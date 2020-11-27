@@ -1,0 +1,28 @@
+body{
+	background: rgb(79,160,174);
+	background: linear-gradient(45deg, rgba(30,60,114,1) 0%, rgba(42,82,152,1) 100%);
+}
+.head{
+	background-color: #1f1f1f;
+}
+
+.menu.links{
+	background-color: #f8f9fa!important;
+	padding: 10px 0;
+}
+
+.version{
+	background-color: #D39D38!important;
+	color: white!important;
+} 
+
+.footer {
+	
+  	background-color: #F7F7F7;
+  	position: absolute;
+  	bottom: 0;
+  	left: 0;
+  	width: 100%;
+  	padding: 15px 0;
+  	text-align:center;
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% block header %}
+	<base href="{{config["siteUrl"]}}">
+	<meta charset="UTF-8">
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	<title>QCM</title>
+{% endblock %}
+{% block css %}
+	{{ css('https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.6/dist/semantic.min.css') }}
+	{{css('css/style.css') | raw}}
+{% endblock %}
+</head>
+<body>
+<div class="ui primary menu" style="border-radius:0px;">
+	<a class="item">Home</a>
+	<div class="right menu">
+		<a class="item">Log in</a>
+		<a class="item">Logout</a>
+	</div>
+</div>
+{% block head %}
+{% endblock %}
