@@ -4,7 +4,6 @@ use Ubiquity\utils\http\USession;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\orm\DAO;
 use models\User;
-use Ubiquity\controllers\Startup;
 
 /**
  * Auth Controller BaseAuthController
@@ -26,29 +25,39 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     }
     
     /**
-     * @route("/login","name"=>"login")
+     * @get("/login","name"=>"login")
      */
     public function index(){
       $this->loadDefaultView();
     }
     
     /**
-     * @route("/register","name"=>"register")
+     * @post("/login")
+     */
+    public function loginPost(){
+        if($this->_connect()!==null){
+            $this->onConnect($this->_connect());
+        }
+    }
+    
+    /**
+     * @get("/register","name"=>"register")
      */
     public function register(){
         $this->loadDefaultView();
     }
     
     /**
-     * @post("/new")
+     * @post("/register")
      */
     public function registerPost(){
         if(URequest::isPost()){
-            if(DAO::getOne(User::class,"login = ? OR email = ?",true,[URequest::post("login"),URequest::post("email")])===null){
+            if(DAO::getOne(User::class,"email = ?",true,[URequest::post("email")])===null){
                 $instance=new User();
-                //$instance->set
+                URequest::setValuesToObject($instance);
                 DAO::insert($instance);
-                Startup::forward("_default",false,false);
+                header('location:/');
+                exit();
             }
         }
     }
@@ -58,15 +67,13 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         USession::set($this->_getUserSessionKey(), $connected);
         if(isset($urlParts)){
             $this->_forward(implode("/",$urlParts));
-        }else{
-            Startup::forward("_default");
         }
+        header('location:/');
+        exit();
     }
     
     protected function _connect() {
         if(URequest::isPost()){
-            $email=URequest::post($this->_getLoginInputName());
-            $password=URequest::post($this->_getPasswordInputName());
             $user=DAO::getOne(User::class,"email = ?",true,[URequest::post('email')]);
             if($user!==null){
                 if(URequest::post('password')==$user->getPassword()){
@@ -74,6 +81,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
                 }
             }
         }
+        return null;
     }
     
     /**

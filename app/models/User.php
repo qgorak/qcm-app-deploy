@@ -12,12 +12,6 @@ class User{
 	private $id;
 
 	/**
-	 * @column("name"=>"login","nullable"=>true,"dbType"=>"varchar(42)")
-	 * @validator("length","constraints"=>array("max"=>42))
-	**/
-	private $login;
-
-	/**
 	 * @column("name"=>"password","nullable"=>true,"dbType"=>"varchar(42)")
 	 * @validator("length","constraints"=>array("max"=>42))
 	 * @transformer("name"=>"password")
@@ -79,14 +73,6 @@ class User{
 
 	 public function setId($id){
 		$this->id=$id;
-	}
-
-	 public function getLogin(){
-		return $this->login;
-	}
-
-	 public function setLogin($login){
-		$this->login=$login;
 	}
 
 	 public function getPassword(){
