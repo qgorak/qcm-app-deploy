@@ -1,7 +1,7 @@
 <?php
 namespace controllers;
  /**
- * @route('_default',automated=>"true",inherited=>"true")
+ * @route('_default',"automated"=>"true","inherited"=>"true")
  * Controller MainController
  */
 class MainController extends ControllerBase{

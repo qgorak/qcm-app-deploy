@@ -12,13 +12,13 @@
 	{{css('css/style.css') | raw}}
 {% endblock %}
 </head>
+{% block head %}
 <body>
 <div class="ui primary menu" style="border-radius:0px;">
-	<a class="item">Home</a>
+	<a class="item" href="{{path('_default')}}">Home</a>
 	<div class="right menu">
-		<a class="item">Log in</a>
-		<a class="item">Logout</a>
+		<a class="item" href="{{path('login')}}">Log in</a>
+		<a class="item" href="{{path('register')}}">Register</a>
 	</div>
 </div>
-{% block head %}
 {% endblock %}
