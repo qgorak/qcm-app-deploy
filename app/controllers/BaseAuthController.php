@@ -38,6 +38,9 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         if($this->_connect()!==null){
             $this->onConnect($this->_connect());
         }
+        else{
+            var_dump($_SESSION);
+        }
     }
     
     /**
@@ -68,11 +71,11 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         if(isset($urlParts)){
             $this->_forward(implode("/",$urlParts));
         }
-        header('location:/');
-        exit();
+        var_dump($_SESSION);
     }
     
     protected function _connect() {
+        //USession::terminate();
         if(URequest::isPost()){
             $user=DAO::getOne(User::class,"email = ?",true,[URequest::post('email')]);
             if($user!==null){
