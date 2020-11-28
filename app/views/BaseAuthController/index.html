@@ -21,9 +21,9 @@
         </div>
         <input type="submit" class="ui fluid large teal submit button" value="Log in"/>
       </div>
-
-      <div class="ui error message"></div>
-
+		{% if process == true %}
+      		<div class="ui message {{process}} visible">{{info}}</div>
+      	{% endif %}
     </form>
   </div>
 </div>

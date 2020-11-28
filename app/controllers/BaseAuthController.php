@@ -35,12 +35,16 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      * @post("/login")
      */
     public function loginPost(){
-        if($this->_connect()!==null){
+        if(gettype($this->_connect())!=="string"){
             $this->onConnect($this->_connect());
+            $info="You are logged";
+            $process="success";
         }
         else{
-            var_dump($_SESSION);
+            $info=$this->_connect();
+            $process="error";
         }
+        $this->loadView("BaseAuthController/index.html",compact("info","process"));
     }
     
     /**
@@ -58,6 +62,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             if(DAO::getOne(User::class,"email = ?",true,[URequest::post("email")])===null){
                 $instance=new User();
                 URequest::setValuesToObject($instance);
+                $instance->setPassword(password_hash(URequest::post('password'), PASSWORD_ARGON2I));
                 DAO::insert($instance);
                 header('location:/');
                 exit();
@@ -71,20 +76,23 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         if(isset($urlParts)){
             $this->_forward(implode("/",$urlParts));
         }
-        var_dump($_SESSION);
     }
     
     protected function _connect() {
-        //USession::terminate();
+        USession::terminate();
         if(URequest::isPost()){
             $user=DAO::getOne(User::class,"email = ?",true,[URequest::post('email')]);
             if($user!==null){
-                if(URequest::post('password')==$user->getPassword()){
+                if(password_verify(URequest::post('password'),$user->getPassword())){
                     return $user;
                 }
+                else{
+                    return "Wrong password !";
+                }
             }
+            return "Wrong email !";
         }
-        return null;
+        return "Error !";
     }
     
     /**
