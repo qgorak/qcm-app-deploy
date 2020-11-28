@@ -5,21 +5,21 @@
         Log into your account !
       </div>
     </h2>
-    <form class="ui large form">
+     <form id="frm-login" class="ui large form" name="frm-login" method="post" action="http://127.0.0.1:8090/BaseAuthController/connect">
       <div class="ui stacked segment">
         <div class="field">
           <div class="ui left icon input">
             <i class="user icon"></i>
-            <input type="text" name="email" placeholder="E-mail address">
+            <input id="email" name="email" type="text" placeholder="Email">
           </div>
         </div>
         <div class="field">
           <div class="ui left icon input">
             <i class="lock icon"></i>
-            <input type="password" name="password" placeholder="Password">
+            <input id="password" name="password" type="password">
           </div>
         </div>
-        <div class="ui fluid large teal submit button">Log in</div>
+        <button class="ui button green basic ajax _connect">Log in</button>
       </div>
 
       <div class="ui error message"></div>
