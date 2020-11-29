@@ -11,7 +11,6 @@ use models\User;
 class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{   
     protected $headerView = "@activeTheme/main/vHeader.html";
     protected $footerView = "@activeTheme/main/vFooter.html";
-    protected $session=[];
     
     public function getSession()
     {
@@ -50,14 +49,12 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $this->onConnect($this->_connect());
             $info="You are logged";
             $process="success";
-            $this->setSession(USession::get('activeUser'));
         }
         else{
             $info=$this->_connect();
             $process="error";
-            $this->setSession([]);
         }
-        $this->loadView("BaseAuthController/index.html",["info"=>$info,"process"=>$process,"session"=>$this->getSession()]);
+        $this->loadView("BaseAuthController/index.html",["info"=>$info,"process"=>$process,"session"=>USession::getAll()]);
     }
     
     /**
