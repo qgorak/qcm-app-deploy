@@ -1,0 +1,101 @@
+<?php
+
+namespace controllers;
+
+use Ajax\semantic\html\collections\HtmlMessage;
+use Ubiquity\controllers\Router;
+use Ubiquity\orm\DAO;
+use Ubiquity\utils\http\URequest;
+use models\Question;
+use services\QuestionDAOLoader;
+
+
+/**
+ * Controller QuestionController
+ * @route('question','automated'=>true)
+ * @property \Ajax\php\ubiquity\JsUtils $jquery
+ */
+class QuestionController extends ControllerBase {
+    
+    /**
+     *
+     * @autowired
+     * @var QuestionDAOLoader
+     */
+    private $loader;
+    
+    /**
+     *
+     * @param \services\QuestionSessionLoader $loader
+     */
+    public function setLoader($loader) {
+        $this->loader = $loader;
+    }
+    private function displayItems() {
+        $items = $this->loader->all ();
+        $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $items );
+        $msg = new HtmlMessage ( '', "Aucun élément à afficher !" );
+        $msg->addIcon ( "shower" );
+        $dt->setEmptyMessage ( $msg );
+        $dt->setFields ( [
+            'id',
+            'caption'
+        ] );
+        
+        $dt->setIdentifierFunction ( 'getId' );
+        $dt->addEditDeleteButtons ( false );
+        
+        $dt->setEdition ();
+        $this->jquery->getOnClick ( '._delete', 'delete', 'body', [
+            'hasLoader' => 'internal',
+            'attr' => 'data-ajax'
+        ] );
+        
+        $this->jquery->getOnClick ( '._edit', Router::path ( 'Question.update', [
+            ''
+        ] ), '#response', [
+            'hasLoader' => 'internal',
+            'attr' => 'data-ajax'
+        ] );
+    }
+    
+
+
+    public function index() {
+        $this->_index ();
+    }
+    
+    /**
+     *
+     * @get("add")
+     */
+    public function add() {
+        $this->jquery->postFormOnClick ( '#btValidate', 'question/add', 'frmItem', 'body', [
+            'hasLoader' => 'internal'
+        ] );
+        if (URequest::isAjax ()) {
+            $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
+        } else {
+            $this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
+        }
+    }
+    
+    /**
+     *
+     * @post("add")
+     */
+    public function submit() {
+        $item = new Question ();
+        $item->setCaption ( URequest::post ( 'caption', 'no caption' ) );
+        $this->loader->add ( $item );
+        $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
+    }
+    private function _index($response = '') {
+        $this->displayItems ();
+        
+        $this->jquery->renderView ( 'QuestionController/index.html', [
+            'response' => $response
+        ] );
+    } 
+}
+    

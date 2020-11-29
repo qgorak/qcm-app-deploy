@@ -1,0 +1,63 @@
+<?php
+
+namespace services;
+
+use Ubiquity\orm\DAO;
+use models\Question;
+
+class QuestionDAOLoader implements IQuestionLoader {
+	/**
+	 *
+	 * {@inheritdoc}
+	 * @see \services\IQuestionLoader::get()
+	 */
+	public function get($id): ?Question {
+		return DAO::getById ( Question::class, $id );
+	}
+
+	/**
+	 *
+	 * {@inheritdoc}
+	 * @see \services\IQuestionLoader::add()
+	 */
+	public function add(Question $item): void {
+		DAO::insert ( $item );
+	}
+
+	/**
+	 *
+	 * {@inheritdoc}
+	 * @see \services\IQuestionLoader::all()
+	 */
+	public function all(): array {
+		return DAO::getAll ( Question::class );
+	}
+
+	/**
+	 *
+	 * {@inheritdoc}
+	 * @see \services\IQuestionLoader::clear()
+	 */
+	public function clear(): void {
+		DAO::deleteAll ( Question::class, '1=1' );
+	}
+
+	/**
+	 *
+	 * {@inheritdoc}
+	 * @see \services\IQuestionLoader::remove()
+	 */
+	public function remove(string $id): bool {
+		return DAO::delete ( Question::class, $id );
+	}
+
+	/**
+	 *
+	 * {@inheritdoc}
+	 * @see \services\IQuestionLoader::update()
+	 */
+	public function update(Question $item): bool {
+		return DAO::update ( $item );
+	}
+}
+
