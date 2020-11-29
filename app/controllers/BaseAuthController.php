@@ -11,16 +11,27 @@ use models\User;
 class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{   
     protected $headerView = "@activeTheme/main/vHeader.html";
     protected $footerView = "@activeTheme/main/vFooter.html";
+    protected $session=[];
     
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    public function setSession($session)
+    {
+        $this->session = $session;
+    }
+
     public function initialize() {
         if (! URequest::isAjax ()) {
-            $this->loadView ( $this->headerView );
+            $this->loadView ( $this->headerView);
         }
     }
     
     public function finalize() {
         if (! URequest::isAjax ()) {
-            $this->loadView ( $this->footerView );
+            $this->loadView ( $this->footerView);
         }
     }
     
@@ -28,7 +39,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      * @get("/login","name"=>"login")
      */
     public function index(){
-      $this->loadDefaultView();
+        $this->loadDefaultView();
     }
     
     /**
@@ -39,12 +50,14 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $this->onConnect($this->_connect());
             $info="You are logged";
             $process="success";
+            $this->setSession(USession::get('activeUser'));
         }
         else{
             $info=$this->_connect();
             $process="error";
+            $this->setSession([]);
         }
-        $this->loadView("BaseAuthController/index.html",compact("info","process"));
+        $this->loadView("BaseAuthController/index.html",["info"=>$info,"process"=>$process,"session"=>$this->getSession()]);
     }
     
     /**
@@ -84,7 +97,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $user=DAO::getOne(User::class,"email = ?",true,[URequest::post('email')]);
             if($user!==null){
                 if(password_verify(URequest::post('password'),$user->getPassword())){
-                    return $user;
+                    return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname()];
                 }
                 else{
                     return "Wrong password !";

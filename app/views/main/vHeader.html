@@ -2,7 +2,7 @@
 <html>
 <head>
 {% block header %}
-	<base href="{{config["siteUrl"]}}">
+	<base href="{{config['siteUrl']}}">
 	<meta charset="UTF-8">
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 	<title>QCM</title>
@@ -14,11 +14,4 @@
 </head>
 {% block head %}
 <body>
-<div class="ui primary menu" style="border-radius:0px;">
-	<a class="item" href="{{path('_default')}}">Home</a>
-	<div class="right menu">
-		<a class="item" href="{{path('login')}}">Log in</a>
-		<a class="item" href="{{path('register')}}">Register</a>
-	</div>
-</div>
 {% endblock %}
