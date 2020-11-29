@@ -1,28 +1,22 @@
 {% extends "@framework/auth/info.html" %}
 {% block _before %}
-	{{ parent() }}
-{% endblock %}
-{% block _beforeConnected %}
-	{{ parent() }}
+     <div class="ui tertiary inverted red segment">
 {% endblock %}
 {% block _userInfo %}
-	{{ parent() }}
+     {{ parent() }}
 {% endblock %}
 {% block _logoutButton %}
-	{{ parent() }}
+     {{ parent() }}
 {% endblock %}
 {% block _logoutCaption %}
-	{{ parent() }}
-{% endblock %}
-{% block _beforeNotConnected %}
-	{{ parent() }}
+     {{ parent() }}
 {% endblock %}
 {% block _loginButton %}
-	{{ parent() }}
+     {{ parent() }}
 {% endblock %}
 {% block _loginCaption %}
-	{{ parent() }}
+     {{ parent() }}
 {% endblock %}
 {% block _after %}
-	{{ parent() }}
+             </div>
 {% endblock %}

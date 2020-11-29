@@ -14,10 +14,8 @@ abstract class ControllerBase extends Controller{
 
 	public function initialize() {
 		if (! URequest::isAjax ()) {
-			$this->loadView ( $this->headerView );
-			
+			$this->loadView ( $this->headerView );	
 		}
-		$this->loadView ( $this->navbarView );
 	}
 
 	public function finalize() {
