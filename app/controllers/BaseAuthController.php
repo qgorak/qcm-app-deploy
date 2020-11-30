@@ -24,7 +24,10 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
 
     public function initialize() {
         if (! URequest::isAjax ()) {
-            $this->loadView ( $this->headerView);
+            $user = USession::get('activeUser');
+            $this->loadView ( $this->headerView ,[
+                'user' => $user
+            ] );	
         }
     }
     
@@ -65,6 +68,13 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     }
     
     /**
+     * @get("/terminate","name"=>"terminate")
+     */
+    public function terminate(){
+        USession::terminate ();
+    }
+    
+    /**
      * @post("/register")
      */
     public function registerPost(){
@@ -89,7 +99,6 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     }
     
     protected function _connect() {
-        USession::terminate();
         if(URequest::isPost()){
             $user=DAO::getOne(User::class,"email = ?",true,[URequest::post('email')]);
             if($user!==null){

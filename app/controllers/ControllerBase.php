@@ -3,6 +3,7 @@ namespace controllers;
 
 use Ubiquity\controllers\Controller;
 use Ubiquity\utils\http\URequest;
+use Ubiquity\utils\http\USession;
 
 /**
  * ControllerBase.
@@ -13,7 +14,10 @@ abstract class ControllerBase extends Controller{
 
 	public function initialize() {
 		if (! URequest::isAjax ()) {
-			$this->loadView ( $this->headerView );	
+		    $user = USession::get('activeUser');
+		    $this->loadView ( $this->headerView ,[
+		        'user' => $user
+		    ] );	
 		}
 	}
 
