@@ -34,7 +34,7 @@ class QuestionController extends ControllerBase {
         $this->loader = $loader;
     }
     private function displayItems() {
-        $items = $this->loader->all ();
+        $items = $this->loader-> my();
         $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $items );
         $msg = new HtmlMessage ( '', "Aucun élément à afficher !" );
         $msg->addIcon ( "shower" );

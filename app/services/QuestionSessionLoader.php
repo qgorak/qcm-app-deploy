@@ -10,6 +10,9 @@ class QuestionSessionLoader implements IQuestionLoader {
 	public function all(): array {
 		return USession::get ( self::SESSION_KEY, [ ] );
 	}
+	public function my(): array{
+	    return USession::get ( self::SESSION_KEY, [ ] );
+	}
 	public function update(Question $item): bool {
 	}
 	public function remove(string $id): bool {
@@ -39,6 +42,8 @@ class QuestionSessionLoader implements IQuestionLoader {
 	public function get($id): ?Question {
 		return (USession::getArray ( self::SESSION_KEY ) [$id]) ?? null;
 	}
+	
+
 }
 
 

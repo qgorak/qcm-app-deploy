@@ -4,6 +4,7 @@ namespace services;
 
 use Ubiquity\orm\DAO;
 use models\Question;
+use Ubiquity\utils\http\USession;
 
 class QuestionDAOLoader implements IQuestionLoader {
 	/**
@@ -32,6 +33,12 @@ class QuestionDAOLoader implements IQuestionLoader {
 	public function all(): array {
 		return DAO::getAll ( Question::class );
 	}
+	
+	public function my(): array{
+	    $userid = USession::get('activeUser')['id'];
+	    return DAO::getAll( Question::class, 'idUser='.$userid);
+	}
+	
 
 	/**
 	 *
@@ -59,5 +66,7 @@ class QuestionDAOLoader implements IQuestionLoader {
 	public function update(Question $item): bool {
 		return DAO::update ( $item );
 	}
+
+
 }
 

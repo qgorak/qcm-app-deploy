@@ -11,6 +11,8 @@ interface IQuestionLoader {
 	 * @return Question[]
 	 */
 	public function all(): array;
+	
+	public function my(): array;
 
 	/**
 	 * Supprime un todo-item par son id
