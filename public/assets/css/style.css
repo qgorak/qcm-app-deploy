@@ -1,5 +1,6 @@
 body{
-	background: lightgrey;
+	 background-image: url(/public/assets/img/wave.svg);
+	 background-repeat: no-repeat;
 }
 .head{
 	background-color: #1f1f1f;
