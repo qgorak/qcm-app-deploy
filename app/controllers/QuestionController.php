@@ -7,7 +7,9 @@ use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use models\Question;
+use models\User;
 use services\QuestionDAOLoader;
+use Ubiquity\utils\http\USession;
 
 
 /**
@@ -85,9 +87,12 @@ class QuestionController extends ControllerBase {
      * @post("add")
      */
     public function submit() {
-        $item = new Question ();
-        $item->setCaption ( URequest::post ( 'caption', 'no caption' ) );
-        $this->loader->add ( $item );
+        $question= new Question ();
+        $question->setCaption ( URequest::post ( 'caption', 'no caption' ) );
+        $creator = new User();
+        $creator->setId(USession::get('activeUser')['id']);
+        $question->setUser($creator);
+        $this->loader->add ( $question );
         $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
     }
     private function _index($response = '') {
