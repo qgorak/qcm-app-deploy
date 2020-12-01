@@ -80,11 +80,26 @@ class QuestionController extends ControllerBase {
             'hasLoader' => 'internal'
         ] );
         $this->jquery->exec('$(\'#drop\').dropdown()',true);
+<<<<<<< Updated upstream
         $this->jquery->ajaxOn('change','#test',Router::path("getForm",""),'#response', 
+=======
+        $this->jquery->ajaxOn('change','#test','/question/getForm','#response', 
+>>>>>>> Stashed changes
         		[
         				'attr' => 'value'
         		]);
         $this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
+<<<<<<< Updated upstream
+=======
+    }
+    
+    /**
+     *
+     * @get("getForm/{type}",name=>"getForm")
+     */
+    public function getform(string $type) {
+    	$this->jquery->renderView('QuestionController/template/'.$type.'.html', [ ]) ;
+>>>>>>> Stashed changes
     }
     
     /**

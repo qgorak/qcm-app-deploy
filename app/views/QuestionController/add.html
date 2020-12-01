@@ -1,6 +1,6 @@
-{% include 'main/vNavbar.html' %}
 <div class="ui container">
 <form class="ui form" id="frmItem" name="frmItem">
+<<<<<<< Updated upstream
 	<input type="text" name="caption" placeholder="Question">
 		<div id="drop" class="ui selection dropdown">
 			<input id="test" type="hidden" name="type">
@@ -15,6 +15,24 @@
 		</div>
 	<textarea id="editor" name="editor" cols="80" rows="10"></textarea>
 	<button id="btValidate" class="ui button">Valider</button>
+=======
+<input type="text" name="caption" placeholder="Question">
+<div id="drop" class="ui selection dropdown">
+  <input id="test" type="hidden" name="type">
+  <i class="dropdown icon"></i>
+  <div class="default text">Type</div>
+  <div class="menu">
+    <div class="item" data-value="ouverte">Ouverte</div>
+    <div class="item" data-value="qcm">Choix multiple</div>
+    <div class="item" data-value="code">Code</div>
+    <div class="item" data-value="3">--</div>
+  </div>
+</div>
+	<div id="response">
+	{{ response | raw }}
+	</div>
+<button id="btValidate" class="ui button">Valider</button>
+>>>>>>> Stashed changes
 </form>
 	<div id="response">
 	{{ response | raw }}

@@ -17,7 +17,9 @@ abstract class ControllerBase extends Controller{
 		    $user = USession::get('activeUser');
 		    $this->loadView ( $this->headerView ,[
 		        'user' => $user
-		    ] );	
+		    ] );
+		    $this->loadView('/main/UI/Navbar.html');
+		    $this->loadView('/main/UI/AuthModal.html');
 		}
 	}
 
