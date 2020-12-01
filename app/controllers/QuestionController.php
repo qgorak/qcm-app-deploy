@@ -34,6 +34,7 @@ class QuestionController extends ControllerBase {
     public function setLoader($loader) {
         $this->loader = $loader;
     }
+    
     private function displayItems() {
         $items = $this->loader-> my();
         $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $items );
@@ -62,25 +63,20 @@ class QuestionController extends ControllerBase {
         ] );
     }
     
-
-
     public function index() {
         $this->_index ();
     }
     
     /**
      *
-     * @get("add")
+     * @get("add",name=>"formQuestion")
      */
     public function add() {
     	$frm=$this->jquery->semantic()->dataForm('frm', new Question());
     	$frm->setFields(['caption','type']);
     	$frm->fieldAsDropDown('type',['qcm','ouverte']);
-    	
     	$frm->fieldAsTextarea('caption',['rules'=>'empty']);
-    	
-    	
-        $this->jquery->postFormOnClick ( '#btValidate', 'question/add', 'frmItem', 'body', [
+    	$this->jquery->postFormOnClick ( '#btValidate',Router::path("postQuestion"), 'frmItem', 'body', [
             'hasLoader' => 'internal'
         ] );
         $this->jquery->exec('$(\'#drop\').dropdown()',true);
@@ -101,7 +97,7 @@ class QuestionController extends ControllerBase {
     
     /**
      *
-     * @post("add")
+     * @post("add",name=>"postQuestion")
      */
     public function submit() {
         $question= new Question ();

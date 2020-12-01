@@ -2,6 +2,7 @@
 namespace controllers;
 use Ubiquity\utils\http\USession;
 use Ubiquity\utils\http\URequest;
+use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use models\User;
 
@@ -72,6 +73,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      */
     public function terminate(){
         USession::terminate ();
+        \header('location:/');
     }
     
     /**
@@ -82,7 +84,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             if(DAO::getOne(User::class,"email = ?",true,[URequest::post("email")])===null){
                 $instance=new User();
                 URequest::setValuesToObject($instance);
-                $instance->setPassword(password_hash(URequest::post('password'), PASSWORD_ARGON2I));
+                $instance->setPassword(URequest::post('password'));
                 DAO::insert($instance);
                 header('location:/');
                 exit();
@@ -102,7 +104,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         if(URequest::isPost()){
             $user=DAO::getOne(User::class,"email = ?",true,[URequest::post('email')]);
             if($user!==null){
-                if(!password_verify(URequest::post('password'),$user->getPassword())){
+                if(URequest::post('password')===$user->getPassword()){
                     return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname()];
                 }
                 else{
