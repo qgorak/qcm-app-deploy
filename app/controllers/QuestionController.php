@@ -83,34 +83,21 @@ class QuestionController extends ControllerBase {
         $this->jquery->postFormOnClick ( '#btValidate', 'question/add', 'frmItem', 'body', [
             'hasLoader' => 'internal'
         ] );
-        
-        
         $this->jquery->exec('$(\'#drop\').dropdown()',true);
-        $this->jquery->exec(' $("#test").change(function () {
-		 $("#test").attr("lenomquejeveux",$(\'#test\').find(":selected").attr(\'data-value\'));
-
-    });',true);
-        
-        $this->jquery->ajaxOn('change','#test', '/question','#response', 
+        $this->jquery->ajaxOn('change','#test',Router::path("getForm",""),'#response', 
         		[
         				'attr' => 'value'
         		]);
-        if (URequest::isAjax ()) {
-            $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
-        } else {
-            $this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
-        }
+        $this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
     }
     
     /**
      *
-     * @get("getform/{type}")
+     * @get("getForm/{type}",name=>"getForm")
      */
-    public function getform($type) {
-
-    		$this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
+    public function getform(string $type) {
+    	$this->jquery->renderView('QuestionController/template/'.$type.'.html', [ ]) ;
     }
-    
     
     /**
      *
@@ -132,5 +119,6 @@ class QuestionController extends ControllerBase {
             'response' => $response
         ] );
     } 
+    
 }
     
