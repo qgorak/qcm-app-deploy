@@ -2,8 +2,21 @@
 <div class="ui container">
 <form class="ui form" id="frmItem" name="frmItem">
 <input type="text" name="caption" placeholder="Item caption">
+<div id="test" class="ui selection dropdown">
+  <input type="hidden" name="type">
+  <i class="dropdown icon"></i>
+  <div class="default text">Type</div>
+  <div class="menu">
+    <div class="item" data-value="0">Ouverte</div>
+    <div class="item" data-value="1">Choix multiple</div>
+    <div class="item" data-value="2">Code</div>
+    <div class="item" data-value="3">--</div>
+  </div>
+</div>
+	<div id="response">
+	{{ response | raw }}
+	</div>
         <textarea id="editor" name="editor" cols="80" rows="10">
-      
         </textarea>
 <button id="btValidate" class="ui button">Valider</button>
 </form>

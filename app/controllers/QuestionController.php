@@ -37,7 +37,7 @@ class QuestionController extends ControllerBase {
         $items = $this->loader-> my();
         $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $items );
         $msg = new HtmlMessage ( '', "Aucun élément à afficher !" );
-        $msg->addIcon ( "shower" );
+        $msg->addIcon ( "x" );
         $dt->setEmptyMessage ( $msg );
         $dt->setFields ( [
             'id',
@@ -75,6 +75,8 @@ class QuestionController extends ControllerBase {
         $this->jquery->postFormOnClick ( '#btValidate', 'question/add', 'frmItem', 'body', [
             'hasLoader' => 'internal'
         ] );
+        $this->jquery->addToCompile('$(\'.ui.dropdown\').dropdown({onChange:function(value,text){console.log(value)}})');
+        $this->jquery->ajaxOn('onChange','.ui.dropdown', 'qqsd','#response');
         if (URequest::isAjax ()) {
             $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
         } else {
