@@ -10,6 +10,7 @@ use models\Question;
 use models\User;
 use services\QuestionDAOLoader;
 use Ubiquity\utils\http\USession;
+use Ajax\php\ci\JsUtils;
 
 
 /**
@@ -72,17 +73,44 @@ class QuestionController extends ControllerBase {
      * @get("add")
      */
     public function add() {
+    	$frm=$this->jquery->semantic()->dataForm('frm', new Question());
+    	$frm->setFields(['caption','type']);
+    	$frm->fieldAsDropDown('type',['qcm','ouverte']);
+    	
+    	$frm->fieldAsTextarea('caption',['rules'=>'empty']);
+    	
+    	
         $this->jquery->postFormOnClick ( '#btValidate', 'question/add', 'frmItem', 'body', [
             'hasLoader' => 'internal'
         ] );
-        $this->jquery->addToCompile('$(\'.ui.dropdown\').dropdown({onChange:function(value,text){console.log(value)}})');
-        $this->jquery->ajaxOn('onChange','.ui.dropdown', 'qqsd','#response');
+        
+        
+        $this->jquery->exec('$(\'#drop\').dropdown()',true);
+        $this->jquery->exec(' $("#test").change(function () {
+		 $("#test").attr("lenomquejeveux",$(\'#test\').find(":selected").attr(\'data-value\'));
+
+    });',true);
+        
+        $this->jquery->ajaxOn('change','#test', '/question','#response', 
+        		[
+        				'attr' => 'value'
+        		]);
         if (URequest::isAjax ()) {
             $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
         } else {
             $this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
         }
     }
+    
+    /**
+     *
+     * @get("getform/{type}")
+     */
+    public function getform($type) {
+
+    		$this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
+    }
+    
     
     /**
      *
