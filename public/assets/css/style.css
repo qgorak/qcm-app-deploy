@@ -26,3 +26,6 @@ body{
   	padding: 15px 0;
   	text-align:center;
 }
+._element:hover {
+	background:whitesmoke;
+}

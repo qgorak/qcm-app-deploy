@@ -11,6 +11,7 @@ use models\User;
 use services\QuestionDAOLoader;
 use Ubiquity\utils\http\USession;
 use Ajax\php\ci\JsUtils;
+use models\Answer;
 
 
 /**
@@ -29,7 +30,7 @@ class QuestionController extends ControllerBase {
     
     /**
      *
-     * @param \services\QuestionSessionLoader $loader
+     * @param \services\QuestionDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;
@@ -45,16 +46,14 @@ class QuestionController extends ControllerBase {
             'id',
             'caption'
         ] );
-        
+        $dt->onRowClick('alert(\'ok\')');
         $dt->setIdentifierFunction ( 'getId' );
         $dt->addEditDeleteButtons ( false );
-        
         $dt->setEdition ();
         $this->jquery->getOnClick ( '._delete', 'delete', 'body', [
             'hasLoader' => 'internal',
             'attr' => 'data-ajax'
         ] );
-        
         $this->jquery->getOnClick ( '._edit', Router::path ( 'Question.update', [
             ''
         ] ), '#response', [
@@ -63,35 +62,40 @@ class QuestionController extends ControllerBase {
         ] );
     }
     
+
+
     public function index() {
         $this->_index ();
     }
     
     /**
      *
-     * @get("add",name=>"formQuestion")
+     * @get("add")
      */
     public function add() {
-    	$frm=$this->jquery->semantic()->dataForm('frm', new Question());
-    	$frm->setFields(['caption','type']);
-    	$frm->fieldAsDropDown('type',['qcm','ouverte']);
-    	$frm->fieldAsTextarea('caption',['rules'=>'empty']);
-    	$this->jquery->postFormOnClick ( '#btValidate',Router::path("postQuestion"), 'frmItem', 'body', [
+        $this->jquery->postFormOnClick ( '#btValidate', 'question/add', 'frmItem', 'body', [
             'hasLoader' => 'internal'
         ] );
         $this->jquery->exec('$(\'#drop\').dropdown()',true);
-<<<<<<< Updated upstream
-        $this->jquery->ajaxOn('change','#test',Router::path("getForm",""),'#response', 
-=======
         $this->jquery->ajaxOn('change','#test','/question/getForm','#response', 
->>>>>>> Stashed changes
         		[
         				'attr' => 'value'
         		]);
         $this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
-<<<<<<< Updated upstream
-=======
     }
+    /**
+     *
+     * @get("{id}")
+     */
+    public function getOne($id) {
+        $question = $this->loader->get($id);
+        $answers = $question->getAnswers();
+        $this->jquery->renderView ( 'QuestionController/question.html', [ 
+            'question' => $question,
+            'answers' => $answers
+        ]) ;
+    }
+    
     
     /**
      *
@@ -99,29 +103,24 @@ class QuestionController extends ControllerBase {
      */
     public function getform(string $type) {
     	$this->jquery->renderView('QuestionController/template/'.$type.'.html', [ ]) ;
->>>>>>> Stashed changes
     }
     
     /**
      *
-     * @get("getForm/{type}",name=>"getForm")
-     */
-    public function getform(string $type) {
-    	$this->jquery->renderView('QuestionController/template/'.$type.'.html', [ ]) ;
-    }
-    
-    /**
-     *
-     * @post("add",name=>"postQuestion")
+     * @post("add")
      */
     public function submit() {
         $question= new Question ();
-        $question->setCaption ( URequest::post ( 'caption', 'no caption' ) );
+        $answer = new Answer();
+        $answer->setQuestion($question);
+        $answer->setCaption(URequest::post ( 'caption', 'no caption' ) );
+        $question->setCaption ( URequest::post ( 'answerCaption', 'no caption' ) );
         $creator = new User();
         $creator->setId(USession::get('activeUser')['id']);
         $question->setUser($creator);
-        $this->loader->add ( $question );
+        $this->loader->add ( $question,$answer );
         $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
+
     }
     private function _index($response = '') {
         $this->displayItems ();

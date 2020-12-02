@@ -3,10 +3,11 @@
 namespace services;
 
 use Ubiquity\orm\DAO;
+use models\Answer;
 use models\Question;
 use Ubiquity\utils\http\USession;
 
-class QuestionDAOLoader implements IQuestionLoader {
+class QuestionDAOLoader {
 	/**
 	 *
 	 * {@inheritdoc}
@@ -21,8 +22,10 @@ class QuestionDAOLoader implements IQuestionLoader {
 	 * {@inheritdoc}
 	 * @see \services\IQuestionLoader::add()
 	 */
-	public function add(Question $item): void {
+	public function add(Question $item,Answer $answer): void {
 		DAO::insert ( $item );
+		$answer->setQuestion($item);
+		DAO::insert($answer);
 	}
 
 	/**
