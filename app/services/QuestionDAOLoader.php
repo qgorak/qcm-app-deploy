@@ -8,27 +8,11 @@ use models\Question;
 use Ubiquity\utils\http\USession;
 
 class QuestionDAOLoader {
-<<<<<<< Updated upstream
-	/**
-	 *
-	 * {@inheritdoc}
-	 * @see \services\IQuestionLoader::get()
-	 */
-=======
 
->>>>>>> Stashed changes
 	public function get($id): ?Question {
 		return DAO::getById ( Question::class, $id );
 	}
 
-<<<<<<< Updated upstream
-	/**
-	 *
-	 * {@inheritdoc}
-	 * @see \services\IQuestionLoader::add()
-	 */
-=======
->>>>>>> Stashed changes
 	public function add(Question $item,Answer $answer): void {
 		DAO::insert ( $item );
 		$answer->setQuestion($item);
@@ -58,7 +42,5 @@ class QuestionDAOLoader {
 	public function update(Question $item): bool {
 		return DAO::update ( $item );
 	}
-
-
 }
 

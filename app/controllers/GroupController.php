@@ -3,10 +3,14 @@ namespace controllers;
 
 use Ajax\semantic\html\collections\HtmlMessage;
 use Ubiquity\controllers\Router;
+use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use models\Group;
 use models\Question;
 use services\GroupDAOLoader;
+use models\User;
+use Ubiquity\utils\http\USession;
+use models\Usergroup;
 
 /**
  * Controller GroupController
@@ -60,28 +64,12 @@ class GroupController extends ControllerBase{
      * @get("add","name"=>"add")
      */
     public function addGroup(){
-        $this->jquery->exec('var userInGroup=[];',true);
         $groupForm=$this->jquery->semantic()->dataForm('groupForm', Group::class);
         $groupForm->setFields([
             "name",
-            "description",
-            "usergroups",
-            "addUserToGroup",
-            "userInGroup"
+            "description"
         ]);
-        $groupForm->fieldAsHidden("userInGroup");
-        $groupForm->fieldAsButton("addUserToGroup","",["value"=>"Add user to group"]);
         $groupForm->addSubmit('groupFormSubmit','Add group');
-        $this->jquery->getOnClick('#groupForm-addUserToGroup-0',Router::path("user.exist",["'+document.getElementById('groupForm-usergroups').value+'"]),null,[
-            'jsCondition'=>'document.getElementById("groupForm-usergroups").value!=""',
-            'jsCallback'=>'if(!userInGroup.includes(data) && data!="false"){
-            var table = document.getElementById("usersInGroup").getElementsByTagName("tbody")[0];
-            var row = table.insertRow(0);
-            var cell1 = row.insertCell(0);
-            cell1.innerHTML = data;
-            userInGroup.push(data);
-            document.getElementById("groupForm-userInGroup-0").value = JSON.stringify(userInGroup);}'
-        ]);
         $this->jquery->postFormOnClick('#groupFormSubmit',Router::path('submit'), 'groupForm','body');
         $this->jquery->renderView ( 'GroupController/add.html', []) ;
         
@@ -91,12 +79,40 @@ class GroupController extends ControllerBase{
     /**
      * @post("add","name"=>"submit")
      */
-    public function submit(){
+    public function addSubmit(){
         $group = new Group();
         $group->setName(URequest::post ( 'name', 'no name' ));
         $group->setDescription(URequest::post ( 'description', 'no desc' ));
+        $group->setKey(uniqid());
+        $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
+        $group->setUser($user);
         $this->loader->add($group);
         var_dump(URequest::getDatas());
+    }
+    
+    /**
+     * @get("join","name"=>"join")
+     */
+    public function joinGroup(){
+        $groupForm=$this->jquery->semantic()->htmlForm('groupForm',[
+            'GroupKey'
+        ]);
+        $groupForm->addSubmit('groupFormSubmit','Join group');
+        $this->jquery->postFormOnClick('#groupFormSubmit',Router::path('joinSubmit'), 'groupForm','body');
+        $this->jquery->renderView ( 'GroupController/join.html') ;
+    }
+    
+    /**
+     * @post("join","name"=>"joinSubmit")
+     */
+    public function joinSubmit(){
+        $userGroup=new Usergroup();
+        $user=DAO::getById(User::class,USession::get('activeUser')['id']);
+        $group=DAO::getOne(Group::class,'`key`=?',true,[URequest::post('GroupKey')]);
+        $userGroup->setIdUser($user->getId());
+        $userGroup->setIdGroup($group->getId());
+        $userGroup->setStatus(0);
+        DAO::insert($userGroup);
     }
 }
 

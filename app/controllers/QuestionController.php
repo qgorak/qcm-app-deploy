@@ -85,7 +85,7 @@ class QuestionController extends ControllerBase {
     }
     /**
      *
-     * @get("one/{id}",name=>"getOne")
+     * @get("one/{id}","name"=>"getOne")
      */
     public function getOne($id) {
         $question = $this->loader->get($id);
@@ -99,7 +99,7 @@ class QuestionController extends ControllerBase {
     
     /**
      *
-     * @get("getForm/{type}",name=>"getForm")
+     * @get("getForm/{type}","name"=>"getForm")
      */
     public function getform(string $type) {
     	$this->jquery->renderView('QuestionController/template/'.$type.'.html', [ ]) ;
