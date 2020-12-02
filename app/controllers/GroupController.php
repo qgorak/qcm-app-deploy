@@ -32,9 +32,9 @@ class GroupController extends ControllerBase{
         $groupForm->fieldAsHidden("userInGroup");
         $groupForm->fieldAsButton("addUserToGroup","",["value"=>"Add user to group"]);
         $groupForm->addSubmit('groupFormSubmit','Add group');
-        $this->jquery->getOnClick('#groupForm-addUserToGroup-0',Router::path('user.exist',["'+document.getElementById('groupForm-usergroups').value+'"]),null,[
-            'jsCondition'=>'function(){if(document.getElementById("groupForm-usergroups").value!==null){return true;}}',
-            'jsCallback'=>'if(!userInGroup.includes(data)){
+        $this->jquery->getOnClick('#groupForm-addUserToGroup-0',Router::path("user.exist",["'+document.getElementById('groupForm-usergroups').value+'"]),null,[
+            'jsCondition'=>'document.getElementById("groupForm-usergroups").value!=""',
+            'jsCallback'=>'if(!userInGroup.includes(data) && data!="false"){
             var table = document.getElementById("usersInGroup").getElementsByTagName("tbody")[0];
             var row = table.insertRow(0);
             var cell1 = row.insertCell(0);
