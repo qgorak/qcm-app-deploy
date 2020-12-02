@@ -85,7 +85,7 @@ class QuestionController extends ControllerBase {
     }
     /**
      *
-     * @get("{id}")
+     * @get("one/{id}",name=>"getOne")
      */
     public function getOne($id) {
         $question = $this->loader->get($id);
