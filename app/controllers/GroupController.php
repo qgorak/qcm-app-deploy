@@ -24,9 +24,12 @@ class GroupController extends ControllerBase{
         $groupForm->setFields([
             "name",
             "description",
-            "usergroups"
+            "usergroups",
+            "addUserToGroup"
         ]);
+        $groupForm->fieldAsButton("addUserToGroup","",["value"=>"Add user to group"]);
         $groupForm->addSubmit('groupFormSubmit','Add group');
+        $this->jquery->getOnClick('#groupForm-addUserToGroup-0',Router::path('user.exist',["'+document.getElementById('groupForm-usergroups').value+'"]),'#response');
         $this->jquery->postFormOnClick('#groupFormSubmit',Router::path('add'), 'groupForm','body');
         $this->jquery->renderDefaultView();
     }
