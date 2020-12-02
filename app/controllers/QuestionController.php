@@ -113,8 +113,8 @@ class QuestionController extends ControllerBase {
         $question= new Question ();
         $answer = new Answer();
         $answer->setQuestion($question);
-        $answer->setCaption(URequest::post ( 'caption', 'no caption' ) );
-        $question->setCaption ( URequest::post ( 'answerCaption', 'no caption' ) );
+        $answer->setCaption(URequest::post ( 'answerCaption', 'no caption' ) );
+        $question->setCaption ( URequest::post ( 'caption', 'no caption' ) );
         $creator = new User();
         $creator->setId(USession::get('activeUser')['id']);
         $question->setUser($creator);
@@ -124,7 +124,6 @@ class QuestionController extends ControllerBase {
     }
     private function _index($response = '') {
         $this->displayItems ();
-        
         $this->jquery->renderView ( 'QuestionController/index.html', [
             'response' => $response
         ] );
