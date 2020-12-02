@@ -6,6 +6,7 @@ use models\Group;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
+use models\User;
 
 /**
  * Controller GroupController
@@ -23,7 +24,7 @@ class GroupController extends ControllerBase{
         $groupForm->setFields([
             "name",
             "description",
-            "userGroup"
+            "usergroups"
         ]);
         $groupForm->addSubmit('groupFormSubmit','Add group');
         $this->jquery->postFormOnClick('#groupFormSubmit',Router::path('add'), 'groupForm','body');
@@ -35,10 +36,9 @@ class GroupController extends ControllerBase{
      */
     public function addGroup(){
         $group=new Group();
-        URequest::setPostValuesToObject($group);
-        $group->setUser('ok');
-        //USession::get('activeUser')['id']
-        var_dump($group);
+        URequest::setPostValuesToObject($group);       
+        $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
+        $group->setUser($user);
         DAO::insert($group,true);
     }
 }
