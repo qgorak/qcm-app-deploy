@@ -10,6 +10,8 @@ use models\Question;
 use models\User;
 use services\QuestionDAOLoader;
 use Ubiquity\utils\http\USession;
+use Ajax\php\ci\JsUtils;
+use models\Answer;
 
 
 /**
@@ -28,31 +30,30 @@ class QuestionController extends ControllerBase {
     
     /**
      *
-     * @param \services\QuestionSessionLoader $loader
+     * @param \services\QuestionDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;
     }
+    
     private function displayItems() {
         $items = $this->loader-> my();
         $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $items );
         $msg = new HtmlMessage ( '', "Aucun élément à afficher !" );
-        $msg->addIcon ( "shower" );
+        $msg->addIcon ( "x" );
         $dt->setEmptyMessage ( $msg );
         $dt->setFields ( [
             'id',
             'caption'
         ] );
-        
+        $dt->onRowClick('alert(\'ok\')');
         $dt->setIdentifierFunction ( 'getId' );
         $dt->addEditDeleteButtons ( false );
-        
         $dt->setEdition ();
         $this->jquery->getOnClick ( '._delete', 'delete', 'body', [
             'hasLoader' => 'internal',
             'attr' => 'data-ajax'
         ] );
-        
         $this->jquery->getOnClick ( '._edit', Router::path ( 'Question.update', [
             ''
         ] ), '#response', [
@@ -75,11 +76,33 @@ class QuestionController extends ControllerBase {
         $this->jquery->postFormOnClick ( '#btValidate', 'question/add', 'frmItem', 'body', [
             'hasLoader' => 'internal'
         ] );
-        if (URequest::isAjax ()) {
-            $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
-        } else {
-            $this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
-        }
+        $this->jquery->exec('$(\'#drop\').dropdown()',true);
+        $this->jquery->ajaxOn('change','#test','/question/getForm','#response', 
+        		[
+        				'attr' => 'value'
+        		]);
+        $this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
+    }
+    /**
+     *
+     * @get("one/{id}",name=>"getOne")
+     */
+    public function getOne($id) {
+        $question = $this->loader->get($id);
+        $answers = $question->getAnswers();
+        $this->jquery->renderView ( 'QuestionController/question.html', [ 
+            'question' => $question,
+            'answers' => $answers
+        ]) ;
+    }
+    
+    
+    /**
+     *
+     * @get("getForm/{type}",name=>"getForm")
+     */
+    public function getform(string $type) {
+    	$this->jquery->renderView('QuestionController/template/'.$type.'.html', [ ]) ;
     }
     
     /**
@@ -88,19 +111,23 @@ class QuestionController extends ControllerBase {
      */
     public function submit() {
         $question= new Question ();
+        $answer = new Answer();
+        $answer->setQuestion($question);
+        $answer->setCaption(URequest::post ( 'answerCaption', 'no caption' ) );
         $question->setCaption ( URequest::post ( 'caption', 'no caption' ) );
         $creator = new User();
         $creator->setId(USession::get('activeUser')['id']);
         $question->setUser($creator);
-        $this->loader->add ( $question );
+        $this->loader->add ( $question,$answer );
         $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
+
     }
     private function _index($response = '') {
         $this->displayItems ();
-        
         $this->jquery->renderView ( 'QuestionController/index.html', [
             'response' => $response
         ] );
     } 
+    
 }
     

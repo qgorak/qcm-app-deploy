@@ -9,8 +9,7 @@ use models\User;
  * Auth Controller BaseAuthController
  */
 class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{   
-    protected $headerView = "@activeTheme/main/vHeader.html";
-    protected $footerView = "@activeTheme/main/vFooter.html";
+
     
     public function getSession()
     {
@@ -20,28 +19,6 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     public function setSession($session)
     {
         $this->session = $session;
-    }
-
-    public function initialize() {
-        if (! URequest::isAjax ()) {
-            $user = USession::get('activeUser');
-            $this->loadView ( $this->headerView ,[
-                'user' => $user
-            ] );	
-        }
-    }
-    
-    public function finalize() {
-        if (! URequest::isAjax ()) {
-            $this->loadView ( $this->footerView);
-        }
-    }
-    
-    /**
-     * @get("/login","name"=>"login")
-     */
-    public function index(){
-        $this->loadDefaultView();
     }
     
     /**
@@ -57,14 +34,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $info=$this->_connect();
             $process="error";
         }
-        $this->loadView("BaseAuthController/index.html",["info"=>$info,"process"=>$process,"session"=>USession::getAll()]);
-    }
-    
-    /**
-     * @get("/register","name"=>"register")
-     */
-    public function register(){
-        $this->loadDefaultView();
+        header('location:/');
     }
     
     /**
@@ -72,6 +42,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      */
     public function terminate(){
         USession::terminate ();
+        header('location:/');
     }
     
     /**

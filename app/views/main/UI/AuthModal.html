@@ -1,0 +1,68 @@
+<div id="loginmodal" class="ui modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Log in
+  </div>
+  <form class="ui large form" action="/login" method="post">
+      <div class="ui stacked segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" name="email" placeholder="E-mail address">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="password" placeholder="Password">
+          </div>
+        </div>
+      </div>
+		{% if process == true %}
+      		<div class="ui message {{process}} visible">{{info}}</div>
+      	{% endif %}
+  <div class="actions">
+		<input type="submit" class="ui fluid large teal submit button" value="Log in">
+		</form>
+  </div>
+</div>
+
+
+<div id="registermodal" class="ui modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Register
+  </div>
+<form class="ui large form" method="post" action="/register">
+      <div class="ui stacked segment">
+      	<div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="text" name="firstname" placeholder="First name">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="text" name="lastname" placeholder="Last name">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" name="email" placeholder="E-mail address">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="password" placeholder="*************">
+          </div>
+        </div>
+      </div>
+
+  <div class="actions">
+		<input type="submit" class="ui fluid large teal submit button" value="Register">
+		</form>
+  </div>
+</div>

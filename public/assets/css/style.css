@@ -35,3 +35,10 @@ body{
   	padding: 15px 0;
   	text-align:center;
 }
+<<<<<<< Updated upstream
+._element:hover {
+=======
+#dtItems tbody tr:hover {
+>>>>>>> Stashed changes
+	background:whitesmoke;
+}

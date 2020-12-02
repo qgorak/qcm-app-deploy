@@ -1,12 +1,12 @@
 <?php
 namespace controllers;
 
+use Ajax\semantic\html\collections\HtmlMessage;
 use Ubiquity\controllers\Router;
-use models\Group;
-use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
-use Ubiquity\utils\http\USession;
-use models\User;
+use models\Group;
+use models\Question;
+use services\GroupDAOLoader;
 
 /**
  * Controller GroupController
@@ -15,11 +15,51 @@ use models\User;
  */
 class GroupController extends ControllerBase{
     
+    
     /**
-     * 
-     * @route("/","name"=>"groupe")
+     *
+     * @autowired
+     * @var GroupDAOLoader
      */
+    private $loader;
+    
+    /**
+     *
+     * @param \services\GroupDAOLoader $loader
+     */
+    public function setLoader($loader) {
+        $this->loader = $loader;
+    }
+    
+    private function displayMyGroups() {
+        $groups = $this->loader-> my();
+        $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Group::class, $groups );
+        $msg = new HtmlMessage ( '', "Aucun élément à afficher !" );
+        $msg->addIcon ( "x" );
+        $dt->setEmptyMessage ( $msg );
+        $dt->setFields ( [
+            'id',
+            'name',
+            'description'
+        ] );
+        $dt->setIdentifierFunction ( 'getId' );
+
+
+    }
     public function index(){
+        $this->_index();
+    }
+    
+    private function _index($response = '') {
+        $this->displayMyGroups();
+        $this->jquery->renderView ( 'Groupcontroller/index.html', [
+            'response' => $response
+        ] );
+    }
+    /**
+     * @get("add","name"=>"add")
+     */
+    public function addGroup(){
         $this->jquery->exec('var userInGroup=[];',true);
         $groupForm=$this->jquery->semantic()->dataForm('groupForm', Group::class);
         $groupForm->setFields([
@@ -42,14 +82,20 @@ class GroupController extends ControllerBase{
             userInGroup.push(data);
             document.getElementById("groupForm-userInGroup-0").value = JSON.stringify(userInGroup);}'
         ]);
-        $this->jquery->postFormOnClick('#groupFormSubmit',Router::path('add'), 'groupForm','body');
-        $this->jquery->renderDefaultView();
+        $this->jquery->postFormOnClick('#groupFormSubmit',Router::path('submit'), 'groupForm','body');
+        $this->jquery->renderView ( 'GroupController/add.html', []) ;
+        
     }
     
+    
     /**
-     * @post("add","name"=>"add")
+     * @post("add","name"=>"submit")
      */
-    public function addGroup(){
+    public function submit(){
+        $group = new Group();
+        $group->setName(URequest::post ( 'name', 'no name' ));
+        $group->setDescription(URequest::post ( 'description', 'no desc' ));
+        $this->loader->add($group);
         var_dump(URequest::getDatas());
     }
 }

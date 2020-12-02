@@ -1,11 +1,30 @@
-{% include 'main/vNavbar.html' %}
 <div class="ui container">
 <form class="ui form" id="frmItem" name="frmItem">
-<input type="text" name="caption" placeholder="Item caption">
-        <textarea id="editor" name="editor" cols="80" rows="10">
-      
-        </textarea>
+<input type="text" name="caption" placeholder="Question">
+<div id="drop" class="ui selection dropdown">
+<<<<<<< Updated upstream
+  <input id="test" type="hidden" name="type">
+=======
+  <input id="type" type="hidden" name="type">
+>>>>>>> Stashed changes
+  <i class="dropdown icon"></i>
+  <div class="default text">Type</div>
+  <div class="menu">
+    <div class="item" data-value="courte">Courte</div>
+    <div class="item" data-value="longue">Longue</div>
+    <div class="item" data-value="qcm">Choix multiple</div>
+    <div class="item" data-value="code">Code</div>
+  </div>
+</div>
+	<div id="response">
+	{{ response | raw }}
+	</div>
+<<<<<<< Updated upstream
+=======
+<button id="addAnswer" class="ui button">Ajouter une reponse</button>
+>>>>>>> Stashed changes
 <button id="btValidate" class="ui button">Valider</button>
+  <input id="nbAnswer" type="text" value="2" name="nbAnswer">
 </form>
 </div>
 {{script_foot | raw}}

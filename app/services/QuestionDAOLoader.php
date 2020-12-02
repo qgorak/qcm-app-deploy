@@ -3,33 +3,39 @@
 namespace services;
 
 use Ubiquity\orm\DAO;
+use models\Answer;
 use models\Question;
 use Ubiquity\utils\http\USession;
 
-class QuestionDAOLoader implements IQuestionLoader {
+class QuestionDAOLoader {
+<<<<<<< Updated upstream
 	/**
 	 *
 	 * {@inheritdoc}
 	 * @see \services\IQuestionLoader::get()
 	 */
+=======
+
+>>>>>>> Stashed changes
 	public function get($id): ?Question {
 		return DAO::getById ( Question::class, $id );
 	}
 
+<<<<<<< Updated upstream
 	/**
 	 *
 	 * {@inheritdoc}
 	 * @see \services\IQuestionLoader::add()
 	 */
-	public function add(Question $item): void {
+=======
+>>>>>>> Stashed changes
+	public function add(Question $item,Answer $answer): void {
 		DAO::insert ( $item );
+		$answer->setQuestion($item);
+		DAO::insert($answer);
 	}
 
-	/**
-	 *
-	 * {@inheritdoc}
-	 * @see \services\IQuestionLoader::all()
-	 */
+
 	public function all(): array {
 		return DAO::getAll ( Question::class );
 	}
@@ -40,29 +46,15 @@ class QuestionDAOLoader implements IQuestionLoader {
 	}
 	
 
-	/**
-	 *
-	 * {@inheritdoc}
-	 * @see \services\IQuestionLoader::clear()
-	 */
 	public function clear(): void {
 		DAO::deleteAll ( Question::class, '1=1' );
 	}
 
-	/**
-	 *
-	 * {@inheritdoc}
-	 * @see \services\IQuestionLoader::remove()
-	 */
 	public function remove(string $id): bool {
 		return DAO::delete ( Question::class, $id );
 	}
 
-	/**
-	 *
-	 * {@inheritdoc}
-	 * @see \services\IQuestionLoader::update()
-	 */
+
 	public function update(Question $item): bool {
 		return DAO::update ( $item );
 	}
