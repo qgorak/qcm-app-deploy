@@ -19,7 +19,6 @@ class QuestionDAOLoader {
 		DAO::insert($answer);
 	}
 
-
 	public function all(): array {
 		return DAO::getAll ( Question::class );
 	}
@@ -28,7 +27,6 @@ class QuestionDAOLoader {
 	    $userid = USession::get('activeUser')['id'];
 	    return DAO::getAll( Question::class, 'idUser='.$userid);
 	}
-	
 
 	public function clear(): void {
 		DAO::deleteAll ( Question::class, '1=1' );
@@ -37,7 +35,6 @@ class QuestionDAOLoader {
 	public function remove(string $id): bool {
 		return DAO::delete ( Question::class, $id );
 	}
-
 
 	public function update(Question $item): bool {
 		return DAO::update ( $item );
