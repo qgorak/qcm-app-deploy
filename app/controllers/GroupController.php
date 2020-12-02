@@ -20,16 +20,28 @@ class GroupController extends ControllerBase{
      * @route("/","name"=>"groupe")
      */
     public function index(){
+        $this->jquery->exec('var userInGroup=[];',true);
         $groupForm=$this->jquery->semantic()->dataForm('groupForm', Group::class);
         $groupForm->setFields([
             "name",
             "description",
             "usergroups",
-            "addUserToGroup"
+            "addUserToGroup",
+            "userInGroup"
         ]);
+        $groupForm->fieldAsHidden("userInGroup");
         $groupForm->fieldAsButton("addUserToGroup","",["value"=>"Add user to group"]);
         $groupForm->addSubmit('groupFormSubmit','Add group');
-        $this->jquery->getOnClick('#groupForm-addUserToGroup-0',Router::path('user.exist',["'+document.getElementById('groupForm-usergroups').value+'"]),'#response');
+        $this->jquery->getOnClick('#groupForm-addUserToGroup-0',Router::path('user.exist',["'+document.getElementById('groupForm-usergroups').value+'"]),null,[
+            'jsCondition'=>'function(){if(document.getElementById("groupForm-usergroups").value!==null){return true;}}',
+            'jsCallback'=>'if(!userInGroup.includes(data)){
+            var table = document.getElementById("usersInGroup").getElementsByTagName("tbody")[0];
+            var row = table.insertRow(0);
+            var cell1 = row.insertCell(0);
+            cell1.innerHTML = data;
+            userInGroup.push(data);
+            document.getElementById("groupForm-userInGroup-0").value = JSON.stringify(userInGroup);}'
+        ]);
         $this->jquery->postFormOnClick('#groupFormSubmit',Router::path('add'), 'groupForm','body');
         $this->jquery->renderDefaultView();
     }
@@ -38,11 +50,7 @@ class GroupController extends ControllerBase{
      * @post("add","name"=>"add")
      */
     public function addGroup(){
-        $group=new Group();
-        URequest::setPostValuesToObject($group);       
-        $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
-        $group->setUser($user);
-        DAO::insert($group,true);
+        var_dump(URequest::getDatas());
     }
 }
 

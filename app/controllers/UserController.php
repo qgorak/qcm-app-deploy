@@ -20,6 +20,6 @@ class UserController extends ControllerBase{
 	 */
 	public function isUserExisting(string $id){
 	    $user=DAO::getOne(User::class,'id=?',true,[$id]);
-	    echo $user->getEmail();
+        echo $user->getEmail();
 	}
 }
