@@ -4,14 +4,12 @@ namespace controllers;
 
 use Ajax\semantic\html\collections\HtmlMessage;
 use Ubiquity\controllers\Router;
-use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
+use Ubiquity\utils\http\USession;
+use models\Answer;
 use models\Question;
 use models\User;
 use services\QuestionDAOLoader;
-use Ubiquity\utils\http\USession;
-use Ajax\php\ci\JsUtils;
-use models\Answer;
 
 
 /**
@@ -76,12 +74,14 @@ class QuestionController extends ControllerBase {
         $this->jquery->postFormOnClick ( '#btValidate', 'question/add', 'frmItem', 'body', [
             'hasLoader' => 'internal'
         ] );
+
+        $this->jquery->ajaxOn('click','#addAnswer', "QuestionController/getform/qcm/'+document.getElementById('nbAnswer').value+'", '#response',
+            [
+                'jsCallback'=>'$("#nbAnswer").get(0).value++'
+            ]);
         $this->jquery->exec('$(\'#drop\').dropdown()',true);
-        $this->jquery->ajaxOn('change','#test','/question/getForm','#response', 
-        		[
-        				'attr' => 'value'
-        		]);
-        $this->jquery->renderView ( 'QuestionController/add.html', [ ]) ;
+        $this->jquery->ajaxOn('change','#test',"QuestionController/getform/'+document.getElementById('test').value+'/'+document.getElementById('nbAnswer').value+'",'#response', );
+        $this->jquery->renderView ( 'QuestionController/add.html', []) ;
     }
     /**
      *
@@ -97,12 +97,11 @@ class QuestionController extends ControllerBase {
     }
     
     
-    /**
-     *
-     * @get("getForm/{type}","name"=>"getForm")
-     */
-    public function getform(string $type) {
-    	$this->jquery->renderView('QuestionController/template/'.$type.'.html', [ ]) ;
+
+    public function getform($type,$nbAnswer = 1) {
+
+        $this->jquery->renderView('QuestionController/template/'.$type.'.html', ['nbAnswer'=>$nbAnswer]);
+
     }
     
     /**
@@ -128,6 +127,12 @@ class QuestionController extends ControllerBase {
             'response' => $response
         ] );
     } 
-    
+   
+
+	public function qsd($param,$param2){
+		
+	}
+
+
+
 }
-    
