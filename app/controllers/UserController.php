@@ -16,7 +16,7 @@ class UserController extends ControllerBase{
 	}
 	
 	/**
-	 * @get('exist/{id}',name=>"user.exist")
+	 * @get('exist/{id}',"name"=>"user.exist")
 	 */
 	public function isUserExisting(string $id){
 	    $user=DAO::getOne(User::class,'id=?',true,[$id]);
