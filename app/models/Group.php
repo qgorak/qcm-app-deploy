@@ -23,6 +23,12 @@ class Group{
 	private $description;
 
 	/**
+	 * @column("name"=>"key","nullable"=>false,"dbType"=>"varchar(255)")
+	 * @validator("length","constraints"=>array("max"=>255,"notNull"=>true))
+	**/
+	private $key;
+
+	/**
 	 * @oneToMany("mappedBy"=>"group","className"=>"models\\Exam")
 	**/
 	private $exams;
@@ -62,6 +68,14 @@ class Group{
 		$this->description=$description;
 	}
 
+	 public function getKey(){
+		return $this->key;
+	}
+
+	 public function setKey($key){
+		$this->key=$key;
+	}
+
 	 public function getExams(){
 		return $this->exams;
 	}
@@ -87,7 +101,7 @@ class Group{
 	}
 
 	 public function __toString(){
-		return $this->id.'';
+		return ($this->key??'no value').'';
 	}
 
 }

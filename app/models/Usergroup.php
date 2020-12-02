@@ -19,6 +19,12 @@ class Usergroup{
 	private $idUser;
 
 	/**
+	 * @column("name"=>"status","nullable"=>true,"dbType"=>"tinyint(2)")
+	 * @validator("length","constraints"=>array("max"=>2))
+	 **/
+	private $status;
+	
+	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\Group","name"=>"idGroup","nullable"=>false)
 	**/
@@ -43,7 +49,15 @@ class Usergroup{
 	}
 
 	 public function setIdUser($idUser){
-		$this->idUser=$idUser;
+	     $this->idUser=$idUser;
+	}
+	
+	public function getStatus(){
+	    return $this->status;
+	}
+	
+	public function setStatus($status){
+	    $this->status=$status;
 	}
 
 	 public function getGroup(){
