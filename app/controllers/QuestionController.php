@@ -14,7 +14,7 @@ use services\QuestionDAOLoader;
 
 /**
  * Controller QuestionController
- * @route('question','automated'=>true)
+ * @route('question','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
 class QuestionController extends ControllerBase {
@@ -62,6 +62,10 @@ class QuestionController extends ControllerBase {
     
 
 
+    /**
+     *
+     * @route('/','name'=>'question')
+     */
     public function index() {
         $this->_index ();
     }
@@ -71,7 +75,7 @@ class QuestionController extends ControllerBase {
      * @get("add")
      */
     public function add() {
-        $this->jquery->postFormOnClick ( '#btValidate', 'question/add', 'frmItem', 'body', [
+        $this->jquery->postFormOnClick ( '#btValidate', Router::path('addSubmit'), 'frmItem', 'body', [
             'hasLoader' => 'internal'
         ] );
 
@@ -105,7 +109,7 @@ class QuestionController extends ControllerBase {
     
     /**
      *
-     * @post("add")
+     * @post("add","name"=>"addSubmit")
      */
     public function submit() {
         $question= new Question ();
@@ -130,7 +134,5 @@ class QuestionController extends ControllerBase {
 	public function qsd($param,$param2){
 		
 	}
-
-
 
 }

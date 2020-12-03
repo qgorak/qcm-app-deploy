@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e700f631708afff774de84ed18cc8ed",
+    "content-hash": "c789430621036a322bce58ba559249a4",
     "packages": [
         {
             "name": "phpmv/ubiquity",
@@ -387,16 +387,16 @@
         },
         {
             "name": "phpmv/php-mv-ui",
-            "version": "2.3.11",
+            "version": "2.3.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/phpMv-UI.git",
-                "reference": "e370f7ec5bc50fecf29cd5c19a04c505baf2397b"
+                "reference": "d937375d48d3356787a3f9fa03ae18a87af07a30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/e370f7ec5bc50fecf29cd5c19a04c505baf2397b",
-                "reference": "e370f7ec5bc50fecf29cd5c19a04c505baf2397b",
+                "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/d937375d48d3356787a3f9fa03ae18a87af07a30",
+                "reference": "d937375d48d3356787a3f9fa03ae18a87af07a30",
                 "shasum": ""
             },
             "require": {
@@ -447,9 +447,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpMv/phpMv-UI/issues",
-                "source": "https://github.com/phpMv/phpMv-UI/tree/2.3.11"
+                "source": "https://github.com/phpMv/phpMv-UI/tree/2.3.12"
             },
-            "time": "2020-11-12T00:39:12+00:00"
+            "time": "2020-11-30T01:36:48+00:00"
         },
         {
             "name": "phpmv/ubiquity-codeception",
@@ -564,20 +564,20 @@
         },
         {
             "name": "phpmv/ubiquity-dev",
-            "version": "0.0.21",
+            "version": "0.0.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/ubiquity-dev.git",
-                "reference": "6fdb18ecab61adcf48384cac49f72daf659fa787"
+                "reference": "ae91b1bc330e87365ab0d98e8e64341d87189a95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/ubiquity-dev/zipball/6fdb18ecab61adcf48384cac49f72daf659fa787",
-                "reference": "6fdb18ecab61adcf48384cac49f72daf659fa787",
+                "url": "https://api.github.com/repos/phpMv/ubiquity-dev/zipball/ae91b1bc330e87365ab0d98e8e64341d87189a95",
+                "reference": "ae91b1bc330e87365ab0d98e8e64341d87189a95",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.4"
+                "php": ">=7.4"
             },
             "type": "extension",
             "extra": {
@@ -612,9 +612,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpMv/ubiquity-dev/issues",
-                "source": "https://github.com/phpMv/ubiquity-dev/tree/0.0.21"
+                "source": "https://github.com/phpMv/ubiquity-dev/tree/0.0.23"
             },
-            "time": "2020-11-28T15:07:10+00:00"
+            "time": "2020-12-03T02:08:32+00:00"
         },
         {
             "name": "phpmv/ubiquity-devtools",

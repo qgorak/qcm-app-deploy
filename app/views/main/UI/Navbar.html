@@ -1,6 +1,7 @@
 <div class="ui primary menu" style="border-radius:0px;">
 	<a class="item" href="{{path('_default')}}">Home</a>
-	<a class="item" href="question/index">Question</a>
+	<a class="item" href="{{path('question')}}">Question</a>
+	<a class="item" href="{{path('group')}}">Group</a>
 	{% if user.email|length > 0 %}
 		<div class="right menu">
 		<a class="item" href="{{path('terminate')}}">Logout</a>
