@@ -20,12 +20,12 @@ class QuestionDAOLoader {
 	}
 
 	public function all(): array {
-		return DAO::getAll ( Question::class );
+		return DAO::getAll ( Question::class,false );
 	}
 	
 	public function my(): array{
 	    $userid = USession::get('activeUser')['id'];
-	    return DAO::getAll( Question::class, 'idUser='.$userid);
+	    return DAO::getAll( Question::class, 'idUser='.$userid,false);
 	}
 
 	public function clear(): void {

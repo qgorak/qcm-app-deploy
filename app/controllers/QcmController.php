@@ -2,10 +2,10 @@
 namespace controllers;
 
 use Ubiquity\controllers\Router;
-use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\USession;
-use models\Question;
 use services\QcmDAOLoader;
+use services\QuestionDAOLoader;
+use services\UIService;
 
 /**
  * Controller QcmController
@@ -13,6 +13,18 @@ use services\QcmDAOLoader;
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
 class QcmController extends ControllerBase{
+    private $uiService;
+    public function initialize() {
+        parent::initialize ();
+        $this->uiService = new UIService ( $this->jquery );
+        if(!USession::exists('questions')){
+            $questionLoader = new QuestionDAOLoader();
+            $myQuestions = array();
+            $myQuestions['notchecked'] = $questionLoader->my();
+            $myQuestions['checked'] = array();
+            USession::init('questions', $myQuestions);
+        }
+    }
     
     /**
      *
@@ -34,7 +46,6 @@ class QcmController extends ControllerBase{
      * @get("index","name"=>"indexQcm")
      */
 	public function index(){
-
 	    $this->jquery->ajaxOnClick('#addQcm', Router::path('addQcm'),'#response',[
 	        'hasLoader'=>'internal'
 	    ]);
@@ -55,14 +66,60 @@ class QcmController extends ControllerBase{
 	 * @get("add","name"=>"addQcm")
 	 */
 	public function add() {
-	    $myQuestions = DAO::getAll( Question::class, 'idUser='.USession::get('activeUser')['id']);
+	    $dtQuestionNotChecked = $this->uiService->questionDataTable('dtQuestionNotChecked',USession::get('questions')['notchecked'],false);
+	    $dtQuestionChecked = $this->uiService->questionDataTable('dtQuestionChecked',USession::get('questions')['checked'],true);
 	    $this->jquery->ajaxOnClick('#cancel', Router::path('indexQcm'),'#response',[
 	        'hasLoader'=>'internal'
 	    ]);
+	    $this->jquery->ajaxOnClick ( '.notchecked ._element', 'qcm/addQuestion/', '#response', [
+	        'hasLoader' => 'internal',
+	        'attr' => 'data-ajax',
+	        'jsCallback'=>''
+	    ] );
+	    $this->jquery->ajaxOnClick ( '.checked ._element', 'qcm/deleteQuestion/', '#response', [
+	        'hasLoader' => 'internal',
+	        'attr' => 'data-ajax'
+	    ] );
 	    $this->_index($this->jquery->renderView ( 'QcmController/add.html', [
-	        'questions' => $myQuestions
+	        'questions' => USession::get('questions')['notchecked'],
+	        'questionsToAdd' => USession::get('questions')['checked']
 	    ]) );
 	}
 	
+	/**
+	 *
+	 * @get("addQuestion/{id}","name"=>"addQuestion")
+	 */
+	public function addQuestionToQcm($id) {
+	    $myQuestions = USession::get('questions');
+	    foreach ($myQuestions['notchecked'] as $key => $value) {
+	        if($value->getId()==$id){
+	            $question = $value;
+	            array_push($myQuestions['checked'],$question);
+	            unset($myQuestions['notchecked'][$key]);
+	            break;
+	        }    
+	    }
+	    USession::set('questions', $myQuestions);
+	    $this->add();
+	}
+	
+	/**
+	 *
+	 * @get("deleteQuestion/{id}","name"=>"deleteQuestion")
+	 */
+	public function removeQuestionToQcm($id) {
+	    $myQuestions = USession::get('questions');
+	    foreach ($myQuestions['checked'] as $key => $value) {
+	        if($value->getId()==$id){
+	            $question = $value;
+	            array_push($myQuestions['notchecked'],$question);
+	            unset($myQuestions['checked'][$key]);
+	            break;
+	        }
+	    }
+	    USession::set('questions', $myQuestions);
+	    $this->add();
+	}
 
 }
