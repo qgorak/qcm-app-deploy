@@ -8,43 +8,43 @@ class Exam{
 	 * @id
 	 * @column("name"=>"id","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
-	**/
+	*/
 	private $id;
 
 	/**
 	 * @column("name"=>"dated","nullable"=>true,"dbType"=>"datetime")
 	 * @validator("type","dateTime")
 	 * @transformer("name"=>"datetime")
-	**/
+	*/
 	private $dated;
 
 	/**
 	 * @column("name"=>"datef","nullable"=>true,"dbType"=>"datetime")
 	 * @validator("type","dateTime")
 	 * @transformer("name"=>"datetime")
-	**/
+	*/
 	private $datef;
 
 	/**
 	 * @column("name"=>"status","nullable"=>true,"dbType"=>"varchar(42)")
 	 * @validator("length","constraints"=>array("max"=>42))
-	**/
+	*/
 	private $status;
 
 	/**
 	 * @oneToMany("mappedBy"=>"exam","className"=>"models\\Examoption")
-	**/
+	*/
 	private $examoptions;
 
 	/**
 	 * @oneToMany("mappedBy"=>"exam","className"=>"models\\Qcm")
-	**/
+	*/
 	private $qcms;
 
 	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\Group","name"=>"idGroup","nullable"=>false)
-	**/
+	*/
 	private $group;
 
 	 public function getId(){
@@ -87,12 +87,20 @@ class Exam{
 		$this->examoptions=$examoptions;
 	}
 
+	 public function addExamoption($examoption){
+		$this->examoptions[]=$examoption;
+	}
+
 	 public function getQcms(){
 		return $this->qcms;
 	}
 
 	 public function setQcms($qcms){
 		$this->qcms=$qcms;
+	}
+
+	 public function addQcm($qcm){
+		$this->qcms[]=$qcm;
 	}
 
 	 public function getGroup(){

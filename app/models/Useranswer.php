@@ -8,39 +8,39 @@ class Useranswer{
 	 * @id
 	 * @column("name"=>"idUser","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
-	**/
+	*/
 	private $idUser;
 
 	/**
 	 * @id
 	 * @column("name"=>"idAnswer","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
-	**/
+	*/
 	private $idAnswer;
 
 	/**
 	 * @id
 	 * @column("name"=>"idQcm","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
-	**/
+	*/
 	private $idQcm;
 
 	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\Answer","name"=>"idAnswer","nullable"=>false)
-	**/
+	*/
 	private $answer;
 
 	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\Qcm","name"=>"idQcm","nullable"=>false)
-	**/
+	*/
 	private $qcm;
 
 	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\User","name"=>"idUser","nullable"=>false)
-	**/
+	*/
 	private $user;
 
 	 public function getIdUser(){

@@ -8,29 +8,29 @@ class Answer{
 	 * @id
 	 * @column("name"=>"id","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
-	**/
+	*/
 	private $id;
 
 	/**
 	 * @column("name"=>"caption","nullable"=>true,"dbType"=>"varchar(42)")
 	 * @validator("length","constraints"=>array("max"=>42))
-	**/
+	*/
 	private $caption;
 
 	/**
 	 * @column("name"=>"score","nullable"=>true,"dbType"=>"float")
-	**/
+	*/
 	private $score;
 
 	/**
 	 * @oneToMany("mappedBy"=>"answer","className"=>"models\\Useranswer")
-	**/
+	*/
 	private $useranswers;
 
 	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\Question","name"=>"idQuestion","nullable"=>false)
-	**/
+	*/
 	private $question;
 
 	 public function getId(){
@@ -63,6 +63,10 @@ class Answer{
 
 	 public function setUseranswers($useranswers){
 		$this->useranswers=$useranswers;
+	}
+
+	 public function addUseranswer($useranswer){
+		$this->useranswers[]=$useranswer;
 	}
 
 	 public function getQuestion(){

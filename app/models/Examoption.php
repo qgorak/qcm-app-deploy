@@ -8,32 +8,32 @@ class Examoption{
 	 * @id
 	 * @column("name"=>"idExam","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
-	**/
+	*/
 	private $idExam;
 
 	/**
 	 * @id
 	 * @column("name"=>"idOption","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
-	**/
+	*/
 	private $idOption;
 
 	/**
 	 * @column("name"=>"value","nullable"=>true,"dbType"=>"varchar(42)")
 	 * @validator("length","constraints"=>array("max"=>42))
-	**/
+	*/
 	private $value;
 
 	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\Exam","name"=>"idExam","nullable"=>false)
-	**/
+	*/
 	private $exam;
 
 	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\Option","name"=>"idOption","nullable"=>false)
-	**/
+	*/
 	private $option;
 
 	 public function getIdExam(){

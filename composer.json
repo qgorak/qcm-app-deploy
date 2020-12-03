@@ -10,8 +10,8 @@
 	],
 	"require" : {
 		"php" : "^7.4",
-		"phpmv/ubiquity": "^2.3",
-		"twig\/twig": "^3.0"
+		"phpmv/ubiquity" : "^2.3.12",
+		"twig/twig" : "^3.0"
 	},
 	"license" : "Apache-2.0",
 	"authors" : [{
@@ -22,7 +22,7 @@
 	],
 	"autoload" : {
 		"psr-4" : {
-			"": "app/"
+			"" : "app/"
 		}
 	},
 	"extra" : {
@@ -31,18 +31,18 @@
 		}
 	},
 	"require-dev" : {
-		"mindplay/annotations": "^1.3",
-		"phpmv/ubiquity-devtools": "^1.2",
-		"phpmv/ubiquity-webtools": "^2.3",
-		"phpmv/ubiquity-codeception": "^1.0",
-		"phpmv/php-mv-ui": "^2.2",
-		"phpmv/ubiquity-dev": "^0.0",
-		"phpmv/ubiquity-commands": "^0.0"
+		"mindplay/annotations" : "^1.3",
+		"phpmv/ubiquity-devtools" : "^1.2",
+		"phpmv/ubiquity-webtools" : "^2.3",
+		"phpmv/ubiquity-codeception" : "^1.0",
+		"phpmv/php-mv-ui" : "^2.2",
+		"phpmv/ubiquity-dev" : "^0.0",
+		"phpmv/ubiquity-commands" : "^0.0"
 	},
-	"minimum-stability": "dev",
-	"prefer-stable": true,
-	"scripts": {
-		"post-create-project-cmd": [
+	"minimum-stability" : "dev",
+	"prefer-stable" : true,
+	"scripts" : {
+		"post-create-project-cmd" : [
 			"@php vendor/phpmv/ubiquity-devtools/src/Ubiquity composer-create-project",
 			"@php vendor/phpmv/ubiquity-devtools/src/Ubiquity init-cache"
 		]

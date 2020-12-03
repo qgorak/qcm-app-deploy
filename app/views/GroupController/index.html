@@ -1,8 +1,12 @@
 <div class="ui container">
-	<a href="{{path('add')}}" class="ui green button">
-	Nouveau groupe
+	<a href="{{path('add')}}" data-target="#response" class="ui green button">
+	Create a group
 	</a>
-	
+	<a href="{{path('join')}}" data-target="#response" class="ui green button">
+	Join a group
+	</a>
+	<div id="response">
+	</div>
 	{{q['dtItems'] | raw }}
 
 </div>

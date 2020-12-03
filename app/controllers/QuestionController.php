@@ -83,6 +83,7 @@ class QuestionController extends ControllerBase {
         $this->jquery->ajaxOn('change','#test',"QuestionController/getform/'+document.getElementById('test').value+'/'+document.getElementById('nbAnswer').value+'",'#response', );
         $this->jquery->renderView ( 'QuestionController/add.html', []) ;
     }
+    
     /**
      *
      * @get("one/{id}","name"=>"getOne")
@@ -95,8 +96,6 @@ class QuestionController extends ControllerBase {
             'answers' => $answers
         ]) ;
     }
-    
-    
 
     public function getform($type,$nbAnswer = 1) {
 
@@ -128,7 +127,6 @@ class QuestionController extends ControllerBase {
         ] );
     } 
    
-
 	public function qsd($param,$param2){
 		
 	}

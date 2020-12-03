@@ -8,40 +8,40 @@ class Group{
 	 * @id
 	 * @column("name"=>"id","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
-	**/
+	*/
 	private $id;
 
 	/**
 	 * @column("name"=>"name","nullable"=>true,"dbType"=>"varchar(42)")
 	 * @validator("length","constraints"=>array("max"=>42))
-	**/
+	*/
 	private $name;
 
 	/**
 	 * @column("name"=>"description","nullable"=>true,"dbType"=>"text")
-	**/
+	*/
 	private $description;
 
 	/**
-	 * @column("name"=>"key","nullable"=>false,"dbType"=>"varchar(255)")
+	 * @column("name"=>"keyCode","nullable"=>false,"dbType"=>"varchar(255)")
 	 * @validator("length","constraints"=>array("max"=>255,"notNull"=>true))
-	**/
-	private $key;
+	*/
+	private $keyCode;
 
 	/**
 	 * @oneToMany("mappedBy"=>"group","className"=>"models\\Exam")
-	**/
+	*/
 	private $exams;
 
 	/**
 	 * @oneToMany("mappedBy"=>"group","className"=>"models\\Usergroup")
-	**/
+	*/
 	private $usergroups;
 
 	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\User","name"=>"idUser","nullable"=>false)
-	**/
+	*/
 	private $user;
 
 	 public function getId(){
@@ -68,12 +68,12 @@ class Group{
 		$this->description=$description;
 	}
 
-	 public function getKey(){
-		return $this->key;
+	 public function getKeyCode(){
+		return $this->keyCode;
 	}
 
-	 public function setKey($key){
-		$this->key=$key;
+	 public function setKeyCode($keyCode){
+		$this->keyCode=$keyCode;
 	}
 
 	 public function getExams(){
@@ -84,12 +84,20 @@ class Group{
 		$this->exams=$exams;
 	}
 
+	 public function addExam($exam){
+		$this->exams[]=$exam;
+	}
+
 	 public function getUsergroups(){
 		return $this->usergroups;
 	}
 
 	 public function setUsergroups($usergroups){
 		$this->usergroups=$usergroups;
+	}
+
+	 public function addUsergroup($usergroup){
+		$this->usergroups[]=$usergroup;
 	}
 
 	 public function getUser(){
@@ -101,7 +109,7 @@ class Group{
 	}
 
 	 public function __toString(){
-		return ($this->key??'no value').'';
+		return ($this->keyCode??'no value').'';
 	}
 
 }

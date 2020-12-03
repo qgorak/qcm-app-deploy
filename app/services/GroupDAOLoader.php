@@ -6,6 +6,7 @@ use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\USession;
 use models\Group;
 use models\User;
+use models\Usergroup;
 
 class GroupDAOLoader {
 
@@ -26,7 +27,7 @@ class GroupDAOLoader {
 		return DAO::getAll ( Group::class );
 	}
 	
-	public function my(): array{
+	public function myGroups(): array{
 	    $userid = USession::get('activeUser')['id'];
 	    return DAO::getAll( Group::class, 'idUser='.$userid);
 	}
@@ -43,6 +44,10 @@ class GroupDAOLoader {
 
 	public function update(Group $group): bool {
 		return DAO::update ( $group );
+	}
+	
+	public function getByKey($key) {
+		return DAO::getOne(Group::class,"keyCode=?",true,[$key]);
 	}
 
 
