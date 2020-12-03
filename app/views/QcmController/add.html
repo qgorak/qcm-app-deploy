@@ -1,0 +1,25 @@
+<button id="cancel" class="ui red button">Cancel</button>
+<form class="ui form" id="frmItem" name="frmItem"></form>
+<input type="text" name="caption" placeholder="Nom qcm">
+
+
+
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>Caption</th>
+      <th>points</th>
+      <th>tags</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for question in questions %}
+    <tr>
+      <td>{{ question.caption }}</td>
+      <td>{{ question.points }}</td>
+      <td>tags</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{{ script_foot | raw }}

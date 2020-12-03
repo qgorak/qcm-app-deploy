@@ -1,0 +1,17 @@
+<button id="addQcm" class="ui green button">add</button>
+<div class="ui cards">
+{% for item in qcm %}
+<div class="card">
+    <div class="content">
+      <div class="header">{{ item.id }}</div>
+      <div class="meta">{{ item.caption }}</div>
+      <div class="description">
+        {{ item.description }}
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{{script_foot | raw}}
+
+
