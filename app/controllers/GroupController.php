@@ -142,8 +142,7 @@ class GroupController extends ControllerBase{
     public function joinSubmit(){
     	$user=DAO::getById(User::class,USession::get('activeUser')['id'],['usergroups']);   	
     	$group=$this->loader->getByKey(URequest::post('GroupKey')); 
-    	$alreadyInGroup=(DAO::exists(Usergroup::class,"idGroup=? AND idUser=?",[$group->getId(),$user->getId()]) || DAO::exists(Group::class,"id=? AND idUser=?","idGroup=? AND idUser=?",[$group->getId(),$user->getId()]))? true : false;
-    	if(!$alreadyInGroup){
+    	if(!($user->isInGroup($group->getId()) || $user->isCreator($group->getId()))){
     		$userGroup=new Usergroup();
     		$userGroup->setIdGroup($group->getId());
     		$userGroup->setIdUser($user->getId());

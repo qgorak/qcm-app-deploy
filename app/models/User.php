@@ -1,5 +1,7 @@
 <?php
 namespace models;
+
+use Ubiquity\orm\DAO;
 /**
  * @table('user')
 */
@@ -181,6 +183,21 @@ class User{
 
 	 public function __toString(){
 		return $this->id.'';
+	}
+	
+	public function isCreator(string $idGroup){
+		$group=DAO::getById(Group::class, $idGroup);
+		if($group->getUser()==$this->getId()){
+			return true;
+		}
+		return false;
+	}
+	
+	public function isInGroup(string $idGroup){
+		if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=?",[$idGroup,$this->getId()])){
+			return true;
+		}
+		return false;
 	}
 
 }
