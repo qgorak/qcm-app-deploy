@@ -3,9 +3,10 @@
 namespace services;
 
 use Ubiquity\orm\DAO;
-use models\Answer;
-use models\Qcm;
 use Ubiquity\utils\http\USession;
+use models\Exam;
+use models\Qcm;
+use models\User;
 
 class QcmDAOLoader {
 
@@ -13,10 +14,16 @@ class QcmDAOLoader {
 		return DAO::getById ( Qcm::class, $id );
 	}
 
-	public function add(Qcm $item,Answer $answer): void {
-		DAO::insert ( $item );
-		$answer->setQcm($item);
-		DAO::insert($answer);
+	public function add(Qcm $qcm): void {
+        $creator = new User();
+        $creator->setId(USession::get('activeUser')['id']);
+        $qcm->setUser($creator);
+        $exam = new Exam();
+        $exam -> setId(1);
+        $questions = USession::get('questions');
+        $qcm->setQuestions($questions['checked']);
+        $qcm->setExam($exam);
+		DAO::insert($qcm,true);
 	}
 
 	public function all(): array {

@@ -5,8 +5,8 @@ namespace services;
 use Ajax\php\ubiquity\JsUtils;
 use Ajax\service\JArray;
 use Ubiquity\orm\DAO;
+use models\Qcm;
 use models\Question;
-use models\User;
 
 class UIService {
 	protected $jquery;
@@ -27,10 +27,17 @@ class UIService {
 		    'checked'=>$checked
 		]);
 		$dt->setIdentifierFunction ( 'getId');
-
-
-		
 		return $dt;
+		
+	}
+	public function qcmForm() {
+	    $q = new Qcm();
+	    $frm = $this->jquery->semantic ()->dataForm ( 'qcmForm', $q );
+	    $frm->setFields ( [
+	        'name',
+	        'description'
+	    ] );
+	    return $frm;
 	}
 
 }

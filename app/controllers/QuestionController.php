@@ -124,15 +124,12 @@ class QuestionController extends ControllerBase {
         $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
 
     }
+    
     private function _index($response = '') {
         $this->displayItems ();
         $this->jquery->renderView ( 'QuestionController/index.html', [
             'response' => $response
         ] );
     } 
-   
-	public function qsd($param,$param2){
-		
-	}
-
+    
 }
