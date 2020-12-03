@@ -199,5 +199,13 @@ class User{
 		}
 		return false;
 	}
+	
+	public function getAllGroups(){
+		$retour=array();
+		foreach($this->getUsergroups() as $value){
+			array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
+		}
+		return array_merge($retour,$this->getGroups());
+	}
 
 }

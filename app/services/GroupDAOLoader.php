@@ -14,24 +14,20 @@ class GroupDAOLoader {
 		return DAO::getById ( Group::class, $id );
 	}
 
-
 	public function add(Group $group): void {
 	    $creator = new User();
 	    $creator->setId(USession::get('activeUser')['id']);
 	    $group->setUser($creator);
 		DAO::insert ( $group );
 	}
-
-
 	public function all(): array {
 		return DAO::getAll ( Group::class );
 	}
 	
 	public function myGroups(): array{
-	    $userid = USession::get('activeUser')['id'];
-	    return DAO::getAll( Group::class, 'idUser='.$userid);
+		$user = DAO::getById(User::class, USession::get('activeUser')['id']);
+	    return $user->getAllGroups();
 	}
-	
 
 	public function clear(): void {
 		DAO::deleteAll ( Group::class, '1=1' );
@@ -49,7 +45,5 @@ class GroupDAOLoader {
 	public function getByKey($key) {
 		return DAO::getOne(Group::class,"keyCode=?",true,[$key]);
 	}
-
-
 }
 
