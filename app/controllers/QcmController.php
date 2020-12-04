@@ -1,8 +1,12 @@
 <?php
 namespace controllers;
 
+use Ajax\semantic\html\collections\HtmlMessage;
 use Ubiquity\controllers\Router;
+use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
+use models\Qcm;
+use models\Question;
 use services\QcmDAOLoader;
 use services\QuestionDAOLoader;
 use services\UIService;
@@ -45,13 +49,14 @@ class QcmController extends ControllerBase{
      *
      * @get("index","name"=>"indexQcm")
      */
-	public function index(){
+	public function index($msg=''){
 	    $this->jquery->ajaxOnClick('#addQcm', Router::path('addQcm'),'#response',[
 	        'hasLoader'=>'internal'
 	    ]);
 	    $myQcm = $myQcm = $this->loader->my();
 	    $this->_index($this->jquery->renderView ( 'QcmController/templates/myQcm.html',[
-	        'qcm' => $myQcm
+	        'qcm' => $myQcm,
+	        'msg' => $msg
 	    ],true));
 	}
 	
@@ -68,7 +73,11 @@ class QcmController extends ControllerBase{
 	public function add() {
 	    $dtQuestionNotChecked = $this->uiService->questionDataTable('dtQuestionNotChecked',USession::get('questions')['notchecked'],false);
 	    $dtQuestionChecked = $this->uiService->questionDataTable('dtQuestionChecked',USession::get('questions')['checked'],true);
+	    $frmQcm = $this->uiService->qcmForm();
 	    $this->jquery->ajaxOnClick('#cancel', Router::path('indexQcm'),'#response',[
+	        'hasLoader'=>'internal'
+	    ]);
+	    $this->jquery->postFormOnClick('#create', Router::path('submitQcm'), 'qcmForm','#response',[
 	        'hasLoader'=>'internal'
 	    ]);
 	    $this->jquery->ajaxOnClick ( '.notchecked ._element', 'qcm/addQuestion/', '#response', [
@@ -80,10 +89,7 @@ class QcmController extends ControllerBase{
 	        'hasLoader' => 'internal',
 	        'attr' => 'data-ajax'
 	    ] );
-	    $this->_index($this->jquery->renderView ( 'QcmController/add.html', [
-	        'questions' => USession::get('questions')['notchecked'],
-	        'questionsToAdd' => USession::get('questions')['checked']
-	    ]) );
+	    $this->_index($this->jquery->renderView ( 'QcmController/add.html', []) );
 	}
 	
 	/**
@@ -120,6 +126,19 @@ class QcmController extends ControllerBase{
 	    }
 	    USession::set('questions', $myQuestions);
 	    $this->add();
+	}
+	
+	/**
+	 *
+	 * @post("add","name"=>"submitQcm")
+	 */
+	public function submit() {
+	    $qcm = new Qcm();
+	    $qcm->setName(URequest::post ( 'name', 'no name' ) );
+	    $qcm->setDescription(URequest::post ( 'description', '' ) );
+	    $this->loader->add ($qcm);
+	    USession::delete('questions');
+	    $this->_index($this->index(new HtmlMessage ( '', "Success !" )));
 	}
 
 }

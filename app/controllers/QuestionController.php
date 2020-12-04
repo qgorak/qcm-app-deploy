@@ -70,19 +70,12 @@ class QuestionController extends ControllerBase {
         $this->_index ();
     }
     
-    private function _index($response = '') {
-        $this->displayItems ();
-        $this->jquery->renderView ( 'QuestionController/index.html', [
-            'response' => $response
-        ] );
-    } 
-    
     /**
      *
-     * @get('add','name'=>'questionAdd')
+     * @get("add")
      */
     public function add() {
-        $this->jquery->postFormOnClick ( '#btValidate', Router::path('QuestionAddSubmit'), 'frmItem', 'body', [
+        $this->jquery->postFormOnClick ( '#btValidate', Router::path('addSubmit'), 'frmItem', 'body', [
             'hasLoader' => 'internal'
         ] );
 
@@ -116,7 +109,7 @@ class QuestionController extends ControllerBase {
     
     /**
      *
-     * @post("add","name"=>"QuestionAddSubmit")
+     * @post("add","name"=>"addSubmit")
      */
     public function submit() {
         $question= new Question ();
@@ -131,9 +124,12 @@ class QuestionController extends ControllerBase {
         $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
 
     }
-   
-	public function qsd($param,$param2){
-		
-	}
-
+    
+    private function _index($response = '') {
+        $this->displayItems ();
+        $this->jquery->renderView ( 'QuestionController/index.html', [
+            'response' => $response
+        ] );
+    } 
+    
 }
