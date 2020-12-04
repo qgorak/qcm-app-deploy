@@ -201,21 +201,31 @@ class GroupController extends ControllerBase{
         ]);
         $usersDt->setIdentifierFunction ( 'getId' );
         $usersDt->addEditDeleteButtons(false);
-        $this->jquery->ajaxOnClick('._edit',Router::path('groupDemandAccept',''),'body',[
+        var_dump(URequest::getUrlParts());
+        $this->jquery->ajaxOnClick('._edit',Router::path('groupDemandAccept',['true',URequest::getUrlParts()[2]]),'body',[
+            'method'=>'post',
+            'attr'=>'data-ajax'
+        ]);
+        $this->jquery->ajaxOnClick('._delete',Router::path('groupDemandAccept',['false',URequest::getUrlParts()[2]]),'body',[
+            'method'=>'post',
             'attr'=>'data-ajax'
         ]);
         $this->jquery->renderView('GroupController/demand.html');
     }
     
     /**
-     * @post('demand/{accept}/{groupId}/{userId}','name'=>'groupDemandAccept')
+     * @post('demand/{bool}/{groupId}/{userId}','name'=>'groupDemandAccept')
      * @param mixed $userId
      * @param mixed $groupId
      */
-    public function acceptDemand($userId,$groupId,$accept){
-        if($accept=="true"){
-            $this->loader->acceptDemand($userId, $groupId);
+    public function acceptDemand($bool,$groupId,$userId){
+        if($bool=="true"){
+            $this->loader->acceptDemand($groupId,$userId);
         }
+        elseif($bool=="false"){
+            $this->loader->refuseDemand($groupId,$userId);
+        }
+        
         $this->jquery->renderView('GroupController/demand.html');
     }
 }

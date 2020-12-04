@@ -57,10 +57,16 @@ class GroupDAOLoader {
 	    return $users;
 	}
 	
-	public function acceptDemand($userId,$groupId){
+	public function acceptDemand($groupId,$userId){
 	    $userGroup=DAO::getOne(Usergroup::class,"idUser=? AND idGroup=?",false,[$userId,$groupId]);
-	    $userGroup->setStatus(1);
-	    DAO::insertOrUpdateAllManyToMany($userGroup);
+	    $userGroup->setStatus('1');
+	    DAO::update($userGroup);
+	}
+	
+	public function refuseDemand($groupId,$userId){
+	    $userGroup=DAO::getOne(Usergroup::class,"idUser=? AND idGroup=?",false,[$userId,$groupId]);
+	    DAO::toDelete($userGroup);
+	    DAO::flushDeletes();
 	}
 }
 
