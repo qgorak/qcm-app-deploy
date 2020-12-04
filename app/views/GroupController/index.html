@@ -1,9 +1,9 @@
 <div class="ui container">
 	<a  id="addGroup" href="{{path('group')}}" data-target="#response" class="ui green button">
-	Create a group
+	{{t('addSubmit',[],'main')}}
 	</a>
 	<a href="{{path('groupJoin')}}" data-target="#response" class="ui green button">
-	Join a group
+	{{t('joinSubmit',[],'main')}}
 	</a>
 	<div id="response">
 	{{ response | raw }}

@@ -11,6 +11,7 @@ use models\User;
 use Ubiquity\utils\http\USession;
 use models\Usergroup;
 use Ubiquity\controllers\Startup;
+use Ubiquity\translation\TranslatorManager;
 
 /**
  * Controller GroupController
@@ -102,7 +103,7 @@ class GroupController extends ControllerBase{
         	'rules'=>'empty'
         ]);
         $groupForm->fieldAsSubmit('submit',null,Router::path('GroupAddSubmit'),'body',[
-        	'value'=>'Add the group'
+        	'value'=>TranslatorManager::trans('addSubmit',[],'main')
         ]);
         if (URequest::isAjax ()) {
             $this->jquery->renderView ( 'GroupController/add.html' );
@@ -141,7 +142,7 @@ class GroupController extends ControllerBase{
 			'rules'=>'empty'
 		]);
 		$groupForm->fieldAsSubmit('submit',null,Router::path('joinSubmit'),'body',[
-			'value'=>'Join the group'
+		    'value'=>TranslatorManager::trans('joinSubmit',[],'main')
 		]);
 		if (URequest::isAjax ()) {
 		    $this->jquery->renderView ( 'GroupController/join.html' );
