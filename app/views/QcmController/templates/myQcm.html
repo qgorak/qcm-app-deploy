@@ -1,5 +1,5 @@
 {{ msg | raw }}
-<button id="addQcm" class="ui green button">add</button>
+<button id="addQcm" href="{{path('qcm.add')}}" data-target="#response" class="ui green button">add</button>
 <div class="ui cards">
 {% for item in qcm %}
 <div class="card">

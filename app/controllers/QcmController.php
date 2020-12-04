@@ -21,12 +21,12 @@ class QcmController extends ControllerBase{
     public function initialize() {
         parent::initialize ();
         $this->uiService = new UIService ( $this->jquery );
-        if(!USession::exists('questions')){
+        if (!URequest::isAjax()){
             $questionLoader = new QuestionDAOLoader();
             $myQuestions = array();
             $myQuestions['notchecked'] = $questionLoader->my();
             $myQuestions['checked'] = array();
-            USession::init('questions', $myQuestions);
+            USession::set('questions', $myQuestions);
         }
     }
     
@@ -47,11 +47,12 @@ class QcmController extends ControllerBase{
     
     /**
      *
-     * @get("index","name"=>"indexQcm")
+     * @route('/','name'=>'qcm')
      */
 	public function index($msg=''){
-	    $this->jquery->ajaxOnClick('#addQcm', Router::path('addQcm'),'#response',[
-	        'hasLoader'=>'internal'
+	    $this->jquery->getHref('#addQcm', '',[
+	        'hasLoader'=>'internal',
+	        'historize'=>false
 	    ]);
 	    $myQcm = $myQcm = $this->loader->my();
 	    $this->_index($this->jquery->renderView ( 'QcmController/templates/myQcm.html',[
@@ -68,24 +69,25 @@ class QcmController extends ControllerBase{
 	
 	/**
 	 *
-	 * @get("add","name"=>"addQcm")
+	 * @get("add","name"=>'qcm.add')
 	 */
 	public function add() {
 	    $dtQuestionNotChecked = $this->uiService->questionDataTable('dtQuestionNotChecked',USession::get('questions')['notchecked'],false);
 	    $dtQuestionChecked = $this->uiService->questionDataTable('dtQuestionChecked',USession::get('questions')['checked'],true);
 	    $frmQcm = $this->uiService->qcmForm();
-	    $this->jquery->ajaxOnClick('#cancel', Router::path('indexQcm'),'#response',[
+	    $this->jquery->getHref('#cancel', '',[
+	        'hasLoader'=>'internal',
+	        'historize'=>false
+	    ]);
+	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
 	        'hasLoader'=>'internal'
 	    ]);
-	    $this->jquery->postFormOnClick('#create', Router::path('submitQcm'), 'qcmForm','#response',[
-	        'hasLoader'=>'internal'
-	    ]);
-	    $this->jquery->ajaxOnClick ( '.notchecked ._element', 'qcm/addQuestion/', '#response', [
+	    $this->jquery->ajaxOnClick ( '.notchecked ._element', Router::path('qcm.add.question',['']) , '#response', [
 	        'hasLoader' => 'internal',
 	        'attr' => 'data-ajax',
 	        'jsCallback'=>''
 	    ] );
-	    $this->jquery->ajaxOnClick ( '.checked ._element', 'qcm/deleteQuestion/', '#response', [
+	    $this->jquery->ajaxOnClick ( '.checked ._element', Router::path('qcm.delete.question',['']), '#response', [
 	        'hasLoader' => 'internal',
 	        'attr' => 'data-ajax'
 	    ] );
@@ -94,7 +96,7 @@ class QcmController extends ControllerBase{
 	
 	/**
 	 *
-	 * @get("addQuestion/{id}","name"=>"addQuestion")
+	 * @get("addQuestion/{id}","name"=>"qcm.add.question")
 	 */
 	public function addQuestionToQcm($id) {
 	    $myQuestions = USession::get('questions');
@@ -112,7 +114,7 @@ class QcmController extends ControllerBase{
 	
 	/**
 	 *
-	 * @get("deleteQuestion/{id}","name"=>"deleteQuestion")
+	 * @get("deleteQuestion/{id}","name"=>"qcm.delete.question")
 	 */
 	public function removeQuestionToQcm($id) {
 	    $myQuestions = USession::get('questions');
@@ -130,7 +132,7 @@ class QcmController extends ControllerBase{
 	
 	/**
 	 *
-	 * @post("add","name"=>"submitQcm")
+	 * @post("add","name"=>"qcm.submit")
 	 */
 	public function submit() {
 	    $qcm = new Qcm();
