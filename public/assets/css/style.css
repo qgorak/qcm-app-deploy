@@ -26,10 +26,11 @@ body{
   	padding: 15px 0;
   	text-align:center;
 }
-<<<<<<< Updated upstream
-._element:hover {
-=======
+
+textarea,input,.selection{
+	margin:10px 0 !important;
+}
+
 #dtItems tbody tr:hover {
->>>>>>> Stashed changes
 	background:whitesmoke;
 }

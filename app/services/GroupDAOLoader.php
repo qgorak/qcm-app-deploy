@@ -34,6 +34,7 @@ class GroupDAOLoader {
 	}
 
 	public function remove(string $id): bool {
+	    DAO::deleteAll(Usergroup::class,"idGroup=?",[$id]);
 		return DAO::delete ( Group::class, $id );
 	}
 

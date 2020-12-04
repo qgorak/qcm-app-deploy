@@ -46,6 +46,18 @@ class GroupController extends ControllerBase{
             'description'
         ] );
         $dt->setIdentifierFunction ( 'getId' );
+        $dt->addDeleteButton( false );
+        
+        $dt->setEdition ();
+        $this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',""), 'body', [
+            'hasLoader' => 'internal',
+            'attr' => 'data-ajax'
+        ] );
+        
+        $this->jquery->getOnClick ( '._edit', Router::path ('groupEdit'), '#response', [
+            'hasLoader' => 'internal',
+            'attr' => 'data-ajax'
+        ] );
     }
     
     /**
@@ -57,9 +69,9 @@ class GroupController extends ControllerBase{
     }
     
     private function _index($response = '') {
-    	$this->jquery->getHref('a','',[
-    		'hasloader'=>''
-    	]);
+        $this->jquery->getHref('.container a','',[
+            'hasloader'=>'internal'
+        ]);
         $this->displayMyGroups();
         $this->jquery->renderView ( 'Groupcontroller/index.html', [
             'response' => $response
@@ -67,38 +79,37 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @get("add","name"=>"add")
+     * @get("add","name"=>"groupAdd")
      */
     public function addGroup(){
-    	if(URequest::isAjax()){
-	        $groupForm=$this->jquery->semantic()->dataForm('groupForm', Group::class);
-	        $groupForm->setFields([
-	            "name",
-	            "description",
-	        	"submit"
-	        ]);
-	        $groupForm->setCaptions([
-	        	'Name',
-	        	'Description'
-	        ]);
-	        $groupForm->fieldAsInput('name',[
-	        	'rules'=>'empty'
-	        ]);
-	        $groupForm->fieldAsTextarea('description',[
-	        	'rules'=>'empty'
-	        ]);
-	        $groupForm->fieldAsSubmit('submit',null,Router::path('addSubmit'),'body',[
-	        	'value'=>'Add the group'
-	        ]);
-	        $this->jquery->renderView ( 'GroupController/add.html', []) ;
-    	}
-    	else{
-    		Startup::forward(Router::path('group'),false,false);
-    	}
+        $groupForm=$this->jquery->semantic()->dataForm('groupForm', Group::class);
+        $groupForm->setFields([
+            "name",
+            "description",
+        	"submit"
+        ]);
+        $groupForm->setCaptions([
+        	'Name',
+        	'Description'
+        ]);
+        $groupForm->fieldAsInput('name',[
+        	'rules'=>'empty'
+        ]);
+        $groupForm->fieldAsTextarea('description',[
+        	'rules'=>'empty'
+        ]);
+        $groupForm->fieldAsSubmit('submit',null,Router::path('GroupAddSubmit'),'body',[
+        	'value'=>'Add the group'
+        ]);
+        if (URequest::isAjax ()) {
+            $this->jquery->renderView ( 'GroupController/add.html' );
+        } else {
+            $this->_index ( $this->jquery->renderView ( 'GroupController/add.html', [ ], true ) );
+        }
     }
     
     /**
-     * @post("add","name"=>"addSubmit")
+     * @post("add","name"=>"GroupAddSubmit")
      */
     public function addSubmit(){
         $group = new Group();
@@ -107,33 +118,33 @@ class GroupController extends ControllerBase{
         $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
         $group->setUser($user);
         $this->loader->add($group);
-        Startup::forward(Router::path('group'));
+        $this->jquery->exec("window.location.href='/group'",true);
+        $this->jquery->renderView( 'GroupController/index.html') ;
     }
     
     /**
-     * @get("join","name"=>"join")
+     * @get("join","name"=>"groupJoin")
      */
     public function joinGroup(){
-    	if(Urequest::isAjax()){
-    		$groupForm=$this->jquery->semantic()->dataForm('groupForm',Usergroup::class);
-    		$groupForm->setFields([
-    			'GroupKey',
-    			'submit'
-    		]);
-    		$groupForm->setCaptions([
-    			'Key of the group'
-    		]);
-    		$groupForm->fieldAsInput('GroupKey',[
-    			'rules'=>'empty'
-    		]);
-    		$groupForm->fieldAsSubmit('submit',null,Router::path('joinSubmit'),'body',[
-    			'value'=>'Join the group'
-    		]);
-    		$this->jquery->renderView ( 'GroupController/join.html') ;
-    	}
-    	else{
-    		Startup::forward(Router::path('group'),false,false);
-    	}
+		$groupForm=$this->jquery->semantic()->dataForm('groupForm',Usergroup::class);
+		$groupForm->setFields([
+			'GroupKey',
+			'submit'
+		]);
+		$groupForm->setCaptions([
+			'Key of the group'
+		]);
+		$groupForm->fieldAsInput('GroupKey',[
+			'rules'=>'empty'
+		]);
+		$groupForm->fieldAsSubmit('submit',null,Router::path('joinSubmit'),'body',[
+			'value'=>'Join the group'
+		]);
+		if (URequest::isAjax ()) {
+		    $this->jquery->renderView ( 'GroupController/join.html' );
+		} else {
+		    $this->_index ( $this->jquery->renderView ( 'GroupController/join.html', [ ], true ) );
+		}
     }
     
     /**
@@ -142,13 +153,27 @@ class GroupController extends ControllerBase{
     public function joinSubmit(){
     	$user=DAO::getById(User::class,USession::get('activeUser')['id'],['usergroups']);   	
     	$group=$this->loader->getByKey(URequest::post('GroupKey')); 
-    	if(!($user->isInGroup($group->getId()) || $user->isCreator($group->getId()))){
-    		$userGroup=new Usergroup();
-    		$userGroup->setIdGroup($group->getId());
-    		$userGroup->setIdUser($user->getId());
-    		$userGroup->setStatus(0);
-    		DAO::save($userGroup);
+    	if($group!=null){
+    	    if(!($user->isInGroup($group->getId()) || $user->isCreator($group->getId()))){
+    	        $userGroup=new Usergroup();
+    	        $userGroup->setIdGroup($group->getId());
+    	        $userGroup->setIdUser($user->getId());
+    	        $userGroup->setStatus(0);
+    	        DAO::save($userGroup);
+    	    }
     	}
-    	Startup::forward(Router::path('group'));
+    	$this->jquery->exec("window.location.href='/group'",true);
+    	$this->jquery->renderView( 'GroupController/index.html') ;
+    }
+    
+    /**
+     * @get('delete/{id}','name'=>'groupDelete')
+     * @param string $id
+     */
+    public function groupDelete(string $id){
+        $this->loader->remove ( $id );
+        $msg = $this->jquery->semantic ()->htmlMessage ( '', 'Item supprimé' );
+        $this->jquery->exec("window.location.href='/group'",true);
+        $this->jquery->renderView( 'GroupController/index.html') ;    
     }
 }
