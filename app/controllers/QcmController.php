@@ -49,13 +49,14 @@ class QcmController extends ControllerBase{
      *
      * @get("index","name"=>"indexQcm")
      */
-	public function index(){
+	public function index($msg=''){
 	    $this->jquery->ajaxOnClick('#addQcm', Router::path('addQcm'),'#response',[
 	        'hasLoader'=>'internal'
 	    ]);
 	    $myQcm = $myQcm = $this->loader->my();
 	    $this->_index($this->jquery->renderView ( 'QcmController/templates/myQcm.html',[
-	        'qcm' => $myQcm
+	        'qcm' => $myQcm,
+	        'msg' => $msg
 	    ],true));
 	}
 	
@@ -133,12 +134,11 @@ class QcmController extends ControllerBase{
 	 */
 	public function submit() {
 	    $qcm = new Qcm();
-	    $question= new Question ();
 	    $qcm->setName(URequest::post ( 'name', 'no name' ) );
 	    $qcm->setDescription(URequest::post ( 'description', '' ) );
 	    $this->loader->add ($qcm);
 	    USession::delete('questions');
-	    $this->_index($this->index());
+	    $this->_index($this->index(new HtmlMessage ( '', "Success !" )));
 	}
 
 }
