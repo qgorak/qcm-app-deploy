@@ -194,7 +194,7 @@ class User{
 	}
 	
 	public function isInGroup(string $idGroup){
-		if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=?",[$idGroup,$this->getId()])){
+		if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=? AND status=1",[$idGroup,$this->getId()])){
 			return true;
 		}
 		return false;

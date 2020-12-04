@@ -68,5 +68,14 @@ class GroupDAOLoader {
 	    DAO::toDelete($userGroup);
 	    DAO::flushDeletes();
 	}
+	
+	public function getUsers($groupId){
+	    $users=[];
+	    $userGroup=DAO::uGetAll(Usergroup::class,"idGroup=?",false,[$groupId]);
+	    foreach($userGroup as $value){
+	        array_push($users,DAO::getById(User::class,$value->getIdUser(),false));
+	    }
+	    return $users;
+	}
 }
 
