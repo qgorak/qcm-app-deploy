@@ -20,6 +20,7 @@ class GroupDAOLoader {
 	    $group->setUser($creator);
 		DAO::insert ( $group );
 	}
+	
 	public function all(): array {
 		return DAO::getAll ( Group::class );
 	}
@@ -45,6 +46,21 @@ class GroupDAOLoader {
 	
 	public function getByKey($key) {
 		return DAO::getOne(Group::class,"keyCode=?",true,[$key]);
+	}
+	
+	public function getJoiningDemand($id){
+	    $users=[];
+	    $userGroups=DAO::uGetAll(Usergroup::class,"idGroup=? AND status=0",false,[$id]);
+	    foreach($userGroups as $value){
+	        array_push($users,DAO::getById(User::class, $value->getIdUser(),false));
+	    }
+	    return $users;
+	}
+	
+	public function acceptDemand($userId,$groupId){
+	    $userGroup=DAO::getOne(Usergroup::class,"idUser=? AND idGroup=?",false,[$userId,$groupId]);
+	    $userGroup->setStatus(1);
+	    DAO::insertOrUpdateAllManyToMany($userGroup);
 	}
 }
 

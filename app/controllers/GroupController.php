@@ -12,6 +12,7 @@ use Ubiquity\utils\http\USession;
 use models\Usergroup;
 use Ubiquity\controllers\Startup;
 use Ubiquity\translation\TranslatorManager;
+use Ajax\semantic\html\elements\HtmlButton;
 
 /**
  * Controller GroupController
@@ -179,5 +180,42 @@ class GroupController extends ControllerBase{
         $msg = $this->jquery->semantic ()->htmlMessage ( '', 'Item supprimé' );
         $this->jquery->exec("window.location.href='/group'",true);
         $this->jquery->renderView( 'GroupController/index.html') ;    
+    }
+    
+    /**
+     * @get('demand/{id}','name'=>'groupDemand')
+     * @param mixed $id
+     */
+    public function getUserDemand($id){
+        $users=$this->loader->getJoiningDemand($id);
+        $usersDt=$this->jquery->semantic()->dataTable('usersDemand',User::class,$users);
+        $usersDt->setFields([
+            'firstname',
+            'lastname',
+            'email'
+        ]);
+        $usersDt->setCaptions([
+            'firstname',
+            'lastname',
+            'email'
+        ]);
+        $usersDt->setIdentifierFunction ( 'getId' );
+        $usersDt->addEditDeleteButtons(false);
+        $this->jquery->ajaxOnClick('._edit',Router::path('groupDemandAccept',''),'body',[
+            'attr'=>'data-ajax'
+        ]);
+        $this->jquery->renderView('GroupController/demand.html');
+    }
+    
+    /**
+     * @post('demand/{accept}/{groupId}/{userId}','name'=>'groupDemandAccept')
+     * @param mixed $userId
+     * @param mixed $groupId
+     */
+    public function acceptDemand($userId,$groupId,$accept){
+        if($accept=="true"){
+            $this->loader->acceptDemand($userId, $groupId);
+        }
+        $this->jquery->renderView('GroupController/demand.html');
     }
 }
