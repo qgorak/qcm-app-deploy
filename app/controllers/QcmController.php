@@ -85,18 +85,17 @@ class QcmController extends ControllerBase{
 	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
 	        'hasLoader'=>'internal'
 	    ]);
-	    $this->jquery->ajaxOnClick ( '.notchecked ._element', Router::path('qcm.add.question',['']) , '#response', [
+	    $this->jquery->ajaxOnClick ( '._add', Router::path('qcm.add.question',['']) , '#response', [
 	        'hasLoader' => 'internal',
+	        'params' => '$("#qcmForm").serialize()',
+	        'method' => 'post',
 	        'attr' => 'data-ajax',
-	        'params' => '$("#qcmForm").serialize()',
-	        'method' => 'post',
-	        'jsCallback'=>''
 	    ] );
-	    $this->jquery->ajaxOnClick ( '.checked ._element', Router::path('qcm.delete.question',['']), '#response', [
+	    $this->jquery->ajaxOnClick ( '._remove', Router::path('qcm.delete.question',['']) , '#response', [
 	        'hasLoader' => 'internal',
 	        'params' => '$("#qcmForm").serialize()',
 	        'method' => 'post',
-	        'attr' => 'data-ajax'
+	        'attr' => 'data-ajax',
 	    ] );
 	    $this->_index($this->jquery->renderView ( 'QcmController/add.html', []) );
 	}
