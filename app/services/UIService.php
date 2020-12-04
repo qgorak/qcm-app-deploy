@@ -7,6 +7,7 @@ use Ajax\service\JArray;
 use Ubiquity\orm\DAO;
 use models\Qcm;
 use models\Question;
+use Ajax\semantic\html\collections\HtmlMessage;
 
 class UIService {
 	protected $jquery;
@@ -19,14 +20,31 @@ class UIService {
 		$q = new Question ();
 		$dt = $this->jquery->semantic ()->dataTable($name, $q,$questions);
 		$dt->setFields ( [
-		    '',
-		    'id',
-		    'caption'
+		    'checkbox',
+		    'caption',
+		    'point'
 		] );
-		$dt->fieldAsCheckbox('',[
-		    'checked'=>$checked
+		$dt->fieldAsCheckbox('checkbox',[
+		    'checked'=>$checked,
+		    'class'=>'test'
 		]);
+		$dt->setVariation('compact');
 		$dt->setIdentifierFunction ( 'getId');
+		$dt->setColWidths([0=>2,1=>8,2=>2]);
+		$dt->setClass(['ui very basic table']);
+		$msg = $this->jquery->semantic()->htmlMessage('');
+		if($checked == true){
+		    $dt->setCaption(0,'My qcm questions:');
+		    $msg->setContent('Select your questions in the bank');
+		    $dt->setEmptyMessage($msg);
+		    
+		}else{
+		    $dt->setCaption(0,'Question bank:');
+		    $msg->setContent('Empty');
+		    $msg->setVariation('negative');
+		    $msg->setIcon('exclamation triangle');
+		    $dt->setEmptyMessage($msg);
+		}
 		return $dt;
 		
 	}

@@ -71,10 +71,13 @@ class QcmController extends ControllerBase{
 	 *
 	 * @get("add","name"=>'qcm.add')
 	 */
-	public function add() {
+	public function add($formContent=['name'=>'','description'=>'']) {
 	    $dtQuestionNotChecked = $this->uiService->questionDataTable('dtQuestionNotChecked',USession::get('questions')['notchecked'],false);
 	    $dtQuestionChecked = $this->uiService->questionDataTable('dtQuestionChecked',USession::get('questions')['checked'],true);
 	    $frmQcm = $this->uiService->qcmForm();
+	    $this->jquery->exec('$("#qcmForm-name").val("'.$formContent['name'].'");'.
+	                        '$("#qcmForm-description").val("'.$formContent['description'].'");'
+	        ,true);
 	    $this->jquery->getHref('#cancel', '',[
 	        'hasLoader'=>'internal',
 	        'historize'=>false
@@ -85,10 +88,14 @@ class QcmController extends ControllerBase{
 	    $this->jquery->ajaxOnClick ( '.notchecked ._element', Router::path('qcm.add.question',['']) , '#response', [
 	        'hasLoader' => 'internal',
 	        'attr' => 'data-ajax',
+	        'params' => '$("#qcmForm").serialize()',
+	        'method' => 'post',
 	        'jsCallback'=>''
 	    ] );
 	    $this->jquery->ajaxOnClick ( '.checked ._element', Router::path('qcm.delete.question',['']), '#response', [
 	        'hasLoader' => 'internal',
+	        'params' => '$("#qcmForm").serialize()',
+	        'method' => 'post',
 	        'attr' => 'data-ajax'
 	    ] );
 	    $this->_index($this->jquery->renderView ( 'QcmController/add.html', []) );
@@ -96,7 +103,7 @@ class QcmController extends ControllerBase{
 	
 	/**
 	 *
-	 * @get("addQuestion/{id}","name"=>"qcm.add.question")
+	 * @post("addQuestion/{id}","name"=>"qcm.add.question")
 	 */
 	public function addQuestionToQcm($id) {
 	    $myQuestions = USession::get('questions');
@@ -108,13 +115,15 @@ class QcmController extends ControllerBase{
 	            break;
 	        }    
 	    }
+	    $formContent['name'] = URequest::post('name');
+	    $formContent['description'] = URequest::post('description');
 	    USession::set('questions', $myQuestions);
-	    $this->add();
+	    $this->add($formContent);
 	}
 	
 	/**
 	 *
-	 * @get("deleteQuestion/{id}","name"=>"qcm.delete.question")
+	 * @post("deleteQuestion/{id}","name"=>"qcm.delete.question")
 	 */
 	public function removeQuestionToQcm($id) {
 	    $myQuestions = USession::get('questions');
@@ -126,8 +135,10 @@ class QcmController extends ControllerBase{
 	            break;
 	        }
 	    }
+	    $formContent['name'] = URequest::post('name');
+	    $formContent['description'] = URequest::post('description');
 	    USession::set('questions', $myQuestions);
-	    $this->add();
+	    $this->add($formContent);
 	}
 	
 	/**
