@@ -69,6 +69,9 @@ class GroupController extends ControllerBase{
     }
     
     private function _index($response = '') {
+        $this->jquery->getHref('#addGroup','', [ 
+				'hasLoader' => 'internal'
+		] );
         $this->jquery->ajaxOnClick('#addGroup',Router::path ('groupAdd',[]),'#response',[
             'hasloader'=>'internal'
         ]);
