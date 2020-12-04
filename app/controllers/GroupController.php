@@ -49,7 +49,7 @@ class GroupController extends ControllerBase{
         $dt->addDeleteButton( false );
         
         $dt->setEdition ();
-        $this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',""), 'body', [
+        $this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[]), 'body', [
             'hasLoader' => 'internal',
             'attr' => 'data-ajax'
         ] );
@@ -61,7 +61,7 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * 
+     *
      * @route('/','name'=>'group')
      */
     public function index(){
@@ -69,7 +69,7 @@ class GroupController extends ControllerBase{
     }
     
     private function _index($response = '') {
-        $this->jquery->getHref('.container a','',[
+        $this->jquery->ajaxOnClick('#addGroup',Router::path ('groupAdd',[]),'#response',[
             'hasloader'=>'internal'
         ]);
         $this->displayMyGroups();
