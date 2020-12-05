@@ -2,7 +2,6 @@
 
 namespace controllers;
 
-use Ajax\semantic\html\collections\HtmlMessage;
 use Ubiquity\controllers\Router;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;

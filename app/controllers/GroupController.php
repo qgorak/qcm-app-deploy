@@ -1,7 +1,6 @@
 <?php
 namespace controllers;
 
-use Ajax\semantic\html\collections\HtmlMessage;
 use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
@@ -10,9 +9,7 @@ use services\GroupDAOLoader;
 use models\User;
 use Ubiquity\utils\http\USession;
 use models\Usergroup;
-use Ubiquity\controllers\Startup;
 use Ubiquity\translation\TranslatorManager;
-use Ajax\semantic\html\elements\HtmlButton;
 
 /**
  * Controller GroupController
@@ -45,6 +42,11 @@ class GroupController extends ControllerBase{
             'name',
             'description'
         ] );
+        $dtMyGroups->setCaptions([
+            'id',
+            TranslatorManager::trans('name',[],'main'),
+            TranslatorManager::trans('description',[],'main')
+        ]);
         $dtMyGroups->setIdentifierFunction ( 'getId' );
         $dtMyGroups->addAllButtons(false);
         $dtMyGroups->setEdition ();
@@ -66,6 +68,11 @@ class GroupController extends ControllerBase{
             'name',
             'description'
         ] );
+        $dtInGroups->setCaptions([
+            'id',
+            TranslatorManager::trans('name',[],'main'),
+            TranslatorManager::trans('description',[],'main')
+        ]);
         $dtInGroups->setIdentifierFunction ( 'getId' );
         $dtInGroups->setEdition ();
     }
@@ -104,9 +111,9 @@ class GroupController extends ControllerBase{
             'email'
         ]);
         $usersDt->setCaptions([
-            'firstname',
-            'lastname',
-            'email'
+            TranslatorManager::trans('firstname',[],'main'),
+            TranslatorManager::trans('lastname',[],'main'),
+            TranslatorManager::trans('email',[],'main')
         ]);
         $usersDt->setIdentifierFunction ( 'getId' );
         if(URequest::isAjax()){
@@ -128,8 +135,8 @@ class GroupController extends ControllerBase{
             "submit"
         ]);
         $groupForm->setCaptions([
-            'Name',
-            'Description'
+            TranslatorManager::trans('name',[],'main'),
+            TranslatorManager::trans('description',[],'main')
         ]);
         $groupForm->fieldAsInput('name',[
             'rules'=>'empty'
@@ -173,7 +180,7 @@ class GroupController extends ControllerBase{
 			'submit'
 		]);
 		$groupForm->setCaptions([
-			'Key of the group'
+		    TranslatorManager::trans('groupKey',[],'main')
 		]);
 		$groupForm->fieldAsInput('GroupKey',[
 			'rules'=>'empty'
@@ -226,9 +233,9 @@ class GroupController extends ControllerBase{
             'email'
         ]);
         $usersDt->setCaptions([
-            'firstname',
-            'lastname',
-            'email'
+            TranslatorManager::trans('firstname',[],'main'),
+            TranslatorManager::trans('lastname',[],'main'),
+            TranslatorManager::trans('email',[],'main')
         ]);
         $usersDt->setIdentifierFunction ( 'getId' );
         $usersDt->addEditDeleteButtons(false);

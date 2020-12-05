@@ -1,17 +1,17 @@
 <div class="ui primary menu" style="border-radius:0px;">
-	<a class="item" href="{{path('_default')}}">Home</a>
-	<a class="item" href="{{path('question')}}">Question</a>
-	<a class="item" href="{{path('group')}}">Group</a>
-		<a class="item" href="{{path('qcm')}}">Qcm</a>
+	<a class="item" href="{{path('_default')}}">{{t('home',[],'main')}}</a>
+	<a class="item" href="{{path('question')}}">{{t('question',[],'main')}}</a>
+	<a class="item" href="{{path('group')}}">{{t('group',[],'main')}}</a>
+		<a class="item" href="{{path('qcm')}}">{{t('qcm',[],'main')}}</a>
 	{% if user.email|length > 0 %}
 		<div class="right menu">
-		<a class="item" href="{{path('terminate')}}">Logout</a>
+		<a class="item" href="{{path('terminate')}}">{{t('logout',[],'main')}}</a>
 		<a class ="item">	{{user.email}}</a>
 	</div>
 	{% else %}
 		<div class="right menu">
-		<a class="item" id="login">Log in</a>
-		<a class="item" id="register">Register</a>
+		<a class="item" id="login">{{t('login',[],'main')}}</a>
+		<a class="item" id="register">{{t('register',[],'main')}}</a>
 	</div>
 	{% endif %}
 </div>

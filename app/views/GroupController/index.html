@@ -5,7 +5,7 @@
 	<a id="joinGroup" href="{{path('groupJoin')}}" data-target="#response" class="ui green button">
 	{{t('joinSubmit',[],'main')}}
 	</a>
-	<a href="{{path('group')}}" class="ui primary button">See my groups</a>
+	<a href="{{path('group')}}" class="ui primary button">{{t('seeGroups',[],'main')}}</a>
 	<div id="response">
 	{{ response | raw }}
 	</div>

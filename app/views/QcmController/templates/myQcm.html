@@ -2,7 +2,7 @@
 {{ msg | raw }}
 </div>
 <div class="ui container segment">
-<button id="addQcm" href="{{path('qcm.add')}}" data-target="#response" class="ui green button">add</button>
+<button id="addQcm" href="{{path('qcm.add')}}" data-target="#response" class="ui green button">{{t('addQcm',[],'main')}}</button>
 <div class="ui cards">
 {% for item in qcm %}
 <div class="card">

@@ -5,6 +5,7 @@ namespace services;
 use Ajax\php\ubiquity\JsUtils;
 use Ajax\service\JArray;
 use Ubiquity\orm\DAO;
+use Ubiquity\translation\TranslatorManager;
 use models\Qcm;
 use models\Question;
 use Ajax\semantic\html\collections\HtmlMessage;
@@ -23,20 +24,24 @@ class UIService {
 		    'caption',
 		    'point'
 		] );
+		$dt->setcaptions([
+		    TranslatorManager::trans('caption',[],'main'),
+		    TranslatorManager::trans('point',[],'main')
+		]);
 		$dt->setVariation('compact');
 		$dt->setIdentifierFunction ( 'getId');
 		$dt->setClass(['ui very basic table']);
 		$msg = $this->jquery->semantic()->htmlMessage('');
 		if($checked == true){
 		    $dt->setCaption(0,'');
-		    $msg->setContent('Select your questions in the bank');
+		    $msg->setContent(TranslatorManager::trans('selectInBank',[],'main'));
 		    $msg->setIcon('arrow down');
 		    $dt->insertDefaultButtonIn(4, 'x','_remove circular red',false,null,'remove');
 		    $dt->setEmptyMessage($msg);
 		    
 		}else{
 		    $dt->setCaption(0,'');
-		    $msg->setContent('Empty');
+		    $msg->setContent(TranslatorManager::trans('empty',[],'main'));
 		    $msg->setVariation('negative');
 		    $msg->setIcon('exclamation triangle');
 		    $dt->insertDefaultButtonIn(4, 'plus','_add circular green ',false,null,'add');
@@ -44,7 +49,7 @@ class UIService {
 		    $dt->setStyle('margin-top:0;padding-inline: 10px 20px;');
 		    $toolbar = $this->jquery->semantic()->htmlMenu('Question Bank');
 		    $toolbar->addPopupAsItem('Sort', 'sort','<div id="response-tag"></div>');
-		    $toolbar->addHeader('Question Bank');
+		    $toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
 		    $toolbar->setClass('ui top attached menu');
 		    
 		    $dt->setToolbar($toolbar);
@@ -62,18 +67,26 @@ class UIService {
 	        'name',
 	        'description'
 	    ] );
+	    $frm->setCaptions([
+	        TranslatorManager::trans('name',[],'main'),
+	        TranslatorManager::trans('description',[],'main')
+	    ]);
 	    return $frm;
 	}
 	
 	public function getQuestionDataTable($questions){
 	    $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $questions );
-	    $msg = new HtmlMessage ( '', "Aucun élément à afficher !" );
+	    $msg = new HtmlMessage ( '', TranslatorManager::trans('noDisplay',[],'main') );
 	    $msg->addIcon ( "x" );
 	    $dt->setEmptyMessage ( $msg );
 	    $dt->setFields ( [
 	        'id',
 	        'caption'
 	    ] );
+	    $dt->setCaptions([
+	        'id',
+	        TranslatorManager::trans('caption',[],'main')
+	    ]);
 	    $dt->onRowClick('alert(\'ok\')');
 	    $dt->setIdentifierFunction ( 'getId' );
 	    $dt->addEditDeleteButtons ( false );
