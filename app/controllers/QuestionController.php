@@ -88,14 +88,12 @@ class QuestionController extends ControllerBase {
         ]);
         $this->jquery->exec('$("#text-dropdown-questionForm-typeq-0").html("Select a type");',true);
         $frm = $this->uiService->questionForm ();
-        $this->jquery->getOnClick ( '.menu .item', 'question/getform', '#response-form', [
+        $this->jquery->getOnClick ( '#dropdown-questionForm-typeq-0 .menu .item', 'question/getform', '#response-form', [
             'stopPropagation'=>false,
             'attr' => 'data-value',
             'hasLoader' => 'internal',
-            'jsCallback'=>'$("#dropdown-form-typeq-0").dropdown("toggle");
-                           $("#dropdown-form-typeq-0").attr("tabindex","2");'
+
         ] );
-        $this->jquery->ajaxOn('change', '.menu .item', 'question/getform');
         $this->jquery->renderView ( 'QuestionController/add.html', []) ;
     }
     
