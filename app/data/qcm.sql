@@ -1,14 +1,14 @@
 CREATE DATABASE `qcm`;
 USE `qcm`;
 CREATE TABLE `answer` (`id` int(11) NOT NULL,`caption` varchar(42) DEFAULT NULL,`score` float DEFAULT 0,`idQuestion` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `exam` (`id` int(11) NOT NULL,`dated` datetime DEFAULT CURRENT_TIMESTAMP,`datef` datetime DEFAULT CURRENT_TIMESTAMP,`status` varchar(42) DEFAULT NULL,`idQcm` int(11) NOT NULL,`idGroup` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `exam` (`id` int(11) NOT NULL,`dated` datetime DEFAULT CURRENT_TIMESTAMP,`datef` datetime DEFAULT CURRENT_TIMESTAMP,`status` varchar(42) DEFAULT NULL,`idGroup` int(11) NOT NULL,`idQcm` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `examoption` (`idExam` int(11) NOT NULL,`idOption` int(11) NOT NULL,`value` varchar(42) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `group` (`id` int(11) NOT NULL,`name` varchar(42) DEFAULT NULL,`description` text DEFAULT NULL,`keyCode` varchar(255) NOT NULL,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `option` (`id` int(11) NOT NULL,`key` varchar(42) DEFAULT NULL,`description` text DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `qcm` (`id` int(11) NOT NULL,`name` varchar(42) DEFAULT NULL,`description` varchar(42) DEFAULT NULL,`cdate` datetime DEFAULT CURRENT_TIMESTAMP,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `question` (`id` int(11) NOT NULL,`caption` varchar(42) DEFAULT NULL,`points` int(11) DEFAULT 0,`tags` text DEFAULT NULL,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `tag` (`id` int(11) NOT NULL,`name` varchar(42) DEFAULT NULL,`color` varchar(42) DEFAULT NULL,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `user` (`id` int(11) NOT NULL,`password` varchar(42) DEFAULT NULL,`firstname` varchar(42) DEFAULT NULL,`lastname` varchar(42) DEFAULT NULL,`email` varchar(255) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `user` (`id` int(11) NOT NULL,`password` varchar(42) DEFAULT NULL,`firstname` varchar(42) DEFAULT NULL,`lastname` varchar(42) DEFAULT NULL,`email` varchar(255) DEFAULT NULL,`language` varchar(32) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `useranswer` (`idUser` int(11) NOT NULL,`idAnswer` int(11) NOT NULL,`idQcm` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `usergroup` (`idGroup` int(11) NOT NULL,`idUser` int(11) NOT NULL,`status` varchar(255) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `qcmquestion` (`idQuestion` int(11) NOT NULL,`idQcm` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;

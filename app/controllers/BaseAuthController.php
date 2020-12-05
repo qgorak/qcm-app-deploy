@@ -1,9 +1,11 @@
 <?php
 namespace controllers;
+use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\USession;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\orm\DAO;
 use models\User;
+use Ubiquity\translation\Translator;
 
 /**
  * Auth Controller BaseAuthController
@@ -35,6 +37,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $process="error";
         }
         header('location:/');
+        exit();
     }
     
     /**
@@ -43,6 +46,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     public function terminate(){
         USession::terminate ();
         header('location:/');
+        exit();
     }
     
     /**
@@ -74,7 +78,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $user=DAO::getOne(User::class,"email = ?",true,[URequest::post('email')]);
             if($user!==null){
                 if(URequest::post('password')==$user->getPassword()){
-                    return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname()];
+                    return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()];
                 }
                 else{
                     return "Wrong password !";

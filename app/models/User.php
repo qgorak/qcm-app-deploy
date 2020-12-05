@@ -41,6 +41,12 @@ class User{
 	private $email;
 
 	/**
+	 * @column("name"=>"language","nullable"=>false,"dbType"=>"varchar(32)")
+	 * @validator("length","constraints"=>array("max"=>32,"notNull"=>true))
+	*/
+	private $language;
+
+	/**
 	 * @oneToMany("mappedBy"=>"user","className"=>"models\\Group")
 	*/
 	private $groups;
@@ -108,6 +114,14 @@ class User{
 
 	 public function setEmail($email){
 		$this->email=$email;
+	}
+
+	 public function getLanguage(){
+		return $this->language;
+	}
+
+	 public function setLanguage($language){
+		$this->language=$language;
 	}
 
 	 public function getGroups(){
@@ -183,31 +197,31 @@ class User{
 	}
 
 	 public function __toString(){
-		return $this->id.'';
+		return ($this->language??'no value').'';
 	}
 	
 	public function isCreator(string $idGroup){
-		$group=DAO::getById(Group::class, $idGroup);
-		if($group->getUser()==$this->getId()){
-			return true;
-		}
-		return false;
+	    $group=DAO::getById(Group::class, $idGroup);
+	    if($group->getUser()==$this->getId()){
+	        return true;
+	    }
+	    return false;
 	}
 	
 	public function isInGroup(string $idGroup){
-		if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=? AND status='1'",[$idGroup,$this->getId()])){
-			return true;
-		}
-		return false;
+	    if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=? AND status='1'",[$idGroup,$this->getId()])){
+	        return true;
+	    }
+	    return false;
 	}
 	
 	public function getAllGroups(){
-		$retour=[];
-		$userGroups=DAO::uGetAll(Usergroup::class,"idUser=? AND status='1'",false,[USession::get('activeUser')['id']]);
-		foreach($userGroups as $value){
-		       array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
-		}
-		return $retour;
+	    $retour=[];
+	    $userGroups=DAO::uGetAll(Usergroup::class,"idUser=? AND status='1'",false,[$this->getId()]);
+	    foreach($userGroups as $value){
+	        array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
+	    }
+	    return $retour;
 	}
 
 }

@@ -222,6 +222,8 @@ class GroupController extends ControllerBase{
      */
     public function groupDelete(string $id){
         $this->loader->remove ( $id );
+        $this->displayMyGroups();
+        $this->jquery->renderView('GroupController/display.html');
     }
     
     private function demand($id){
