@@ -49,7 +49,6 @@ class GroupController extends ControllerBase{
         ]);
         $dtMyGroups->setIdentifierFunction ( 'getId' );
         $dtMyGroups->addAllButtons(false);
-        $dtMyGroups->setEdition ();
         $this->jquery->getOnClick('._display', Router::path ('groupView',[""]),'#response',[
             'hasLoader'=>'internal',
             'attr'=>'data-ajax'
@@ -74,7 +73,6 @@ class GroupController extends ControllerBase{
             TranslatorManager::trans('description',[],'main')
         ]);
         $dtInGroups->setIdentifierFunction ( 'getId' );
-        $dtInGroups->setEdition ();
     }
     
     /**
@@ -93,7 +91,7 @@ class GroupController extends ControllerBase{
     }
     
     private function _index($response = '') {
-        $this->jquery->renderView ( 'Groupcontroller/index.html', [
+        $this->jquery->renderView ( 'GroupController/index.html', [
             'response' => $response
         ] );
     }

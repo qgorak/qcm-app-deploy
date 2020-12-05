@@ -6,7 +6,7 @@
 	{% if user.email|length > 0 %}
 		<div class="right menu">
 		<a class="item" href="{{path('terminate')}}">{{t('logout',[],'main')}}</a>
-		<a class ="item">	{{user.email}}</a>
+		<a class ="item" href="{{path('user')}}">{{user.email}}</a>
 	</div>
 	{% else %}
 		<div class="right menu">
