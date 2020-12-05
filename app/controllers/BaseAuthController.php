@@ -1,11 +1,9 @@
 <?php
 namespace controllers;
-use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\USession;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\orm\DAO;
 use models\User;
-use Ubiquity\translation\Translator;
 
 /**
  * Auth Controller BaseAuthController
@@ -24,7 +22,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     }
     
     /**
-     * @post("/login")
+     * @post("/login",'name'=>'loginPost')
      */
     public function loginPost(){
         if(gettype($this->_connect())!=="string"){
@@ -50,7 +48,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     }
     
     /**
-     * @post("/register")
+     * @post("/register",'name'=>'registerPost')
      */
     public function registerPost(){
         if(URequest::isPost()){

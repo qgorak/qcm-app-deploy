@@ -1,10 +1,10 @@
-<div id="loginmodal" class="ui modal">
+<div id="loginmodal" class="ui modal" style="padding:10px;">
   <i class="close icon"></i>
   <div class="header">
     {{t('login',[],'main')}}
   </div>
-  <form class="ui large form" action="/login" method="post">
-      <div class="ui stacked segment">
+  <form class="ui large form" action="{{path('loginPost')}}" method="post">
+      <div class="ui stacked">
         <div class="field">
           <div class="ui left icon input">
             <i class="user icon"></i>
@@ -22,19 +22,19 @@
       		<div class="ui message {{process}} visible">{{info}}</div>
       	{% endif %}
   <div class="actions">
-		<input type="submit" class="ui fluid large teal submit button" value="{{t('login',[],'main')}}">
+		<input type="submit" class="ui fluid large primary submit button" value="{{t('login',[],'main')}}">
 		</form>
   </div>
 </div>
 
 
-<div id="registermodal" class="ui modal">
+<div id="registermodal" class="ui modal" style="padding:10px;">
   <i class="close icon"></i>
   <div class="header">
     {{t('register',[],'main')}}
   </div>
-<form class="ui large form" method="post" action="/register">
-      <div class="ui stacked segment">
+<form class="ui large form" method="post" action="{{path('registerPost')}}">
+      <div class="ui stacked">
       	<div class="field">
           <div class="ui left icon input">
             <i class="lock icon"></i>
@@ -70,7 +70,7 @@
       </div>
 
   <div class="actions">
-		<input type="submit" class="ui fluid large teal submit button" value="{{t('register',[],'main')}}">
+		<input type="submit" class="ui fluid large primary submit button" value="{{t('register',[],'main')}}">
 		</form>
   </div>
 </div>
