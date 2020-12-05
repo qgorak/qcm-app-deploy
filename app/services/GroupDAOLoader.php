@@ -27,9 +27,18 @@ class GroupDAOLoader {
 	
 	public function myGroups(): array{
 		$user = DAO::getById(User::class, USession::get('activeUser')['id']);
-	    return $user->getAllGroups();
+	    return $user->getGroups();
 	}
 
+	public function inGroups(){
+	    $groups=[];
+	    $userGroup=DAO::uGetAll(Usergroup::class,"idUser=?",false,[USession::get('activeUser')['id']]);
+	    foreach($userGroup as $value){
+	        array_push($groups,DAO::getById(Group::class,$value->getIdGroup()));
+	    }
+	    return $groups;	    
+	}
+	
 	public function clear(): void {
 		DAO::deleteAll ( Group::class, '1=1' );
 	}

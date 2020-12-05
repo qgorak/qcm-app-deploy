@@ -37,19 +37,17 @@ class GroupController extends ControllerBase{
     }
     
     private function displayMyGroups() {
-        $groups = $this->loader->myGroups();
-        $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Group::class, $groups );
-        $msg = new HtmlMessage ( '', "Aucun élément à afficher !" );
-        $msg->addIcon ( "x" );
-        $dt->setEmptyMessage ( $msg );
-        $dt->setFields ( [
+        $groups = $this->loader->myGroups();//seulement les groupes qui m'appartiennent
+        $inGroups=$this->loader->inGroups();//seulement les groupes ou je suis membre
+        $dtMyGroups = $this->jquery->semantic ()->dataTable ( 'myGroups', Group::class, $groups );
+        $dtMyGroups->setFields ( [
             'id',
             'name',
             'description'
         ] );
-        $dt->setIdentifierFunction ( 'getId' );
-        $dt->addAllButtons(false);
-        $dt->setEdition ();
+        $dtMyGroups->setIdentifierFunction ( 'getId' );
+        $dtMyGroups->addAllButtons(false);
+        $dtMyGroups->setEdition ();
         $this->jquery->getOnClick('._display', Router::path ('groupView',[""]),'#response',[
             'hasLoader'=>'internal',
             'attr'=>'data-ajax'
@@ -59,6 +57,19 @@ class GroupController extends ControllerBase{
             'attr' => 'data-ajax'
         ] );       
         $this->jquery->getOnClick ( '._edit', Router::path ('groupDemand',[""]), '#response', [
+            'hasLoader' => 'internal',
+            'attr' => 'data-ajax'
+        ] );
+        $dtInGroups = $this->jquery->semantic ()->dataTable ( 'inGroups', Group::class, $inGroups );
+        $dtInGroups->setFields ( [
+            'id',
+            'name',
+            'description'
+        ] );
+        $dtInGroups->setIdentifierFunction ( 'getId' );
+        $dtInGroups->addDeleteButton(false);
+        $dtInGroups->setEdition ();
+        $this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '#response', [
             'hasLoader' => 'internal',
             'attr' => 'data-ajax'
         ] );

@@ -203,7 +203,9 @@ class User{
 	public function getAllGroups(){
 		$retour=array();
 		foreach($this->getUsergroups() as $value){
-			array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
+		    if($value->getStatus=="1"){
+		        array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
+		    }
 		}
 		return array_merge($retour,$this->getGroups());
 	}
