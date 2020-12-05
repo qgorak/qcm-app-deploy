@@ -47,6 +47,9 @@ class QuestionController extends ControllerBase {
      * @route('/','name'=>'question')
      */
     public function index() {
+        $answer_array= array();
+        array_push($answer_array,new Answer());
+        USession::set('answers',$answer_array);
         $dt=$this->uiService->getQuestionDataTable($this->loader-> my());
         $this->jquery->getOnClick ( '._delete', 'delete', 'body', [
             'hasLoader' => 'internal',
@@ -80,7 +83,8 @@ class QuestionController extends ControllerBase {
      */
     public function add() {
         $this->jquery->postFormOnClick('#create', Router::path('question.submit'), 'questionForm','#response',[
-            'hasLoader'=>'internal'
+            'hasLoader'=>'internal',
+            'attr'=>'data-value'
         ]);
         $this->jquery->getHref('#cancel', '',[
             'hasLoader'=>'internal',
@@ -91,9 +95,10 @@ class QuestionController extends ControllerBase {
         $this->jquery->getOnClick ( '#dropdown-questionForm-typeq-0 .menu .item', 'question/getform', '#response-form', [
             'stopPropagation'=>false,
             'attr' => 'data-value',
-            'hasLoader' => 'internal',
+            'hasLoader' => false,
 
         ] );
+
         $this->jquery->renderView ( 'QuestionController/add.html', []) ;
     }
     
@@ -110,9 +115,14 @@ class QuestionController extends ControllerBase {
         ]) ;
     }
 
-    public function getform($type,$nbAnswer = 1) {
-        USession::set('answers',array());
-        $this->jquery->renderView('QuestionController/template/'.$type.'.html', ['nbAnswer'=>$nbAnswer]);
+    public function getform($type) {
+        $this->jquery->postFormOnClick ( '#addAnswer', Router::path('question.add.answer',['']) ,'frmAnswer', '#response-form', [
+            'hasLoader' => 'internal',
+            'method' => 'post',
+            'attr' => 'data-ajax',
+        ] );
+        
+        $this->jquery->renderView('QuestionController/template/'.$type.'.html', ['answers'=>USession::get('answers')]);
 
     }
     
@@ -121,17 +131,19 @@ class QuestionController extends ControllerBase {
      * @post("addAnswerToQuestion","name"=>"question.add.answer")
      */
     public function addAnswerToQuestion() {
-        $question= new Question ();
-        $answer = new Answer();
-        $answer->setQuestion($question);
-        $answer->setCaption(URequest::post ( 'answerCaption', 'no caption' ) );
-        $question->setCaption ( URequest::post ( 'caption', 'no caption' ) );
-        $creator = new User();
-        $creator->setId(USession::get('activeUser')['id']);
-        $question->setUser($creator);
-        $this->loader->add ( $question,$answer );
-        $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
-        
+        $postAnswers = URequest::getPost();
+        $answerObjects = array();
+
+        for ($i = 1; $i <= count($postAnswers); $i++) {
+            $answerToInsert = new Answer();
+            $answerToInsert->setCaption($postAnswers['caption-'.$i]);
+            array_push($answerObjects,$answerToInsert);
+        }
+        $newanswer = new Answer();
+        $newanswer->setCaption('');
+        array_push($answerObjects,$newanswer);
+        USession::set('answers', $answerObjects);
+        $this->getform(1);
     }
     
     /**

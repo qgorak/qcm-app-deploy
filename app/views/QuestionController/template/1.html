@@ -1,9 +1,8 @@
-{% for i in 1..nbAnswer %}
-<div class="field">
-    <div class="ui checkbox" id="demo1">
-      <input type="checkbox" disabled="disabled">
-      <label>{{t('disabled',[],'main')}}</label>
-    </div>
-  </div>
-{% endfor %}
+<form id="frmAnswer" class="ui form" name="frmAnswer">
+{% for answer in answers %}
 
+  <input type="text" name="caption-{{ loop.index }}"  value="{{ answer.caption }}" >
+{% endfor %}
+<a type="submit" data-value="1" id="addAnswer" name="submit" >Add answer</a>
+</form>
+{{ script_foot | raw }}
