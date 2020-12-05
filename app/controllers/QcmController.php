@@ -21,13 +21,6 @@ class QcmController extends ControllerBase{
     public function initialize() {
         parent::initialize ();
         $this->uiService = new UIService ( $this->jquery );
-        if (!URequest::isAjax()){
-            $questionLoader = new QuestionDAOLoader();
-            $myQuestions = array();
-            $myQuestions['notchecked'] = $questionLoader->my();
-            $myQuestions['checked'] = array();
-            USession::set('questions', $myQuestions);
-        }
     }
     
     /**
@@ -50,6 +43,11 @@ class QcmController extends ControllerBase{
      * @route('/','name'=>'qcm')
      */
 	public function index($msg=''){
+	    $questionLoader = new QuestionDAOLoader();
+	    $myQuestions = array();
+	    $myQuestions['notchecked'] = $questionLoader->my();
+	    $myQuestions['checked'] = array();
+	    USession::set('questions', $myQuestions);
 	    $this->jquery->getHref('#addQcm', '',[
 	        'hasLoader'=>'internal',
 	        'historize'=>false
@@ -150,6 +148,7 @@ class QcmController extends ControllerBase{
 	    $qcm->setDescription(URequest::post ( 'description', '' ) );
 	    $this->loader->add ($qcm);
 	    USession::delete('questions');
+	    $this->initialize();
 	    $this->_index($this->index(new HtmlMessage ( '', "Success !" )));
 	}
 

@@ -28,18 +28,26 @@ class UIService {
 		$dt->setClass(['ui very basic table']);
 		$msg = $this->jquery->semantic()->htmlMessage('');
 		if($checked == true){
-		    $dt->setCaption(0,'My qcm questions:');
+		    $dt->setCaption(0,'');
 		    $msg->setContent('Select your questions in the bank');
+		    $msg->setIcon('arrow down');
 		    $dt->insertDefaultButtonIn(4, 'x','_remove circular red',false,null,'remove');
 		    $dt->setEmptyMessage($msg);
 		    
 		}else{
-		    $dt->setCaption(0,'Question bank:');
+		    $dt->setCaption(0,'');
 		    $msg->setContent('Empty');
 		    $msg->setVariation('negative');
 		    $msg->setIcon('exclamation triangle');
 		    $dt->insertDefaultButtonIn(4, 'plus','_add circular green ',false,null,'add');
 		    $dt->setEmptyMessage($msg);
+		    $dt->setStyle('margin-top:0;padding-inline: 10px 20px;');
+		    $toolbar = $this->jquery->semantic()->htmlMenu('Question Bank');
+		    $toolbar->addPopupAsItem('Sort', 'sort','<div id="response-tag"></div>');
+		    $toolbar->addHeader('Question Bank');
+		    $toolbar->setClass('ui top attached menu');
+		    
+		    $dt->setToolbar($toolbar);
 		}
 		$dt->setColWidths([0=>8,1=>1,2=>1]);
 		$dt->setIdentifierFunction ( 'getId' );
