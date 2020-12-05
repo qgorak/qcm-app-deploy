@@ -4,7 +4,6 @@ namespace services;
 
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\USession;
-use models\Exam;
 use models\Qcm;
 use models\User;
 
@@ -18,11 +17,9 @@ class QcmDAOLoader {
         $creator = new User();
         $creator->setId(USession::get('activeUser')['id']);
         $qcm->setUser($creator);
-        $exam = new Exam();
-        $exam -> setId(1);
         $questions = USession::get('questions');
         $qcm->setQuestions($questions['checked']);
-        $qcm->setExam($exam);
+        $qcm->setCdate(date_create()->format('Y-m-d H:i:s'));
 		DAO::insert($qcm,true);
 	}
 
