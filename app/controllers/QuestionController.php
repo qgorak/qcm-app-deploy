@@ -7,6 +7,7 @@ use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\Answer;
 use models\Question;
+use models\Typeq;
 use models\User;
 use services\QuestionDAOLoader;
 use services\UIService;
@@ -78,20 +79,23 @@ class QuestionController extends ControllerBase {
      * @get("add",'name'=>'question.add')
      */
     public function add() {
+        $this->jquery->postFormOnClick('#create', Router::path('question.submit'), 'questionForm','#response',[
+            'hasLoader'=>'internal'
+        ]);
         $this->jquery->getHref('#cancel', '',[
             'hasLoader'=>'internal',
             'historize'=>false
         ]);
-        $this->jquery->postFormOnClick ( '#btValidate', Router::path('addSubmit'), 'frmItem', 'body', [
-            'hasLoader' => 'internal'
+        $this->jquery->exec('$("#text-dropdown-questionForm-typeq-0").html("Select a type");',true);
+        $frm = $this->uiService->questionForm ();
+        $this->jquery->getOnClick ( '.menu .item', 'question/getform', '#response-form', [
+            'stopPropagation'=>false,
+            'attr' => 'data-value',
+            'hasLoader' => 'internal',
+            'jsCallback'=>'$("#dropdown-form-typeq-0").dropdown("toggle");
+                           $("#dropdown-form-typeq-0").attr("tabindex","2");'
         ] );
-
-        $this->jquery->ajaxOn('click','#addAnswer', "QuestionController/getform/qcm/'+document.getElementById('nbAnswer').value+'", '#response',
-            [
-                'jsCallback'=>'$("#nbAnswer").get(0).value++'
-            ]);
-        $this->jquery->exec('$(\'#drop\').dropdown()',true);
-        $this->jquery->ajaxOn('change','#test',"QuestionController/getform/'+document.getElementById('test').value+'/'+document.getElementById('nbAnswer').value+'",'#answers', );
+        $this->jquery->ajaxOn('change', '.menu .item', 'question/getform');
         $this->jquery->renderView ( 'QuestionController/add.html', []) ;
     }
     
@@ -134,7 +138,7 @@ class QuestionController extends ControllerBase {
     
     /**
      *
-     * @post("add","name"=>"addSubmit")
+     * @post("add","name"=>"question.submit")
      */
     public function submit() {
         $question= new Question ();

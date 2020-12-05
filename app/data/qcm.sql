@@ -6,8 +6,18 @@ CREATE TABLE `examoption` (`idExam` int(11) NOT NULL,`idOption` int(11) NOT NULL
 CREATE TABLE `group` (`id` int(11) NOT NULL,`name` varchar(42) DEFAULT NULL,`description` text DEFAULT NULL,`keyCode` varchar(255) NOT NULL,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `option` (`id` int(11) NOT NULL,`key` varchar(42) DEFAULT NULL,`description` text DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `qcm` (`id` int(11) NOT NULL,`name` varchar(42) DEFAULT NULL,`description` varchar(42) DEFAULT NULL,`cdate` datetime DEFAULT CURRENT_TIMESTAMP,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `question` (`id` int(11) NOT NULL,`caption` varchar(42) DEFAULT NULL,`points` int(11) DEFAULT 0,`tags` text DEFAULT NULL,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `question` (`id` int(11) NOT NULL,`caption` varchar(42) DEFAULT NULL,`points` int(11) DEFAULT 0,`tags` text DEFAULT NULL,  `idTypeq` int(11) DEFAULT NULL, `idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `tag` (`id` int(11) NOT NULL,`name` varchar(42) DEFAULT NULL,`color` varchar(42) DEFAULT NULL,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `typeq` (`id` int(11) NOT NULL,`caption` varchar(42) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `typeq` (`id`, `caption`) VALUES
+(1, 'choix multiple'),
+(2, 'ouverte');
+(3, 'courte'),
+(4, 'code');
+
+
+
 CREATE TABLE `user` (`id` int(11) NOT NULL,`password` varchar(42) DEFAULT NULL,`firstname` varchar(42) DEFAULT NULL,`lastname` varchar(42) DEFAULT NULL,`email` varchar(255) DEFAULT NULL,`language` varchar(32) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `useranswer` (`idUser` int(11) NOT NULL,`idAnswer` int(11) NOT NULL,`idQcm` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `usergroup` (`idGroup` int(11) NOT NULL,`idUser` int(11) NOT NULL,`status` varchar(255) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -33,9 +43,13 @@ ALTER TABLE `qcm` ADD  KEY (`idUser`);
 ALTER TABLE `question` ADD PRIMARY KEY (`id`);
 ALTER TABLE `question` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 ALTER TABLE `question` ADD  KEY (`idUser`);
+ALTER TABLE `question` ADD  KEY (`idTypeq`);
 ALTER TABLE `tag` ADD PRIMARY KEY (`id`);
 ALTER TABLE `tag` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 ALTER TABLE `tag` ADD  KEY (`idUser`);
+ALTER TABLE `typeq` ADD PRIMARY KEY (`id`);
+ALTER TABLE `typeq` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
+    AUTO_INCREMENT=1;
 ALTER TABLE `user` ADD PRIMARY KEY (`id`);
 ALTER TABLE `user` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 ALTER TABLE `useranswer` ADD PRIMARY KEY (`idUser`,`idAnswer`,`idQcm`);
@@ -56,6 +70,7 @@ ALTER TABLE `examoption` ADD CONSTRAINT `fk_examoption_option` FOREIGN KEY (`idO
 ALTER TABLE `group` ADD CONSTRAINT `fk_group_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `qcm` ADD CONSTRAINT `fk_qcm_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `question` ADD CONSTRAINT `fk_question_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE `question` ADD CONSTRAINT `fk_question_typeq` FOREIGN KEY (`idTypeq`) REFERENCES `typeq` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `tag` ADD CONSTRAINT `fk_tag_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `useranswer` ADD CONSTRAINT `fk_useranswer_answer` FOREIGN KEY (`idAnswer`) REFERENCES `answer` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `useranswer` ADD CONSTRAINT `fk_useranswer_qcm` FOREIGN KEY (`idQcm`) REFERENCES `qcm` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;

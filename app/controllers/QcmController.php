@@ -78,7 +78,7 @@ class QcmController extends ControllerBase{
 	        'hasLoader'=>'internal',
 	        'historize'=>false
 	    ]);
-	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
+	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'questionForm','#response',[
 	        'hasLoader'=>'internal'
 	    ]);
 	    $this->jquery->ajaxOnClick ( '._add', Router::path('qcm.add.question',['']) , '#response', [

@@ -3,12 +3,13 @@
 namespace services;
 
 use Ajax\php\ubiquity\JsUtils;
+use Ajax\semantic\html\collections\HtmlMessage;
 use Ajax\service\JArray;
 use Ubiquity\orm\DAO;
 use Ubiquity\translation\TranslatorManager;
 use models\Qcm;
 use models\Question;
-use Ajax\semantic\html\collections\HtmlMessage;
+use models\Typeq;
 
 class UIService {
 	protected $jquery;
@@ -58,6 +59,23 @@ class UIService {
 		$dt->setIdentifierFunction ( 'getId' );
 		return $dt;
 		
+	}
+	
+	public function questionForm() {
+	    $q = new Question ();
+	    $frm = $this->jquery->semantic ()->dataForm ( 'questionForm', $q );
+	    $frm->setFields ( [
+	        'caption',
+	        'typeq'
+	    ] );
+	    $types = DAO::getAll ( Typeq::class );
+	    $ddtypes= array();
+	    foreach ($types as &$value) {
+	        array_push($ddtypes,$value->getCaption());
+	    }
+	    $frm->fieldAsDropDown ( 'typeq', JArray::modelArray ( $types, 'getId','getCaption' ),false,'test2' );
+	    $q->setTypeq ( current ( $types ) );
+	    return $frm;
 	}
 	
 	public function qcmForm() {

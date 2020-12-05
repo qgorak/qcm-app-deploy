@@ -1,25 +1,7 @@
 <a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</a>
+<a class="ui green button" id="create">test</a>
 <div class="ui container">
-<form class="ui form" id="frmItem" name="frmItem">
-<input type="text" name="caption" placeholder="{{t('question',[],'main')}}">
-<div id="drop" class="ui selection dropdown">
-  <input id="test" type="hidden" name="type">
-  <i class="dropdown icon"></i>
-  <div class="default text">{{t('typeQuestion',[],'main')}}</div>
-  <div class="menu">
-    <div class="item" data-value="courte">{{t('shortAnswer',[],'main')}}</div>
-    <div class="item" data-value="longue">{{t('longAnswer',[],'main')}}</div>
-    <div class="item" data-value="qcm">{{t('multipleAnswer',[],'main')}}</div>
-    <div class="item" data-value="code">{{t('codeAnswer',[],'main')}}</div>
-  </div>
+{{ q['questionForm'] | raw }}
+<div id="response-form"></div>
 </div>
-	<div id="answers">
-	{{ response | raw }}
-	</div>
-<button id="btValidate" class="ui button">{{t('validate',[],'main')}}</button>
-  <input id="nbAnswer" type="hidden" value="1" name="nbAnswer">
-</form>
-</div>
-<button id="addAnswer" class="ui button">{{t('addAnswer',[],'main')}}</button>
-{{script_foot | raw}}
-
+{{ script_foot | raw }}
