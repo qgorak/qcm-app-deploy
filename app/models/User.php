@@ -2,6 +2,7 @@
 namespace models;
 
 use Ubiquity\orm\DAO;
+use Ubiquity\utils\http\USession;
 /**
  * @table('user')
 */
@@ -194,20 +195,19 @@ class User{
 	}
 	
 	public function isInGroup(string $idGroup){
-		if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=? AND status=1",[$idGroup,$this->getId()])){
+		if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=? AND status='1'",[$idGroup,$this->getId()])){
 			return true;
 		}
 		return false;
 	}
 	
 	public function getAllGroups(){
-		$retour=array();
-		foreach($this->getUsergroups() as $value){
-		    if($value->getStatus=="1"){
-		        array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
-		    }
+		$retour=[];
+		$userGroups=DAO::uGetAll(Usergroup::class,"idUser=? AND status='1'",false,[USession::get('activeUser')['id']]);
+		foreach($userGroups as $value){
+		       array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
 		}
-		return array_merge($retour,$this->getGroups());
+		return $retour;
 	}
 
 }

@@ -31,12 +31,8 @@ class GroupDAOLoader {
 	}
 
 	public function inGroups(){
-	    $groups=[];
-	    $userGroup=DAO::uGetAll(Usergroup::class,"idUser=?",false,[USession::get('activeUser')['id']]);
-	    foreach($userGroup as $value){
-	        array_push($groups,DAO::getById(Group::class,$value->getIdGroup()));
-	    }
-	    return $groups;	    
+	    $user=DAO::getById(User::class,USession::get('activeUser')['id']);
+	    return $user->getAllGroups();	    
 	}
 	
 	public function clear(): void {
@@ -80,7 +76,7 @@ class GroupDAOLoader {
 	
 	public function getUsers($groupId){
 	    $users=[];
-	    $userGroup=DAO::uGetAll(Usergroup::class,"idGroup=?",false,[$groupId]);
+	    $userGroup=DAO::uGetAll(Usergroup::class,"idGroup=? AND status='1'",false,[$groupId]);
 	    foreach($userGroup as $value){
 	        array_push($users,DAO::getById(User::class,$value->getIdUser(),false));
 	    }

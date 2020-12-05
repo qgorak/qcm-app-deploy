@@ -67,12 +67,7 @@ class GroupController extends ControllerBase{
             'description'
         ] );
         $dtInGroups->setIdentifierFunction ( 'getId' );
-        $dtInGroups->addDeleteButton(false);
         $dtInGroups->setEdition ();
-        $this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '#response', [
-            'hasLoader' => 'internal',
-            'attr' => 'data-ajax'
-        ] );
     }
     
     /**
@@ -220,14 +215,9 @@ class GroupController extends ControllerBase{
      */
     public function groupDelete(string $id){
         $this->loader->remove ( $id );
-        $msg = $this->jquery->semantic ()->htmlMessage ( '', 'Item supprimé' );
     }
     
-    /**
-     * @get('demand/{id}','name'=>'groupDemand')
-     * @param mixed $id
-     */
-    public function getUserDemand($id){
+    private function demand($id){
         $users=$this->loader->getJoiningDemand($id);
         $usersDt=$this->jquery->semantic()->dataTable('usersDemand',User::class,$users);
         $usersDt->setFields([
@@ -242,12 +232,20 @@ class GroupController extends ControllerBase{
         ]);
         $usersDt->setIdentifierFunction ( 'getId' );
         $usersDt->addEditDeleteButtons(false);
-        $this->jquery->ajaxOnClick('._edit',Router::path('groupDemandAccept',['true',URequest::getUrlParts()[2]]),'body',[
+        $this->jquery->ajaxOnClick('._edit',Router::path('groupDemandAccept',['true',URequest::getUrlParts()[2]]),'#response',[
             'attr'=>'data-ajax'
         ]);
-        $this->jquery->ajaxOnClick('._delete',Router::path('groupDemandAccept',['false',URequest::getUrlParts()[2]]),'body',[
+        $this->jquery->ajaxOnClick('._delete',Router::path('groupDemandAccept',['false',URequest::getUrlParts()[2]]),'#response',[
             'attr'=>'data-ajax'
         ]);
+    }
+    
+    /**
+     * @get('demand/{id}','name'=>'groupDemand')
+     * @param mixed $id
+     */
+    public function getUserDemand($id){
+        $this->demand($id);
         if(URequest::isAjax()){
             $this->jquery->renderView('GroupController/demand.html');
         }
@@ -268,5 +266,7 @@ class GroupController extends ControllerBase{
         elseif($bool=="false"){
             $this->loader->refuseDemand($groupId,$userId);
         }
+        $this->demand($groupId);
+        $this->jquery->renderView('GroupController/demand.html');
     }
 }
