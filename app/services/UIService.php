@@ -54,6 +54,7 @@ class UIService {
 		return $dt;
 		
 	}
+	
 	public function qcmForm() {
 	    $q = new Qcm();
 	    $frm = $this->jquery->semantic ()->dataForm ( 'qcmForm', $q );
@@ -62,6 +63,21 @@ class UIService {
 	        'description'
 	    ] );
 	    return $frm;
+	}
+	
+	public function getQuestionDataTable($questions){
+	    $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $questions );
+	    $msg = new HtmlMessage ( '', "Aucun élément à afficher !" );
+	    $msg->addIcon ( "x" );
+	    $dt->setEmptyMessage ( $msg );
+	    $dt->setFields ( [
+	        'id',
+	        'caption'
+	    ] );
+	    $dt->onRowClick('alert(\'ok\')');
+	    $dt->setIdentifierFunction ( 'getId' );
+	    $dt->addEditDeleteButtons ( false );
+	    $dt->setEdition ();
 	}
 
 }

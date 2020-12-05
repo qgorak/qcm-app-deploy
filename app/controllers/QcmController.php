@@ -73,9 +73,7 @@ class QcmController extends ControllerBase{
 	    $dtQuestionNotChecked = $this->uiService->questionDataTable('dtQuestionNotChecked',USession::get('questions')['notchecked'],false);
 	    $dtQuestionChecked = $this->uiService->questionDataTable('dtQuestionChecked',USession::get('questions')['checked'],true);
 	    $frmQcm = $this->uiService->qcmForm();
-	    $this->jquery->exec('$("#qcmForm-name").val("'.$formContent['name'].'");'.
-	                        '$("#qcmForm-description").val("'.$formContent['description'].'");'
-	        ,true);
+
 	    $this->jquery->getHref('#cancel', '',[
 	        'hasLoader'=>'internal',
 	        'historize'=>false

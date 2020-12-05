@@ -1,3 +1,6 @@
+<a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">
+	Cancel
+	</a>
 <div class="ui container">
 <form class="ui form" id="frmItem" name="frmItem">
 <input type="text" name="caption" placeholder="Question">
@@ -12,7 +15,7 @@
     <div class="item" data-value="code">Code</div>
   </div>
 </div>
-	<div id="response">
+	<div id="answers">
 	{{ response | raw }}
 	</div>
 <button id="btValidate" class="ui button">Valider</button>
