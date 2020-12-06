@@ -6,7 +6,7 @@ CREATE TABLE `examoption` (`idExam` int(11) NOT NULL,`idOption` int(11) NOT NULL
 CREATE TABLE `group` (`id` int(11) NOT NULL,`name` varchar(42) DEFAULT NULL,`description` text DEFAULT NULL,`keyCode` varchar(255) NOT NULL,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `option` (`id` int(11) NOT NULL,`key` varchar(42) DEFAULT NULL,`description` text DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `qcm` (`id` int(11) NOT NULL,`name` varchar(42) DEFAULT NULL,`description` varchar(42) DEFAULT NULL,`cdate` datetime DEFAULT CURRENT_TIMESTAMP,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `question` (`id` int(11) NOT NULL,`caption` varchar(42) DEFAULT NULL,`ckcontent` TEXT DEFAULT NULL,`points` int(11) DEFAULT 0,`tags` text DEFAULT NULL,  `idTypeq` int(11) DEFAULT NULL, `idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `question` (`id` int(11) NOT NULL,`caption` varchar(42) DEFAULT NULL,`ckcontent` TEXT DEFAULT NULL,`points` int(11) DEFAULT 0,`idTypeq` int(11) DEFAULT NULL, `idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `tag` (`id` int(11) NOT NULL,`name` varchar(42) DEFAULT NULL,`color` varchar(42) DEFAULT NULL,`idUser` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `typeq` (`id` int(11) NOT NULL,`caption` varchar(42) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -22,6 +22,7 @@ CREATE TABLE `user` (`id` int(11) NOT NULL,`password` varchar(42) DEFAULT NULL,`
 CREATE TABLE `useranswer` (`idUser` int(11) NOT NULL,`idAnswer` int(11) NOT NULL,`idQcm` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `usergroup` (`idGroup` int(11) NOT NULL,`idUser` int(11) NOT NULL,`status` varchar(255) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `qcmquestion` (`idQuestion` int(11) NOT NULL,`idQcm` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `questiontag` (`idQuestion` int(11) NOT NULL,`idTag` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `answer` ADD PRIMARY KEY (`id`);
 ALTER TABLE `answer` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 ALTER TABLE `answer` ADD  KEY (`idQuestion`);
@@ -62,6 +63,10 @@ ALTER TABLE `usergroup` ADD  KEY (`idUser`);
 ALTER TABLE `qcmquestion` ADD PRIMARY KEY (`idQuestion`,`idQcm`);
 ALTER TABLE `qcmquestion` ADD  KEY (`idQuestion`);
 ALTER TABLE `qcmquestion` ADD  KEY (`idQcm`);
+ALTER TABLE `questiontag` ADD PRIMARY KEY (`idQuestion`,`idTag`);
+ALTER TABLE `questiontag` ADD  KEY (`idQuestion`);
+ALTER TABLE `questiontag` ADD  KEY (`idTag`);
+
 ALTER TABLE `answer` ADD CONSTRAINT `fk_answer_question` FOREIGN KEY (`idQuestion`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `exam` ADD CONSTRAINT `fk_exam_group` FOREIGN KEY (`idGroup`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `exam` ADD CONSTRAINT `fk_exam_qcm` FOREIGN KEY (`idQcm`) REFERENCES `qcm` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;

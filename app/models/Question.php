@@ -28,11 +28,6 @@ class Question{
 	private $points;
 
 	/**
-	 * @column("name"=>"tags","nullable"=>true,"dbType"=>"text")
-	**/
-	private $tags;
-
-	/**
 	 * @oneToMany("mappedBy"=>"question","className"=>"models\\Answer")
 	**/
 	private $answers;
@@ -85,14 +80,6 @@ class Question{
 
 	 public function setPoints($points){
 		$this->points=$points;
-	}
-
-	 public function getTags(){
-		return $this->tags;
-	}
-
-	 public function setTags($tags){
-		$this->tags=$tags;
 	}
 
 	 public function getAnswers(){

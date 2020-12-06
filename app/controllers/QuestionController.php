@@ -8,6 +8,7 @@ use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\Answer;
 use models\Question;
+use models\Tag;
 use models\Typeq;
 use services\QuestionDAOLoader;
 use services\UIService;
@@ -99,9 +100,9 @@ class QuestionController extends ControllerBase {
      * @get("add",'name'=>'question.add')
      */
     public function add() {
-        $this->jquery->postFormOnClick('#create', Router::path('question.submit'), 'questionAnswerForm','#response',[
+        $this->jquery->postFormOnClick('#create', Router::path('question.submit'), 'questionForm','#response',[
             'hasLoader'=>'internal',
-            'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData()}'
+            'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serialize()}'
         ]);
         $this->jquery->getHref('#cancel', '',[
             'hasLoader'=>'internal',
@@ -109,7 +110,8 @@ class QuestionController extends ControllerBase {
         ]);
         $this->jquery->ajax('get',Router::path('tag.my'),'#tagManager',[
             'hasLoader'=>'internal',
-            'historize'=>false
+            'historize'=>false,
+            'jsCallback'=>'$(".ui.accordion").accordion();'
         ]);
         $this->jquery->postFormOnClick('#addTag', Router::path('tag.submit'), 'tagForm','#tagManager',[
             'hasLoader'=>'internal',
@@ -192,7 +194,14 @@ class QuestionController extends ControllerBase {
      */
     public function submit() {
         $post = URequest::getPost();
-        var_dump($post);
+
+        $strTagArray = explode("&",$post['tags']);
+        $tagObjects = array();
+        foreach($strTagArray as $item) {
+            $tag = new Tag();
+            $tag->setId(preg_replace('/[^0-9.]+/', '', $item));
+            array_push($tagObjects,$tag);
+        }
         $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
         $postAnswers = array();
         foreach($strAnswersArray as $item) {
@@ -213,12 +222,11 @@ class QuestionController extends ControllerBase {
         $question->setCkContent ( $post['ckcontent'] );
         $question->setTypeq($typeq);
         $question->setUser(USession::get('activeUser')['id']);
-        $this->loader->add ( $question );
+        $this->loader->add ( $question, $tagObjects );
         foreach($answerObjects as $answer) {
             $answer->setQuestion($question);
             DAO::insert($answer,true);
         }
         $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
-
     }
 }
