@@ -12,7 +12,7 @@ CREATE TABLE `typeq` (`id` int(11) NOT NULL,`caption` varchar(42) DEFAULT NULL) 
 
 INSERT INTO `typeq` (`id`, `caption`) VALUES
 (1, 'choix multiple'),
-(2, 'ouverte');
+(2, 'ouverte'),
 (3, 'courte'),
 (4, 'code');
 
