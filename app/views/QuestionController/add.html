@@ -1,7 +1,10 @@
 <a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</a>
 <a class="ui green button" id="create">test</a>
+<form id="questionAnswerForm" class="ui form" name="questionAnswerForm" >
 <div class="ui container">
 {{ q['questionForm'] | raw }}
 <div id="response-form"></div>
 </div>
+</form>
+{{ckEditor | raw}}
 {{ script_foot | raw }}
