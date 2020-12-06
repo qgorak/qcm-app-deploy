@@ -1,4 +1,5 @@
-ClassicEditor.create( document.querySelector( '#questionForm-caption' ), {	
+function includeCkEditor(identifier,lang){
+	ClassicEditor.create( document.querySelector( identifier ), {	
 	toolbar: {
 		items: [
 			'heading',
@@ -22,7 +23,7 @@ ClassicEditor.create( document.querySelector( '#questionForm-caption' ), {
 			'redo'
 		]
 	},
-	language: 'fr',
+	language: lang,
 	image: {
 		toolbar: [
 			'imageTextAlternative',
@@ -49,3 +50,4 @@ ClassicEditor.create( document.querySelector( '#questionForm-caption' ), {
 	console.warn( 'Build id: w6otliccyxof-287cihodwhfo' );
 	console.error( error );
 } );
+}

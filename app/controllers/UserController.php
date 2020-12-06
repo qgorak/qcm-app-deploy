@@ -41,7 +41,7 @@ class UserController extends ControllerBase{
             TranslatorManager::trans('language',[],'main')
         ]);
         $info->setIdentifierFunction ( 'getId' );
-        $info->fieldAsDropDown('language',['en_EN'=>'en_EN','fr_FR'=>'fr_FR']);
+        $info->fieldAsDropDown('language',['en_EN'=>'English','fr_FR'=>'Français']);
         $info->fieldAsSubmit('submitLang',null, Router::path('langSubmit'),'#response',[
             'value'=>TranslatorManager::trans('submitLang',[],'main')
         ]);
@@ -71,6 +71,7 @@ class UserController extends ControllerBase{
         $this->loader->update($user);
         $this->displayMyInfo(USession::get('activeUser')['id']);
         TranslatorManager::setLocale($user->getLanguage());
+        USession::set('activeUser',["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()]);
         $this->jquery->renderView('UserController/display.html');
     }
 }
