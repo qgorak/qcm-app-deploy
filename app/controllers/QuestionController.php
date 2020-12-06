@@ -8,6 +8,7 @@ use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\Answer;
 use models\Question;
+use models\Typeq;
 use services\QuestionDAOLoader;
 use services\UIService;
 
@@ -112,6 +113,8 @@ class QuestionController extends ControllerBase {
             'stopPropagation'=>false,
             'attr' => 'data-value',
             'hasLoader' => false,
+            'jsCallback' =>'$("#input-dropdown-questionForm-typeq-0").attr("name","typeq");
+                            $("#input-dropdown-questionForm-typeq-0").val($(self).attr("data-value"))'
 
         ] );
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
@@ -197,8 +200,10 @@ class QuestionController extends ControllerBase {
             array_push($answerObjects,$answerToInsert);
         }
         $question= new Question ();
+        $typeq= new Typeq ();
+        $typeq->setId($post['typeq']);
         $question->setCaption ( $post['caption'] );
-        var_dump($post);
+        $question->setTypeq($typeq);
         $question->setUser(USession::get('activeUser')['id']);
         $this->loader->add ( $question );
         foreach($answerObjects as $answer) {
