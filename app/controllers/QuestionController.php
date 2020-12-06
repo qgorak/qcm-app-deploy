@@ -100,13 +100,19 @@ class QuestionController extends ControllerBase {
      */
     public function add() {
         $this->jquery->postFormOnClick('#create', Router::path('question.submit'), 'questionAnswerForm','#response',[
-            'before'=>'',
             'hasLoader'=>'internal',
             'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData()}'
         ]);
         $this->jquery->getHref('#cancel', '',[
             'hasLoader'=>'internal',
             'historize'=>false
+        ]);
+        $this->jquery->ajax('get',Router::path('tag.my'),'#tagManager',[
+            'hasLoader'=>'internal',
+            'historize'=>false
+        ]);
+        $this->jquery->postFormOnClick('#addTag', Router::path('tag.submit'), 'tagForm','#tagManager',[
+            'hasLoader'=>'internal',
         ]);
         $this->jquery->exec('$("#text-dropdown-questionForm-typeq-0").html("Select a type");',true);
         $frm = $this->uiService->questionForm ();

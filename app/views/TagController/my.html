@@ -1,0 +1,12 @@
+<div class="ui tag labels">
+{% for tag in tags %}
+
+  <div class="ui fitted radio checkbox">
+    <input type="checkbox">
+    <label></label>
+  </div>
+
+  <label class="ui {{ tag.color }} label ">{{ tag.name }}</label>
+
+{% endfor %}
+</div>
