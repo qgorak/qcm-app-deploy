@@ -10,7 +10,6 @@ use models\Answer;
 use models\Question;
 use services\QuestionDAOLoader;
 use services\UIService;
-use Ubiquity\assets\AssetsManager;
 
 
 
