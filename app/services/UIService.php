@@ -66,6 +66,7 @@ class UIService {
 	    $frm = $this->jquery->semantic ()->dataForm ( 'questionForm', $q );
 	    $frm->setFields ( [
 	        'caption',
+	        'ckcontent',
 	        'typeq'
 	    ] );
 	    $types = DAO::getAll ( Typeq::class );

@@ -18,6 +18,11 @@ class Question{
 	private $caption;
 
 	/**
+	 * @column("name"=>"ckcontent","nullable"=>true,"dbType"=>"text")
+	**/
+	private $ckcontent;
+
+	/**
 	 * @column("name"=>"points","nullable"=>true,"dbType"=>"int(11)")
 	**/
 	private $points;
@@ -64,6 +69,14 @@ class Question{
 
 	 public function setCaption($caption){
 		$this->caption=$caption;
+	}
+
+	 public function getCkcontent(){
+		return $this->ckcontent;
+	}
+
+	 public function setCkcontent($ckcontent){
+		$this->ckcontent=$ckcontent;
 	}
 
 	 public function getPoints(){

@@ -100,8 +100,9 @@ class QuestionController extends ControllerBase {
      */
     public function add() {
         $this->jquery->postFormOnClick('#create', Router::path('question.submit'), 'questionAnswerForm','#response',[
+            'before'=>'',
             'hasLoader'=>'internal',
-            'params'=>'{"answers":$("#frmAnswer").serialize()}'
+            'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData()}'
         ]);
         $this->jquery->getHref('#cancel', '',[
             'hasLoader'=>'internal',
@@ -119,7 +120,7 @@ class QuestionController extends ControllerBase {
         ] );
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
         $this->jquery->renderView ( 'QuestionController/add.html', [
-            'identifier'=>'#questionForm-caption',
+            'identifier'=>'#questionForm-ckcontent',
             'lang'=>$lang
         ]) ;
     }
@@ -185,7 +186,7 @@ class QuestionController extends ControllerBase {
      */
     public function submit() {
         $post = URequest::getPost();
-
+        var_dump($post);
         $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
         $postAnswers = array();
         foreach($strAnswersArray as $item) {
@@ -203,6 +204,7 @@ class QuestionController extends ControllerBase {
         $typeq= new Typeq ();
         $typeq->setId($post['typeq']);
         $question->setCaption ( $post['caption'] );
+        $question->setCkContent ( $post['ckcontent'] );
         $question->setTypeq($typeq);
         $question->setUser(USession::get('activeUser')['id']);
         $this->loader->add ( $question );
