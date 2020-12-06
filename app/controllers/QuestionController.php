@@ -2,8 +2,8 @@
 
 namespace controllers;
 
-use Ubiquity\assets\AssetsManager;
 use Ubiquity\controllers\Router;
+use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\Answer;
@@ -181,29 +181,30 @@ class QuestionController extends ControllerBase {
      * @post("add","name"=>"question.submit")
      */
     public function submit() {
-        
         $post = URequest::getPost();
 
-        $strArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
-
-        foreach($strArray as $item) {
+        $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
+        $postAnswers = array();
+        foreach($strAnswersArray as $item) {
             $array = explode("=", $item);
-            $returndata[] = $array;
+            array_push($postAnswers,$array);
         }
-        $question= new Question ();
         $answerObjects = array();
-        for ($i = 0; $i < count($returndata)/2; $i++) {
+        for ($i = 0; $i < count($postAnswers); $i += 2) {
             $answerToInsert = new Answer();
-            $answerToInsert->setCaption($returndata[$i][1]);
-            $answerToInsert->setScore($returndata[$i+1][1]);
-            var_dump($answerToInsert->getCaption());
+            $answerToInsert->setCaption($postAnswers[$i][1]);
+            $answerToInsert->setScore($postAnswers[$i+1][1]);
             array_push($answerObjects,$answerToInsert);
         }
-
-
-        $question->setCaption ( URequest::post ( 'caption', 'no caption' ) );
+        $question= new Question ();
+        $question->setCaption ( $post['caption'] );
+        var_dump($post);
         $question->setUser(USession::get('activeUser')['id']);
-        $this->loader->add ( $question);
+        $this->loader->add ( $question );
+        foreach($answerObjects as $answer) {
+            $answer->setQuestion($question);
+            DAO::insert($answer,true);
+        }
         $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
 
     }
