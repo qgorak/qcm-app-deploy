@@ -99,11 +99,11 @@ class QuestionController extends ControllerBase {
             'hasLoader' => false,
 
         ] );
-        $includeCkEditor=AssetsManager::js("js/ckeditor/includeEN.js");
-        if(USession::get('activeUser')['language']=='fr_FR'){
-            $includeCkEditor=AssetsManager::js("js/ckeditor/includeFR.js");
-        }
-        $this->jquery->renderView ( 'QuestionController/add.html', ['ckEditor'=>$includeCkEditor]) ;
+        $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
+        $this->jquery->renderView ( 'QuestionController/add.html', [
+            'identifier'=>'#questionForm-caption',
+            'lang'=>$lang
+        ]) ;
     }
     
     /**
