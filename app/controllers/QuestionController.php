@@ -11,6 +11,7 @@ use models\Typeq;
 use models\User;
 use services\QuestionDAOLoader;
 use services\UIService;
+use Ubiquity\assets\AssetsManager;
 
 
 /**
@@ -98,8 +99,11 @@ class QuestionController extends ControllerBase {
             'hasLoader' => false,
 
         ] );
-
-        $this->jquery->renderView ( 'QuestionController/add.html', []) ;
+        $includeCkEditor=AssetsManager::js("js/ckeditor/includeEN.js");
+        if(USession::get('activeUser')['language']=='fr_FR'){
+            $includeCkEditor=AssetsManager::js("js/ckeditor/includeFR.js");
+        }
+        $this->jquery->renderView ( 'QuestionController/add.html', ['ckEditor'=>$includeCkEditor]) ;
     }
     
     /**
