@@ -14,8 +14,13 @@ class QuestionDAOLoader {
 		return DAO::getById ( Question::class, $id );
 	}
 	
-	public function getByTag($tag): ?array {
-		return DAO::getManyToMany($tag, 'questions',true);
+	public function getByTags($tags): ?array {
+	    $res=array();
+	    foreach($tags as $tag) {
+	        $questions = DAO::getManyToMany($tag, 'questions',true);
+	        $res = array_merge($res,$questions);
+	    }
+		return $res;
 	}
 	
 

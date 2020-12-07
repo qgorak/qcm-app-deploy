@@ -118,8 +118,6 @@ class UIService {
 	    	'typeq',
 	    	'action'
 	    ] );
-
-
 		$dt->insertDeleteButtonIn(3,true);
 		$dt->insertEditButtonIn(3,true);
 		$dt->insertDisplayButtonIn(3,true);
@@ -138,14 +136,6 @@ class UIService {
 	    $dt->setIdentifierFunction ( 'getId' );
 	    $dt->setColWidths([0=>9,1=>2,2=>1,3=>2]);
 	    $dt->setEdition ();
-	    $this->jquery->ajax('get',Router::path('tag.my'),'#response-tag',[
-	    		'hasLoader'=>'internal',
-	    		'historize'=>false,
-	    		'jsCallback'=>'$(".ui.menu .item:first-child").popup({
-   								 popup : $(".ui.popup"),
-    						     on : "click"
-							});;'
-	    ]);
 	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), 'body', [
 	    		'hasLoader' => 'internal',
 	    		'attr' => 'data-ajax'
@@ -224,7 +214,6 @@ class UIService {
 		$dd = $this->jquery->semantic()->htmlDropdown('Filter','',JArray::modelArray ( $mytags, 'getId','getName' ));
 		$dd->asSearch('tags',true);
 		$toolbar = $this->jquery->semantic()->htmlMenu('QuestionBank');
-		$toolbar->addPopupAsItem('Sort', 'sort','<div id="response-tag"></div>');
 		$toolbar->addDropdownAsItem($dd);
 		$toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
 		$toolbar->setClass('ui top attached menu');	
