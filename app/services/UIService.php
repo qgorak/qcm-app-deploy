@@ -118,11 +118,8 @@ class UIService {
 	    	'typeq',
 	    	'action'
 	    ] );
-	    $toolbar = $this->jquery->semantic()->htmlMenu('Question Bank');
-	    $toolbar->addPopupAsItem('Sort', 'sort','<div id="response-tag"></div>');
-	    $toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
-	    $toolbar->setClass('ui top attached menu');
-	    $dt->setToolbar($toolbar);
+
+
 		$dt->insertDeleteButtonIn(3,true);
 		$dt->insertEditButtonIn(3,true);
 		$dt->insertDisplayButtonIn(3,true);
@@ -220,6 +217,17 @@ class UIService {
 		$this->jquery->ajaxOnClick('.refuse',Router::path('groupDemandAccept',['false',URequest::getUrlParts()[2]]),'#response',[
 			'attr'=>'data-ajax'
 		]);
+	}
+	
+	public function questionBankToolbar(){
+		$mytags = DAO::getAll( Tag::class, 'idUser='.USession::get('activeUser')['id'],false);
+		$dd = $this->jquery->semantic()->htmlDropdown('Filter','',JArray::modelArray ( $mytags, 'getId','getName' ));
+		$dd->asSearch('tags',true);
+		$toolbar = $this->jquery->semantic()->htmlMenu('QuestionBank');
+		$toolbar->addPopupAsItem('Sort', 'sort','<div id="response-tag"></div>');
+		$toolbar->addDropdownAsItem($dd);
+		$toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
+		$toolbar->setClass('ui top attached menu');	
 	}
 
 }

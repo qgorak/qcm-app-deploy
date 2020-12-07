@@ -54,17 +54,18 @@ class QuestionController extends ControllerBase {
         $answer->setScore(0);
         array_push($answer_array,$answer);
         USession::set('answers',$answer_array);
-        $dt=$this->uiService->getQuestionDataTable($this->loader-> my());
-        $this->jquery->getHref('#add', '',[
-            'hasLoader'=>'internal',
-            'historize'=>false
-        ]);
-        $this->_index ($this->jquery->renderView ( 'QuestionController/template/myQuestion.html',[
-
-        ],true));
+        $toolbar=$this->uiService->questionBankToolbar();
+        $this->_index ($this->jquery->renderView('QuestionController/template/QuestionBank.html',[],true), [
+        ] );
     }
     
     private function _index($response='') {
+
+    	$this->jquery->getHref('#add', '',[
+    			'hasLoader'=>'internal',
+    			'historize'=>false
+    	]);
+    	$this->jquery->ajax('get', Router::path('question.my'),"#myquestions");
         $this->jquery->renderView ( 'QuestionController/index.html', [
             'response' => $response
         ] );
@@ -179,6 +180,38 @@ class QuestionController extends ControllerBase {
         $answers = array_values($answers);
         USession::set('answers', $answers);
         $this->getform(1);
+    }
+    
+    /**
+     *
+     * @post("getByTags","name"=>"question.getBy.tags")
+     */
+    public function getByTags() {
+    	$tag = new Tag();
+    	$tag->setId(3);
+    	$this->loader->getByTag($tag);
+    	$dt=$this->uiService->getQuestionDataTable();
+    	$this->jquery->ajaxOn('change','#input-Filter', Router::path('question.getBy.tags',['']),"#myquestions",[
+    			'preventDefault'=>false,
+    			'method' => 'post',
+    	]);
+    	
+    	$this->jquery->renderView ( 'QuestionController/template/myQuestions.html',[
+    	]);
+    }
+    
+    /**
+     *
+     * @get("displayMyQuestions","name"=>"question.my")
+     */
+    public function displayMyQuestions() {
+
+    	$dt=$this->uiService->getQuestionDataTable($this->loader->my());
+    	$this->jquery->ajaxOn('change','#input-Filter', Router::path('question.getBy.tags',['']),"#myquestions",[
+    			'preventDefault'=>false,
+    			'method' => 'post',
+    	]);
+    	$this->jquery->renderView ( 'QuestionController/template/myQuestions.html', [] );
     }
     
     /**

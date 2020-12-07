@@ -6,12 +6,18 @@ use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\USession;
 use models\Question;
 use models\User;
+use models\Tag;
 
 class QuestionDAOLoader {
 
 	public function get($id): ?Question {
 		return DAO::getById ( Question::class, $id );
 	}
+	
+	public function getByTag($tag): ?array {
+		return DAO::getManyToMany($tag, 'questions',true);
+	}
+	
 
 	public function add(Question $item,array $tags): void {
 	    $creator = new User();
