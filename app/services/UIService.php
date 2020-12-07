@@ -17,6 +17,7 @@ use models\Tag;
 use models\Typeq;
 use models\User;
 use Ajax\semantic\html\elements\HtmlLabel;
+use models\Exam;
 
 class UIService {
 	protected $jquery;
@@ -229,5 +230,4 @@ class UIService {
 		$toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
 		$toolbar->setClass('ui top attached menu');	
 	}
-
 }

@@ -1,0 +1,32 @@
+<div id="chooseQcm">
+{{q['chooseQcm'] | raw}}
+</div>
+<div id="chooseGroup"></div>
+<form method="post" id="examAdd" name="examAdd" action="{{path('examAddSubmit')}}">
+<div class="ui form">
+  <div class="two fields">
+    <div class="field">
+      <label>Start date</label>
+      <div class="ui calendar" id="rangestart">
+        <div class="ui input left icon">
+          <i class="calendar icon"></i>
+          <input type="text" name="start" placeholder="Start">
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>End date</label>
+      <div class="ui calendar" id="rangeend">
+        <div class="ui input left icon">
+          <i class="calendar icon"></i>
+          <input type="text" name="end" placeholder="End">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{q['dtQcm'] | raw }}
+{{q['dtGroups'] | raw }}
+<input type="submit" value="Create">
+</form>
+{{script_foot | raw}}

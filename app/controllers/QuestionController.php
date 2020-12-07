@@ -13,8 +13,6 @@ use models\Typeq;
 use services\QuestionDAOLoader;
 use services\UIService;
 
-
-
 /**
  * Controller QuestionController
  * @route('question','inherited'=>true,'automated'=>true)
