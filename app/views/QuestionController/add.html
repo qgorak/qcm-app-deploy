@@ -1,11 +1,19 @@
 <a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</a>
 <a class="ui green button" id="create">test</a>
-<div class="ui styled accordion" style="width:100%">
-  <div class="title">
-    <i class="dropdown icon"></i>
+
+
+
+
+
+
+
+<div class="ui menu">
+  <a class="browse item">
     Assign tag
-  </div>
-    <div class="content">
+    <i class="dropdown icon"></i>
+  </a>
+</div>
+<div class="ui fluid popup bottom left transition hidden">
 		<form id="checkedTagForm"  name="checkedTagForm" >
 			<div id="tagManager">
 			</div>
@@ -17,7 +25,6 @@
 				<a id="addTag" class="ui tag label" style="height:38px;margin-top:10px;">Add Tag</a>
 			</div>
 		</form>
-	</div>
 </div>
 <div class="ui segment" style="">
 {{ q['questionForm'] | raw }}
