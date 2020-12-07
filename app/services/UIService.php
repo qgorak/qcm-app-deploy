@@ -9,11 +9,14 @@ use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\URequest;
+use Ubiquity\utils\http\USession;
 use models\Group;
 use models\Qcm;
 use models\Question;
+use models\Tag;
 use models\Typeq;
 use models\User;
+use Ajax\semantic\html\elements\HtmlLabel;
 
 class UIService {
 	protected $jquery;
@@ -22,6 +25,7 @@ class UIService {
 		$this->jquery = $jq;
 		$this->semantic = $jq->semantic ();
 	}
+	
 	public function questionDataTable($name,$questions,$checked) {
 		$q = new Question ();
 		$dt = $this->jquery->semantic ()->dataTable($name, $q,$questions);
@@ -62,7 +66,6 @@ class UIService {
 		$dt->setColWidths([0=>8,1=>1,2=>1]);
 		$dt->setIdentifierFunction ( 'getId' );
 		return $dt;
-		
 	}
 	
 	public function questionForm() {
@@ -103,17 +106,35 @@ class UIService {
 	    $msg->addIcon ( "x" );
 	    $dt->setEmptyMessage ( $msg );
 	    $dt->setFields ( [
-	        'id',
-	        'caption'
+	        'caption',
+	    	'tags',
+	    	'action'
 	    ] );
+		$dt->insertDeleteButtonIn(2,true);
+		$dt->insertEditButtonIn(2,true);
+		$dt->insertDisplayButtonIn(2,true);
+	    $dt->setClass(['ui very basic table']);
 	    $dt->setCaptions([
-	        'id',
 	        TranslatorManager::trans('caption',[],'main')
 	    ]);
-	    $dt->onRowClick('alert(\'ok\')');
+		$userid = USession::get('activeUser')['id'];
+		$tags = DAO::getAll( Tag::class, 'idUser='.$userid,false);
+		$dt->setValueFunction('tags',function($tags){
+		$res=[];
+		foreach ($tags as $tag){
+			$label=new HtmlLabel($tag->getId(),$tag->getName());
+			$res[]=$label->setClass('ui '.$tag->getColor().' label');
+		}
+		return $res;
+		});
+
 	    $dt->setIdentifierFunction ( 'getId' );
-	    $dt->addEditDeleteButtons ( false );
+	    $dt->setColWidths([0=>10,1=>3,2=>3]);
 	    $dt->setEdition ();
+	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), 'body', [
+	    		'hasLoader' => 'internal',
+	    		'attr' => 'data-ajax'
+	    ] );
 	}
 	
 	public function displayMyGroups($myGroups,$inGroups){

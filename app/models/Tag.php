@@ -29,6 +29,12 @@ class Tag{
 	*/
 	private $user;
 
+	/**
+	 * @manyToMany("targetEntity"=>"models\\Question","inversedBy"=>"tags")
+	 * @joinTable("name"=>"questiontag")
+	*/
+	private $questions;
+
 	 public function getId(){
 		return $this->id;
 	}
@@ -61,8 +67,20 @@ class Tag{
 		$this->user=$user;
 	}
 
+	 public function getQuestions(){
+		return $this->questions;
+	}
+
+	 public function setQuestions($questions){
+		$this->questions=$questions;
+	}
+
+	 public function addQuestion($question){
+		$this->questions[]=$question;
+	}
+
 	 public function __toString(){
-		return $this->id.'';
+		return $this->name.'';
 	}
 
 }

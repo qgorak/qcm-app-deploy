@@ -3,11 +3,9 @@
 namespace services;
 
 use Ubiquity\orm\DAO;
-use models\Answer;
-use models\Question;
 use Ubiquity\utils\http\USession;
+use models\Question;
 use models\User;
-use models\Questiontag;
 
 class QuestionDAOLoader {
 
@@ -19,13 +17,9 @@ class QuestionDAOLoader {
 	    $creator = new User();
 	    $creator->setId(USession::get('activeUser')['id']);
 	    $item->setUser($creator);
-		DAO::insert ( $item );
-		foreach($tags as $tag) {
-		    $questiontag = new Questiontag();
-		    $questiontag->setIdQuestion($item->getId());
-		    $questiontag->setIdTag($tag);
-		    DAO::insert($questiontag);
-		}
+	    $item->setTags($tags);
+		DAO::insert ( $item);
+		DAO::insertOrUpdateAllManyToMany($item);
 	}
 
 	public function all(): array {
@@ -34,7 +28,7 @@ class QuestionDAOLoader {
 	
 	public function my(): array{
 	    $userid = USession::get('activeUser')['id'];
-	    return DAO::getAll( Question::class, 'idUser='.$userid,false);
+	    return DAO::getAll( Question::class, 'idUser='.$userid,true);
 	}
 
 	public function clear(): void {

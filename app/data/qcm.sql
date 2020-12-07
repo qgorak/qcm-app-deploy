@@ -83,4 +83,6 @@ ALTER TABLE `useranswer` ADD CONSTRAINT `fk_useranswer_user` FOREIGN KEY (`idUse
 ALTER TABLE `usergroup` ADD CONSTRAINT `fk_usergroup_group` FOREIGN KEY (`idGroup`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `usergroup` ADD CONSTRAINT `fk_usergroup_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE `qcmquestion` ADD CONSTRAINT `fk_qcmquestion_question` FOREIGN KEY (`idQuestion`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-ALTER TABLE `qcmquestion` ADD CONSTRAINT `fk_qcmquestion_qcm` FOREIGN KEY (`idQcm`) REFERENCES `qcm` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+ALTER TABLE `qcmquestion` ADD CONSTRAINT `fk_qcmquestion_qcm` FOREIGN KEY (`idQcm`) REFERENCES `qcm` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE `questiontag` ADD CONSTRAINT `fk_questiontag_question` FOREIGN KEY (`idQuestion`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE `questiontag` ADD CONSTRAINT `fk_questiontag_tag` FOREIGN KEY (`idTag`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION

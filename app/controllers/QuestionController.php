@@ -55,10 +55,6 @@ class QuestionController extends ControllerBase {
         array_push($answer_array,$answer);
         USession::set('answers',$answer_array);
         $dt=$this->uiService->getQuestionDataTable($this->loader-> my());
-        $this->jquery->getOnClick ( '._delete', 'delete', 'body', [
-            'hasLoader' => 'internal',
-            'attr' => 'data-ajax'
-        ] );
         $this->jquery->getOnClick ( '._edit', Router::path ( 'Question.update', [
             ''
         ] ), '#response', [
