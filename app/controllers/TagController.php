@@ -41,15 +41,17 @@ class TagController extends ControllerBase{
 	 * @post("submit","name"=>'tag.submit')
 	 */
 	public function submit(){
-	    $tag = new Tag();
-	    $creator= new User();
-	    $creator->setId(USession::get('activeUser')['id']);
-	    $tag->setName(URequest::getPost()['nametag']);
-	    $tag->setUser($creator);
-	    $colors = ['red','orange','yellow','olive','green','teal','blue','violet','purple','pink','brown','grey','black'];
-	    $color = $colors[array_rand($colors)];
-	    $tag->setColor($color);
-	    DAO::insert($tag);
+	    if(DAO::getOne(Tag::class,"idUser=? AND name=?",false,[USession::get('activeUser')['id'],URequest::post('nametag')])==null){
+	        $tag = new Tag();
+	        $creator= new User();
+	        $creator->setId(USession::get('activeUser')['id']);
+	        $tag->setName(URequest::getPost()['nametag']);
+	        $tag->setUser($creator);
+	        $colors = ['red','orange','yellow','olive','green','teal','blue','violet','purple','pink','brown','grey','black'];
+	        $color = $colors[array_rand($colors)];
+	        $tag->setColor($color);
+	        DAO::insert($tag);
+	    }
         $this->my();
 	}
 }
