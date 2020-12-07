@@ -1,38 +1,28 @@
 <a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</a>
 <a class="ui green button" id="create">test</a>
-
-
-<div class="ui styled accordion" style="width:300px">
+<div class="ui styled accordion" style="width:100%">
   <div class="title">
     <i class="dropdown icon"></i>
     Assign tag
   </div>
-  <div class="content">
-
-
-  <form id="checkedTagForm"  name="checkedTagForm" >
-<div id="tagManager">
+    <div class="content">
+		<form id="checkedTagForm"  name="checkedTagForm" >
+			<div id="tagManager">
+			</div>
+		</form>
+		<form id="tagForm"  name="tagForm" >
+			<div class="ui right labeled left icon input">
+			  	<i class="tags icon"></i>
+			  	<input id="nametag" style="width:175px;" name="nametag" type="text" placeholder="Enter tags">
+				<a id="addTag" class="ui tag label" style="height:38px;margin-top:10px;">Add Tag</a>
+			</div>
+		</form>
+	</div>
 </div>
-</form>
-  <form id="tagForm"  name="tagForm" >
-<div class="ui right labeled left icon input">
-  <i class="tags icon"></i>
-  <input id="nametag" style="width:175px;" name="nametag" type="text" placeholder="Enter tags">
-
-  <a id="addTag" class="ui tag label" style="height:38px;margin-top:10px;">
-    Add Tag
-  </a>
-</div>
-  </form>
-
-</div>
-  </div>
 <div class="ui segment" style="">
 {{ q['questionForm'] | raw }}
 </div>
 <div id="response-form"></div>
-{{ckEditor | raw}}
-
 <script>
 includeCkEditor('{{identifier}}','{{lang}}');
 </script>
