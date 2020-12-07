@@ -102,7 +102,7 @@ class QuestionController extends ControllerBase {
     public function add() {
         $this->jquery->postFormOnClick('#create', Router::path('question.submit'), 'questionForm','#response',[
             'hasLoader'=>'internal',
-            'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serialize()}'
+            'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'
         ]);
         $this->jquery->getHref('#cancel', '',[
             'hasLoader'=>'internal',
@@ -195,13 +195,12 @@ class QuestionController extends ControllerBase {
      */
     public function submit() {
         $post = URequest::getPost();
-
-        $strTagArray = explode("&",$post['tags']);
-        $tagObjects = array();
-        foreach($strTagArray as $item) {
-            $tag = new Tag();
-            $tag->setId(preg_replace('/[^0-9.]+/', '', $item));
-            array_push($tagObjects,$tag);
+        $tags = URequest::getInput()['tags'];
+        $tagsObjects = array();
+        for ($i = 0; $i < count($tags); $i++) {
+        	$tagToInsert = new Tag();
+        	$tagToInsert->setId($tags[$i]['name']);
+        	array_push($tagsObjects,$tagToInsert);
         }
         $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
         $postAnswers = array();
@@ -223,7 +222,7 @@ class QuestionController extends ControllerBase {
         $question->setCkContent ( $post['ckcontent'] );
         $question->setTypeq($typeq);
         $question->setUser(USession::get('activeUser')['id']);
-        $this->loader->add ( $question, $tagObjects );
+        $this->loader->add ( $question, $tagsObjects );
         foreach($answerObjects as $answer) {
             $answer->setQuestion($question);
             DAO::insert($answer,true);

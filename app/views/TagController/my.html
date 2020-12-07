@@ -2,7 +2,7 @@
 {% for tag in tags %}
   <div class="item">
   <div class="ui radio fitted checkbox">
-    <input name="tag-{{ tag.id }}" type="checkbox" data-ajax="{{ tag.id }}">
+    <input name="{{ tag.id }}"  type="checkbox" >
     <label style="margin-top:3px" ></label>
   </div>
   <label class="ui {{ tag.color }} tag label ">{{ tag.name }}</label>
