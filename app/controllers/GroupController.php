@@ -63,7 +63,7 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @get('{id}','name'=>'groupView')
+     * @get('view/{id}','name'=>'groupView')
      * @param mixed $id
      */
     public function viewGroup($id){
@@ -211,9 +211,10 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @get('demand/{bool}/{groupId}/{userId}','name'=>'groupDemandAccept')
+     * @get('valid/{bool}/{groupId}/{userId}','name'=>'groupDemandAccept')
      * @param mixed $userId
      * @param mixed $groupId
+     * @param mixed $bool
      */
     public function acceptDemand($bool,$groupId,$userId){
         if($bool=="true"){
