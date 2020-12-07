@@ -4,14 +4,14 @@ namespace controllers;
 use Ubiquity\utils\http\USession;
 
 /**
- * Rest Controller ImageController
- * @route("/rest/","inherited"=>true,"automated"=>true)
+ * Controller ImageController
+ * @route("image","inherited"=>true,"automated"=>true)
  */
-class ImageController extends \Ubiquity\controllers\rest\RestController {
+class ImageController extends ControllerBase{
 	
 	/**
 	 * 
-	 * @post('image/add')
+	 * @post('add')
 	 */
 	public function add(){
 		$availableType=["image/bmp","image/gif","image/jpeg","image/png"];
@@ -34,4 +34,8 @@ class ImageController extends \Ubiquity\controllers\rest\RestController {
 			}
 		}
 	}
+	
+	public function index() {}
+	public function initialize(){}
+	public function finalize(){}
 }
