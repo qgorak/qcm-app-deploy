@@ -60,11 +60,18 @@ class UIService {
 		    $toolbar->addPopupAsItem('Sort', 'sort','<div id="response-tag"></div>');
 		    $toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
 		    $toolbar->setClass('ui top attached menu');
-		    
 		    $dt->setToolbar($toolbar);
 		}
 		$dt->setColWidths([0=>8,1=>1,2=>1]);
 		$dt->setIdentifierFunction ( 'getId' );
+		$this->jquery->ajax('get',Router::path('tag.my'),'#response-tag',[
+				'hasLoader'=>'internal',
+				'historize'=>false,
+				'jsCallback'=>'$(".ui.menu .item:first-child").popup({
+   								 popup : $(".ui.popup"),
+    						     on : "click"
+							});;'
+		]);
 		return $dt;
 	}
 	
@@ -108,29 +115,40 @@ class UIService {
 	    $dt->setFields ( [
 	        'caption',
 	    	'tags',
+	    	'typeq',
 	    	'action'
 	    ] );
-		$dt->insertDeleteButtonIn(2,true);
-		$dt->insertEditButtonIn(2,true);
-		$dt->insertDisplayButtonIn(2,true);
+	    $toolbar = $this->jquery->semantic()->htmlMenu('Question Bank');
+	    $toolbar->addPopupAsItem('Sort', 'sort','<div id="response-tag"></div>');
+	    $toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
+	    $toolbar->setClass('ui top attached menu');
+	    $dt->setToolbar($toolbar);
+		$dt->insertDeleteButtonIn(3,true);
+		$dt->insertEditButtonIn(3,true);
+		$dt->insertDisplayButtonIn(3,true);
 	    $dt->setClass(['ui very basic table']);
 	    $dt->setCaptions([
 	        TranslatorManager::trans('caption',[],'main')
 	    ]);
-		$userid = USession::get('activeUser')['id'];
-		$tags = DAO::getAll( Tag::class, 'idUser='.$userid,false);
 		$dt->setValueFunction('tags',function($tags){
-		$res=[];
-		foreach ($tags as $tag){
-			$label=new HtmlLabel($tag->getId(),$tag->getName());
-			$res[]=$label->setClass('ui '.$tag->getColor().' label');
-		}
-		return $res;
-		});
-
+			$res=[];
+			foreach ($tags as $tag){
+				$label=new HtmlLabel($tag->getId(),$tag->getName());
+				$res[]=$label->setClass('ui '.$tag->getColor().' label');
+			}
+			return $res;
+			});
 	    $dt->setIdentifierFunction ( 'getId' );
-	    $dt->setColWidths([0=>10,1=>3,2=>3]);
+	    $dt->setColWidths([0=>9,1=>2,2=>1,3=>2]);
 	    $dt->setEdition ();
+	    $this->jquery->ajax('get',Router::path('tag.my'),'#response-tag',[
+	    		'hasLoader'=>'internal',
+	    		'historize'=>false,
+	    		'jsCallback'=>'$(".ui.menu .item:first-child").popup({
+   								 popup : $(".ui.popup"),
+    						     on : "click"
+							});;'
+	    ]);
 	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), 'body', [
 	    		'hasLoader' => 'internal',
 	    		'attr' => 'data-ajax'

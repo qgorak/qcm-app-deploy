@@ -47,7 +47,7 @@ class Typeq{
 	}
 
 	 public function __toString(){
-		return $this->id.'';
+		return $this->caption.'';
 	}
 
 }
