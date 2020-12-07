@@ -117,7 +117,24 @@ class ExamController extends ControllerBase{
      * @post('choose/{id}','name'=>'chooseQcm')
      */
     public function chooseQcm(int $id){
+        $allQcm=$this->loader->allMyQCM();
         $qcm=[DAO::getOne(Qcm::class,'id=?',false,[$id])];
+        foreach (\array_keys($allQcm,$qcm) as $key) {
+            unset($allQcm[$key]);
+        }
+        $dtQcm=$this->jquery->semantic()->dataTable('dtQcm',Qcm::class,$qcm);
+        $dtQcm->setFields([
+            'id',
+            'name',
+            'description',
+            'add'
+        ]);
+        $dtQcm->setCaptions([
+            'id',
+            TranslatorManager::trans('name',[],'main'),
+            TranslatorManager::trans('description',[],'main')
+        ]);
+        $dtQcm->insertDefaultButtonIn('add','plus','addQcm',false);
         $chooseQcm=$this->jquery->semantic()->dataTable('chooseQcm',Qcm::class,$qcm);
         $chooseQcm->setFields([
             'name',
@@ -125,7 +142,37 @@ class ExamController extends ControllerBase{
             'remove'
         ]);
         $chooseQcm->insertDefaultButtonIn('remove','remove','removeQcm',false);
-        $this->jquery->ajaxOnClick('.addQcm',Router::path('removeQcm',['']),'#response',[
+        $this->jquery->ajaxOnClick('.removeQcm',Router::path('removeQcm',['']),'#response',[
+            'method'=>'post',
+            'attr'=>'data-ajax'
+        ]);
+        if(URequest::isAjax()){
+            $this->jquery->renderView('ExamController/add.html');
+        }
+        else{
+            $this->_index($this->jquery->renderView('ExamController/add.html',[],true));
+        }
+    }
+    
+    /**
+     * @post('remove/{id}','name'=>'removeQcm')
+     */
+    public function removeQcm(int $id){
+        $allQcm=$this->loader->allMyQCM();
+        $dtQcm=$this->jquery->semantic()->dataTable('dtQcm',Qcm::class,$allQcm);
+        $dtQcm->setFields([
+            'id',
+            'name',
+            'description',
+            'add'
+        ]);
+        $dtQcm->setCaptions([
+            'id',
+            TranslatorManager::trans('name',[],'main'),
+            TranslatorManager::trans('description',[],'main')
+        ]);
+        $dtQcm->insertDefaultButtonIn('add','plus','addQcm',false);
+        $this->jquery->ajaxOnClick('.addQcm',Router::path('chooseQcm',['']),'#response',[
             'method'=>'post',
             'attr'=>'data-ajax'
         ]);
