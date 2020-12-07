@@ -115,6 +115,7 @@ class QuestionController extends ControllerBase {
         ]);
         $this->jquery->postFormOnClick('#addTag', Router::path('tag.submit'), 'tagForm','#tagManager',[
             'hasLoader'=>'internal',
+            'jsCallback'=>"$('#nametag').val('');"
         ]);
         $this->jquery->exec('$("#text-dropdown-questionForm-typeq-0").html("Select a type");',true);
         $frm = $this->uiService->questionForm ();
