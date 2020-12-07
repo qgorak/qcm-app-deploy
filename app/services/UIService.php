@@ -5,11 +5,15 @@ namespace services;
 use Ajax\php\ubiquity\JsUtils;
 use Ajax\semantic\html\collections\HtmlMessage;
 use Ajax\service\JArray;
+use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\translation\TranslatorManager;
+use Ubiquity\utils\http\URequest;
+use models\Group;
 use models\Qcm;
 use models\Question;
 use models\Typeq;
+use models\User;
 
 class UIService {
 	protected $jquery;
@@ -110,6 +114,73 @@ class UIService {
 	    $dt->setIdentifierFunction ( 'getId' );
 	    $dt->addEditDeleteButtons ( false );
 	    $dt->setEdition ();
+	}
+	
+	public function displayMyGroups($myGroups,$inGroups){
+		$dtMyGroups = $this->jquery->semantic ()->dataTable ( 'myGroups', Group::class, $myGroups );
+		$dtMyGroups->setFields ( [
+			'id',
+			'name',
+			'description',
+			'keyCode'
+		] );
+		$dtMyGroups->setCaptions([
+			'id',
+			TranslatorManager::trans('name',[],'main'),
+			TranslatorManager::trans('description',[],'main'),
+			TranslatorManager::trans('groupKey',[],'main')
+		]);
+		$dtMyGroups->setIdentifierFunction ( 'getId' );
+		$dtMyGroups->addAllButtons(false);
+		$this->jquery->getOnClick('._display', Router::path ('groupView',[""]),'#response',[
+			'hasLoader'=>'internal',
+			'attr'=>'data-ajax'
+		]);
+		$this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '#response', [
+			'hasLoader' => 'internal',
+			'attr' => 'data-ajax'
+		] );
+		$this->jquery->getOnClick ( '._edit', Router::path ('groupDemand',[""]), '#response', [
+			'hasLoader' => 'internal',
+			'attr' => 'data-ajax'
+		] );
+		$dtInGroups = $this->jquery->semantic ()->dataTable ( 'inGroups', Group::class, $inGroups );
+		$dtInGroups->setFields ( [
+			'id',
+			'name',
+			'description'
+		] );
+		$dtInGroups->setCaptions([
+			'id',
+			TranslatorManager::trans('name',[],'main'),
+			TranslatorManager::trans('description',[],'main')
+		]);
+		$dtInGroups->setIdentifierFunction ( 'getId' );
+	}
+	
+	public function groupJoinDemand($users){
+		$usersDt=$this->jquery->semantic()->dataTable('usersDemand',User::class,$users);
+		$usersDt->setFields([
+			'firstname',
+			'lastname',
+			'email',
+			'accept',
+			'refuse'
+		]);
+		$usersDt->setCaptions([
+			TranslatorManager::trans('firstname',[],'main'),
+			TranslatorManager::trans('lastname',[],'main'),
+			TranslatorManager::trans('email',[],'main')
+		]);
+		$usersDt->setIdentifierFunction ( 'getId' );
+		$usersDt->insertDefaultButtonIn('accept','check','accept',false);
+		$usersDt->insertDefaultButtonIn('refuse','remove','refuse',false);
+		$this->jquery->ajaxOnClick('.accept',Router::path('groupDemandAccept',['true',URequest::getUrlParts()[2]]),'#response',[
+			'attr'=>'data-ajax'
+		]);
+		$this->jquery->ajaxOnClick('.refuse',Router::path('groupDemandAccept',['false',URequest::getUrlParts()[2]]),'#response',[
+			'attr'=>'data-ajax'
+		]);
 	}
 
 }

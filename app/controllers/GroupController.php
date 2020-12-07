@@ -10,6 +10,7 @@ use models\User;
 use Ubiquity\utils\http\USession;
 use models\Usergroup;
 use Ubiquity\translation\TranslatorManager;
+use services\UIService;
 
 /**
  * Controller GroupController
@@ -34,45 +35,10 @@ class GroupController extends ControllerBase{
     }
     
     private function displayMyGroups() {
-        $groups = $this->loader->myGroups();//seulement les groupes qui m'appartiennent
-        $inGroups=$this->loader->inGroups();//seulement les groupes ou je suis membre
-        $dtMyGroups = $this->jquery->semantic ()->dataTable ( 'myGroups', Group::class, $groups );
-        $dtMyGroups->setFields ( [
-            'id',
-            'name',
-            'description'
-        ] );
-        $dtMyGroups->setCaptions([
-            'id',
-            TranslatorManager::trans('name',[],'main'),
-            TranslatorManager::trans('description',[],'main')
-        ]);
-        $dtMyGroups->setIdentifierFunction ( 'getId' );
-        $dtMyGroups->addAllButtons(false);
-        $this->jquery->getOnClick('._display', Router::path ('groupView',[""]),'#response',[
-            'hasLoader'=>'internal',
-            'attr'=>'data-ajax'
-        ]);
-        $this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '#response', [
-            'hasLoader' => 'internal',
-            'attr' => 'data-ajax'
-        ] );       
-        $this->jquery->getOnClick ( '._edit', Router::path ('groupDemand',[""]), '#response', [
-            'hasLoader' => 'internal',
-            'attr' => 'data-ajax'
-        ] );
-        $dtInGroups = $this->jquery->semantic ()->dataTable ( 'inGroups', Group::class, $inGroups );
-        $dtInGroups->setFields ( [
-            'id',
-            'name',
-            'description'
-        ] );
-        $dtInGroups->setCaptions([
-            'id',
-            TranslatorManager::trans('name',[],'main'),
-            TranslatorManager::trans('description',[],'main')
-        ]);
-        $dtInGroups->setIdentifierFunction ( 'getId' );
+        $myGroups = $this->loader->myGroups();
+        $inGroups=$this->loader->inGroups();
+        $dt=new UIService($this->jquery);
+        $dt->displayMyGroups($myGroups, $inGroups);
     }
     
     /**
@@ -226,25 +192,8 @@ class GroupController extends ControllerBase{
     
     private function demand($id){
         $users=$this->loader->getJoiningDemand($id);
-        $usersDt=$this->jquery->semantic()->dataTable('usersDemand',User::class,$users);
-        $usersDt->setFields([
-            'firstname',
-            'lastname',
-            'email'
-        ]);
-        $usersDt->setCaptions([
-            TranslatorManager::trans('firstname',[],'main'),
-            TranslatorManager::trans('lastname',[],'main'),
-            TranslatorManager::trans('email',[],'main')
-        ]);
-        $usersDt->setIdentifierFunction ( 'getId' );
-        $usersDt->addEditDeleteButtons(false);
-        $this->jquery->ajaxOnClick('._edit',Router::path('groupDemandAccept',['true',URequest::getUrlParts()[2]]),'#response',[
-            'attr'=>'data-ajax'
-        ]);
-        $this->jquery->ajaxOnClick('._delete',Router::path('groupDemandAccept',['false',URequest::getUrlParts()[2]]),'#response',[
-            'attr'=>'data-ajax'
-        ]);
+		$dt=new UIService($this->jquery);
+		$dt->groupJoinDemand($users);
     }
     
     /**
