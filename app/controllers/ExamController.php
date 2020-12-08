@@ -51,6 +51,8 @@ class ExamController extends ControllerBase{
         	'QCM',
         	'Groupe'
         ]);
+        $exams->setValueFunction('qcm',function($v){return $v->getName();});
+        $exams->setValueFunction('group',function($v){return $v->getName();});
     }
     
     /**

@@ -73,14 +73,13 @@ class QuestionController extends ControllerBase {
         $this->jquery->postFormOnClick ( '#addAnswer', Router::path('question.add.answer',['']) ,'frmAnswer', '#response-form', [
             'hasLoader' => 'internal',
             'method' => 'post',
-            'attr' => 'data-ajax',
+            'attr' => 'data-ajax'
         ] );
         $this->jquery->ajaxOnClick ( '._remove', Router::path('question.delete.answer',['']) , '#response-form', [
             'hasLoader' => 'internal',
             'method' => 'delete',
-            'attr' => 'data-ajax',
-        ] );
-        
+            'attr' => 'data-ajax'
+        ] ); 
     }
     
     /**

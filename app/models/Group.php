@@ -109,7 +109,7 @@ class Group{
 	}
 
 	 public function __toString(){
-		return ($this->name??'no value').'';
+		return ($this->id??'no value').'';
 	}
 
 }
