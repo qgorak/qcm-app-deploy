@@ -65,12 +65,16 @@ class QuestionController extends ControllerBase {
             'hasLoader'=>'internal',
             'historize'=>false
         ]);
+        $this->jquery->ajaxOnClick ( '._delete', Router::path('question.delete') , '#response-form', [
+        		'hasLoader' => 'internal',
+        		'method' => 'delete',
+        		'attr' => 'data-ajax',
+        ] );
         $this->_index ($this->jquery->renderView('QuestionController/template/QuestionBank.html',['msg'=>$msg],true), [
         ] );
     }
     
     private function _index($response='') {
-
         $this->jquery->renderView ( 'QuestionController/index.html', [
             'response' => $response
         ] );
@@ -132,6 +136,16 @@ class QuestionController extends ControllerBase {
             'identifier'=>'#questionForm-ckcontent',
             'lang'=>$lang
         ]) ;
+    }
+    
+    /**
+     *
+     * @get("delete/{id}",'name'=>'question.delete')
+     */
+    public function delete($id) {
+    	$this->loader->remove($id);
+    	$msg = $this->jquery->semantic()->htmlMessage('','success !');
+    	$this->index($msg);
     }
     
     /**
