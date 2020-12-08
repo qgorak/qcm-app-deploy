@@ -4,6 +4,7 @@ namespace services;
 
 use Ajax\php\ubiquity\JsUtils;
 use Ajax\semantic\html\collections\HtmlMessage;
+use Ajax\semantic\html\elements\HtmlLabel;
 use Ajax\service\JArray;
 use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
@@ -16,8 +17,6 @@ use models\Question;
 use models\Tag;
 use models\Typeq;
 use models\User;
-use Ajax\semantic\html\elements\HtmlLabel;
-use models\Exam;
 
 class UIService {
 	protected $jquery;
@@ -106,28 +105,27 @@ class UIService {
 	            'empty',
 	            'length[5]'
 	        ]
-	    ] );
+	    ] )->setValue(1000);
 	    $types = DAO::getAll ( Typeq::class );
-	    $ddtypes= array();
-	    foreach ($types as &$value) {
-	        array_push($ddtypes,$value->getCaption());
-	    }
 	    $frm->fieldAsDropDown ( 'typeq', JArray::modelArray ( $types, 'getId','getCaption' ),false,[
 	        'rules' => [
 	            'empty',
 	        ]
+	        
 	    ]);
+	    $this->jquery->html('#text-dropdown-questionForm-typeq-0','<div style="color:#8e8e8e">Select type</div>',true);
 	    $q->setTypeq ( current ( $types ) );
 	    $frm->setValidationParams ( [
 	        "on" => "blur",
 	        "inline" => true
 	    ] );
+
 	    $this->jquery->getOnClick ( '#dropdown-questionForm-typeq-0 .menu .item', 'question/getform', '#response-form', [
 	    		'stopPropagation'=>false,
 	    		'attr' => 'data-value',
 	    		'hasLoader' => false,
-	    		'jsCallback' =>''
-	    		
+	             'jsCallback' =>'$("#input-dropdown-questionForm-typeq-0").attr("name","typeq");
+                                $("#input-dropdown-questionForm-typeq-0").val($(self).attr("data-value"))'
 	    ] );
 	    return $frm;
 	}
@@ -174,6 +172,13 @@ class UIService {
 			return $res;
 		    }
 			});
+        $dt->setValueFunction('typeq', function ($typeq) {
+            if ($typeq != null) {
+                $label = new HtmlLabel('',$typeq->getCaption());
+                $label->setClass('ui circular label');
+                return $label;
+            }
+        });
 	    $dt->setIdentifierFunction ( 'getId' );
 	    $dt->setColWidths([0=>9,1=>2,2=>1,3=>2]);
 	    $dt->setEdition ();

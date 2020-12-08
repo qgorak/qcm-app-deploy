@@ -97,7 +97,7 @@ class QuestionController extends ControllerBase {
             'historize'=>false
         ]);
         $this->uiService->tagManagerJquery();
-        $this->jquery->exec('$("#text-dropdown-questionForm-typeq-0").html("Select a type");',true);
+
         $frm = $this->uiService->questionForm ();
         $frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit'), '#response', [
             'ajax' => [
@@ -132,7 +132,6 @@ class QuestionController extends ControllerBase {
     	$type=$question->getTypeq();
 
     	$this->jquery->ajax('get', 'question/getform/'.$type->getId().'','#response-form');
-    	$this->jquery->exec('$("#dropdown-questionForm-typeq-0").prop("selectedIndex", '.$type->getId().')',true);
     	$this->jquery->getHref('#cancel', '',[
     			'hasLoader'=>'internal',
     			'historize'=>false
