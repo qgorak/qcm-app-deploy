@@ -126,8 +126,7 @@ class UIService {
 	    		'stopPropagation'=>false,
 	    		'attr' => 'data-value',
 	    		'hasLoader' => false,
-	    		'jsCallback' =>'$("#input-dropdown-questionForm-typeq-0").attr("name","typeq");
-                            $("#input-dropdown-questionForm-typeq-0").val($(self).attr("data-value"))'
+	    		'jsCallback' =>''
 	    		
 	    ] );
 	    return $frm;
