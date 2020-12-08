@@ -95,10 +95,6 @@ class QuestionController extends ControllerBase {
      * @get("add",'name'=>'question.add')
      */
     public function add() {
-        $this->jquery->postFormOnClick('#create', Router::path('question.submit'), 'questionForm','#response',[
-            'hasLoader'=>'internal',
-            'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'
-        ]);
         $this->jquery->getHref('#cancel', '',[
             'hasLoader'=>'internal',
             'historize'=>false
@@ -117,6 +113,12 @@ class QuestionController extends ControllerBase {
         ]);
         $this->jquery->exec('$("#text-dropdown-questionForm-typeq-0").html("Select a type");',true);
         $frm = $this->uiService->questionForm ();
+        $frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit'), '#response', [
+            'ajax' => [
+                'hasLoader' => 'internal',
+                'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'
+            ]
+        ] );
         $this->jquery->getOnClick ( '#dropdown-questionForm-typeq-0 .menu .item', 'question/getform', '#response-form', [
             'stopPropagation'=>false,
             'attr' => 'data-value',
@@ -225,12 +227,14 @@ class QuestionController extends ControllerBase {
      */
     public function submit() {
         $post = URequest::getDatas();
-        $tags = $post['tags'];
         $tagsObjects = array();
-        for ($i = 0; $i < count($tags); $i++) {
-        	$tagToInsert = new Tag();
-        	$tagToInsert->setId($tags[$i]['name']);
-        	array_push($tagsObjects,$tagToInsert);
+        if (array_key_exists ( 'tags', $post  )){
+                $tags = $post['tags'];
+            for ($i = 0; $i < count($tags); $i++) {
+        	   $tagToInsert = new Tag();
+        	   $tagToInsert->setId($tags[$i]['name']);
+        	   array_push($tagsObjects,$tagToInsert);
+            }
         }
         $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
         $postAnswers = array();

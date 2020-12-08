@@ -80,16 +80,36 @@ class UIService {
 	    $frm = $this->jquery->semantic ()->dataForm ( 'questionForm', $q );
 	    $frm->setFields ( [
 	        'caption',
+	        'addbody',
 	        'ckcontent',
-	        'typeq'
+	        'typeq',
+	        'submit'
+	    ] );
+	    $frm->fieldAsButton('addbody','ui green button',[
+	        'content'=>'Add body',
+	        'click'=>'$("#field-questionForm-ckcontent").show();$(this).hide();'
+	    ]);
+	    $frm->fieldAsInput ( 'caption', [
+	        'rules' => [
+	            'empty',
+	            'length[5]'
+	        ]
 	    ] );
 	    $types = DAO::getAll ( Typeq::class );
 	    $ddtypes= array();
 	    foreach ($types as &$value) {
 	        array_push($ddtypes,$value->getCaption());
 	    }
-	    $frm->fieldAsDropDown ( 'typeq', JArray::modelArray ( $types, 'getId','getCaption' ),false,'test2' );
+	    $frm->fieldAsDropDown ( 'typeq', JArray::modelArray ( $types, 'getId','getCaption' ),false,[
+	        'rules' => [
+	            'empty',
+	        ]
+	    ]);
 	    $q->setTypeq ( current ( $types ) );
+	    $frm->setValidationParams ( [
+	        "on" => "blur",
+	        "inline" => true
+	    ] );
 	    return $frm;
 	}
 	
