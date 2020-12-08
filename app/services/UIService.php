@@ -165,9 +165,15 @@ class UIService {
 	    $dt->setIdentifierFunction ( 'getId' );
 	    $dt->setColWidths([0=>9,1=>2,2=>1,3=>2]);
 	    $dt->setEdition ();
-	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), 'body', [
+	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), '#response', [
 	    		'hasLoader' => 'internal',
 	    		'attr' => 'data-ajax'
+	    ] );
+	    $this->jquery->ajaxOnClick ( '._display', Router::path('question.preview',['']) , '#response-modal', [
+	    		'hasLoader' => 'internal',
+	    		'method' => 'get',
+	    		'attr' => 'data-ajax',
+	    		'jsCallback'=>'$("#modal").modal("show");'
 	    ] );
 	}
 	
@@ -247,5 +253,14 @@ class UIService {
 		$toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
 		$toolbar->setClass('ui top attached menu');	
 	}
+	
+	public function modal(){
+	    $modal = $this->jquery->semantic()->htmlModal('modal');
+	    $modal ->addContent('<div id="response-modal"></div>');
+	}
+	
+
+	
+	
 
 }

@@ -55,6 +55,7 @@ class QuestionController extends ControllerBase {
         array_push($answer_array,$answer);
         USession::set('answers',$answer_array);
         $toolbar=$this->uiService->questionBankToolbar();
+        $modal=$this->uiService->modal();
         $this->jquery->ajax('get', Router::path('question.my'),"#myquestions");
         $this->jquery->ajaxOn('change','#input-Filter', Router::path('question.getBy.tags',['']),"#myquestions",[
             'method' => 'post',
@@ -65,11 +66,6 @@ class QuestionController extends ControllerBase {
             'hasLoader'=>'internal',
             'historize'=>false
         ]);
-        $this->jquery->ajaxOnClick ( '._delete', Router::path('question.delete') , '#response-form', [
-        		'hasLoader' => 'internal',
-        		'method' => 'delete',
-        		'attr' => 'data-ajax',
-        ] );
         $this->_index ($this->jquery->renderView('QuestionController/template/QuestionBank.html',['msg'=>$msg],true), [
         ] );
     }
@@ -150,7 +146,7 @@ class QuestionController extends ControllerBase {
     
     /**
      *
-     * @get("one/{id}","name"=>"getOne")
+     * @get("preview/{id}","name"=>"question.preview")
      */
     public function getOne($id) {
         $question = $this->loader->get($id);

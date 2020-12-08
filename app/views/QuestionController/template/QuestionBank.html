@@ -1,6 +1,5 @@
 
     {{ msg | raw}}
-
 <div class="ui container text">
 </div>
 	<a id="add" href="{{path('question.add')}}" data-target="#response" class="ui green button">
@@ -10,6 +9,7 @@
 	{{q['QuestionBank'] | raw }}
 	<div id="myquestions">
 </div>
+{{ q['modal'] | raw }}
 {{script_foot | raw}}
 
 

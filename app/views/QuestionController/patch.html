@@ -1,0 +1,26 @@
+<a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</a>
+<div id="tagMenu" class="ui menu">
+  <a class="browse item">
+    Assign tag
+    <i class="dropdown icon"></i>
+  </a>
+</div>
+<div id="tagPopup" class="ui fluid popup bottom left transition hidden">
+			<div id="tagManager">
+			</div>
+		<form id="tagForm"  name="tagForm" >
+			<div class="ui right labeled left icon input">
+			  	<i class="tags icon"></i>
+			  	<input id="nametag" style="width:175px;" name="nametag" type="text" placeholder="Enter tags">
+				<a id="addTag" class="ui tag label" style="height:38px;margin-top:10px;">Add Tag</a>
+			</div>
+		</form>
+</div>
+<div class="ui segment" style="">
+{{ q['questionForm'] | raw }}
+</div>
+<div id="response-form"></div>
+<script>
+includeCkEditor('{{identifier}}','{{lang}}');
+</script>
+{{ script_foot | raw }}
