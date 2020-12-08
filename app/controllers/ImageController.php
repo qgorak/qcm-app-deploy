@@ -20,7 +20,8 @@ class ImageController extends ControllerBase{
 			if(\in_array($_FILES['upload']['type'],$availableType)){
 				if(($_FILES['upload']['size'] < $maxsize) && ($_FILES["upload"]["size"] != 0)) {
 					$tmp_name = $_FILES["upload"]["tmp_name"];
-					$ext=\end(explode("/",$_FILES["upload"]["type"]));
+					$ext=explode("/",$_FILES["upload"]["type"]);
+					$ext=\end($ext);
 					$user=USession::get('activeUser')['id'];
 					$uploads_dir = "upload/".$user."/";
 					$files = \glob($uploads_dir. "*");
