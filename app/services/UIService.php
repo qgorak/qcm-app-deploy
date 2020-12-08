@@ -79,12 +79,19 @@ class UIService {
 	    $q = new Question ();
 	    $frm = $this->jquery->semantic ()->dataForm ( 'questionForm', $q );
 	    $frm->setFields ( [
+	        'submit',
 	        'caption',
 	        'addbody',
 	        'ckcontent',
 	        'typeq',
-	        'submit'
 	    ] );
+	    $frm->setCaptions([
+	        'submit',
+	        'caption',
+	        'addbody',
+	        '',
+	        'Type'
+	    ]);
 	    $frm->fieldAsButton('addbody','ui green button',[
 	        'content'=>'Add body',
 	        'click'=>'$("#field-questionForm-ckcontent").show();$(this).hide();'

@@ -1,11 +1,11 @@
 <a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</a>
-<div class="ui menu">
+<div id="tagMenu" class="ui menu">
   <a class="browse item">
     Assign tag
     <i class="dropdown icon"></i>
   </a>
 </div>
-<div class="ui fluid popup bottom left transition hidden">
+<div id="tagPopup" class="ui fluid popup bottom left transition hidden">
 			<div id="tagManager">
 			</div>
 		<form id="tagForm"  name="tagForm" >

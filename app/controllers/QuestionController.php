@@ -102,8 +102,8 @@ class QuestionController extends ControllerBase {
         $this->jquery->ajax('get',Router::path('tag.my'),'#tagManager',[
             'hasLoader'=>'internal',
             'historize'=>false,
-            'jsCallback'=>'$(".ui.menu .item:first-child").popup({
-   								 popup : $(".ui.popup"),
+            'jsCallback'=>'$("#tagMenu").popup({
+   								 popup : $("#tagPopup"),
     						     on : "click"
 							});;'
         ]);
