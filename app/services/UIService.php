@@ -126,12 +126,14 @@ class UIService {
 	        TranslatorManager::trans('caption',[],'main')
 	    ]);
 		$dt->setValueFunction('tags',function($tags){
+		    if($tags!=null){
 			$res=[];
 			foreach ($tags as $tag){
 				$label=new HtmlLabel($tag->getId(),$tag->getName());
 				$res[]=$label->setClass('ui '.$tag->getColor().' label');
 			}
 			return $res;
+		    }
 			});
 	    $dt->setIdentifierFunction ( 'getId' );
 	    $dt->setColWidths([0=>9,1=>2,2=>1,3=>2]);

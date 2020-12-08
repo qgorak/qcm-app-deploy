@@ -17,11 +17,17 @@ class QuestionDAOLoader {
 	public function getByTags($tags): ?array {
 	    $res=array();
 	    foreach($tags as $tag) {
-	        $questions = DAO::getManyToMany($tag, 'questions',true);
-	        $res = array_merge($res,$questions);
+	        if (empty($res)) {
+	            $res = DAO::getManyToMany($tag, 'questions',true);
+	        }else{
+	            $questions = DAO::getManyToMany($tag, 'questions',true);
+                 
+	            }     
+	        }
+	        return $res;
 	    }
-		return $res;
-	}
+	
+
 	
 
 	public function add(Question $item,array $tags): void {

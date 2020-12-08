@@ -48,7 +48,7 @@ class QuestionController extends ControllerBase {
      *
      * @route('/','name'=>'question')
      */
-    public function index() {
+    public function index($msg='') {
         $answer_array= array();
         $answer = new Answer();
         $answer->setScore(0);
@@ -57,20 +57,20 @@ class QuestionController extends ControllerBase {
         $toolbar=$this->uiService->questionBankToolbar();
         $this->jquery->ajax('get', Router::path('question.my'),"#myquestions");
         $this->jquery->ajaxOn('change','#input-Filter', Router::path('question.getBy.tags',['']),"#myquestions",[
-            'preventDefault'=>true,
             'method' => 'post',
             'params' =>'{"tags":$("#input-Filter").val()}',
             'hasLoader'=>'internal'
         ]);
-        $this->_index ($this->jquery->renderView('QuestionController/template/QuestionBank.html',[],true), [
+        $this->jquery->getHref('#add', '',[
+            'hasLoader'=>'internal',
+            'historize'=>false
+        ]);
+        $this->_index ($this->jquery->renderView('QuestionController/template/QuestionBank.html',['msg'=>$msg],true), [
         ] );
     }
     
     private function _index($response='') {
-    	$this->jquery->getHref('#add', '',[
-    			'hasLoader'=>'internal',
-    			'historize'=>false
-    	]);
+
         $this->jquery->renderView ( 'QuestionController/index.html', [
             'response' => $response
         ] );
@@ -203,8 +203,8 @@ class QuestionController extends ControllerBase {
     	   }
     	   $questions = $this->loader->getByTags($tagObjects);
     	   $dt=$this->uiService->getQuestionDataTable($questions);
-    	   return $this->jquery->renderView ( 'QuestionController/template/myQuestions.html',[
-    	   ]);
+    	   $this->_index($this->jquery->renderView ( 'QuestionController/template/myQuestions.html',[
+    	   ],true));
         }else{
            $this->displayMyQuestions();
         }
@@ -216,7 +216,7 @@ class QuestionController extends ControllerBase {
      */
     public function displayMyQuestions() {
     	$dt=$this->uiService->getQuestionDataTable($this->loader->my());
-    	return $this->jquery->renderView( 'QuestionController/template/myQuestions.html', []);
+    	$this->_index($this->jquery->renderView( 'QuestionController/template/myQuestions.html', [] ,true));
     }
     
     /**
@@ -224,8 +224,8 @@ class QuestionController extends ControllerBase {
      * @post("add","name"=>"question.submit")
      */
     public function submit() {
-        $post = URequest::getPost();
-        $tags = URequest::getInput()['tags'];
+        $post = URequest::getDatas();
+        $tags = $post['tags'];
         $tagsObjects = array();
         for ($i = 0; $i < count($tags); $i++) {
         	$tagToInsert = new Tag();
@@ -257,6 +257,7 @@ class QuestionController extends ControllerBase {
             $answer->setQuestion($question);
             DAO::insert($answer,true);
         }
-        $this->jquery->renderView ( 'QuestionController/add.html' , [ ]);
+        $msg = $this->jquery->semantic()->htmlMessage('','success !');
+        $this->index($msg);
     }
 }
