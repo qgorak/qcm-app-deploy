@@ -7,7 +7,6 @@ use models\Exam;
 use models\Group;
 use models\Qcm;
 use Ubiquity\utils\http\USession;
-use models\Option;
 
 class ExamDAOLoader {
 

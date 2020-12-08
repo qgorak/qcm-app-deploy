@@ -11,8 +11,6 @@ use models\Qcm;
 use models\Group;
 use Ubiquity\translation\TranslatorManager;
 use Ajax\service\JArray;
-use models\Option;
-use models\Examoption;
 
 /**
  * Controller ExamController
@@ -46,10 +44,10 @@ class ExamController extends ControllerBase{
         	'group'
         ]);
         $exams->setCaptions([
-        	'Date de début',
-        	'Date de fin',
-        	'QCM',
-        	'Groupe'
+            TranslatorManager::trans('startDate',[],'main'),
+            TranslatorManager::trans('endDate',[],'main'),
+            TranslatorManager::trans('qcm',[],'main'),
+            TranslatorManager::trans('group',[],'main')
         ]);
         $exams->setValueFunction('qcm',function($v){return $v->getName();});
         $exams->setValueFunction('group',function($v){return $v->getName();});
@@ -96,8 +94,8 @@ class ExamController extends ControllerBase{
         	'idGroup'
         ]);
         $exam->setCaptions([
-        	'QCM',
-        	'Group'
+            TranslatorManager::trans('qcm',[],'main'),
+            TranslatorManager::trans('group',[],'main')
         ]);
         $exam->fieldAsDropDown('idQcm',JArray::modelArray($qcm,'getId','getId'));
         $exam->fieldAsDropDown('idGroup',JArray::modelArray($groups,'getId','getId'));
@@ -121,9 +119,8 @@ class ExamController extends ControllerBase{
         $exam->setQcm(DAO::getById(Qcm::class,URequest::post('idQcm'),false));
         $exam->setGroup(DAO::getById(Group::class,URequest::post('idGroup'),false));
         $exam->setOptions(URequest::post('options'));
-        DAO::save($exam,true);
+        DAO::save($exam);
         $this->displayMyExam();
-        var_dump(URequest::getDatas());
         $this->jquery->renderView('ExamController/display.html');
     }
 }

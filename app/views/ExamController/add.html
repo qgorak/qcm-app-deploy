@@ -2,7 +2,7 @@
 <div class="ui form">
   <div class="two fields">
     	<div class="field">
-    	<label>Start</label>
+    	<label>{{t('startDate',[],'main')}}</label>
 		<div class="ui calendar">
 		    <div class="ui input left icon">
 		    <i class="calendar icon"></i>
@@ -11,7 +11,7 @@
 		</div>
 	</div>
     	<div class="field">
-    	<label>End</label>
+    	<label>{{t('endDate',[],'main')}}</label>
 		<div class="ui calendar">
 		    <div class="ui input left icon">
 		    <i class="calendar icon"></i>
@@ -30,6 +30,6 @@
 		</select>
 	</div>
 {{q['exam'] | raw}}
-<input id="examSubmit" type="submit" value="Create">
+<input id="examSubmit" type="submit" value="{{t('create',[],'main')}}">
 </form>
 {{script_foot | raw}}
