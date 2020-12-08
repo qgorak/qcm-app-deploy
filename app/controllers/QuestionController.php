@@ -105,14 +105,6 @@ class QuestionController extends ControllerBase {
                 'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'
             ]
         ] );
-        $this->jquery->getOnClick ( '#dropdown-questionForm-typeq-0 .menu .item', 'question/getform', '#response-form', [
-            'stopPropagation'=>false,
-            'attr' => 'data-value',
-            'hasLoader' => false,
-            'jsCallback' =>'$("#input-dropdown-questionForm-typeq-0").attr("name","typeq");
-                            $("#input-dropdown-questionForm-typeq-0").val($(self).attr("data-value"))'
-
-        ] );
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
         $this->jquery->renderView ( 'QuestionController/add.html', [
             'identifier'=>'#questionForm-ckcontent',
