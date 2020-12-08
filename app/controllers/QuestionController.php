@@ -99,18 +99,7 @@ class QuestionController extends ControllerBase {
             'hasLoader'=>'internal',
             'historize'=>false
         ]);
-        $this->jquery->ajax('get',Router::path('tag.my'),'#tagManager',[
-            'hasLoader'=>'internal',
-            'historize'=>false,
-            'jsCallback'=>'$("#tagMenu").popup({
-   								 popup : $("#tagPopup"),
-    						     on : "click"
-							});;'
-        ]);
-        $this->jquery->postFormOnClick('#addTag', Router::path('tag.submit'), 'tagForm','#tagManager',[
-            'hasLoader'=>'internal',
-            'jsCallback'=>"$('#nametag').val('');"
-        ]);
+        $this->uiService->tagManagerJquery();
         $this->jquery->exec('$("#text-dropdown-questionForm-typeq-0").html("Select a type");',true);
         $frm = $this->uiService->questionForm ();
         $frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit'), '#response', [
@@ -133,6 +122,7 @@ class QuestionController extends ControllerBase {
             'lang'=>$lang
         ]) ;
     }
+	
     
     /**
      *
@@ -142,6 +132,34 @@ class QuestionController extends ControllerBase {
     	$this->loader->remove($id);
     	$msg = $this->jquery->semantic()->htmlMessage('','success !');
     	$this->index($msg);
+    }
+    
+    /**
+     *
+     * @get("patch/{id}",'name'=>'question.patch')
+     */
+    public function patch($id) {
+    	$question = $this->loader->get($id);
+    	$this->jquery->getHref('#cancel', '',[
+    			'hasLoader'=>'internal',
+    			'historize'=>false
+    	]);
+    	
+    	$frm = $this->uiService->questionForm ($question);
+    	$this->uiService->tagManagerJquery();
+    	$frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit'), '#response', [
+    			'ajax' => [
+    					'hasLoader' => 'internal',
+    					'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'
+    			]
+    	] );
+    	USession::set('answers', $question->getAnswers());
+    	$lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
+    	$this->jquery->ajax('get', 'question/getform/'.$question->getTypeq()->getId(),'#response-form');
+    	$this->jquery->renderView ( 'QuestionController/patch.html', [
+    			'identifier'=>'#questionForm-ckcontent',
+    			'lang'=>$lang
+    	]) ;
     }
     
     /**
@@ -274,4 +292,6 @@ class QuestionController extends ControllerBase {
         $msg = $this->jquery->semantic()->htmlMessage('','success !');
         $this->index($msg);
     }
+    
+
 }

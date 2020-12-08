@@ -75,8 +75,12 @@ class UIService {
 		return $dt;
 	}
 	
-	public function questionForm() {
-	    $q = new Question ();
+	public function questionForm($question='') {
+		if($question==''){
+			$q = new Question ();
+		}else{
+			$q =$question;
+		}
 	    $frm = $this->jquery->semantic ()->dataForm ( 'questionForm', $q );
 	    $frm->setFields ( [
 	        'submit',
@@ -116,6 +120,14 @@ class UIService {
 	    $frm->setValidationParams ( [
 	        "on" => "blur",
 	        "inline" => true
+	    ] );
+	    $this->jquery->getOnClick ( '#dropdown-questionForm-typeq-0 .menu .item', 'question/getform', '#response-form', [
+	    		'stopPropagation'=>false,
+	    		'attr' => 'data-value',
+	    		'hasLoader' => false,
+	    		'jsCallback' =>'$("#input-dropdown-questionForm-typeq-0").attr("name","typeq");
+                            $("#input-dropdown-questionForm-typeq-0").val($(self).attr("data-value"))'
+	    		
 	    ] );
 	    return $frm;
 	}
@@ -174,6 +186,10 @@ class UIService {
 	    		'method' => 'get',
 	    		'attr' => 'data-ajax',
 	    		'jsCallback'=>'$("#modal").modal("show");'
+	    ] );
+	    $this->jquery->getOnClick ( '._edit', Router::path ('question.patch',[""]), '#response', [
+	    		'hasLoader' => 'internal',
+	    		'attr' => 'data-ajax'
 	    ] );
 	}
 	
@@ -257,10 +273,20 @@ class UIService {
 	public function modal(){
 	    $modal = $this->jquery->semantic()->htmlModal('modal');
 	    $modal ->addContent('<div id="response-modal"></div>');
+	}	
+	
+	public function tagManagerJquery(){
+		$this->jquery->ajax('get',Router::path('tag.my'),'#tagManager',[
+				'hasLoader'=>'internal',
+				'historize'=>false,
+				'jsCallback'=>'$("#tagMenu").popup({
+   								 popup : $("#tagPopup"),
+    						     on : "click"
+							});;'
+		]);
+		$this->jquery->postFormOnClick('#addTag', Router::path('tag.submit'), 'tagForm','#tagManager',[
+				'hasLoader'=>'internal',
+				'jsCallback'=>"$('#nametag').val('');"
+		]);
 	}
-	
-
-	
-	
-
 }
