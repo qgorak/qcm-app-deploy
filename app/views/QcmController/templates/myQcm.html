@@ -5,6 +5,7 @@
 <button id="addQcm" href="{{path('qcm.add')}}" data-target="#response" class="ui green button">{{t('addQcm',[],'main')}}</button>
 <div class="ui cards">
 	{{q['dtQcms'] | raw }}
+		{{q['modal'] | raw }}
 </div>
 </div>
 {{script_foot | raw}}

@@ -168,7 +168,7 @@ class QuestionController extends ControllerBase {
      *
      * @get("preview/{id}","name"=>"question.preview")
      */
-    public function getOne($id) {
+    public function preview($id) {
         $question = $this->loader->get($id);
         $answers = $question->getAnswers();
         $this->jquery->renderView ( 'QuestionController/question.html', [ 

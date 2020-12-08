@@ -47,6 +47,7 @@ class QcmController extends ControllerBase{
 	    $myQuestions = array();
 	    $myQuestions['notchecked'] = $questionLoader->my();
 	    $myQuestions['checked'] = array();
+	    $modal=$this->uiService->modal();
 	    USession::set('questions', $myQuestions);
 	    $this->jquery->getHref('#addQcm', '',[
 	        'hasLoader'=>'internal',
@@ -143,6 +144,17 @@ class QcmController extends ControllerBase{
 		$this->loader->remove($id);
 		$msg = $this->jquery->semantic()->htmlMessage('','success !');
 		$this->index($msg);
+	}
+	
+	/**
+	 *
+	 * @get("preview/{id}","name"=>"qcm.preview")
+	 */
+	public function preview($id) {
+		$qcm = $this->loader->get($id);
+		$this->jquery->renderView ( 'QcmController/qcm.html', [
+				'qcm' => $qcm,
+		]) ;
 	}
 	
 	/**
