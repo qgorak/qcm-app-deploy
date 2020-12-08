@@ -141,15 +141,16 @@ class QuestionController extends ControllerBase {
     public function patch($id) {
     	$question = $this->loader->get($id);
     	$type=$question->getTypeq();
+
     	$this->jquery->ajax('get', 'question/getform/'.$type->getId().'','#response-form');
-    	$frm = $this->uiService->questionForm ($question);
-    	$this->jquery->exec('$("#text-dropdown-questionForm-typeq-0").html("'.$type->getCaption().'");',true);
+    	$this->jquery->exec('$("#dropdown-questionForm-typeq-0").prop("selectedIndex", '.$type->getId().')',true);
     	$this->jquery->getHref('#cancel', '',[
     			'hasLoader'=>'internal',
     			'historize'=>false
     	]);
     	$this->uiService->tagManagerJquery();
-    	$frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit'), '#response', [
+    	$frm = $this->uiService->questionForm ($question);
+    	$frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit.patch'), '#response', [
     			'ajax' => [
     					'hasLoader' => 'internal',
     					'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'

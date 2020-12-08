@@ -289,4 +289,40 @@ class UIService {
 				'jsCallback'=>"$('#nametag').val('');"
 		]);
 	}
+	
+	public function getQcmDataTable($qcms){
+		$dt = $this->jquery->semantic ()->dataTable ( 'dtQcms', Question::class, $qcms );
+		$msg = new HtmlMessage ( '', TranslatorManager::trans('noDisplay',[],'main') );
+		$msg->addIcon ( "x" );
+		$dt->setEmptyMessage ( $msg );
+		$dt->setFields ( [
+				'name',
+				'description',
+				'cdate',
+		] );
+		$dt->insertDeleteButtonIn(3,true);
+		$dt->insertEditButtonIn(3,true);
+		$dt->insertDisplayButtonIn(3,true);
+		$dt->setClass(['ui very basic table']);
+		$dt->setCaptions([
+				TranslatorManager::trans('name',[],'main')
+		]);
+		$dt->setIdentifierFunction ( 'getId' );
+		$dt->setColWidths([0=>2,1=>8,2=>3,2=>3]);
+		$dt->setEdition ();
+		$this->jquery->getOnClick ( '._delete', Router::path ('qcm.delete',[""]), '#response', [
+				'hasLoader' => 'internal',
+				'attr' => 'data-ajax'
+		] );
+		$this->jquery->ajaxOnClick ( '._display', Router::path('qcm.preview',['']) , '#response-modal', [
+				'hasLoader' => 'internal',
+				'method' => 'get',
+				'attr' => 'data-ajax',
+				'jsCallback'=>'$("#modal").modal("show");'
+		] );
+		$this->jquery->getOnClick ( '._edit', Router::path ('qcm.patch',[""]), '#response', [
+				'hasLoader' => 'internal',
+				'attr' => 'data-ajax'
+		] );
+	}
 }

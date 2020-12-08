@@ -52,9 +52,8 @@ class QcmController extends ControllerBase{
 	        'hasLoader'=>'internal',
 	        'historize'=>false
 	    ]);
-	    $myQcm = $myQcm = $this->loader->my();
+	    $dt = $this->uiService->getQcmDataTable($this->loader->my());
 	    $this->_index($this->jquery->renderView ( 'QcmController/templates/myQcm.html',[
-	        'qcm' => $myQcm,
 	        'msg' => $msg
 	    ],true));
 	}
@@ -78,7 +77,7 @@ class QcmController extends ControllerBase{
 	        'hasLoader'=>'internal',
 	        'historize'=>false
 	    ]);
-	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'questionForm','#response',[
+	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
 	        'hasLoader'=>'internal'
 	    ]);
 	    $this->jquery->ajaxOnClick ( '._add', Router::path('qcm.add.question',['']) , '#response', [
@@ -134,6 +133,16 @@ class QcmController extends ControllerBase{
 	    $formContent['description'] = URequest::post('description');
 	    USession::set('questions', $myQuestions);
 	    $this->add($formContent);
+	}
+	
+	/**
+	 *
+	 * @get("delete/{id}",'name'=>'qcm.delete')
+	 */
+	public function delete($id) {
+		$this->loader->remove($id);
+		$msg = $this->jquery->semantic()->htmlMessage('','success !');
+		$this->index($msg);
 	}
 	
 	/**
