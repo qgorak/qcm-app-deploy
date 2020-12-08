@@ -20,12 +20,11 @@ class QuestionDAOLoader {
 	        if (empty($res)) {
 	            $res = DAO::getManyToMany($tag, 'questions',true);
 	        }else{
-	            $questions = DAO::getManyToMany($tag, 'questions',true);
-                 
+	            $res = array_intersect($res, DAO::getManyToMany($tag, 'questions',true));
 	            }     
 	        }
 	        return $res;
-	    }
+	  }
 	
 
 	
