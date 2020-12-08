@@ -17,6 +17,7 @@ use models\Tag;
 use models\Typeq;
 use models\User;
 use Ajax\semantic\html\elements\HtmlLabel;
+use models\Exam;
 
 class UIService {
 	protected $jquery;
