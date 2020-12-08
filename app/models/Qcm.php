@@ -129,7 +129,7 @@ class Qcm{
 	}
 
 	 public function __toString(){
-		return $this->id.'';
+		return $this->name.'';
 	}
 
 }

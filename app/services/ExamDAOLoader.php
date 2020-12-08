@@ -7,6 +7,7 @@ use models\Exam;
 use models\Group;
 use models\Qcm;
 use Ubiquity\utils\http\USession;
+use models\Option;
 
 class ExamDAOLoader {
 
@@ -43,6 +44,10 @@ class ExamDAOLoader {
 	
 	public function allMyGroup(){
 	    return DAO::uGetAll(Group::class,"idUser=?",false,[USession::get('activeUser')['id']]);
+	}
+	
+	public function getOptions(){
+		return DAO::getAll(Option::class);
 	}
 }
 

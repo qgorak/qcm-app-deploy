@@ -5,10 +5,14 @@ use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use services\ExamDAOLoader;
+use DateTime;
 use models\Exam;
 use models\Qcm;
 use models\Group;
 use Ubiquity\translation\TranslatorManager;
+use Ajax\service\JArray;
+use models\Option;
+use models\Examoption;
 
 /**
  * Controller ExamController
@@ -34,7 +38,19 @@ class ExamController extends ControllerBase{
     
     private function displayMyExam() {
         $exam=$this->loader->all();
-        $this->jquery->semantic()->dataTable('myExam',Exam::class,$exam);
+        $exams=$this->jquery->semantic()->dataTable('myExam',Exam::class,$exam);
+        $exams->setFields([
+        	'dated',
+        	'datef',
+        	'qcm',
+        	'group'
+        ]);
+        $exams->setCaptions([
+        	'Date de début',
+        	'Date de fin',
+        	'QCM',
+        	'Groupe'
+        ]);
     }
     
     /**
@@ -42,7 +58,7 @@ class ExamController extends ControllerBase{
      * @route('/','name'=>'exam')
      */
     public function index(){
-        $this->jquery->ajaxOnClick('#addExam',Router::path ('examAdd',[""]),'#response',[
+        $this->jquery->ajaxOnClick('#addExam',Router::path ('examAdd'),'#response',[
             'hasloader'=>'internal'
         ]);
         $this->displayMyExam();
@@ -61,7 +77,10 @@ class ExamController extends ControllerBase{
     public function add(){
         $qcm=$this->loader->allMyQCM();
         $groups=$this->loader->allMyGroup();
-        $this->jquery->exec("$('#rangestart').calendar({
+        $options=$this->loader->getOptions();
+        $this->jquery->exec("
+		$('.ui.calendar').calendar();
+		$('#rangestart').calendar({
           type: 'date',
           endCalendar: $('#rangeend')
         });
@@ -69,105 +88,48 @@ class ExamController extends ControllerBase{
           type: 'date',
           startCalendar: $('#rangestart')
         });",true);
-        $dtQcm=$this->jquery->semantic()->dataTable('dtQcm',Qcm::class,$qcm);
-        $dtQcm->setFields([
-            'id',
-            'name',
-            'description',
-            'add'
+        $exam=$this->jquery->semantic()->dataForm('exam',new Exam());
+        $exam->setFields([
+        	'idQcm',
+        	'idGroup',
+        	'options'
         ]);
-        $dtQcm->setCaptions([
-            'id',
-            TranslatorManager::trans('name',[],'main'),
-            TranslatorManager::trans('description',[],'main')
+        $exam->setCaptions([
+        	'QCM',
+        	'Group',
+        	'Liste des options'
         ]);
-        $dtQcm->insertDefaultButtonIn('add','plus','addQcm',false);
-        $this->jquery->ajaxOnClick('.addQcm',Router::path('chooseQcm',['']),'#response',[
-            'method'=>'post',
-            'attr'=>'data-ajax'
+        $exam->fieldAsDropDown('idQcm',JArray::modelArray($qcm,'getId','getId'));
+        $exam->fieldAsDropDown('idGroup',JArray::modelArray($groups,'getId','getId'));
+        $exam->fieldAsDropDown('options',$options,true);
+        $this->jquery->postFormOnClick('#examSubmit',Router::path ('examAddSubmit'),'examAdd','#response',[
+        	'hasloader'=>'internal'
         ]);
-        $dtGroups=$this->jquery->semantic()->dataTable('dtGroups',Group::class,$groups);
-        $dtGroups->setFields([
-            'id',
-            'name',
-            'description',
-            'add'
-        ]);
-        $dtGroups->setCaptions([
-            'id',
-            TranslatorManager::trans('name',[],'main'),
-            TranslatorManager::trans('description',[],'main')
-        ]);
-        if(URequest::isAjax()){
-            $this->jquery->renderView('ExamController/add.html');
-        }
-        else{
-            $this->_index($this->jquery->renderView('ExamController/add.html',[],true));
-        }
+        $this->jquery->renderView('ExamController/add.html');
     }
     
     /**
      * @post('add','name'=>'examAddSubmit')
      */
     public function addSubmit(){
-        var_dump(URequest::getDatas());
-    }
-    
-    /**
-     * @post('choose/{id}','name'=>'chooseQcm')
-     */
-    public function chooseQcm(int $id){
-        $qcm=[DAO::getOne(Qcm::class,'id=?',false,[$id])];
-        foreach (\array_keys($allQcm,$qcm) as $key) {
-            unset($allQcm[$key]);
+        $exam=new Exam();
+        $dated=str_replace(',','',URequest::post('dated'));
+        $dated = new DateTime($dated);
+        $datef=str_replace(',','',URequest::post('datef'));
+        $datef = new DateTime($datef);
+        $exam->setDated(date_format($dated,'Y-m-d H:i'));
+        $exam->setDatef(date_format($datef,'Y-m-d H:i'));
+        $exam->setQcm(DAO::getById(Qcm::class,URequest::post('idQcm'),false));
+        $exam->setGroup(DAO::getById(Group::class,URequest::post('idGroup'),false));
+        DAO::save($exam,true);
+        foreach(explode(',',URequest::post('options')) as $i){
+        	$option=new Examoption();
+        	$option->setOption(DAO::getById(Option::class, $i));
+        	$option->setExam($exam);
+        	DAO::insert($option);     	
         }
-        $chooseQcm=$this->jquery->semantic()->dataTable('chooseQcm',Qcm::class,$qcm);
-        $chooseQcm->setFields([
-            'name',
-            'description',
-            'remove'
-        ]);
-        $chooseQcm->insertDefaultButtonIn('remove','remove','removeQcm',false);
-        $this->jquery->ajaxOnClick('.removeQcm',Router::path('removeQcm',['']),'#response',[
-            'method'=>'post',
-            'attr'=>'data-ajax'
-        ]);
-        if(URequest::isAjax()){
-            $this->jquery->renderView('ExamController/add.html');
-        }
-        else{
-            $this->_index($this->jquery->renderView('ExamController/add.html',[],true));
-        }
-    }
-    
-    /**
-     * @post('remove/{id}','name'=>'removeQcm')
-     */
-    public function removeQcm(int $id){
-        $allQcm=$this->loader->allMyQCM();
-        $dtQcm=$this->jquery->semantic()->dataTable('dtQcm',Qcm::class,$allQcm);
-        $dtQcm->setFields([
-            'id',
-            'name',
-            'description',
-            'add'
-        ]);
-        $dtQcm->setCaptions([
-            'id',
-            TranslatorManager::trans('name',[],'main'),
-            TranslatorManager::trans('description',[],'main')
-        ]);
-        $dtQcm->insertDefaultButtonIn('add','plus','addQcm',false);
-        $this->jquery->ajaxOnClick('.addQcm',Router::path('chooseQcm',['']),'#response',[
-            'method'=>'post',
-            'attr'=>'data-ajax'
-        ]);
-        if(URequest::isAjax()){
-            $this->jquery->renderView('ExamController/add.html');
-        }
-        else{
-            $this->_index($this->jquery->renderView('ExamController/add.html',[],true));
-        }
+        $this->displayMyExam();
+        $this->jquery->renderView('ExamController/display.html');
     }
 }
 
