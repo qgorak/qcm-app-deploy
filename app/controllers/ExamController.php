@@ -79,8 +79,8 @@ class ExamController extends ControllerBase{
     public function add(){
         $qcm=$this->loader->allMyQCM();
         $groups=$this->loader->allMyGroup();
-        $options=$this->loader->getOptions();
         $this->jquery->exec("
+        $('.ui.dropdown').dropdown();
 		$('.ui.calendar').calendar();
 		$('#rangestart').calendar({
           type: 'date',
@@ -93,17 +93,14 @@ class ExamController extends ControllerBase{
         $exam=$this->jquery->semantic()->dataForm('exam',new Exam());
         $exam->setFields([
         	'idQcm',
-        	'idGroup',
-        	'options'
+        	'idGroup'
         ]);
         $exam->setCaptions([
         	'QCM',
-        	'Group',
-        	'Liste des options'
+        	'Group'
         ]);
         $exam->fieldAsDropDown('idQcm',JArray::modelArray($qcm,'getId','getId'));
         $exam->fieldAsDropDown('idGroup',JArray::modelArray($groups,'getId','getId'));
-        $exam->fieldAsDropDown('options',$options,true);
         $this->jquery->postFormOnClick('#examSubmit',Router::path ('examAddSubmit'),'examAdd','#response',[
         	'hasloader'=>'internal'
         ]);
@@ -123,14 +120,10 @@ class ExamController extends ControllerBase{
         $exam->setDatef(date_format($datef,'Y-m-d H:i'));
         $exam->setQcm(DAO::getById(Qcm::class,URequest::post('idQcm'),false));
         $exam->setGroup(DAO::getById(Group::class,URequest::post('idGroup'),false));
+        $exam->setOptions(URequest::post('options'));
         DAO::save($exam,true);
-        foreach(explode(',',URequest::post('options')) as $i){
-        	$option=new Examoption();
-        	$option->setOption(DAO::getById(Option::class, $i));
-        	$option->setExam($exam);
-        	DAO::insert($option);     	
-        }
         $this->displayMyExam();
+        var_dump(URequest::getDatas());
         $this->jquery->renderView('ExamController/display.html');
     }
 }

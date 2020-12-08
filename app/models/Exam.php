@@ -32,9 +32,10 @@ class Exam{
 	private $status;
 
 	/**
-	 * @oneToMany("mappedBy"=>"exam","className"=>"models\\Examoption")
+	 * @column("name"=>"options","nullable"=>false,"dbType"=>"text")
+	 * @validator("notNull")
 	*/
-	private $examoptions;
+	private $options;
 
 	/**
 	 * @manyToOne
@@ -80,16 +81,12 @@ class Exam{
 		$this->status=$status;
 	}
 
-	 public function getExamoptions(){
-		return $this->examoptions;
+	 public function getOptions(){
+		return $this->options;
 	}
 
-	 public function setExamoptions($examoptions){
-		$this->examoptions=$examoptions;
-	}
-
-	 public function addExamoption($examoption){
-		$this->examoptions[]=$examoption;
+	 public function setOptions($options){
+		$this->options=$options;
 	}
 
 	 public function getGroup(){
@@ -109,7 +106,7 @@ class Exam{
 	}
 
 	 public function __toString(){
-		return $this->id.'';
+		return ($this->options??'no value').'';
 	}
 
 }

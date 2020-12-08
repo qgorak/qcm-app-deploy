@@ -23,7 +23,7 @@ body{
 	color: white!important;
 } 
 
-#dropdown-exam-idQcm-0,#dropdown-exam-idGroup-0,#dropdown-exam-options-0{
+#dropdown-exam-idQcm-0,#dropdown-exam-idGroup-0,.field .dropdown{
 	width:100%;
 }
 #tagManager{

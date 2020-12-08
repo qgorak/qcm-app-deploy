@@ -2,7 +2,6 @@
 namespace models;
 
 use Ubiquity\orm\DAO;
-use Ubiquity\utils\http\USession;
 /**
  * @table('user')
 */
