@@ -11,7 +11,7 @@ use models\Tag;
 class QuestionDAOLoader {
 
 	public function get($id): ?Question {
-		return DAO::getById ( Question::class, $id );
+		return DAO::getById ( Question::class, $id, true );
 	}
 	
 	public function getByTags($tags): ?array {

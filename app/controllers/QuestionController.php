@@ -140,12 +140,14 @@ class QuestionController extends ControllerBase {
      */
     public function patch($id) {
     	$question = $this->loader->get($id);
+    	$type=$question->getTypeq();
+    	$this->jquery->ajax('get', 'question/getform/'.$type->getId().'','#response-form');
+    	$frm = $this->uiService->questionForm ($question);
+    	$this->jquery->exec('$("#text-dropdown-questionForm-typeq-0").html("'.$type->getCaption().'");',true);
     	$this->jquery->getHref('#cancel', '',[
     			'hasLoader'=>'internal',
     			'historize'=>false
     	]);
-    	
-    	$frm = $this->uiService->questionForm ($question);
     	$this->uiService->tagManagerJquery();
     	$frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit'), '#response', [
     			'ajax' => [
@@ -155,7 +157,6 @@ class QuestionController extends ControllerBase {
     	] );
     	USession::set('answers', $question->getAnswers());
     	$lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
-    	$this->jquery->ajax('get', 'question/getform/'.$question->getTypeq()->getId(),'#response-form');
     	$this->jquery->renderView ( 'QuestionController/patch.html', [
     			'identifier'=>'#questionForm-ckcontent',
     			'lang'=>$lang
@@ -179,9 +180,19 @@ class QuestionController extends ControllerBase {
         switch ($type) {
             case 1:
                 $this->getMultipleChoicesJquery();
+                $this->jquery->renderView('QuestionController/template/1.html', ['answers'=>USession::get('answers')]);
                 break;
+            case 2:
+            	$this->jquery->renderView('QuestionController/template/2.html', ['answers'=>USession::get('answers')]);
+            	break;
+            case 3:
+            	$this->jquery->renderView('QuestionController/template/3.html', ['answers'=>USession::get('answers')]);
+            	break;
+            case 4:
+            	$this->getMultipleChoicesJquery();
+            	$this->jquery->renderView('QuestionController/template/4.html', ['answers'=>USession::get('answers')]);
+            	break;
         }
-        $this->jquery->renderView('QuestionController/template/'.$type.'.html', ['answers'=>USession::get('answers')]);
     }
     
     /**
