@@ -74,5 +74,6 @@ class UserController extends ControllerBase{
         USession::set('activeUser',["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()]);
         $this->jquery->renderView('UserController/display.html');
     }
+    
 }
 

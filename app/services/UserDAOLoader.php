@@ -4,6 +4,9 @@ namespace services;
 
 use Ubiquity\orm\DAO;
 use models\User;
+use Ubiquity\utils\http\USession;
+use models\Usergroup;
+use models\Exam;
 
 class UserDAOLoader {
     
@@ -26,5 +29,6 @@ class UserDAOLoader {
     public function update(User $user): bool {
         return DAO::update ( $user );
     }
+   
 }
 
