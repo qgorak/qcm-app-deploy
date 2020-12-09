@@ -1,18 +1,24 @@
+   {{ msg | raw}}
 <div class="ui container segment">
 
 <form id="frmAnswer" class="ui form" name="frmAnswer">
 <div class="ui divider"></div>
+<div class="ui grid">
 {% for answer in answers %}
+<div class="eight wide column">
+  <div class="eight wide column"></div>
 <i class="circle outline icon"></i>
 <div class="ui input">
-  <input type="text" name="caption-{{ loop.index }}" value="{{ answer.caption }}" placeholder="Entrez le titre de la réponse" >
+  <input type="text" name="caption[]" value="{{ answer.caption }}" placeholder="Entrez le titre de la réponse" >
   </div>
   <div class="ui input" style="width:75px;">
-  <input type="number" min="-1" max="1" name="score-{{ loop.index }}"  value="{{ answer.score }}" >
+  <input type="number" min="-1" max="1" name="score[]"  value="{{ answer.score }}" >
   </div>
   <a   class="ui red button _remove" data-ajax="{{ loop.index }}" >Delete answer</a>
     <div class="ui divider"></div>
+    </div>
 {% endfor %}
+</div>
 </form>
 <a id="addAnswer" class="ui green button" name="submit" >Add answer</a>
 </div>

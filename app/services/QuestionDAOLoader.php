@@ -7,6 +7,7 @@ use Ubiquity\utils\http\USession;
 use models\Question;
 use models\User;
 use models\Tag;
+use models\Answer;
 
 class QuestionDAOLoader {
 
@@ -55,8 +56,14 @@ class QuestionDAOLoader {
 		return DAO::delete ( Question::class, $id );
 	}
 
-	public function update(Question $item): bool {
-		return DAO::update ( $item );
+	public function update(Question $item,array $tags) {
+	    $creator = new User();
+	    $creator->setId(USession::get('activeUser')['id']);
+	    $item->setUser($creator);
+	    $item->setTags($tags);
+		DAO::deleteAll( Answer::class , 'idQuestion='.$item->getId());
+		DAO::update($item);
+		DAO::insertOrUpdateAllManyToMany($item);
 	}
 }
 

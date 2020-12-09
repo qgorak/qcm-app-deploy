@@ -105,6 +105,7 @@ class QuestionController extends ControllerBase {
                 'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'
             ]
         ] );
+        
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
         $this->jquery->renderView ( 'QuestionController/add.html', [
             'identifier'=>'#questionForm-ckcontent',
@@ -139,11 +140,19 @@ class QuestionController extends ControllerBase {
     	$this->uiService->tagManagerJquery();
     	$frm = $this->uiService->questionForm ($question);
     	$frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit.patch'), '#response', [
-    			'ajax' => [
+    			'content'=>'Edit',
+    	        'ajax' => [
     					'hasLoader' => 'internal',
     					'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'
     			]
     	] );
+    	$frm->addField('id');
+    	$frm->fieldAsHidden('id',[
+    	    'value'=>$id
+    	]);
+    	$this->jquery->attr('#input-dropdown-questionForm-typeq-0','name','typeq',true);
+    	$this->jquery->attr('#input-dropdown-questionForm-typeq-0','value',$type->getId(),true);
+    	$this->jquery->html('#text-dropdown-questionForm-typeq-0',$type->getCaption(),true);
     	USession::set('answers', $question->getAnswers());
     	$lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
     	$this->jquery->renderView ( 'QuestionController/patch.html', [
@@ -165,11 +174,11 @@ class QuestionController extends ControllerBase {
         ]) ;
     }
 
-    public function getform($type) {
+    public function getform($type,$msg='') {
         switch ($type) {
             case 1:
                 $this->getMultipleChoicesJquery();
-                $this->jquery->renderView('QuestionController/template/1.html', ['answers'=>USession::get('answers')]);
+                $this->jquery->renderView('QuestionController/template/1.html', ['answers'=>USession::get('answers'),'msg'=>$msg]);
                 break;
             case 2:
             	$this->jquery->renderView('QuestionController/template/2.html', ['answers'=>USession::get('answers')]);
@@ -189,12 +198,12 @@ class QuestionController extends ControllerBase {
      * @post("addAnswerToQuestion","name"=>"question.add.answer")
      */
     public function addAnswerToQuestion() {
-        $postAnswers = URequest::getPost();
+        $postAnswers = URequest::getDatas();
         $answerObjects = array();
-        for ($i = 1; $i <= count($postAnswers)/2; $i++) {
+        for ($i = 0; $i < count($postAnswers['caption']); $i++) {
             $answerToInsert = new Answer();
-            $answerToInsert->setCaption(html_entity_decode($postAnswers['caption-'.$i]));
-            $answerToInsert->setScore($postAnswers['score-'.$i]);
+            $answerToInsert->setCaption($postAnswers['caption'][$i]);
+            $answerToInsert->setScore($postAnswers['score'][$i]);
             array_push($answerObjects,$answerToInsert);
         }
         $newanswer = new Answer();
@@ -210,11 +219,15 @@ class QuestionController extends ControllerBase {
      * @delete("removeAnswerFromQuestion/{index}","name"=>"question.delete.answer")
      */
     public function removeAnswerFromQuestion(int $index) {
-        $answers = USession::get('answers');
-        unset($answers [$index-1]);
-        $answers = array_values($answers);
-        USession::set('answers', $answers);
-        $this->getform(1);
+        if($index!=1){
+            $answers = USession::get('answers');
+            unset($answers [$index-1]);
+            $answers = array_values($answers);
+            USession::set('answers', $answers);
+            $this->getform(1);
+        }else{
+            $this->getform(1,'You cant');
+        }
     }
     
     /**
@@ -255,35 +268,13 @@ class QuestionController extends ControllerBase {
      */
     public function submit() {
         $post = URequest::getDatas();
-        $tagsObjects = array();
-        if (array_key_exists ( 'tags', $post  )){
-                $tags = $post['tags'];
-            for ($i = 0; $i < count($tags); $i++) {
-        	   $tagToInsert = new Tag();
-        	   $tagToInsert->setId($tags[$i]['name']);
-        	   array_push($tagsObjects,$tagToInsert);
-            }
-        }
-        $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
-        $postAnswers = array();
-        foreach($strAnswersArray as $item) {
-            $array = explode("=", $item);
-            array_push($postAnswers,$array);
-        }
-        $answerObjects = array();
-        for ($i = 0; $i < count($postAnswers); $i += 2) {
-            $answerToInsert = new Answer();
-            $answerToInsert->setCaption($postAnswers[$i][1]);
-            $answerToInsert->setScore($postAnswers[$i+1][1]);
-            array_push($answerObjects,$answerToInsert);
-        }
         $question= new Question ();
+        URequest::setValuesToObject($question);
         $typeq= new Typeq ();
         $typeq->setId($post['typeq']);
-        $question->setCaption ( $post['caption'] );
-        $question->setCkContent ( $post['ckcontent'] );
-        $question->setTypeq($typeq);
-        $question->setUser(USession::get('activeUser')['id']);
+        $question->setTypeq($typeq); 
+        $tagsObjects = $this->getTagPostData();
+        $answerObjects = $this->getAnswersPostData();
         $this->loader->add ( $question, $tagsObjects );
         foreach($answerObjects as $answer) {
             $answer->setQuestion($question);
@@ -293,5 +284,61 @@ class QuestionController extends ControllerBase {
         $this->index($msg);
     }
     
-
+    /**
+     *
+     * @post("submitpatch","name"=>"question.submit.patch")
+     */
+    public function submitPatch() {
+        $post = URequest::getDatas();
+        $question= new Question ();
+        URequest::setValuesToObject($question);
+        $typeq= new Typeq ();
+        $typeq->setId($post['typeq']);
+        $question->setTypeq($typeq);
+        $tagsObjects = $this->getTagPostData();
+        $answerObjects = $this->getAnswersPostData();
+        $question->setAnswers($answerObjects);
+        $this->loader->update( $question, $tagsObjects );
+        foreach($answerObjects as $answer) {
+            $answer->setQuestion($question);
+            DAO::insert($answer,true);
+        }
+        $msg = $this->jquery->semantic()->htmlMessage('','success !');
+        $this->index($msg);
+    }
+    
+    private function getAnswersPostData(){
+        $post = URequest::getDatas();
+        if(strlen($post['answers'])>0){
+            $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
+            $postAnswers = array();
+            foreach($strAnswersArray as $item) {
+                $array = explode("=", $item);
+                array_push($postAnswers,$array);
+            }
+            $answerObjects = array();
+            for ($i = 0; $i < count($postAnswers); $i += 2) {
+                $answerToInsert = new Answer();
+                $answerToInsert->setCaption($postAnswers[$i][1]);
+                $answerToInsert->setScore($postAnswers[$i+1][1]);
+                array_push($answerObjects,$answerToInsert);
+            }
+        } 
+        return $answerObjects;
+    }
+    
+    private function getTagPostData(){
+        $post = URequest::getDatas();
+        $tagsObjects = array();
+        if (array_key_exists ( 'tags', $post  )){
+            $tags = $post['tags'];
+            for ($i = 0; $i < count($tags); $i++) {
+                $tagToInsert = new Tag();
+                $tagToInsert->setId($tags[$i]['name']);
+                array_push($tagsObjects,$tagToInsert);
+            }
+        }
+        return $tagsObjects;
+    }
+    
 }

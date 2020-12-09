@@ -31,11 +31,14 @@ class UIService {
 		$dt = $this->jquery->semantic ()->dataTable($name, $q,$questions);
 		$dt->setFields ( [
 		    'caption',
-		    'point'
+		    'tags',
+		    'typeq',
+		    'action'
 		] );
 		$dt->setcaptions([
 		    TranslatorManager::trans('caption',[],'main'),
-		    TranslatorManager::trans('point',[],'main')
+		    'tags',
+		    'type',
 		]);
 		$dt->setVariation('compact');
 		$dt->setIdentifierFunction ( 'getId');
@@ -56,22 +59,33 @@ class UIService {
 		    $dt->insertDefaultButtonIn(4, 'plus','_add circular green ',false,null,'add');
 		    $dt->setEmptyMessage($msg);
 		    $dt->setStyle('margin-top:0;padding-inline: 10px 20px;');
-		    $toolbar = $this->jquery->semantic()->htmlMenu('Question Bank');
-		    $toolbar->addPopupAsItem('Sort', 'sort','<div id="response-tag"></div>');
-		    $toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
-		    $toolbar->setClass('ui top attached menu');
+		    $toolbar = $this->questionBankToolbar();
 		    $dt->setToolbar($toolbar);
 		}
-		$dt->setColWidths([0=>8,1=>1,2=>1]);
-		$dt->setIdentifierFunction ( 'getId' );
-		$this->jquery->ajax('get',Router::path('tag.my'),'#response-tag',[
-				'hasLoader'=>'internal',
-				'historize'=>false,
-				'jsCallback'=>'$(".ui.menu .item:first-child").popup({
-   								 popup : $(".ui.popup"),
-    						     on : "click"
-							});;'
-		]);
+        $dt->setValueFunction('tags', function ($tags) {
+            if ($tags != null) {
+                $res = [];
+                foreach ($tags as $tag) {
+                    $label = new HtmlLabel($tag->getId(), $tag->getName());
+                    $res[] = $label->setClass('ui ' . $tag->getColor() . ' label');
+                }
+                return $res;
+            }
+        });
+        $dt->setValueFunction('typeq', function ($typeq) {
+            if ($typeq != null) {
+                $label = new HtmlLabel('', $typeq->getCaption());
+                $label->setClass('ui circular label');
+                return $label;
+            }
+        });
+        $dt->setIdentifierFunction('getId');
+        $dt->setColWidths([
+            0 => 9,
+            1 => 2,
+            2 => 1,
+            3 => 2
+        ]);
 		return $dt;
 	}
 	
@@ -273,6 +287,7 @@ class UIService {
 		$toolbar->addDropdownAsItem($dd);
 		$toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
 		$toolbar->setClass('ui top attached menu');	
+		return $toolbar;
 	}
 	
 	public function modal(){
