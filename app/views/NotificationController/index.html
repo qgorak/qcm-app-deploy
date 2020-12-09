@@ -1,20 +1,22 @@
-<table class="ui celled striped table">
-  <thead>
-    <tr><th colspan="2">
-      Notifications
-    </th>
-  </tr></thead>
-  <tbody>
-  {% for i in notifications  %}
-    <tr>
-      <td class="collapsing">
-        {{i.id}}
-      </td>
-      <td class="collapsing">
-        <a href="{{i.link}}">Cliquez ici</a>
-      </td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="ui container">
+	<table class="ui celled striped table">
+	  <thead>
+	    <tr><th colspan="2">
+	      Notifications
+	    </th>
+	  </tr></thead>
+	  <tbody>
+	  {% for i in notifications  %}
+	    <tr>
+	      <td class="collapsing">
+	        {{i.id}}
+	      </td>
+	      <td class="collapsing">
+	        <a href="{{i.link}}">Cliquez ici</a>
+	      </td>
+	    </tr>
+	  {% endfor %}
+	  </tbody>
+	</table>
+</div>
 {{script_foot | raw}}
