@@ -71,6 +71,9 @@ class QcmController extends ControllerBase{
 	 */
 	public function add() {
 	    $frmQcm = $this->uiService->qcmForm();
+	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
+	        'hasLoader'=>'internal'
+	    ]);
 	    $this->jquery->ajax('get', Router::path('qcm.display.bank'),'#responseBank' );
 	    $this->jquery->renderView ( 'QcmController/add.html', []);
 	}
@@ -103,9 +106,6 @@ class QcmController extends ControllerBase{
 	    $this->jquery->getHref('#cancel', '',[
 	        'hasLoader'=>'internal',
 	        'historize'=>false
-	    ]);
-	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
-	        'hasLoader'=>'internal'
 	    ]);
 	    $this->jquery->ajaxOnClick ( '._add', Router::path('qcm.add.question',['']) , '#responseBank', [
 	        'hasLoader' => 'internal',
@@ -184,7 +184,6 @@ class QcmController extends ControllerBase{
 	    $qcm->setDescription(URequest::post ( 'description', '' ) );
 	    $this->loader->add ($qcm);
 	    USession::delete('questions');
-	    $this->initialize();
 	    $this->_index($this->index(new HtmlMessage ( '', "Success !" )));
 	}
 

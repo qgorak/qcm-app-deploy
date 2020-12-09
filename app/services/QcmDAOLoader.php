@@ -10,7 +10,7 @@ use models\User;
 class QcmDAOLoader {
 
 	public function get($id): ?Qcm {
-		return DAO::getById ( Qcm::class, $id );
+		return DAO::getById ( Qcm::class, $id ,true);
 	}
 
 	public function add(Qcm $qcm): void {

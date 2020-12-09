@@ -1,16 +1,18 @@
 <?php
 namespace controllers;
 
+use Ajax\service\JArray;
 use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
+use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\URequest;
-use services\ExamDAOLoader;
+use Ubiquity\utils\http\USession;
 use DateTime;
 use models\Exam;
-use models\Qcm;
 use models\Group;
-use Ubiquity\translation\TranslatorManager;
-use Ajax\service\JArray;
+use models\Qcm;
+use models\Question;
+use services\ExamDAOLoader;
 
 /**
  * Controller ExamController
@@ -122,6 +124,55 @@ class ExamController extends ControllerBase{
         DAO::save($exam);
         $this->displayMyExam();
         $this->jquery->renderView('ExamController/display.html');
+    }
+    
+    /**
+     * @get('get/{id}','name'=>'exam.get')
+     */
+    public function getExam($id){
+        $exam=$this->loader->get($id);
+        $qcm=$exam->getQcm();
+        $date=$exam->getDated();
+        $this->jquery->getHref('#startExam','#response');
+        $this->jquery->renderView('ExamController/start.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
+    }
+    
+    /**
+     * @get('start/{id}','name'=>'exam.start')
+     */
+    public function ExamStart($id){
+        $exam=$this->loader->get($id);
+        $qcm=$exam->getQcm();
+        $qcm = DAO::getById ( Qcm::class, $qcm->getId() ,true);
+        $questions = $qcm->getQuestions();
+        USession::set('questions_exam', $questions);
+        $this->nextQuestion();
+    }
+    
+    /**
+     * @post('next','name'=>'exam.next')
+     */
+    public function nextQuestion(){
+        $remainingQuestions = USession::getArray('questions_exam');
+        $question = $remainingQuestions[0];
+        unset($remainingQuestions[0]);
+        $remainingQuestions = array_values($remainingQuestions);
+        $question = DAO::getById ( Question::class, $question->getId() ,true);
+        $answers = $question->getAnswers();
+        USession::set('questions_exam', $remainingQuestions);
+        $this->jquery->renderView ( 'ExamController/question.html', [
+            'question' => $question,
+            'answers' => $answers
+        ]) ;
+    }
+    
+    /**
+     * @get('oversee/{id}','name'=>'examStart')
+     */
+    public function ExamOverseePage($id){
+        $exam=$this->loader->get($id);
+        USession::set('ExamQuestion',$exam->getQcm());
+        $this->jquery->renderView('ExamController/start.html',);
     }
 }
 

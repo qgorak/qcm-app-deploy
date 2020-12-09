@@ -1,0 +1,15 @@
+<div class="ui container">
+
+	<a  id="startExam" href="{{path('exam.start')}}" data-ajax="{{ id }}" class="ui green button">
+Commencer Exam
+	</a>
+	<H1>QCM: {{ name }}</H1>
+	<div class="container">
+  <h1 id="headline">Countdown to my birthday:</h1>
+ 
+	<div id="response">
+	{{ response | raw }}
+	</div>
+</div>
+{{ js('/js/countdown.js') }}
+{{script_foot | raw}}
