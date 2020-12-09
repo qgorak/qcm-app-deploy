@@ -1,15 +1,32 @@
 
     {{ msg | raw}}
-<div class="ui container text">
-</div>
-	<a id="add" href="{{path('question.add')}}" data-target="#response" class="ui green button">
+
+
+<div class="ui grid stackable">
+ <div class="row">
+   <div class="right aligned twelve wide column">
+   	<a id="add" href="{{path('question.add')}}" data-target="#response" class="ui green button">
 	{{t('newItem',[],'main')}}
 	</a>
-
+      <div class="ui segment container">
+   <div id="bank">
+   
 	{{q['QuestionBank'] | raw }}
 	<div id="myquestions">
 </div>
+</div>
+</div>
+</div>
+  <div class="four wide column mobile hidden">
+    <img src="public/assets/img/undraw_Questions_re_1fy7.svg" class="ui large rounded image">
+  <div class="ui horizontal container segment">
+  <H4>tags</H4>
+    <div id="myTags">
+    </div>
+    </div>
+  </div>
+</div>
+</div>
 {{ q['modal'] | raw }}
 {{script_foot | raw}}
-
 

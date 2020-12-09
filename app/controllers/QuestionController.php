@@ -54,7 +54,12 @@ class QuestionController extends ControllerBase {
         USession::set('answers',$answer_array);
         $toolbar=$this->uiService->questionBankToolbar();
         $modal=$this->uiService->modal();
-        $this->jquery->ajax('get', Router::path('question.my'),"#myquestions");
+        $this->jquery->ajax('get', Router::path('question.my'),"#myquestions",[
+            'hasLoader'=>false,
+        ]);
+        $this->jquery->ajax('get', Router::path('tag.my'),"#myTags",[
+            'hasLoader'=>false,
+        ]);
         $this->jquery->ajaxOn('change','#input-Filter', Router::path('question.getBy.tags',['']),"#myquestions",[
             'method' => 'post',
             'params' =>'{"tags":$("#input-Filter").val()}',
@@ -132,9 +137,11 @@ class QuestionController extends ControllerBase {
     	$question = $this->loader->get($id);
     	$type=$question->getTypeq();
 
-    	$this->jquery->ajax('get', 'question/getform/'.$type->getId().'','#response-form');
+    	$this->jquery->ajax('get', 'question/getform/'.$type->getId().'','#response-form',[
+    	    'hasLoader'=>false,
+    	]);
     	$this->jquery->getHref('#cancel', '',[
-    			'hasLoader'=>'internal',
+    			'hasLoader'=>false,
     			'historize'=>false
     	]);
     	$this->uiService->tagManagerJquery();

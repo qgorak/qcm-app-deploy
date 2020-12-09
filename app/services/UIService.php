@@ -287,6 +287,7 @@ class UIService {
 		$toolbar->addDropdownAsItem($dd);
 		$toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
 		$toolbar->setClass('ui top attached menu');	
+		
 		return $toolbar;
 	}
 	
