@@ -27,38 +27,19 @@ class NotificationController extends ControllerBase{
         $this->loader = $loader;
     }
     
-    private function displayMyNotification(){
-        $exam=$this->loader->getExamNotification();
-        $groupDemand=$this->loader->getGroupNotification();
-        $notifJson=[];
-        foreach($exam as $value){
-            array_push($notifJson,[$value,Router::path('')]);
-        }
-        foreach($groupDemand as $value){
-            array_push($notifJson,[$value,Router::path('groupDemand',[$value])]);
-        }
-        $this->jquery->semantic()->htmlList('notifications',$notifJson);
-    }
-    
-    private function _index($response = '') {
-        $this->jquery->renderView ( 'NotificationController/index.html', [
-            'response' => $response
-        ] );
-    }
-    
     public function index(){
         $exam=$this->loader->getExamNotification();
         $groupDemand=$this->loader->getGroupNotification();
         $notifJson=[];
         foreach($exam as $value){
-            array_push($notifJson,['id'=>$value,'link'=>Router::path('')]);
+            array_push($notifJson,['id'=>'Exam open','link'=>Router::path('')]);
         }
         foreach($groupDemand as $value){
-            array_push($notifJson,['id'=>$value,'link'=>Router::path('groupDemand',[$value])]);
+            array_push($notifJson,['id'=>'New joining demand for this group','link'=>Router::path('groupDemand',[$value])]);
         }
-        $notification=$this->jquery->semantic()->htmlItems('notifications',$notifJson);
-        $notification->compile($this->jquery);
-        $this->_index();
+        $this->jquery->renderView('NotificationController/index.html',[
+            'notifications'=>$notifJson
+        ]);
     }
 
 }

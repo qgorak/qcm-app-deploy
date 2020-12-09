@@ -1,2 +1,20 @@
-{{q['notifications'] | raw}}
+<table class="ui celled striped table">
+  <thead>
+    <tr><th colspan="2">
+      Notifications
+    </th>
+  </tr></thead>
+  <tbody>
+  {% for i in notifications  %}
+    <tr>
+      <td class="collapsing">
+        {{i.id}}
+      </td>
+      <td class="collapsing">
+        <a href="{{i.link}}">Cliquez ici</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
 {{script_foot | raw}}
