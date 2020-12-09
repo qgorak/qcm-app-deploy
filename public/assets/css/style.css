@@ -61,3 +61,6 @@ body{
 #dtItems tbody tr:hover {
 	background:whitesmoke;
 }
+#_userInfo{
+	display:none;
+}

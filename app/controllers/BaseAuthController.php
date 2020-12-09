@@ -1,15 +1,22 @@
 <?php
 namespace controllers;
-use Ubiquity\utils\http\USession;
-use Ubiquity\utils\http\URequest;
 use Ubiquity\orm\DAO;
+use Ubiquity\utils\http\URequest;
+use Ubiquity\utils\http\USession;
 use models\User;
+use services\AuthUIService;
+use Ubiquity\utils\http\UResponse;
 
 /**
  * Auth Controller BaseAuthController
  */
-class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{   
-
+class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
+    
+    private $uiService;
+    
+    public function initialize(){
+        $this->uiService = new AuthUIService ( $this->jquery );
+    }
     
     public function getSession()
     {
@@ -22,20 +29,39 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     }
     
     /**
+     * @get("/loginForm",'name'=>'loginform')
+     */
+    public function loginform(){
+        $frm = $this->uiService->loginForm();
+        $this->jquery->renderView('BaseAuthController/login.html',[]);
+
+    }
+    
+    /**
+     * @get("/registerForm",'name'=>'registerform')
+     */
+    public function registerform(){
+        $frm = $this->uiService->registerForm();
+        $this->jquery->renderView('BaseAuthController/register.html',[]);
+        
+    }
+    
+    /**
      * @post("/login",'name'=>'loginPost')
      */
     public function loginPost(){
+        $frm = $this->uiService->loginForm();
+        $info=$this->_connect();
+        $msg = $this->uiService->loginErrorMessage($info);
         if(gettype($this->_connect())!=="string"){
             $this->onConnect($this->_connect());
-            $info="You are logged";
-            $process="success";
+            $this->jquery->clear_compile();
+            echo 'logged';
+        }else{
+            $this->jquery->renderView('BaseAuthController/login.html',[]);
         }
-        else{
-            $info=$this->_connect();
-            $process="error";
-        }
-        header('location:/');
-        exit();
+
+
     }
     
     /**
@@ -57,8 +83,8 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
                 URequest::setValuesToObject($instance);
                 $instance->setPassword(URequest::post('password'));
                 DAO::insert($instance);
-                header('location:/');
-                exit();
+                $msg=$this->uiService->loginErrorMessage('Success');
+                $this->jquery->renderView('BaseAuthController/register.html',[]);
             }
         }
     }
@@ -98,4 +124,12 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     public function _getBaseRoute() {
         return 'BaseAuthController';
     }
+    
+    public function _insertJquerySemantic(){
+        return false;
+    }
+    public function _displayInfoAsString(){
+        return true;
+    }
+
 }
