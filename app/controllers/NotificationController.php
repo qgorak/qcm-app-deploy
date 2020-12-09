@@ -2,7 +2,6 @@
 namespace controllers;
 
 use Ubiquity\controllers\Router;
-use models\User;
 use services\NotificationDAOLoader;
 
 /**
@@ -27,6 +26,10 @@ class NotificationController extends ControllerBase{
         $this->loader = $loader;
     }
     
+    /**
+     * 
+     * @route('/','name'=>'notification')
+     */
     public function index(){
         $exam=$this->loader->getExamNotification();
         $groupDemand=$this->loader->getGroupNotification();
