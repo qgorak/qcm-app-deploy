@@ -83,16 +83,16 @@ class AuthUIService {
 	        "on" => "blur",
 	        "inline" => true
 	    ] );
-	    $dd = $this->jquery->semantic()->htmlDropdown('language','',[0=>'en_EN',1=>'fr_FR'],false);
+	    $dd = $this->jquery->semantic()->htmlDropdown('language','',['en_EN'=>'English','fr_FR'=>'Français']);
 	    $dd->asSelect('language',false);
 	    $frm->fieldAsElement('language','div',$dd,[
 	        'rules' => [
-	            'empty',
+	            'empty'
 	        ]]);
 	    $frm->fieldAsSubmit ( 'submit', 'green', Router::path('registerPost'), '#responseauth', [
 	        'ajax' => [
 	            'hasLoader' => 'internal',
-	            'params'=>'$("#registerForm").serialize()',
+	            'params'=>'$("#registerForm").serialize()'
 	        ]
 	    ] );
 	    return $frm;
