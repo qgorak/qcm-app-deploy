@@ -4,6 +4,7 @@ namespace controllers;
 
 use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
+use Ubiquity\security\acl\controllers\AclControllerTrait;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\Answer;
@@ -12,7 +13,6 @@ use models\Tag;
 use models\Typeq;
 use services\QuestionDAOLoader;
 use services\UIService;
-use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
  * Controller QuestionController
@@ -173,10 +173,34 @@ class QuestionController extends ControllerBase {
     public function preview($id) {
         $question = $this->loader->get($id);
         $answers = $question->getAnswers();
-        $this->jquery->renderView ( 'QuestionController/question.html', [ 
-            'question' => $question,
-            'answers' => $answers
-        ]) ;
+        $type = $question->getTypeq();
+        switch ($type->getId()) {
+        	case 1:
+        		$this->jquery->renderView ( 'QuestionController/display/questionqcm.html', [
+        				'question' => $question,
+        				'answers' => $answers
+        		]) ;
+        		break;
+        	case 2:
+        		$this->jquery->renderView ( 'QuestionController/display/questionlong.html', [
+        		'question' => $question,
+        		'answers' => $answers
+        		]) ;
+        		break;
+        	case 3:
+        		$this->jquery->renderView ( 'QuestionController/display/questionshort.html', [
+        		'question' => $question,
+        		'answers' => $answers
+        		]) ;
+        		break;
+        	case 4:
+        		$this->jquery->renderView ( 'QuestionController/display/questioncode.html', [
+        		'question' => $question,
+        		'answers' => $answers
+        		]) ;
+        		break;
+        }
+        
     }
 
     public function getform($type,$msg='') {

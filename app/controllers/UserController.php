@@ -1,12 +1,12 @@
 <?php
 namespace controllers;
 
-use services\UserDAOLoader;
 use Ubiquity\controllers\Router;
-use Ubiquity\translation\TranslatorManager;
-use Ubiquity\utils\http\USession;
-use Ubiquity\utils\http\URequest;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
+use Ubiquity\translation\TranslatorManager;
+use Ubiquity\utils\http\URequest;
+use Ubiquity\utils\http\USession;
+use services\UserDAOLoader;
 
 
 /**
