@@ -6,8 +6,11 @@
 	<meta charset="UTF-8">
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 	<title>QCM</title>
+	{{ js('js/highlight.min.js') }}
+	<script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}
 {% block css %}
+	{{ css('css/highlight.min.css') }}
 	{{ css('https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.6/dist/semantic.min.css') }}
 	{{css('css/style.css') | raw}}
 {% endblock %}
