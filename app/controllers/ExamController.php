@@ -139,6 +139,9 @@ class ExamController extends ControllerBase{
         $this->jquery->getOnClick('#startExam', Router::path('exam.start',['']),'#response',[
         		'attr'=>'data-ajax'
         ]);
+        $this->jquery->ajaxOnClick('#next', Router::path('exam.next'),"#response",[
+        		'method'=>'post'
+        ]);
         $this->jquery->renderView('ExamController/start.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
     }
     
