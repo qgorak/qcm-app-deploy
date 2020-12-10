@@ -156,9 +156,7 @@ class QuestionController extends ControllerBase {
     	$frm->fieldAsHidden('id',[
     	    'value'=>$id
     	]);
-    	$this->jquery->attr('#input-dropdown-questionForm-typeq-0','name','typeq',true);
-    	$this->jquery->attr('#input-dropdown-questionForm-typeq-0','value',$type->getId(),true);
-    	$this->jquery->html('#text-dropdown-questionForm-typeq-0',$type->getCaption(),true);
+
     	USession::set('answers', $question->getAnswers());
     	$lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
     	$this->jquery->renderView ( 'QuestionController/patch.html', [
