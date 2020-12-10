@@ -349,11 +349,4 @@ class QuestionController extends ControllerBase {
         }
         return $tagsObjects;
     }
-    
-    public function _getRole(){
-        if(isset(USession::get('activeUser')['id'])){
-            return '@USER';
-        }
-        return '@GUEST';
-    }
 }

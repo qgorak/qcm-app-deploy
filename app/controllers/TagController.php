@@ -57,11 +57,4 @@ class TagController extends ControllerBase{
 	    }
         $this->my();
 	}
-	
-	public function _getRole(){
-	    if(isset(USession::get('activeUser')['id'])){
-	        return '@USER';
-	    }
-	    return '@GUEST';
-	}
 }

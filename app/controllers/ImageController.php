@@ -44,11 +44,4 @@ class ImageController extends ControllerBase{
 			}
 		}
 	}
-	
-    public function _getRole(){
-        if(isset(USession::get('activeUser')['id'])){
-            return '@USER';
-        }
-        return '@GUEST';
-    }
 }

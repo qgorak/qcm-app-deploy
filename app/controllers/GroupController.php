@@ -236,11 +236,4 @@ class GroupController extends ControllerBase{
         $this->demand($groupId);
         $this->jquery->renderView('GroupController/demand.html');
     }
-    
-    public function _getRole(){
-        if(isset(USession::get('activeUser')['id'])){
-            return '@USER';
-        }
-        return '@GUEST';
-    }
 }

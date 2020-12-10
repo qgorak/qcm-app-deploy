@@ -182,13 +182,5 @@ class ExamController extends ControllerBase{
         USession::set('ExamQuestion',$exam->getQcm());
         $this->jquery->renderView('ExamController/start.html',);
     }
-    
-    public function _getRole(){
-        if(isset(USession::get('activeUser')['id'])){
-            return '@USER';
-        }
-        return '@GUEST';
-    }
-
 }
 

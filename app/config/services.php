@@ -14,5 +14,5 @@ AclManager::start();
 AclManager::initFromProviders([
     new AclCacheProvider()
 ]);
-AclManager::addRole('@GUEST');
+AclManager::addRole('@USER',['@GUEST']);
 AclManager::saveAll();

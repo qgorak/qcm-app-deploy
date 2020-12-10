@@ -33,6 +33,13 @@ abstract class ControllerBase extends Controller{
 		}
 	}
 	
+	public function _getRole(){
+		if(isset(USession::get('activeUser')['id'])){
+			return '@USER';
+		}
+		return '@GUEST';
+	}
+	
 	public function onInvalidControl() {
 	    header('location:/');
 	}

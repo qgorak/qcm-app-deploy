@@ -190,11 +190,4 @@ class QcmController extends ControllerBase{
 	    USession::delete('questions');
 	    $this->_index($this->index(new HtmlMessage ( '', "Success !" )));
 	}
-	
-	public function _getRole(){
-	    if(isset(USession::get('activeUser')['id'])){
-	        return '@USER';
-	    }
-	    return '@GUEST';
-	}
 }

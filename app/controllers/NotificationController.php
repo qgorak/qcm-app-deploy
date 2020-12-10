@@ -47,12 +47,5 @@ class NotificationController extends ControllerBase{
             'notifications'=>$notifJson
         ]);
     }
-    
-    public function _getRole(){
-        if(isset(USession::get('activeUser')['id'])){
-            return '@USER';
-        }
-        return '@GUEST';
-    }
 }
 
