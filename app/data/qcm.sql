@@ -146,8 +146,9 @@ CREATE TABLE `user` (
 
 CREATE TABLE `useranswer` (
   `idUser` int(11) NOT NULL,
-  `idAnswer` int(11) NOT NULL,
-  `idQcm` int(11) NOT NULL
+  `idExam` int(11) NOT NULL,
+  `idQuestion` int(11) NOT NULL,
+  `value` TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -242,9 +243,9 @@ ALTER TABLE `user`
 -- Index pour la table `useranswer`
 --
 ALTER TABLE `useranswer`
-  ADD PRIMARY KEY (`idUser`,`idAnswer`,`idQcm`),
-  ADD KEY `idAnswer` (`idAnswer`),
-  ADD KEY `idQcm` (`idQcm`),
+  ADD PRIMARY KEY (`idUser`,`idExam`,`idQuestion`),
+  ADD KEY `idExam` (`idExam`),
+  ADD KEY `idQuestion` (`idQuestion`),
   ADD KEY `idUser` (`idUser`);
 
 --

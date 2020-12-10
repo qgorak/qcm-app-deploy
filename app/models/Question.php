@@ -33,6 +33,11 @@ class Question{
 	private $answers;
 
 	/**
+	 * @oneToMany("mappedBy"=>"question","className"=>"models\\Useranswer")
+	*/
+	private $useranswers;
+
+	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\Typeq","name"=>"idTypeq","nullable"=>false)
 	*/
@@ -98,6 +103,18 @@ class Question{
 
 	 public function addAnswer($answer){
 		$this->answers[]=$answer;
+	}
+
+	 public function getUseranswers(){
+		return $this->useranswers;
+	}
+
+	 public function setUseranswers($useranswers){
+		$this->useranswers=$useranswers;
+	}
+
+	 public function addUseranswer($useranswer){
+		$this->useranswers[]=$useranswer;
 	}
 
 	 public function getTypeq(){
