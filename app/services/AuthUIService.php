@@ -53,6 +53,7 @@ class AuthUIService {
 	
 	public function registerForm(){
 	    $u = new User();
+	    $u->setLanguage('en_EN');
 	    $frm = $this->jquery->semantic ()->dataForm ( 'registerForm', $u);
 	    $frm->setFields ( [
 	        'firstname',
@@ -83,12 +84,11 @@ class AuthUIService {
 	        "on" => "blur",
 	        "inline" => true
 	    ] );
-	    $dd = $this->jquery->semantic()->htmlDropdown('language','',['en_EN'=>'English','fr_FR'=>'Français']);
-	    $dd->asSelect('language',false);
-	    $frm->fieldAsElement('language','div',$dd,[
-	        'rules' => [
-	            'empty'
-	        ]]);
+	    $frm->fieldAsDropDown('language',['en_EN'=>'English','fr_FR'=>'Français'],false, [
+	    		'rules' => [
+	    				'empty'
+	    		]]);
+	    
 	    $frm->fieldAsSubmit ( 'submit', 'green', Router::path('registerPost'), '#responseauth', [
 	        'ajax' => [
 	            'hasLoader' => 'internal',
