@@ -162,13 +162,26 @@ class ExamController extends ControllerBase{
      */
     public function nextQuestion(){
         $remainingQuestions = USession::getArray('questions_exam');
-        $question = $remainingQuestions[0];
-        unset($remainingQuestions[0]);
-        $remainingQuestions = array_values($remainingQuestions);
-        $question = DAO::getById ( Question::class, $question->getId() ,true);
-        $answers = $question->getAnswers();
-        USession::set('questions_exam', $remainingQuestions);
-        Startup::forward(Router::path('question.preview',[ $question->getId()]));
+        if (count($remainingQuestions) != 0) {
+            $question = $remainingQuestions[0];
+            unset($remainingQuestions[0]);
+            $remainingQuestions = array_values($remainingQuestions);
+            $question = DAO::getById(Question::class, $question->getId(), true);
+            $answers = $question->getAnswers();
+            USession::set('questions_exam', $remainingQuestions);
+            $_SERVER['REQUEST_METHOD'] = 'GET';
+            var_dump(USession::getArray('questions_exam'));
+            Startup::forward(Router::path('question.preview', [
+                $question->getId()
+            ]));
+        } else {
+            $this->ExamCorrection();
+        }
+    }
+    
+
+    private function ExamCorrection(){
+        $this->jquery->renderView('ExamController/correction.html',);
     }
     
     /**
