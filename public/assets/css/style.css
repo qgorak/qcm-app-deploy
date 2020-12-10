@@ -1,5 +1,5 @@
 body{
-
+	 min-height:100vh;
 	 background-repeat: no-repeat;
 }
 .head{
@@ -31,16 +31,20 @@ body{
 	width:100%;
 }
 
+#margin_footer{display:block;height:45px;}
+
 .footer {	
+	position:fixed;
+	font-size: 15px;
   	background-color: #1b1c1d;
-  	position: fixed;
-  	bottom: 0;
-  	left: 0;
+  	display:block;
   	width: 100%;
   	padding: 15px 0;
   	text-align:center;
   	color:rgba(255,255,255,.9);
+	bottom:0;
 }
+
 
 #field-questionForm-ckcontent{
 	display:none;
