@@ -368,8 +368,8 @@ ALTER TABLE `tag`
 -- Contraintes pour la table `useranswer`
 --
 ALTER TABLE `useranswer`
-  ADD CONSTRAINT `fk_useranswer_answer` FOREIGN KEY (`idAnswer`) REFERENCES `answer` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_useranswer_qcm` FOREIGN KEY (`idQcm`) REFERENCES `qcm` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_useranswer_exam` FOREIGN KEY (`idExam`) REFERENCES `exam` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_useranswer_question` FOREIGN KEY (`idQuestion`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_useranswer_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
