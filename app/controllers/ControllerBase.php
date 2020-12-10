@@ -32,5 +32,17 @@ abstract class ControllerBase extends Controller{
 			$this->loadView ( $this->footerView );
 		}
 	}
+	
+	public function _getRole(){
+		if(isset(USession::get('activeUser')['id'])){
+			return '@USER';
+		}
+		return '@GUEST';
+	}
+	
+	public function onInvalidControl() {
+	    header('location:/');
+	}
+	
 }
 

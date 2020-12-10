@@ -3,13 +3,17 @@ namespace controllers;
 
 use Ubiquity\controllers\Router;
 use services\NotificationDAOLoader;
+use Ubiquity\security\acl\controllers\AclControllerTrait;
+use Ubiquity\utils\http\USession;
 
 /**
  * Controller NotificationController
+ * @allow('role'=>'@USER')
  * @route('notification','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
 class NotificationController extends ControllerBase{
+    use AclControllerTrait;
     
     /**
      *
@@ -27,7 +31,6 @@ class NotificationController extends ControllerBase{
     }
     
     /**
-     * 
      * @route('/','name'=>'notification')
      */
     public function index(){
@@ -44,6 +47,5 @@ class NotificationController extends ControllerBase{
             'notifications'=>$notifJson
         ]);
     }
-
 }
 

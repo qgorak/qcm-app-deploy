@@ -6,14 +6,17 @@ use Ubiquity\controllers\Router;
 use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\USession;
 use Ubiquity\utils\http\URequest;
+use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 
 /**
  * Controller UserController
+ * @allow('role'=>'@USER')
  * @route('user','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
 class UserController extends ControllerBase{
+    use AclControllerTrait;
     
     /**
      *
@@ -48,7 +51,6 @@ class UserController extends ControllerBase{
     }
     
     /**
-     *
      * @route('/','name'=>'user')
      */
     public function index(){
@@ -74,6 +76,5 @@ class UserController extends ControllerBase{
         USession::set('activeUser',["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()]);
         $this->jquery->renderView('UserController/display.html');
     }
-    
 }
 

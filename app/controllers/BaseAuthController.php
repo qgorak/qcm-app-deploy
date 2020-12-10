@@ -131,5 +131,4 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     public function _displayInfoAsString(){
         return true;
     }
-
 }

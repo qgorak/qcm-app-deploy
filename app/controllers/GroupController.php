@@ -11,13 +11,16 @@ use Ubiquity\utils\http\USession;
 use models\Usergroup;
 use Ubiquity\translation\TranslatorManager;
 use services\UIService;
+use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
  * Controller GroupController
+ * @allow('role'=>'@USER')
  * @route('group','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
 class GroupController extends ControllerBase{
+    use AclControllerTrait;
      
     /**
      *
@@ -42,7 +45,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     *
      * @route('/','name'=>'group')
      */
     public function index(){

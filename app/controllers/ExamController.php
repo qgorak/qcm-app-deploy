@@ -13,14 +13,17 @@ use models\Group;
 use models\Qcm;
 use models\Question;
 use services\ExamDAOLoader;
+use Ubiquity\security\acl\controllers\AclControllerTrait;
 use Ubiquity\controllers\Startup;
 
 /**
  * Controller ExamController
+ * @allow('role'=>'@USER')
  * @route('exam','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
 class ExamController extends ControllerBase{
+    use AclControllerTrait;
 
     /**
      *
@@ -57,7 +60,6 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     *
      * @route('/','name'=>'exam')
      */
     public function index(){
