@@ -150,7 +150,7 @@ class ExamController extends ControllerBase{
         $qcm=$exam->getQcm();
         $qcm = DAO::getById ( Qcm::class, $qcm->getId() ,true);
         $questions = $qcm->getQuestions();
-        USession::set('questions_exam', $questions);
+        USession::set('questions_exam', $questions);;
         $this->nextQuestion();
     }
     
