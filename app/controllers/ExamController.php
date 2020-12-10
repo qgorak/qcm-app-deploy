@@ -13,6 +13,7 @@ use models\Group;
 use models\Qcm;
 use models\Question;
 use services\ExamDAOLoader;
+use Ubiquity\controllers\Startup;
 
 /**
  * Controller ExamController
@@ -133,7 +134,9 @@ class ExamController extends ControllerBase{
         $exam=$this->loader->get($id);
         $qcm=$exam->getQcm();
         $date=$exam->getDated();
-        $this->jquery->getHref('#startExam','#response');
+        $this->jquery->getOnClick('#startExam', Router::path('exam.start',['']),'#response',[
+        		'attr'=>'data-ajax'
+        ]);
         $this->jquery->renderView('ExamController/start.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
     }
     
@@ -160,10 +163,7 @@ class ExamController extends ControllerBase{
         $question = DAO::getById ( Question::class, $question->getId() ,true);
         $answers = $question->getAnswers();
         USession::set('questions_exam', $remainingQuestions);
-        $this->jquery->renderView ( 'ExamController/question.html', [
-            'question' => $question,
-            'answers' => $answers
-        ]) ;
+        Startup::forward(Router::path('question.preview',[ $question->getId()]));
     }
     
     /**

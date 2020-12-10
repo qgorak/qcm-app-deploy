@@ -38,6 +38,11 @@ class Exam{
 	private $options;
 
 	/**
+	 * @oneToMany("mappedBy"=>"exam","className"=>"models\\Useranswer")
+	*/
+	private $useranswers;
+
+	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\Group","name"=>"idGroup","nullable"=>false)
 	*/
@@ -87,6 +92,18 @@ class Exam{
 
 	 public function setOptions($options){
 		$this->options=$options;
+	}
+
+	 public function getUseranswers(){
+		return $this->useranswers;
+	}
+
+	 public function setUseranswers($useranswers){
+		$this->useranswers=$useranswers;
+	}
+
+	 public function addUseranswer($useranswer){
+		$this->useranswers[]=$useranswer;
 	}
 
 	 public function getGroup(){

@@ -13,29 +13,35 @@ class Useranswer{
 
 	/**
 	 * @id
-	 * @column("name"=>"idAnswer","nullable"=>false,"dbType"=>"int(11)")
+	 * @column("name"=>"idExam","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
 	*/
-	private $idAnswer;
+	private $idExam;
 
 	/**
 	 * @id
-	 * @column("name"=>"idQcm","nullable"=>false,"dbType"=>"int(11)")
+	 * @column("name"=>"idQuestion","nullable"=>false,"dbType"=>"int(11)")
 	 * @validator("id","constraints"=>array("autoinc"=>true))
 	*/
-	private $idQcm;
+	private $idQuestion;
+
+	/**
+	 * @column("name"=>"value","nullable"=>false,"dbType"=>"text")
+	 * @validator("notNull")
+	*/
+	private $value;
 
 	/**
 	 * @manyToOne
-	 * @joinColumn("className"=>"models\\Answer","name"=>"idAnswer","nullable"=>false)
+	 * @joinColumn("className"=>"models\\Exam","name"=>"idExam","nullable"=>false)
 	*/
-	private $answer;
+	private $exam;
 
 	/**
 	 * @manyToOne
-	 * @joinColumn("className"=>"models\\Qcm","name"=>"idQcm","nullable"=>false)
+	 * @joinColumn("className"=>"models\\Question","name"=>"idQuestion","nullable"=>false)
 	*/
-	private $qcm;
+	private $question;
 
 	/**
 	 * @manyToOne
@@ -51,36 +57,44 @@ class Useranswer{
 		$this->idUser=$idUser;
 	}
 
-	 public function getIdAnswer(){
-		return $this->idAnswer;
+	 public function getIdExam(){
+		return $this->idExam;
 	}
 
-	 public function setIdAnswer($idAnswer){
-		$this->idAnswer=$idAnswer;
+	 public function setIdExam($idExam){
+		$this->idExam=$idExam;
 	}
 
-	 public function getIdQcm(){
-		return $this->idQcm;
+	 public function getIdQuestion(){
+		return $this->idQuestion;
 	}
 
-	 public function setIdQcm($idQcm){
-		$this->idQcm=$idQcm;
+	 public function setIdQuestion($idQuestion){
+		$this->idQuestion=$idQuestion;
 	}
 
-	 public function getAnswer(){
-		return $this->answer;
+	 public function getValue(){
+		return $this->value;
 	}
 
-	 public function setAnswer($answer){
-		$this->answer=$answer;
+	 public function setValue($value){
+		$this->value=$value;
 	}
 
-	 public function getQcm(){
-		return $this->qcm;
+	 public function getExam(){
+		return $this->exam;
 	}
 
-	 public function setQcm($qcm){
-		$this->qcm=$qcm;
+	 public function setExam($exam){
+		$this->exam=$exam;
+	}
+
+	 public function getQuestion(){
+		return $this->question;
+	}
+
+	 public function setQuestion($question){
+		$this->question=$question;
 	}
 
 	 public function getUser(){
@@ -92,7 +106,7 @@ class Useranswer{
 	}
 
 	 public function __toString(){
-		return $this->idUser.'';
+		return ($this->value??'no value').'';
 	}
 
 }
