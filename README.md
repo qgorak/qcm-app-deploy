@@ -3,6 +3,10 @@
 This README outlines the details of collaborating on this Ubiquity application.
 A short introduction of this app could easily go here.
 
+##Conception
+DB diagram:
+<img src="https://i.ibb.co/Zz1X7xB/Capture-d-e-cran-2020-12-10-a-13-16-18.png">
+
 ## Prerequisites
 
 You will need the following things properly installed on your computer.
