@@ -63,3 +63,7 @@ body{
 #_userInfo{
 	display:none;
 }
+
+.ck.ck-editor {
+	width:100% !important;
+}
