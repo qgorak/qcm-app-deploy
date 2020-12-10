@@ -15,6 +15,7 @@ use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
  * Controller GroupController
+ * @allow('role'=>'@USER')
  * @route('group','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
@@ -44,7 +45,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @route('/','name'=>'group')
      */
     public function index(){
@@ -65,7 +65,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get('view/{id}','name'=>'groupView')
      * @param mixed $id
      */
@@ -92,7 +91,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get("add","name"=>"groupAdd")
      */
     public function addGroup(){
@@ -125,7 +123,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @post("add","name"=>"GroupAddSubmit")
      */
     public function addSubmit(){
@@ -140,7 +137,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get("join","name"=>"groupJoin")
      */
     public function joinGroup(){
@@ -168,7 +164,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @post("join","name"=>"joinSubmit")
      */
     public function joinSubmit(){
@@ -188,7 +183,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get('delete/{id}','name'=>'groupDelete')
      * @param string $id
      */
@@ -205,7 +199,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get('demand/{id}','name'=>'groupDemand')
      * @param mixed $id
      */
@@ -220,7 +213,6 @@ class GroupController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get('valid/{bool}/{groupId}/{userId}','name'=>'groupDemandAccept')
      * @param mixed $userId
      * @param mixed $groupId

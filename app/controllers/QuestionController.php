@@ -16,6 +16,7 @@ use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
  * Controller QuestionController
+ * @allow('role'=>'@USER')
  * @route('question','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
@@ -45,7 +46,6 @@ class QuestionController extends ControllerBase {
     
 
     /**
-     * @allow('role'=>'@USER')
      * @route('/','name'=>'question')
      */
     public function index($msg='') {
@@ -95,7 +95,6 @@ class QuestionController extends ControllerBase {
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get("add",'name'=>'question.add')
      */
     public function add() {
@@ -122,7 +121,6 @@ class QuestionController extends ControllerBase {
 	
     
     /**
-     * @allow('role'=>'@USER')
      * @get("delete/{id}",'name'=>'question.delete')
      */
     public function delete($id) {
@@ -132,7 +130,6 @@ class QuestionController extends ControllerBase {
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get("patch/{id}",'name'=>'question.patch')
      */
     public function patch($id) {
@@ -171,7 +168,6 @@ class QuestionController extends ControllerBase {
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get("preview/{id}","name"=>"question.preview")
      */
     public function preview($id) {
@@ -203,7 +199,6 @@ class QuestionController extends ControllerBase {
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @post("addAnswerToQuestion","name"=>"question.add.answer")
      */
     public function addAnswerToQuestion() {
@@ -224,7 +219,6 @@ class QuestionController extends ControllerBase {
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @delete("removeAnswerFromQuestion/{index}","name"=>"question.delete.answer")
      */
     public function removeAnswerFromQuestion(int $index) {
@@ -240,7 +234,6 @@ class QuestionController extends ControllerBase {
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @post("getByTags","name"=>"question.getBy.tags")
      */
     public function getByTags() {
@@ -263,7 +256,6 @@ class QuestionController extends ControllerBase {
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get("displayMyQuestions","name"=>"question.my")
      */
     public function displayMyQuestions() {
@@ -272,7 +264,6 @@ class QuestionController extends ControllerBase {
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @post("add","name"=>"question.submit")
      */
     public function submit() {
@@ -294,7 +285,6 @@ class QuestionController extends ControllerBase {
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @post("submitpatch","name"=>"question.submit.patch")
      */
     public function submitPatch() {

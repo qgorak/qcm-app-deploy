@@ -14,6 +14,7 @@ use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
  * Controller QcmController
+ * @allow('role'=>'@USER')
  * @route('qcm','inherited'=>true, 'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
@@ -43,7 +44,6 @@ class QcmController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @route('/','name'=>'qcm')
      */
 	public function index($msg=''){
@@ -70,7 +70,6 @@ class QcmController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @get("add","name"=>'qcm.add')
 	 */
 	public function add() {
@@ -83,7 +82,6 @@ class QcmController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @get("addQuestion/{id}","name"=>"qcm.add.question")
 	 */
 	public function addQuestionToQcm($id) {
@@ -101,7 +99,6 @@ class QcmController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @get("questionBankImport","name"=>'qcm.display.bank')
 	 */
 	public function displayQuestionBankImport(){
@@ -131,7 +128,6 @@ class QcmController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @delete("deleteQuestion/{id}","name"=>"qcm.delete.question")
 	 */
 	public function removeQuestionToQcm($id) {
@@ -149,7 +145,6 @@ class QcmController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @post("filterQuestionBank","name"=>"qcm.filter")
 	 */
 	public function filterQuestionBank() {
@@ -158,7 +153,6 @@ class QcmController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @get("delete/{id}",'name'=>'qcm.delete')
 	 */
 	public function delete($id) {
@@ -168,7 +162,6 @@ class QcmController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @get("preview/{id}","name"=>"qcm.preview")
 	 */
 	public function preview($id) {
@@ -179,7 +172,6 @@ class QcmController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @post("add","name"=>"qcm.submit")
 	 */
 	public function submit() {

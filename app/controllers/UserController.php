@@ -11,6 +11,7 @@ use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
  * Controller UserController
+ * @allow('role'=>'@USER')
  * @route('user','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
@@ -50,7 +51,6 @@ class UserController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @route('/','name'=>'user')
      */
     public function index(){
@@ -65,7 +65,6 @@ class UserController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @post('lang','name'=>'langSubmit')
      */
     public function langSubmit(){

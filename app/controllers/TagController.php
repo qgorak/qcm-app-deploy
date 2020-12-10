@@ -10,6 +10,7 @@ use services\UIService;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
  /**
  * Controller TagController
+ * @allow('role'=>'@USER')
  * @route('tag','inherited'=>true, 'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
@@ -28,7 +29,6 @@ class TagController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @get("my","name"=>'tag.my')
 	 */
 	public function my(){
@@ -40,7 +40,6 @@ class TagController extends ControllerBase{
 	}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @post("submit","name"=>'tag.submit')
 	 */
 	public function submit(){

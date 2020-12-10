@@ -6,6 +6,7 @@ use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
  * Controller ImageController
+ * @allow('role'=>'@USER')
  * @route("image","inherited"=>true,"automated"=>true)
  */
 class ImageController extends ControllerBase{
@@ -16,7 +17,6 @@ class ImageController extends ControllerBase{
 	public function finalize(){}
 	
 	/**
-	 * @allow('role'=>'@USER')
 	 * @post('add')
 	 */
 	public function add(){

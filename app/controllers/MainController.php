@@ -3,6 +3,7 @@ namespace controllers;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
+ * @allow('role'=>['@GUEST','@USER'])
  * @route('_default',"automated"=>"true","inherited"=>"true")
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  * Controller MainController
@@ -11,9 +12,6 @@ use Ubiquity\security\acl\controllers\AclControllerTrait;
 class MainController extends ControllerBase{
     use AclControllerTrait;
     
-    /**
-     * @allow('role'=>'@GUEST')
-     */
     public function index(){
         $this->loadDefaultView();
     }

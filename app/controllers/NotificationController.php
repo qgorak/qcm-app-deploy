@@ -8,6 +8,7 @@ use Ubiquity\utils\http\USession;
 
 /**
  * Controller NotificationController
+ * @allow('role'=>'@USER')
  * @route('notification','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
@@ -30,7 +31,6 @@ class NotificationController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @route('/','name'=>'notification')
      */
     public function index(){

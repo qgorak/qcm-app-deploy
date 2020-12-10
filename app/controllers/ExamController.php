@@ -17,6 +17,7 @@ use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
  * Controller ExamController
+ * @allow('role'=>'@USER')
  * @route('exam','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
@@ -58,7 +59,6 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @route('/','name'=>'exam')
      */
     public function index(){
@@ -76,7 +76,6 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get('add','name'=>'examAdd')
      */
     public function add(){
@@ -111,7 +110,6 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @post('add','name'=>'examAddSubmit')
      */
     public function addSubmit(){
@@ -131,7 +129,6 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get('get/{id}','name'=>'exam.get')
      */
     public function getExam($id){
@@ -143,7 +140,6 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get('start/{id}','name'=>'exam.start')
      */
     public function ExamStart($id){
@@ -156,7 +152,6 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @post('next','name'=>'exam.next')
      */
     public function nextQuestion(){
@@ -174,7 +169,6 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     * @allow('role'=>'@USER')
      * @get('oversee/{id}','name'=>'examStart')
      */
     public function ExamOverseePage($id){
