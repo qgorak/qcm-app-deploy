@@ -55,6 +55,7 @@ return array(
 			"translate",
 			"themes",
 			"maintenance",
-			"composer"
+			"composer",
+			"acls"
 			)
 	);

@@ -3,6 +3,8 @@ namespace controllers;
 
 use Ubiquity\controllers\Router;
 use services\NotificationDAOLoader;
+use Ubiquity\security\acl\controllers\AclControllerTrait;
+use Ubiquity\utils\http\USession;
 
 /**
  * Controller NotificationController
@@ -10,6 +12,7 @@ use services\NotificationDAOLoader;
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
 class NotificationController extends ControllerBase{
+    use AclControllerTrait;
     
     /**
      *
@@ -27,7 +30,7 @@ class NotificationController extends ControllerBase{
     }
     
     /**
-     * 
+     * @allow('role'=>'@USER')
      * @route('/','name'=>'notification')
      */
     public function index(){
@@ -44,6 +47,12 @@ class NotificationController extends ControllerBase{
             'notifications'=>$notifJson
         ]);
     }
-
+    
+    public function _getRole(){
+        if(isset(USession::get('activeUser')['id'])){
+            return '@USER';
+        }
+        return '@GUEST';
+    }
 }
 

@@ -2,15 +2,21 @@
 namespace controllers;
 
 use Ubiquity\utils\http\USession;
+use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
  * Controller ImageController
  * @route("image","inherited"=>true,"automated"=>true)
  */
 class ImageController extends ControllerBase{
+	use AclControllerTrait;
+	
+	public function index() {}
+	public function initialize(){}
+	public function finalize(){}
 	
 	/**
-	 * 
+	 * @allow('role'=>'@USER')
 	 * @post('add')
 	 */
 	public function add(){
@@ -39,7 +45,10 @@ class ImageController extends ControllerBase{
 		}
 	}
 	
-	public function index() {}
-	public function initialize(){}
-	public function finalize(){}
+    public function _getRole(){
+        if(isset(USession::get('activeUser')['id'])){
+            return '@USER';
+        }
+        return '@GUEST';
+    }
 }

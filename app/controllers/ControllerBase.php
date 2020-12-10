@@ -32,5 +32,10 @@ abstract class ControllerBase extends Controller{
 			$this->loadView ( $this->footerView );
 		}
 	}
+	
+	public function onInvalidControl() {
+	    header('location:/');
+	}
+	
 }
 

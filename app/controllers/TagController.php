@@ -7,12 +7,15 @@ use Ubiquity\utils\http\USession;
 use models\Tag;
 use models\User;
 use services\UIService;
+use Ubiquity\security\acl\controllers\AclControllerTrait;
  /**
  * Controller TagController
  * @route('tag','inherited'=>true, 'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
 class TagController extends ControllerBase{
+    use AclControllerTrait;
+    
     private $uiService;
     
     public function initialize() {
@@ -25,7 +28,7 @@ class TagController extends ControllerBase{
 	}
 	
 	/**
-	 *
+	 * @allow('role'=>'@USER')
 	 * @get("my","name"=>'tag.my')
 	 */
 	public function my(){
@@ -37,7 +40,7 @@ class TagController extends ControllerBase{
 	}
 	
 	/**
-	 *
+	 * @allow('role'=>'@USER')
 	 * @post("submit","name"=>'tag.submit')
 	 */
 	public function submit(){
@@ -53,5 +56,12 @@ class TagController extends ControllerBase{
 	        DAO::insert($tag);
 	    }
         $this->my();
+	}
+	
+	public function _getRole(){
+	    if(isset(USession::get('activeUser')['id'])){
+	        return '@USER';
+	    }
+	    return '@GUEST';
 	}
 }
