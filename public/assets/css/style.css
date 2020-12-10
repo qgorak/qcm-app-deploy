@@ -26,23 +26,22 @@ body{
 #dropdown-exam-idQcm-0,#dropdown-exam-idGroup-0,.field .dropdown{
 	width:100%;
 }
+
 #tagManager{
 	width:100%;
 }
-#primary-menu{
-	
-}
 
-.footer {
-	
-  	background-color: #F7F7F7;
+.footer {	
+  	background-color: #1b1c1d;
   	position: absolute;
   	bottom: 0;
   	left: 0;
   	width: 100%;
   	padding: 15px 0;
   	text-align:center;
+  	color:rgba(255,255,255,.9);
 }
+
 #field-questionForm-ckcontent{
 	display:none;
 }
