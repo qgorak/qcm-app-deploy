@@ -96,7 +96,7 @@ function includeCkEditor(identifier,lang){
 			'indent',
 			'outdent',
 			'|',
-			'imageInsert',
+			'imageUpload',
 			'blockQuote',
 			'insertTable',
 			'mediaEmbed',
