@@ -64,11 +64,7 @@ class GroupController extends ControllerBase{
         ] );
     }
     
-    /**
-     * @get('view/{id}','name'=>'groupView')
-     * @param mixed $id
-     */
-    public function viewGroup($id){
+    private function _viewGroup($id){
         $users=$this->loader->getUsers($id);
         $usersDt=$this->jquery->semantic()->dataTable('dtUsers',User::class,$users);
         $usersDt->setFields([
@@ -82,6 +78,17 @@ class GroupController extends ControllerBase{
             TranslatorManager::trans('email',[],'main')
         ]);
         $usersDt->setIdentifierFunction ( 'getId' );
+        $usersDt->setProperty('group', $id);
+        $usersDt->addDeleteButton(false);
+        $this->jquery->postOnClick('._delete',Router::path('banUser'),'{"group":$("#dtUsers").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
+    }
+    
+    /**
+     * @get('view/{id}','name'=>'groupView')
+     * @param mixed $id
+     */
+    public function viewGroup($id){
+        $this->_viewGroup($id);
         if(URequest::isAjax()){
             $this->jquery->renderView('GroupController/view.html');
         }
@@ -227,5 +234,14 @@ class GroupController extends ControllerBase{
         }
         $this->demand($groupId);
         $this->jquery->renderView('GroupController/demand.html');
+    }
+    
+    /**
+     * @post('ban','name'=>'banUser')
+     */
+    public function banUser(){
+        $this->loader->banUser(URequest::post('group'), URequest::post('user'));
+        $this->_viewGroup(URequest::post('group'));
+        $this->jquery->renderView('GroupController/view.html');
     }
 }

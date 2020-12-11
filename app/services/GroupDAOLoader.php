@@ -82,5 +82,9 @@ class GroupDAOLoader {
 	    }
 	    return $users;
 	}
+	
+	public function banUser($groupId,$userId){
+	    DAO::deleteAll(Usergroup::class,'idGroup=? AND idUser=?',[$groupId,$userId]);
+	}
 }
 
