@@ -9,7 +9,7 @@
 	{% for item in answers %}
             <div class="field">
             	<div class="ui checkbox">
-  				<input type="checkbox" name="example">
+  				<input type="checkbox" value="{{ item.id }}" name="userAnswer[]">
   				<label>{{ item.caption }}</label></div>
 
 </div>

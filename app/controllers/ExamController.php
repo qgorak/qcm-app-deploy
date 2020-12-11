@@ -3,7 +3,9 @@ namespace controllers;
 
 use Ajax\service\JArray;
 use Ubiquity\controllers\Router;
+use Ubiquity\controllers\Startup;
 use Ubiquity\orm\DAO;
+use Ubiquity\security\acl\controllers\AclControllerTrait;
 use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
@@ -13,8 +15,7 @@ use models\Group;
 use models\Qcm;
 use models\Question;
 use services\ExamDAOLoader;
-use Ubiquity\security\acl\controllers\AclControllerTrait;
-use Ubiquity\controllers\Startup;
+use models\Useranswer;
 
 /**
  * Controller ExamController
@@ -139,10 +140,8 @@ class ExamController extends ControllerBase{
         $this->jquery->getOnClick('#startExam', Router::path('exam.start',['']),'#response',[
         		'attr'=>'data-ajax'
         ]);
-        $this->jquery->ajaxOnClick('#next', Router::path('exam.next'),"#response",[
-        		'method'=>'post'
-        ]);
-        $this->jquery->renderView('ExamController/start.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
+        $this->jquery->postFormOnClick("#next", Router::path('exam.next'), 'frmUserAnswer','#response');
+        $this->jquery->renderView('ExamController/exam.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
     }
     
     /**
@@ -153,29 +152,41 @@ class ExamController extends ControllerBase{
         $qcm=$exam->getQcm();
         $qcm = DAO::getById ( Qcm::class, $qcm->getId() ,true);
         $questions = $qcm->getQuestions();
-        USession::set('questions_exam', $questions);;
+        USession::set('questions_exam', $questions);
+        USession::set('exam_id', $exam->getId());
         $this->nextQuestion();
     }
-    
+
     /**
+     *
      * @post('next','name'=>'exam.next')
      */
     public function nextQuestion(){
         $remainingQuestions = USession::getArray('questions_exam');
-        if (count($remainingQuestions) != 0) {
-            $question = $remainingQuestions[0];
-            unset($remainingQuestions[0]);
-            $remainingQuestions = array_values($remainingQuestions);
-            $question = DAO::getById(Question::class, $question->getId(), true);
-            $answers = $question->getAnswers();
-            USession::set('questions_exam', $remainingQuestions);
-            $_SERVER['REQUEST_METHOD'] = 'GET';
-            var_dump(USession::getArray('questions_exam'));
+        $question = $remainingQuestions[0];
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             Startup::forward(Router::path('question.preview', [
                 $question->getId()
             ]));
         } else {
-            $this->ExamCorrection();
+            $userAnswer = new Useranswer();
+            $userAnswer->setValue(json_encode(URequest::getDatas()));
+            $userAnswer->setIdUser(USession::get('activeUser')['id']);
+            $userAnswer->setQuestion($question);
+            $userAnswer->setIdExam(USession::get('exam_id'));
+            DAO::insert($userAnswer);
+            unset($remainingQuestions[0]);
+            if (count($remainingQuestions) > 0) {
+                $remainingQuestions = array_values($remainingQuestions);
+                $question = $remainingQuestions[0];
+                USession::set('questions_exam', $remainingQuestions);
+                $_SERVER['REQUEST_METHOD'] = 'GET';
+                Startup::forward(Router::path('question.preview', [
+                    $question->getId()
+                ]));
+            } else {
+                $this->ExamCorrection();
+            }
         }
     }
     
@@ -189,8 +200,7 @@ class ExamController extends ControllerBase{
      */
     public function ExamOverseePage($id){
         $exam=$this->loader->get($id);
-        USession::set('ExamQuestion',$exam->getQcm());
-        $this->jquery->renderView('ExamController/start.html',);
+        $this->jquery->renderView('ExamController/oversee.html',);
     }
 }
 
