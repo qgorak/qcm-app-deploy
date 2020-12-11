@@ -127,8 +127,8 @@ class UIService {
 	        ]
 	        
 	    ]);
-	    $this->jquery->html('#text-dropdown-questionForm-typeq-0','<div style="color:#8e8e8e">Select type</div>',true);
-	    $q->setTypeq ( current ( $types ) );
+	    $q->setTypeq(current($types)->getId());//The current type id, not the type itself !
+	    
 	    $frm->setValidationParams ( [
 	        "on" => "blur",
 	        "inline" => true
