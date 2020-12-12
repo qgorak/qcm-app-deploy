@@ -68,6 +68,7 @@ class ExamController extends ControllerBase{
             'hasloader'=>'internal'
         ]);
         $this->displayMyExam();
+        $this->jquery->execOn('ready','document','$("pre code").each(function(i, e) {hljs.highlightBlock(e)});');
         $this->_index($this->jquery->renderView('ExamController/display.html',[],true));
     }
     
