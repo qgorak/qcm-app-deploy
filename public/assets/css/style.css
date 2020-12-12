@@ -64,6 +64,8 @@ body{
 	display:none;
 }
 
+pre {tab-size: 4;}
+
 .ck.ck-editor {
 	width:100% !important;
 }

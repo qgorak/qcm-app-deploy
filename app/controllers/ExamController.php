@@ -104,8 +104,8 @@ class ExamController extends ControllerBase{
             TranslatorManager::trans('qcm',[],'main'),
             TranslatorManager::trans('group',[],'main')
         ]);
-        $exam->fieldAsDropDown('idQcm',JArray::modelArray($qcm,'getId','getId'));
-        $exam->fieldAsDropDown('idGroup',JArray::modelArray($groups,'getId','getId'));
+        $exam->fieldAsDropDown('idQcm',JArray::modelArray($qcm,'getId','getName'));
+        $exam->fieldAsDropDown('idGroup',JArray::modelArray($groups,'getId','getName'));
         $this->jquery->postFormOnClick('#examSubmit',Router::path ('examAddSubmit'),'examAdd','#response',[
         	'hasloader'=>'internal'
         ]);
