@@ -60,8 +60,6 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         }else{
             $this->jquery->renderView('BaseAuthController/login.html',[]);
         }
-
-
     }
     
     /**

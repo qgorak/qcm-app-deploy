@@ -1,0 +1,16 @@
+<div id="primary-menu" class="ui inverted menu">
+	<a class="item" id="show-menu"><i class="cog icon"></i></a>
+	<a class="item" href="{{path('_default')}}">{{t('home',[],'main')}} </a>
+	<div class="right menu">
+		<a class="item" href="{{path('notification')}}"><i class="bell icon"></i></a>
+		<a class="item" href="{{path('terminate')}}">{{t('logout',[],'main')}}</a>
+		<a class ="item" href="{{path('user')}}">{{user.email}}</a>
+	</div>
+</div>
+<div id="second-menu" class="ui secondary pointing menu" style="visibility:hidden;">
+	<a class="item" href="{{path('question')}}">{{t('question',[],'main')}}</a>
+	<a class="item" href="{{path('group')}}">{{t('group',[],'main')}}</a>
+	<a class="item" href="{{path('qcm')}}">{{t('qcm',[],'main')}}</a>
+	<a class="item" href="{{path('exam')}}">{{t('exam',[],'main')}}</a>
+</div>
+

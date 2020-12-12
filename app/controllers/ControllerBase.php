@@ -22,7 +22,12 @@ abstract class ControllerBase extends Controller{
 		    $this->loadView ( $this->headerView ,[
 		        'user' => $user
 		    ] );
-		    $this->loadView('/main/UI/Navbar.html');
+		    if(USession::get('activeUser',false)){
+		        $this->loadView('/main/UI/userNavbar.html');
+		    }
+		    else{
+		        $this->loadView('/main/UI/Navbar.html');
+		    }
 		    $this->loadView('/main/UI/AuthModal.html');
 		}
 	}
