@@ -139,9 +139,12 @@ class ExamController extends ControllerBase{
         $qcm=$exam->getQcm();
         $date=$exam->getDated();
         $this->jquery->getOnClick('#startExam', Router::path('exam.start',['']),'#response',[
-        		'attr'=>'data-ajax'
+        		'attr'=>'data-ajax',
+                'jsCallback'=>'$("#btNext").css("display","block");'
         ]);
-        $this->jquery->postFormOnClick("#next", Router::path('exam.next'), 'frmUserAnswer','#response');
+        $bt=$this->jquery->semantic()->htmlButton('btNext','next');
+        $bt->addToProperty('style', 'display:none;');
+        $this->jquery->postFormOnClick("#btNext", Router::path('exam.next'), 'frmUserAnswer','#response');
         $this->jquery->renderView('ExamController/exam.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
     }
     
@@ -186,14 +189,20 @@ class ExamController extends ControllerBase{
                     $question->getId()
                 ]));
             } else {
-                $this->ExamCorrection();
+                $this->ExamEnd();
             }
         }
     }
     
 
-    private function ExamCorrection(){
-        $this->jquery->renderView('ExamController/correction.html',);
+    private function ExamEnd(){
+        $this->jquery->exec('$("#btNext").css("display","none");',true);
+        $bt=$this->jquery->semantic()->htmlButton('result','See result');
+        $this->jquery->ajaxOnClick('#result', Router::path('Correction.myExam', [
+            USession::get('exam_id'),
+            USession::get('activeUser')['id']
+        ]),'#response');
+        $this->jquery->renderView('ExamController/end.html',);
     }
     
     /**
