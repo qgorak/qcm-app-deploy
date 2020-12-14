@@ -54,8 +54,7 @@ class CorrectionController extends ControllerBase{
         $totalScore=0;
         foreach($questions as $question){
             $userAnswer = DAO::getOne(Useranswer::class,'idUser=? and idExam=? and idQuestion=?',false,[$idUser,$idExam,$question->getId()]);
-            $type = $question->getTypeq();
-            switch ($type->getId()) {
+            switch ($question->getIdTypeq()) {
                 case 1:
                     $res=$this->correctQcmAnswer($acc,$question,$userAnswer); 
                     $userScore+=$res[1];
