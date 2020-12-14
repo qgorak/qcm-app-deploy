@@ -156,7 +156,6 @@ class QuestionController extends ControllerBase {
     	$frm->fieldAsHidden('id',[
     	    'value'=>$id
     	]);
-
     	USession::set('answers', $question->getAnswers());
     	$lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
     	$this->jquery->renderView ( 'QuestionController/patch.html', [

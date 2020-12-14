@@ -125,7 +125,7 @@ class UIService {
 	        ]
 	        
 	    ]);
-	    //$q->setTypeq(current($types)->getId());//The current type id, not the type itself !
+	    $q->typeq=$q->getIdTypeq();
 	    
 	    $frm->setValidationParams ( [
 	        "on" => "blur",
