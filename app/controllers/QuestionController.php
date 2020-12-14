@@ -81,16 +81,13 @@ class QuestionController extends ControllerBase {
     }
     
     private function getMultipleChoicesJquery(){
-        $this->jquery->postFormOnClick ( '#addAnswer', Router::path('question.add.answer',['']) ,'frmAnswer', '#response-form', [
-            'hasLoader' => 'internal',
-            'method' => 'post',
-            'attr' => 'data-ajax'
-        ] );
-        $this->jquery->ajaxOnClick ( '._remove', Router::path('question.delete.answer',['']) , '#response-form', [
-            'hasLoader' => 'internal',
-            'method' => 'delete',
-            'attr' => 'data-ajax'
-        ] ); 
+        $this->jquery->execOn('click','.button-add','var clone = $(".box:first").clone();
+                                                    clone.find("input:text").val("");
+                                                    clone.find("#score").val(0);
+                                                    clone.insertAfter(".box:last")');
+        $this->jquery->exec('$(document).on("click", ".button-remove", function() {
+                            $(this).closest(".box").remove();
+                            });',true);
     }
     
     /**
@@ -111,7 +108,7 @@ class QuestionController extends ControllerBase {
                 'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'
             ]
         ] );
-        
+
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
         $this->jquery->renderView ( 'QuestionController/add.html', [
             'identifier'=>'#questionForm-ckcontent',
@@ -207,6 +204,7 @@ class QuestionController extends ControllerBase {
                 $this->jquery->renderView('QuestionController/template/1.html', ['answers'=>USession::get('answers'),'msg'=>$msg]);
                 break;
             case 2:
+                $this->getMultipleChoicesJquery();
             	$this->jquery->renderView('QuestionController/template/2.html', ['answers'=>USession::get('answers')]);
             	break;
             case 3:
@@ -218,42 +216,8 @@ class QuestionController extends ControllerBase {
             	break;
         }
     }
-    
-    /**
-     * @post("addAnswerToQuestion","name"=>"question.add.answer")
-     */
-    public function addAnswerToQuestion() {
-        $postAnswers = URequest::getDatas();
-        $answerObjects = array();
-        for ($i = 0; $i < count($postAnswers['caption']); $i++) {
-            $answerToInsert = new Answer();
-            $answerToInsert->setCaption($postAnswers['caption'][$i]);
-            $answerToInsert->setScore($postAnswers['score'][$i]);
-            array_push($answerObjects,$answerToInsert);
-        }
-        $newanswer = new Answer();
-        $newanswer->setCaption('');
-        $newanswer->setScore(0);
-        array_push($answerObjects,$newanswer);
-        USession::set('answers', $answerObjects);
-        return $this->getform(1);
-    }
-    
-    /**
-     * @delete("removeAnswerFromQuestion/{index}","name"=>"question.delete.answer")
-     */
-    public function removeAnswerFromQuestion(int $index) {
-        if($index!=1){
-            $answers = USession::get('answers');
-            unset($answers [$index-1]);
-            $answers = array_values($answers);
-            USession::set('answers', $answers);
-            $this->getform(1);
-        }else{
-            $this->getform(1,'You cant');
-        }
-    }
-    
+
+
     /**
      * @post("getByTags","name"=>"question.getBy.tags")
      */
@@ -323,6 +287,23 @@ class QuestionController extends ControllerBase {
     
     private function getAnswersPostData(){
         $post = URequest::getDatas();
+        var_dump($post['typeq']);
+        switch ($post['typeq']) {
+            case 1:
+                $answerObjects=$this->getMultipleAnswersData($post);
+                break;
+            case 2:
+                $answerObjects=$this->getMultipleAnswersData($post);
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+        return $answerObjects;
+    }
+
+    private function getMultipleAnswersData($post){
         if(strlen($post['answers'])>0){
             $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
             $postAnswers = array();
@@ -337,7 +318,7 @@ class QuestionController extends ControllerBase {
                 $answerToInsert->setScore($postAnswers[$i+1][1]);
                 array_push($answerObjects,$answerToInsert);
             }
-        } 
+        }
         return $answerObjects;
     }
     

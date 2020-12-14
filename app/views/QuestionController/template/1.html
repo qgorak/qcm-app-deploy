@@ -1,26 +1,21 @@
    {{ msg | raw}}
 <div class="ui container segment">
-
 <form id="frmAnswer" class="ui form" name="frmAnswer">
 <div class="ui divider"></div>
-<div class="ui grid">
-{% for answer in answers %}
-<div class="eight wide column">
-  <div class="eight wide column"></div>
-<i class="circle outline icon"></i>
-<div class="ui input">
-  <input type="text" name="caption[]" value="{{ answer.caption }}" placeholder="Entrez le titre de la réponse" >
-  </div>
-  <div class="ui input" style="width:75px;">
-  <input type="number" min="-1" max="1" name="score[]"  value="{{ answer.score }}" >
-  </div>
-  <a   class="ui red button _remove" data-ajax="{{ loop.index }}" >Delete answer</a>
-    <div class="ui divider"></div>
+   <div class="ui grid">
+  <div class="form-group box">
+    <i class="circle outline icon"></i>
+    <div class="ui input">
+      <input type="text" name="caption[]" value="{{ answer.caption }}" placeholder="Entrez le titre de la réponse" >
     </div>
-{% endfor %}
-</div>
+    <div class="ui input" style="width:75px;">
+      <input id="score" type="number" min="-1" max="1" name="score[]"  value="0" >
+    </div>
+    <a   class="ui red button button-remove"  >Delete answer</a>
+    <div class="ui divider"></div>
+  </div>
+   </div>
+  <a class="ui green button button-add">Add answer</a>
 </form>
-<a id="addAnswer" class="ui green button" name="submit" >Add answer</a>
 </div>
-
 {{ script_foot | raw }}
