@@ -10,7 +10,6 @@ use Ubiquity\utils\http\USession;
 use models\Answer;
 use models\Question;
 use models\Tag;
-use models\Typeq;
 use services\QuestionDAOLoader;
 use services\UIService;
 
@@ -98,13 +97,14 @@ class QuestionController extends ControllerBase {
      * @get("add",'name'=>'question.add')
      */
     public function add() {
+    	$types=$this->loader->getTypeq();
         $this->jquery->getHref('#cancel', '',[
             'hasLoader'=>'internal',
             'historize'=>false
         ]);
         $this->uiService->tagManagerJquery();
 
-        $frm = $this->uiService->questionForm ();
+        $frm = $this->uiService->questionForm ('',$types);
         $frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit'), '#response', [
             'ajax' => [
                 'hasLoader' => 'internal',
@@ -134,9 +134,9 @@ class QuestionController extends ControllerBase {
      */
     public function patch($id) {
     	$question = $this->loader->get($id);
-    	$type=$question->getTypeq();
+    	$types=$this->loader->getTypeq();
 
-    	$this->jquery->ajax('get', 'question/getform/'.$type->getId().'','#response-form',[
+    	$this->jquery->ajax('get', 'question/getform/'.$question->getIdTypeq().'','#response-form',[
     	    'hasLoader'=>false,
     	]);
     	$this->jquery->getHref('#cancel', '',[
@@ -144,7 +144,7 @@ class QuestionController extends ControllerBase {
     			'historize'=>false
     	]);
     	$this->uiService->tagManagerJquery();
-    	$frm = $this->uiService->questionForm ($question);
+    	$frm = $this->uiService->questionForm ($question,$types);
     	$frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit.patch'), '#response', [
     			'content'=>'Edit',
     	        'ajax' => [
@@ -171,8 +171,8 @@ class QuestionController extends ControllerBase {
     public function preview($id) {
         $question = $this->loader->get($id);
         $answers = $question->getAnswers();
-        $type = $question->getTypeq();
-        switch ($type->getId()) {
+        $type = $question->getIdTypeq();
+        switch ($type) {
         	case 1:
         		$this->jquery->renderView ( 'QuestionController/display/questionqcm.html', [
         				'question' => $question,
@@ -289,12 +289,9 @@ class QuestionController extends ControllerBase {
      * @post("add","name"=>"question.submit")
      */
     public function submit() {
-        $post = URequest::getDatas();
         $question= new Question ();
         URequest::setValuesToObject($question);
-        $typeq= new Typeq ();
-        $typeq->setId($post['typeq']);
-        $question->setTypeq($typeq); 
+        $question->setIdTypeq(URequest::post('typeq'));
         $tagsObjects = $this->getTagPostData();
         $answerObjects = $this->getAnswersPostData();
         $this->loader->add ( $question, $tagsObjects );
@@ -310,12 +307,9 @@ class QuestionController extends ControllerBase {
      * @post("submitpatch","name"=>"question.submit.patch")
      */
     public function submitPatch() {
-        $post = URequest::getDatas();
         $question= new Question ();
         URequest::setValuesToObject($question);
-        $typeq= new Typeq ();
-        $typeq->setId($post['typeq']);
-        $question->setTypeq($typeq);
+        $question->setIdTypeq(URequest::post('typeq'));
         $tagsObjects = $this->getTagPostData();
         $answerObjects = $this->getAnswersPostData();
         $question->setAnswers($answerObjects);

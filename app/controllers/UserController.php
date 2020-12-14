@@ -35,16 +35,20 @@ class UserController extends ControllerBase{
 
     private function displayMyInfo($id){
         $user=$this->loader->get($id);
+        $user->code_style='default';
         $info=$this->jquery->semantic()->dataForm('myInfo',$user);
         $info->setFields([
             'language',
+        	'code_style',
             'submitLang'
         ]);
         $info->setCaptions([
-            TranslatorManager::trans('language',[],'main')
+            TranslatorManager::trans('language',[],'main'),
+        	TranslatorManager::trans('code_style',[],'main')
         ]);
         $info->setIdentifierFunction ( 'getId' );
         $info->fieldAsDropDown('language',['en_EN'=>'English','fr_FR'=>'Français']);
+        $info->fieldAsDropDown('code_style',['dark'=>TranslatorManager::trans('dark',[],'main'),'default'=>TranslatorManager::trans('light',[],'main')]);
         $info->fieldAsSubmit('submitLang',null, Router::path('langSubmit'),'#response',[
             'value'=>TranslatorManager::trans('submitLang',[],'main')
         ]);

@@ -28,6 +28,11 @@ class Question{
 	private $points;
 
 	/**
+	 * @column("name"=>"idTypeq","nullable"=>true,"dbType"=>"int(11)")
+	*/
+	private $idTypeq;
+
+	/**
 	 * @oneToMany("mappedBy"=>"question","className"=>"models\\Answer")
 	*/
 	private $answers;
@@ -36,12 +41,6 @@ class Question{
 	 * @oneToMany("mappedBy"=>"question","className"=>"models\\Useranswer")
 	*/
 	private $useranswers;
-
-	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\\Typeq","name"=>"idTypeq","nullable"=>false)
-	*/
-	private $typeq;
 
 	/**
 	 * @manyToOne
@@ -93,6 +92,14 @@ class Question{
 		$this->points=$points;
 	}
 
+	 public function getIdTypeq(){
+		return $this->idTypeq;
+	}
+
+	 public function setIdTypeq($idTypeq){
+		$this->idTypeq=$idTypeq;
+	}
+
 	 public function getAnswers(){
 		return $this->answers;
 	}
@@ -115,14 +122,6 @@ class Question{
 
 	 public function addUseranswer($useranswer){
 		$this->useranswers[]=$useranswer;
-	}
-
-	 public function getTypeq(){
-		return $this->typeq;
-	}
-
-	 public function setTypeq($typeq){
-		$this->typeq=$typeq;
 	}
 
 	 public function getUser(){

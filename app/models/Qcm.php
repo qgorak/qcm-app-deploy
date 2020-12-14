@@ -36,11 +36,6 @@ class Qcm{
 	private $exams;
 
 	/**
-	 * @oneToMany("mappedBy"=>"qcm","className"=>"models\\Useranswer")
-	*/
-	private $useranswers;
-
-	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\User","name"=>"idUser","nullable"=>false)
 	*/
@@ -94,18 +89,6 @@ class Qcm{
 
 	 public function addExam($exam){
 		$this->exams[]=$exam;
-	}
-
-	 public function getUseranswers(){
-		return $this->useranswers;
-	}
-
-	 public function setUseranswers($useranswers){
-		$this->useranswers=$useranswers;
-	}
-
-	 public function addUseranswer($useranswer){
-		$this->useranswers[]=$useranswer;
 	}
 
 	 public function getUser(){

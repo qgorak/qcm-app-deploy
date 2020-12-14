@@ -200,27 +200,26 @@ class User{
 	}
 	
 	public function isCreator(string $idGroup){
-	    $group=DAO::getById(Group::class, $idGroup);
-	    if($group->getUser()==$this->getId()){
-	        return true;
-	    }
-	    return false;
+		$group=DAO::getById(Group::class, $idGroup);
+		if($group->getUser()==$this->getId()){
+			return true;
+		}
+		return false;
 	}
 	
 	public function isInGroup(string $idGroup){
-	    if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=? AND status='1'",[$idGroup,$this->getId()])){
-	        return true;
-	    }
-	    return false;
+		if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=? AND status='1'",[$idGroup,$this->getId()])){
+			return true;
+		}
+		return false;
 	}
 	
 	public function getAllGroups(){
-	    $retour=[];
-	    $userGroups=DAO::uGetAll(Usergroup::class,"idUser=? AND status='1'",false,[$this->getId()]);
-	    foreach($userGroups as $value){
-	        array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
-	    }
-	    return $retour;
+		$retour=[];
+		$userGroups=DAO::uGetAll(Usergroup::class,"idUser=? AND status='1'",false,[$this->getId()]);
+		foreach($userGroups as $value){
+			array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
+		}
+		return $retour;
 	}
-
 }

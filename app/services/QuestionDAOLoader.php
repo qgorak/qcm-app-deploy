@@ -26,9 +26,6 @@ class QuestionDAOLoader {
 	        }
 	        return $res;
 	  }
-	
-
-	
 
 	public function add(Question $item,array $tags): void {
 	    $creator = new User();
@@ -64,6 +61,10 @@ class QuestionDAOLoader {
 		DAO::deleteAll( Answer::class , 'idQuestion='.$item->getId());
 		DAO::update($item);
 		DAO::insertOrUpdateAllManyToMany($item);
+	}
+	
+	public function getTypeq(){
+		return [1=>'QCM',2=>'courte',3=>'longue',4=>'code'];
 	}
 }
 

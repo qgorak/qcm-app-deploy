@@ -15,7 +15,6 @@ use models\Group;
 use models\Qcm;
 use models\Question;
 use models\Tag;
-use models\Typeq;
 use models\User;
 
 class UIService {
@@ -89,7 +88,7 @@ class UIService {
 		return $dt;
 	}
 	
-	public function questionForm($question='') {
+	public function questionForm($question='',array $types) {
 		if($question==''){
 			$q = new Question ();
 		}else{
@@ -120,14 +119,13 @@ class UIService {
 	            'length[5]'
 	        ]
 	    ] )->setValue(1000);
-	    $types = DAO::getAll ( Typeq::class );
-	    $frm->fieldAsDropDown ( 'typeq', JArray::modelArray ( $types, 'getId','getCaption' ),false,[
+	    $frm->fieldAsDropDown ( 'typeq', $types,false,[
 	        'rules' => [
 	            'empty',
 	        ]
 	        
 	    ]);
-	    $q->setTypeq(current($types)->getId());//The current type id, not the type itself !
+	    //$q->setTypeq(current($types)->getId());//The current type id, not the type itself !
 	    
 	    $frm->setValidationParams ( [
 	        "on" => "blur",
