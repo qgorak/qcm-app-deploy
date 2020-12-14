@@ -145,6 +145,14 @@ class ExamController extends ControllerBase{
         $bt=$this->jquery->semantic()->htmlButton('btNext','next');
         $bt->addToProperty('style', 'display:none;');
         $this->jquery->postFormOnClick("#btNext", Router::path('exam.next'), 'frmUserAnswer','#response');
+        $this->jquery->exec('var ws = new WebSocket("ws:/127.0.0.1:2346");
+    ws.onopen = function() {
+        alert("connection success");
+        ws.send("Connected to exam");
+    };
+    ws.onmessage = function(e) {
+        alert("message from server：" + e.data);
+    };',true);
         $this->jquery->renderView('ExamController/exam.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
     }
     

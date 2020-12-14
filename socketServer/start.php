@@ -22,7 +22,7 @@ $ws_worker->onConnect = function($connection)
 $ws_worker->onMessage = function($connection, $data)
 {
     // Send hello $data
-    $connection->send('hello ' . $data);
+    $connection->send('hello ');
 };
 
 // Emitted when connection closed
