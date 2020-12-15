@@ -98,7 +98,7 @@ class ExamController extends ControllerBase{
         $this->jquery->postFormOnClick('#examSubmit',Router::path ('examAddSubmit'),'examAdd','#response',[
         	'hasloader'=>'internal'
         ]);
-        $this->jquery->renderView('ExamController/add.html');
+        $this->jquery->renderView('ExamController/add.html',['lang'=>USession::get('activeUser')['language']]);
     }
     
     /**
