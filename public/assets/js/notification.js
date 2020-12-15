@@ -1,18 +1,19 @@
-
-
-function GetData() {
+function GetData(path) {
     $.ajax({
-        'url': '/notification/json',
+        'url': path,
         'method': 'GET',
         'timeout': 1000,
         'async': true
-    }).done(function (data, textStatus, jqXHR) {
-        if (!$.trim(data)) {
+    }).done(function (data) {
+        if (data=="false" || $("#notifications").length==0) {
             $("#notificationCircle").css("visibility", "hidden");
         } else {
             $("#notificationCircle").css("visibility", "visible");
         }
     })
 }
-GetData();
-var myInterval = setInterval(GetData, 8000)
+
+GetData('/notification/json');
+window.setInterval(function(){
+  GetData('/notification/json');
+}, 30000);
