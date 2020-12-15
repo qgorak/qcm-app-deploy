@@ -1,13 +1,13 @@
 <?php
 return array(
-	"siteUrl"=>"http://127.0.0.1:8090/",
+	"siteUrl"=>"https://qcm-app-ubiquity.herokuapp.com/",
 	"database"=>array(
 			"type"=>"mysql",
 			"dbName"=>"qcm",
-			"serverName"=>"127.0.0.1",
+			"serverName"=>"163.172.212.32",
 			"port"=>3306,
-			"user"=>"root",
-			"password"=>"",
+			"user"=>"qcm-app",
+			"password"=>"lIwM8pFuUd7mA6Rv",
 			"options"=>array(),
 			"cache"=>false,
 			"wrapper"=>"Ubiquity\\db\\providers\\pdo\\PDOWrapper"
