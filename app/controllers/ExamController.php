@@ -16,6 +16,7 @@ use models\Qcm;
 use models\Question;
 use services\ExamDAOLoader;
 use models\Useranswer;
+use services\datePickerTranslator;
 
 /**
  * Controller ExamController
@@ -105,10 +106,16 @@ class ExamController extends ControllerBase{
      * @post('add','name'=>'examAddSubmit')
      */
     public function addSubmit(){
+        $lang=USession::get('activeUser')['language'];
         $exam=new Exam();
         $dated=str_replace(',','',URequest::post('dated'));
-        $dated = new DateTime($dated);
         $datef=str_replace(',','',URequest::post('datef'));
+        if($lang=='fr_FR'){
+            $translator = new datePickerTranslator();
+            $dated=$translator->translate($dated);
+            $datef=$translator->translate($datef);
+        }
+        $dated = new DateTime($dated);
         $datef = new DateTime($datef);
         $exam->setDated(date_format($dated,'Y-m-d H:i'));
         $exam->setDatef(date_format($datef,'Y-m-d H:i'));

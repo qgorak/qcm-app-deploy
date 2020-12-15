@@ -108,6 +108,7 @@ class CorrectionController extends ControllerBase{
         $answer->value=$userAnswer->answer;
         $answer->scoreUser=0;
         $totalScore+=$answer->getScore();
+        levenshtein();
         $dt = $this->uiService->shortAnswerTable($answer);
         $acc->addItem(array($question->getCaption().'----'.$totalScore,$dt));
         return [$totalScore,$score];
