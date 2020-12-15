@@ -1,0 +1,5 @@
+#!/bin/sh
+BUILD_DIR=$1
+VENDOR_DIR="vendor"
+$VENDOR_DIR/bin/Ubiquity init-cache
+$VENDOR_DIR/bin/Ubiquity serve
