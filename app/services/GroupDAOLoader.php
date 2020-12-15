@@ -31,8 +31,7 @@ class GroupDAOLoader {
 	}
 
 	public function inGroups(){
-	    $user=DAO::getById(User::class,USession::get('activeUser')['id']);
-	    return $user->getAllGroups();	    
+	    return $this->getAllGroups(USession::get('activeUser')['id']);	    
 	}
 	
 	public function clear(): void {
@@ -85,6 +84,30 @@ class GroupDAOLoader {
 	
 	public function banUser($groupId,$userId){
 	    DAO::deleteAll(Usergroup::class,'idGroup=? AND idUser=?',[$groupId,$userId]);
+	}
+	
+	public function isCreator($groupId,$userId){
+	    $group=DAO::getById(Group::class, $groupId);
+	    if($group->getUser()==$userId){
+	        return true;
+	    }
+	    return false;
+	}
+	
+	public function isInGroup($groupId,$userId){
+	    if(DAO::exists(Usergroup::class,"idGroup=? AND idUser=? AND status='1'",[$groupId,$userId])){
+	        return true;
+	    }
+	    return false;
+	}
+	
+	public function getAllGroups($userId){
+	    $retour=[];
+	    $userGroups=DAO::uGetAll(Usergroup::class,"idUser=? AND status='1'",false,[$userId]);
+	    foreach($userGroups as $value){
+	        array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
+	    }
+	    return $retour;
 	}
 }
 

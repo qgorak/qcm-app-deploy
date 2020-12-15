@@ -174,13 +174,13 @@ class GroupController extends ControllerBase{
      * @post("join","name"=>"joinSubmit")
      */
     public function joinSubmit(){
-    	$user=DAO::getById(User::class,USession::get('activeUser')['id'],['usergroups']);   	
+    	$user=USession::get('activeUser')['id'];   	
     	$group=$this->loader->getByKey(URequest::post('GroupKey')); 
     	if($group!=null){
-    	    if(!($user->isInGroup($group->getId()) || $user->isCreator($group->getId()))){
+    	    if(!($this->loader->isInGroup($group->getId(), $user) || $this->loader->isCreator($group->getId(), $user))){
     	        $userGroup=new Usergroup();
     	        $userGroup->setIdGroup($group->getId());
-    	        $userGroup->setIdUser($user->getId());
+    	        $userGroup->setIdUser($user);
     	        $userGroup->setStatus(0);
     	        DAO::save($userGroup);
     	    }
