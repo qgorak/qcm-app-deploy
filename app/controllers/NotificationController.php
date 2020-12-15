@@ -69,6 +69,26 @@ class NotificationController extends ControllerBase{
         }
         return $notifJson;
     }
-    
+
+    /**
+     * @route('json','name'=>'notification.json')
+     */
+    public function json(){
+        date_default_timezone_set('Europe/Paris');
+        $exam=$this->loader->getExamNotification();
+        $groupDemand=$this->loader->getGroupNotification();
+        $notifJson=[];
+        foreach($exam as $value){
+            array_push($notifJson,['id'=>$value->getId(),'title'=>'Examen en cours','timer'=>strtotime($value->getDated())-strtotime(date("Y-m-d H:i:s"))]);
+        }
+        foreach($groupDemand as $value){
+            array_push($notifJson,['id'=>$value->getId(),'title'=>'Demande d\'accès au groupe','timer'=>null]);
+        }
+
+        if (array_key_exists(0,$notifJson)){
+            $res = json_encode($notifJson[0]);
+            echo $res;
+        }
+    }
 }
 
