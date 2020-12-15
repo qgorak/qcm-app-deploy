@@ -176,13 +176,13 @@ class QuestionController extends ControllerBase {
         		]) ;
         		break;
         	case 2:
-        		$this->jquery->renderView ( 'QuestionController/display/questionlong.html', [
+        		$this->jquery->renderView ( 'QuestionController/display/questionshort.html', [
         		'question' => $question,
         		'answers' => $answers
         		]) ;
         		break;
         	case 3:
-        		$this->jquery->renderView ( 'QuestionController/display/questionshort.html', [
+        		$this->jquery->renderView ( 'QuestionController/display/questionlong.html', [
         		'question' => $question,
         		'answers' => $answers
         		]) ;
@@ -287,7 +287,6 @@ class QuestionController extends ControllerBase {
     
     private function getAnswersPostData(){
         $post = URequest::getDatas();
-        var_dump($post['typeq']);
         switch ($post['typeq']) {
             case 1:
                 $answerObjects=$this->getMultipleAnswersData($post);
@@ -296,11 +295,20 @@ class QuestionController extends ControllerBase {
                 $answerObjects=$this->getMultipleAnswersData($post);
                 break;
             case 3:
+                $answerObjects=$this->getSingleAnswerData($post);
                 break;
             case 4:
                 break;
         }
         return $answerObjects;
+    }
+
+    private function getSingleAnswerData($post){
+        $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
+        $array = explode("=", $strAnswersArray[0]);
+        $answer=new Answer();
+        $answer->setScore($array[1]);
+        return array($answer);
     }
 
     private function getMultipleAnswersData($post){

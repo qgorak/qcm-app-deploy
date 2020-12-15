@@ -4,12 +4,12 @@
 <div class="ui divider"></div>
    <div class="ui grid">
   <div class="form-group box">
-    <i class="circle outline icon"></i>
+    <i class="square outline icon"></i>
     <div class="ui input">
       <input type="text" name="caption[]" value="{{ answer.caption }}" placeholder="Entrez le titre de la réponse" >
     </div>
     <div class="ui input" style="width:75px;">
-      <input id="score" type="number" min="-1" max="1" name="score[]"  value="0" >
+      <input id="score" type="number" min="-100" max="100" step=".5" name="score[]"  value="0" >
     </div>
     <a   class="ui red button button-remove"  >Delete answer</a>
     <div class="ui divider"></div>

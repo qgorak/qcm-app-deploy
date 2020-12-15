@@ -17,29 +17,38 @@ class CorrectionUIService {
         $acc=$this->jquery->semantic()->htmlAccordion("accordion3");
         return $acc;
     }
+
     public function correctionAnswersDataTable($answers) {
         $dt=$this->jquery->semantic()->dataTable('dtCorrectionAnswers', Answer::class,$answers);
         $dt->setFields ( [
-            'caption',
-            'score',
-
-        ] );
-        $dt->setFields ( [
             'checked',
             'caption',
-            'score',
-            
+            'score'
         ] );
         $dt->setCaptions ( [
             'User answer',
             'caption',
-            'score',
+            'score'
         ] );
-        
         $dt->fieldAsCheckbox('checked');
-
         return $dt;
     }
-    
-    
+
+    public function longAnswerTable($answer) {
+        $dt=$this->jquery->semantic()->dataTable('dtCorrectionAnswers', Answer::class,array($answer));
+        $dt->setFields ( [
+            'value',
+            'scoreUser',
+            'caption',
+            'score'
+        ] );
+        $dt->setCaptions ( [
+            'User answer',
+            'scoreUser',
+            'Commentaire',
+            'score'
+        ] );
+        $dt->fieldAsTextarea('value');
+        return $dt;
+    }
 }

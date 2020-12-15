@@ -181,11 +181,15 @@ class ExamController extends ControllerBase{
                 $question->getId()
             ]));
         } else {
-            $userAnswer = new Useranswer();
-            $userAnswer->setValue(json_encode(URequest::getDatas()));
-            $userAnswer->setIdUser(USession::get('activeUser')['id']);
+            switch ($question->getIdTypeq()){
+                case 1:
+                    $userAnswer=$this->postMultipleAnswerData();
+                case 2:
+                    $userAnswer=$this->postMultipleAnswerData();
+                case 3:
+                    $userAnswer=$this->postSingleAnswerData();
+            }
             $userAnswer->setQuestion($question);
-            $userAnswer->setIdExam(USession::get('exam_id'));
             DAO::insert($userAnswer);
             unset($remainingQuestions[0]);
             if (count($remainingQuestions) > 0) {
@@ -219,6 +223,24 @@ class ExamController extends ControllerBase{
     public function ExamOverseePage($id){
         $exam=$this->loader->get($id);
         $this->jquery->renderView('ExamController/oversee.html',);
+    }
+    private function postMultipleAnswerData(){
+        $userAnswer = new Useranswer();
+        $userAnswer->setValue(json_encode(URequest::getDatas()));
+        $userAnswer->setIdUser(USession::get('activeUser')['id']);
+        $userAnswer->setIdExam(USession::get('exam_id'));
+        return $userAnswer;
+    }
+
+    private function postSingleAnswerData(){
+        $value = URequest::getDatas();
+        $value['corrected'] = false;
+        $value['points'] = 0;
+        $userAnswer = new Useranswer();
+        $userAnswer->setValue(json_encode($value));
+        $userAnswer->setIdUser(USession::get('activeUser')['id']);
+        $userAnswer->setIdExam(USession::get('exam_id'));
+        return $userAnswer;
     }
 }
 

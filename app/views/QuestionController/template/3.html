@@ -1,2 +1,22 @@
-<label for="answerCaption">{{t('expectedAnswer',[],'main')}}:</label>
-<input type="text" name="answerCaption" placeholder="{{t('answer',[],'main')}}">
+<form id="frmAnswer" class="ui form" name="frmAnswer">
+<div class="ui container segment">
+<div class="ui input" style="width:75px;">
+    <input id="score" type="number" min="-100" max="100" step=".5" name="score"  value="0" >
+</div>
+<div class="ui form">
+    <div class="field">
+        <label>User input:</label>
+        <textarea disabled></textarea>
+    </div>
+</div>
+    <div class="ui icon message">
+        <i class="x icon"></i>
+        <div class="content">
+            <div class="header">
+                need to be correct manually
+            </div>
+            <p>Get the best news in your e-mail every day.</p>
+        </div>
+    </div>
+</div>
+</form>

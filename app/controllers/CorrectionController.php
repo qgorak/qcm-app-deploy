@@ -58,7 +58,13 @@ class CorrectionController extends ControllerBase{
                 case 1:
                     $res=$this->correctQcmAnswer($acc,$question,$userAnswer); 
                     $userScore+=$res[1];
-                    $totalScore+=$res[0];    
+                    $totalScore+=$res[0];
+                case 2:
+                    break;
+                case 3:
+                    $res=$this->correctLongAnswer($acc,$question,$userAnswer);
+                    $userScore+=$res[1];
+                    $totalScore+=$res[0];
             }
         }
         $this->jquery->renderView('CorrectionController/result.html',['totalScore'=>$totalScore,'userScore'=>$userScore]);
@@ -87,7 +93,20 @@ class CorrectionController extends ControllerBase{
         $dt = $this->uiService->correctionAnswersDataTable($answersToDisplay);
         $acc->addItem(array($question->getCaption(),$dt));
         return [$totalScore,$score];
-        
+    }
+
+    private function correctLongAnswer($acc,$question,$userAnswer){
+        $answer = $question->getAnswers()[0];
+        $userAnswer = json_decode($userAnswer);
+        $score=0;
+        $totalScore=0;
+        $score+=$answer->getScore();
+        $answer->value = $userAnswer->answer;
+        $answer->scoreUser = $userAnswer->points;
+        $totalScore += $answer->getScore();
+        $dt = $this->uiService->longAnswerTable($answer);
+        $acc->addItem(array($question->getCaption(),$dt));
+        return [$totalScore,$score];
     }
     
  
