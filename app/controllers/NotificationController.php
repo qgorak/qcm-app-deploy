@@ -39,10 +39,10 @@ class NotificationController extends ControllerBase{
         $groupDemand=$this->loader->getGroupNotification();
         $notifJson=[];
         foreach($exam as $value){
-            array_push($notifJson,['id'=>$value->getId(),'link'=>Router::path(''),'timer'=>strtotime($value->getDated())-strtotime(date("Y-m-d H:i:s"))]);
+            array_push($notifJson,['id'=>$value->getId(),'title'=>'Examen en cours','timer'=>strtotime($value->getDated())-strtotime(date("Y-m-d H:i:s"))]);
         }
         foreach($groupDemand as $value){
-            array_push($notifJson,['id'=>'New joining demand for this group','link'=>Router::path('groupDemand',[$value]),'timer'=>null]);
+        	array_push($notifJson,['id'=>$value->getId(),'title'=>'Demande d\'accès au groupe','timer'=>null]);
         }
         $this->jquery->renderView('NotificationController/index.html',[
             'notifications'=>$notifJson

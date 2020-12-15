@@ -14,7 +14,7 @@ class NotificationDAOLoader{
         $groupNotif=[];
         foreach($user->getGroups() as $group){
             if(DAO::getOne(Usergroup::class,'idGroup=? AND status="0"',false,[$group->getId()])!=null){
-                array_push($groupNotif,$group->getId());
+                array_push($groupNotif,$group);
                 continue;
             }
         }

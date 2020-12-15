@@ -134,14 +134,12 @@
   return Timer
 }))
 
-function createTimer(second,identifier){
-	console.log(second,'seconde test');
+function createTimer(second,identifier,link){
 	var timer = new Timer({
-  tick    : 1,
-  ontick  : function(ms) { $(identifier).html(Math.round(ms / 1000) + " restantes"); },
-  onend   : function() { $(identifier).html(0 + " restantes"); }
-});
-
+	  tick    : 1,
+	  ontick  : function(ms) { $(identifier).html(Math.round(ms / 1000) + " restantes"); },
+	  onend   : function() { $(identifier).html("<a href="+link+">Accéder à l'exam</a>"); }
+	});
 //start timer for 10 seconds
 timer.start(second);
 }

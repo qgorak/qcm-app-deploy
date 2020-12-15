@@ -13,11 +13,15 @@
 	        {{i.id}}
 	      </td>
 	      <td class="collapsing">
-	        <a href="{{i.link}}">Cliquez ici</a>
+	        <span>{{i.title}}</span>
 	      </td>
 	      <td id="timer-{{i.id}}"class="collapsing">
+	      {% if i.timer is not null %}
 	        <span>{{i.timer}} restantes</span>
-	        <script>createTimer({{i.timer}},'#timer-{{i.id}}')</script>
+	        <script>createTimer({{i.timer}},'#timer-{{i.id}}','{{path('exam.get',[i.id])}}')</script>
+	      {% else %}
+	      	<a href="{{path('groupDemand',[i.id])}}">Voir la demande</a>
+	      {% endif %}
 	      </td>
 	    </tr>
 	  {% endfor %}
