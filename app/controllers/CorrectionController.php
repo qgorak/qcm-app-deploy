@@ -59,12 +59,17 @@ class CorrectionController extends ControllerBase{
                     $res=$this->correctQcmAnswer($acc,$question,$userAnswer); 
                     $userScore+=$res[1];
                     $totalScore+=$res[0];
+                    break;
                 case 2:
+                    $res=$this->correctShortAnswer($acc,$question,$userAnswer);
+                    $userScore+=$res[1];
+                    $totalScore+=$res[0];
                     break;
                 case 3:
                     $res=$this->correctLongAnswer($acc,$question,$userAnswer);
                     $userScore+=$res[1];
                     $totalScore+=$res[0];
+                    break;
             }
         }
         $this->jquery->renderView('CorrectionController/result.html',['totalScore'=>$totalScore,'userScore'=>$userScore]);
@@ -95,19 +100,33 @@ class CorrectionController extends ControllerBase{
         return [$totalScore,$score];
     }
 
+    private function correctShortAnswer($acc,$question,$userAnswer){
+        $answer = $question->getAnswers()[0];
+        $userAnswer = json_decode($userAnswer);
+        $score=0;
+        $totalScore=0;
+        $answer->value=$userAnswer->answer;
+        $answer->scoreUser=0;
+        $totalScore+=$answer->getScore();
+        $dt = $this->uiService->shortAnswerTable($answer);
+        $acc->addItem(array($question->getCaption(),$dt));
+        return [$totalScore,$score];
+    }
+
     private function correctLongAnswer($acc,$question,$userAnswer){
         $answer = $question->getAnswers()[0];
         $userAnswer = json_decode($userAnswer);
         $score=0;
         $totalScore=0;
-        $score+=$answer->getScore();
         $answer->value = $userAnswer->answer;
         $answer->scoreUser = $userAnswer->points;
         $totalScore += $answer->getScore();
+        $totalScore += $userAnswer->points;
         $dt = $this->uiService->longAnswerTable($answer);
         $acc->addItem(array($question->getCaption(),$dt));
         return [$totalScore,$score];
     }
+
     
  
 }

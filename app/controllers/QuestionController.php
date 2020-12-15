@@ -289,13 +289,13 @@ class QuestionController extends ControllerBase {
         $post = URequest::getDatas();
         switch ($post['typeq']) {
             case 1:
-                $answerObjects=$this->getMultipleAnswersData($post);
+                $answerObjects=$this->getQcmAnswersData($post);
                 break;
             case 2:
-                $answerObjects=$this->getMultipleAnswersData($post);
+                $answerObjects=$this->getShortAnswersData($post);
                 break;
             case 3:
-                $answerObjects=$this->getSingleAnswerData($post);
+                $answerObjects=$this->getLongAnswerData($post);
                 break;
             case 4:
                 break;
@@ -303,15 +303,7 @@ class QuestionController extends ControllerBase {
         return $answerObjects;
     }
 
-    private function getSingleAnswerData($post){
-        $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
-        $array = explode("=", $strAnswersArray[0]);
-        $answer=new Answer();
-        $answer->setScore($array[1]);
-        return array($answer);
-    }
-
-    private function getMultipleAnswersData($post){
+    private function getQcmAnswersData($post){
         if(strlen($post['answers'])>0){
             $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
             $postAnswers = array();
@@ -328,6 +320,33 @@ class QuestionController extends ControllerBase {
             }
         }
         return $answerObjects;
+    }
+
+    private function getShortAnswersData($post){
+        if(strlen($post['answers'])>0){
+            $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
+            $postAnswers = array();
+            foreach($strAnswersArray as $item) {
+                $array = explode("=", $item);
+                array_push($postAnswers,$array);
+            }
+            $answersPossibilities = array();
+            for ($i = 0; $i < count($postAnswers)-1; $i ++) {
+                $answersPossibilities[$i]=$postAnswers[$i+1][1];
+            }
+        }
+        $answer = new Answer();
+        $answer->setCaption(json_encode($answersPossibilities));
+        $answer->setScore($postAnswers[0][1]);
+        return array($answer);
+    }
+
+    private function getLongAnswerData($post){
+        $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
+        $array = explode("=", $strAnswersArray[0]);
+        $answer=new Answer();
+        $answer->setScore($array[1]);
+        return array($answer);
     }
     
     private function getTagPostData(){

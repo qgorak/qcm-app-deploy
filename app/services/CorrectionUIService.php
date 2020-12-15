@@ -34,6 +34,25 @@ class CorrectionUIService {
         return $dt;
     }
 
+    public function shortAnswerTable($answer) {
+        $dt=$this->jquery->semantic()->dataTable('dtCorrectionAnswers', Answer::class,array($answer));
+        $dt->setFields ( [
+            'value',
+            'scoreUser',
+            'caption',
+            'possible_answer',
+            'score'
+        ] );
+        $dt->setCaptions ( [
+            'User answer',
+            'scoreUser',
+            'Reponses possibles',
+            'score'
+        ] );
+        $dt->fieldAsInput('value','disabled');
+        return $dt;
+    }
+
     public function longAnswerTable($answer) {
         $dt=$this->jquery->semantic()->dataTable('dtCorrectionAnswers', Answer::class,array($answer));
         $dt->setFields ( [
@@ -48,7 +67,7 @@ class CorrectionUIService {
             'Commentaire',
             'score'
         ] );
-        $dt->fieldAsTextarea('value');
+        $dt->fieldAsTextarea('value','disabled');
         return $dt;
     }
 }

@@ -1,14 +1,19 @@
-
 <div class="ui container segment">
     <form id="frmAnswer" class="ui form" name="frmAnswer">
+        <div class="ui input" style="width:75px;">
+            <input id="score" type="number" min="-100" max="100" name="score"  value="0" >
+        </div>
+        <div class="ui form">
+            <div class="field">
+                <label>User input:</label>
+                <input  disabled>
+            </div>
+        </div>
         <div class="ui divider"></div>
         <div class="ui grid">
             <div class="form-group box">
                 <div class="ui input">
                     <input type="text" name="caption[]" value="{{ answer.caption }}" placeholder="{{t('expectedAnswer',[],'main')}}" >
-                </div>
-                <div class="ui input" style="width:75px;">
-                    <input id="score" type="number" min="-1" max="1" name="score[]"  value="0" >
                 </div>
                 <a   class="ui red button button-remove"  >Delete answer</a>
                 <div class="ui divider"></div>
@@ -17,4 +22,5 @@
         <a class="ui green button button-add">Add answer</a>
     </form>
 </div>
+
 {{ script_foot | raw }}
