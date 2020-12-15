@@ -84,17 +84,6 @@ class ExamController extends ControllerBase{
     public function add(){
         $qcm=$this->loader->allMyQCM();
         $groups=$this->loader->allMyGroup();
-        $this->jquery->exec("
-        $('.ui.dropdown').dropdown();
-		$('.ui.calendar').calendar();
-		$('#rangestart').calendar({
-          type: 'date',
-          endCalendar: $('#rangeend')
-        });
-        $('#rangeend').calendar({
-          type: 'date',
-          startCalendar: $('#rangestart')
-        });",true);
         $exam=$this->jquery->semantic()->dataForm('exam',new Exam());
         $exam->setFields([
         	'idQcm',

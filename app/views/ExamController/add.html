@@ -3,7 +3,7 @@
   <div class="two fields">
     	<div class="field">
     	<label>{{t('startDate',[],'main')}}</label>
-		<div class="ui calendar">
+		<div class="ui calendar" id="rangestart">
 		    <div class="ui input left icon">
 		    <i class="calendar icon"></i>
 		    <input type="text" name="dated" placeholder="{{t('startDate',[],'main')}}">
@@ -12,7 +12,7 @@
 	</div>
     	<div class="field">
     	<label>{{t('endDate',[],'main')}}</label>
-		<div class="ui calendar">
+		<div class="ui calendar" id="rangeend">
 		    <div class="ui input left icon">
 		    <i class="calendar icon"></i>
 		    <input type="text" name="datef" placeholder="{{t('endDate',[],'main')}}">
@@ -32,4 +32,18 @@
 {{q['exam'] | raw}}
 <input id="examSubmit" class="ui button green" type="submit" value="{{t('create',[],'main')}}">
 </form>
+<script>
+var today = new Date();
+$('.ui.dropdown').dropdown();
+$('.ui.calendar').calendar();
+$('#rangestart').calendar({
+    endCalendar: $('#rangeend'),
+    minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
+});
+$('#rangeend').calendar({
+    startCalendar: $('#rangestart'),
+    minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+    maxDate: $("input[name=dated]").val()
+});
+</script>
 {{script_foot | raw}}
