@@ -4,6 +4,7 @@ namespace services;
 
 use Ajax\php\ubiquity\JsUtils;
 use models\Answer;
+use Ubiquity\utils\http\USession;
 
 class CorrectionUIService {
     protected $jquery;
@@ -41,33 +42,35 @@ class CorrectionUIService {
             'scoreUser',
             'caption',
             'possible_answer',
-            'score'
         ] );
         $dt->setCaptions ( [
             'User answer',
             'scoreUser',
             'Reponses possibles',
-            'score'
         ] );
         $dt->fieldAsInput('value','disabled');
         return $dt;
     }
 
-    public function longAnswerTable($answer) {
+    public function longAnswerTable($answer,$idQuestionCreator) {
         $dt=$this->jquery->semantic()->dataTable('dtCorrectionAnswers', Answer::class,array($answer));
         $dt->setFields ( [
             'value',
             'scoreUser',
-            'caption',
-            'score'
+            'comment',
         ] );
         $dt->setCaptions ( [
             'User answer',
             'scoreUser',
             'Commentaire',
-            'score'
         ] );
         $dt->fieldAsTextarea('value','disabled');
+        if(USession::get('activeUser')['id']==$idQuestionCreator){
+            $dt->fieldAsInput('comment',['test'=>'test']);
+            $dt->insertDefaultButtonIn(4,'plus');
+            $dt->fieldAsInput('scoreUser');
+            $dt->setEdition(true);
+        }
         return $dt;
     }
 }

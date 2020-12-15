@@ -96,7 +96,7 @@ class CorrectionController extends ControllerBase{
             array_push($answersToDisplay,$answer); 
         }
         $dt = $this->uiService->correctionAnswersDataTable($answersToDisplay);
-        $acc->addItem(array($question->getCaption(),$dt));
+        $acc->addItem(array($question->getCaption().'----'.$totalScore,$dt));
         return [$totalScore,$score];
     }
 
@@ -109,11 +109,12 @@ class CorrectionController extends ControllerBase{
         $answer->scoreUser=0;
         $totalScore+=$answer->getScore();
         $dt = $this->uiService->shortAnswerTable($answer);
-        $acc->addItem(array($question->getCaption(),$dt));
+        $acc->addItem(array($question->getCaption().'----'.$totalScore,$dt));
         return [$totalScore,$score];
     }
 
     private function correctLongAnswer($acc,$question,$userAnswer){
+        $questionCreator = $question->getUser();
         $answer = $question->getAnswers()[0];
         $userAnswer = json_decode($userAnswer);
         $score=0;
@@ -122,8 +123,8 @@ class CorrectionController extends ControllerBase{
         $answer->scoreUser = $userAnswer->points;
         $totalScore += $answer->getScore();
         $totalScore += $userAnswer->points;
-        $dt = $this->uiService->longAnswerTable($answer);
-        $acc->addItem(array($question->getCaption(),$dt));
+        $dt = $this->uiService->longAnswerTable($answer,$questionCreator->getId());
+        $acc->addItem(array($question->getCaption().'----'.$totalScore,$dt));
         return [$totalScore,$score];
     }
 
