@@ -47,5 +47,13 @@
 			"@php vendor/phpmv/ubiquity-devtools/src/Ubiquity composer-create-project",
 			"@php vendor/phpmv/ubiquity-devtools/src/Ubiquity init-cache"
 		]
+        "start-cmd" : [
+            "@php vendor/phpmv/ubiquity-devtools/src/Ubiquity composer-create-project",
+            "@php vendor/phpmv/ubiquity-devtools/src/Ubiquity init-cache"
+        ]
+        "post-install-cmd": [
+             "php artisan clear-compiled",
+             "chmod -R 777 public/"
+         ]
 	}
 }
