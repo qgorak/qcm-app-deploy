@@ -18,6 +18,7 @@ class CorrectionUIService {
         $acc=$this->jquery->semantic()->htmlAccordion("accordion3");
         $acc->setStyled();
         $acc->setExclusive(false);
+        $acc->setClass('ui styled fluid accordion');
         return $acc;
     }
 
