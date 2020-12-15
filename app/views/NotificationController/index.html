@@ -1,31 +1,7 @@
-{{js('/js/timer.js')}}
 <div class="ui container">
-	<table class="ui celled striped table">
-	  <thead>
-	    <tr><th colspan="3">
-	      Notifications
-	    </th>
-	  </tr></thead>
-	  <tbody>
-	  {% for i in notifications  %}
-	    <tr>
-	      <td class="collapsing">
-	        {{i.id}}
-	      </td>
-	      <td class="collapsing">
-	        <span>{{i.title}}</span>
-	      </td>
-	      <td id="timer-{{i.id}}"class="collapsing">
-	      {% if i.timer is not null %}
-	        <span>{{i.timer}} restantes</span>
-	        <script>createTimer({{i.timer}},'#timer-{{i.id}}','{{path('exam.get',[i.id])}}')</script>
-	      {% else %}
-	      	<a href="{{path('groupDemand',[i.id])}}">Voir la demande</a>
-	      {% endif %}
-	      </td>
-	    </tr>
-	  {% endfor %}
-	  </tbody>
-	</table>
+{{js('/js/timer.js')}}
+<div id="response">
+{{notif | raw}}
+</div>
 </div>
 {{script_foot | raw}}
