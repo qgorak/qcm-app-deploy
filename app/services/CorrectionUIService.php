@@ -16,6 +16,8 @@ class CorrectionUIService {
     
     public function correctionAccordion() {
         $acc=$this->jquery->semantic()->htmlAccordion("accordion3");
+        $acc->setStyled();
+        $acc->setExclusive(false);
         return $acc;
     }
 
