@@ -15,8 +15,9 @@
 	      <td class="collapsing">
 	        <a href="{{i.link}}">Cliquez ici</a>
 	      </td>
-	      <td class="collapsing">
-	        <span><script>createTimer({{i.timer}})</script></span>
+	      <td id="timer-{{i.id}}"class="collapsing">
+	        <span>{{i.timer}} restantes</span>
+	        <script>createTimer({{i.timer}},'#timer-{{i.id}}')</script>
 	      </td>
 	    </tr>
 	  {% endfor %}

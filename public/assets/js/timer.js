@@ -134,16 +134,12 @@
   return Timer
 }))
 
-function createTimer(second){
+function createTimer(second,identifier){
 	console.log(second,'seconde test');
 	var timer = new Timer({
-    tick : 1,
-    ontick : function (sec) {
-        console.log('interval', sec);
-    },
-    onstart : function() {
-        console.log('timer started');
-    }
+  tick    : 1,
+  ontick  : function(ms) { $(identifier).html(ms/1000 + " restantes"); },
+  onend   : function() { console.log('timer ended normally') }
 });
 
 // defining options using on
