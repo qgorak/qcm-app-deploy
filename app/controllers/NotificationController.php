@@ -34,14 +34,15 @@ class NotificationController extends ControllerBase{
      * @route('/','name'=>'notification')
      */
     public function index(){
+        date_default_timezone_set('Europe/Paris');
         $exam=$this->loader->getExamNotification();
         $groupDemand=$this->loader->getGroupNotification();
         $notifJson=[];
         foreach($exam as $value){
-            array_push($notifJson,['id'=>'Exam open','link'=>Router::path('')]);
+            array_push($notifJson,['id'=>'Exam open','link'=>Router::path(''),'timer'=>strtotime($value->getDated())-strtotime(date("Y-m-d H:i:s"))]);
         }
         foreach($groupDemand as $value){
-            array_push($notifJson,['id'=>'New joining demand for this group','link'=>Router::path('groupDemand',[$value])]);
+            array_push($notifJson,['id'=>'New joining demand for this group','link'=>Router::path('groupDemand',[$value]),'timer'=>null]);
         }
         $this->jquery->renderView('NotificationController/index.html',[
             'notifications'=>$notifJson

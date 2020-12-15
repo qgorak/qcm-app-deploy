@@ -26,9 +26,9 @@ class NotificationDAOLoader{
         $userGroups=DAO::uGetAll(Usergroup::class,"idUser=? AND status='1'",false,[$user->getId()]);
         $examNotif=[];
         foreach($userGroups as $group){
-            $exam=DAO::uGetOne(Exam::class,'idGroup=? AND datef>=now()',false,[$group->getIdGroup()]);
+            $exam=DAO::uGetOne(Exam::class,'idGroup=? AND datef>now()',false,[$group->getIdGroup()]);
             if($exam!=null){
-                array_push($examNotif,$exam->getId());
+                array_push($examNotif,$exam);
             }
         }
         return $examNotif;

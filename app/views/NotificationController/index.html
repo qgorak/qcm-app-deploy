@@ -1,7 +1,8 @@
+{{js('/js/timer.js')}}
 <div class="ui container">
 	<table class="ui celled striped table">
 	  <thead>
-	    <tr><th colspan="2">
+	    <tr><th colspan="3">
 	      Notifications
 	    </th>
 	  </tr></thead>
@@ -13,6 +14,9 @@
 	      </td>
 	      <td class="collapsing">
 	        <a href="{{i.link}}">Cliquez ici</a>
+	      </td>
+	      <td class="collapsing">
+	        <span><script>createTimer({{i.timer}})</script></span>
 	      </td>
 	    </tr>
 	  {% endfor %}
