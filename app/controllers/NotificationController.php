@@ -45,7 +45,7 @@ class NotificationController extends ControllerBase{
     private function _index($response){
         $this->jquery->renderView ( 'NotificationController/index.html', [
             'notif' => $response
-        ] );
+        ] ); 
     }
     
     /**

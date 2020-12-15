@@ -5,7 +5,9 @@ function GetData(path) {
         'timeout': 1000,
         'async': true
     }).done(function (data) {
-        if (data=="false" || $("#notifications").length==0) {
+		
+        if (data=="false") {
+			console.log(data);
             $("#notificationCircle").css("visibility", "hidden");
         } else {
             $("#notificationCircle").css("visibility", "visible");
