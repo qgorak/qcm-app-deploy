@@ -15,7 +15,11 @@ abstract class ControllerBase extends Controller{
 
 	public function initialize() {
 	    if(USession::get('activeUser',false)){
+	        USession::delete('language');
 	        TranslatorManager::setLocale(USession::get('activeUser')['language']);
+	    }
+	    else{
+	        TranslatorManager::setLocale(USession::get('language'));
 	    }
 		if (! URequest::isAjax ()) {
 		    $user = USession::get('activeUser');
@@ -26,7 +30,7 @@ abstract class ControllerBase extends Controller{
 		        $this->loadView('/main/UI/userNavbar.html');
 		    }
 		    else{
-		        $this->loadView('/main/UI/Navbar.html');
+		        $this->loadView('/main/UI/Navbar.html',['lang'=>USession::get('language')]);
 		    }
 		    $this->loadView('/main/UI/AuthModal.html');
 		}
@@ -48,6 +52,5 @@ abstract class ControllerBase extends Controller{
 	public function onInvalidControl() {
 	    header('location:/');
 	}
-	
 }
 

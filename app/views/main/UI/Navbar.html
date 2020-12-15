@@ -1,6 +1,12 @@
 <div id="primary-menu" class="ui inverted menu">
 	<a class="item" href="{{path('_default')}}">{{t('home',[],'main')}} </a>
 	<div class="right menu">
+		{% if lang == 'en_EN' %}
+	    <a class="item" id="translate" href="{{path('changeLanguage',['fr_FR'])}}"><i class="france flag"></i>Traduire en Français</a>
+	    {% endif %}
+	    {% if lang == 'fr_FR' %}
+	    <a class="item" id="translate" href="{{path('changeLanguage',['en_EN'])}}"><i class="uk flag"></i>Translate to English</a>
+	    {% endif %}
 		<a class="item" id="login">{{t('login',[],'main')}}</a>
 		<a class="item" id="register">{{t('register',[],'main')}}</a>
 	</div>
