@@ -80,7 +80,7 @@ class CorrectionUIService {
     }
     public function longAnswerForm($answer,$idQuestionCreator,$totalScore) {
         $form=$this->jquery->semantic()->htmlForm('frmCorrectionAnswers');
-        $this->jquery->attr('#userAnswer','disabled','',true);
+        $form->addItem(new HtmlFormTextarea("userAnswer","userAnwser",$answer->value));
         $scoreInput = $form->addInput('score','userScore','number',$answer->scoreUser);
         $form->addItem(new HtmlFormTextarea("comment","comment",$answer->comment));
         $form->addInput('identifiers','','hidden',$answer->identifiers);
@@ -91,12 +91,12 @@ class CorrectionUIService {
             $scoreInput->setDisabled(false);
             $form->addButton('submitCorrection','submit');
             $this->jquery->postFormOnClick('#submitCorrection',Router::path('correct.answer'),'frmCorrectionAnswers','',['hasLoader'=>'internal']);
-
         }else{
             $this->jquery->attr('#score','step',0.5,true);
             $this->jquery->attr('#comment','disabled','',true);
             $scoreInput->setDisabled(true);
         }
+        $this->jquery->attr('#userAnswer','disabled','',true);
         return $form;
     }
 }
