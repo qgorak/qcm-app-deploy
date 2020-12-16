@@ -232,6 +232,7 @@ class ExamController extends ControllerBase{
         $value = URequest::getDatas();
         $value['corrected'] = false;
         $value['points'] = 0;
+        $value['comment'] = '';
         $userAnswer = new Useranswer();
         $userAnswer->setValue(json_encode($value));
         $userAnswer->setIdUser(USession::get('activeUser')['id']);

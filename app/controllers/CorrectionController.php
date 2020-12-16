@@ -1,12 +1,14 @@
 <?php
 namespace controllers;
 
+use Ajax\semantic\widgets\business\user\FormLogin;
 use Ubiquity\orm\DAO;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use models\Useranswer;
 use services\CorrectionUIService;
 use services\ExamDAOLoader;
 use models\Answer;
+use Ubiquity\utils\http\URequest;
 
 /**
  * Controller CorrectionController
@@ -74,7 +76,22 @@ class CorrectionController extends ControllerBase{
         }
         $this->jquery->renderView('CorrectionController/result.html',['totalScore'=>$totalScore,'userScore'=>$userScore]);
     }
-    
+
+    /**
+     * @post('correctAnswer','name'=>'correct.answer')
+     */
+    public function correctAnswer(){
+        $post =URequest::getPost();
+        $identifiers = explode(',',$post['identifiers']);
+        $userAnswer = DAO::getOne(Useranswer::class,'idUser=? and idExam=? and idQuestion=?',false,[$identifiers[0],$identifiers[1],$identifiers[2]]);
+        $userAnswerValue = json_decode($userAnswer);
+        $userAnswerValue->points=$post["score"];
+        $userAnswerValue->comment=$post["comment"];
+        $userAnswer->setValue(json_encode($userAnswerValue));
+        DAO::update($userAnswer);
+
+    }
+
     
     private function correctQcmAnswer($acc,$question,$userAnswer){
         $answers = $question->getAnswers();
@@ -96,7 +113,8 @@ class CorrectionController extends ControllerBase{
             array_push($answersToDisplay,$answer); 
         }
         $dt = $this->uiService->correctionAnswersDataTable($answersToDisplay);
-        $acc->addItem(array($question->getCaption().'----'.$totalScore,$dt));
+        $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
+        $acc->addItem(array($question->getCaption().$label,$dt));
         return [$totalScore,$score];
     }
 
@@ -108,24 +126,27 @@ class CorrectionController extends ControllerBase{
         $answer->value=$userAnswer->answer;
         $answer->scoreUser=0;
         $totalScore+=$answer->getScore();
-        levenshtein();
         $dt = $this->uiService->shortAnswerTable($answer);
-        $acc->addItem(array($question->getCaption().'----'.$totalScore,$dt));
+        $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
+        $acc->addItem(array($question->getCaption().$label,$dt));
         return [$totalScore,$score];
     }
 
     private function correctLongAnswer($acc,$question,$userAnswer){
         $questionCreator = $question->getUser();
         $answer = $question->getAnswers()[0];
-        $userAnswer = json_decode($userAnswer);
+        $userAnswerValue = json_decode($userAnswer);
         $score=0;
         $totalScore=0;
-        $answer->value = $userAnswer->answer;
-        $answer->scoreUser = $userAnswer->points;
+        $answer->value = $userAnswerValue->answer;
+        $answer->scoreUser = $userAnswerValue->points;
+        $answer->comment = $userAnswerValue->comment;
+        $answer->identifiers = $userAnswer->getidUser().','.$userAnswer->getidExam().','.$userAnswer->getidQuestion();
         $totalScore += $answer->getScore();
-        $totalScore += $userAnswer->points;
+        $score += $userAnswerValue->points;
         $dt = $this->uiService->longAnswerForm($answer,$questionCreator->getId(),$totalScore);
-        $acc->addItem(array($question->getCaption().'----'.$totalScore,$dt));
+        $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
+        $acc->addItem(array($question->getCaption().$label,$dt));
         return [$totalScore,$score];
     }
 

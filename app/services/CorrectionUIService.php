@@ -6,6 +6,7 @@ use Ajax\php\ubiquity\JsUtils;
 use models\Answer;
 use Ubiquity\utils\http\USession;
 use Ajax\semantic\html\collections\form\HtmlFormTextarea;
+use Ubiquity\controllers\Router;
 
 class CorrectionUIService {
     protected $jquery;
@@ -78,17 +79,19 @@ class CorrectionUIService {
         return $dt;
     }
     public function longAnswerForm($answer,$idQuestionCreator,$totalScore) {
-        $form=$this->jquery->semantic()->htmlForm('dtCorrectionAnswers');
-        $test = $form->addTextarea('userAnswer','userAnswer',$answer->value);
+        $form=$this->jquery->semantic()->htmlForm('frmCorrectionAnswers');
         $this->jquery->attr('#userAnswer','disabled','',true);
         $scoreInput = $form->addInput('score','userScore','number',$answer->scoreUser);
-        $form->addItem(new HtmlFormTextarea("Comment","Comment"));
+        $form->addItem(new HtmlFormTextarea("comment","comment",$answer->comment));
+        $form->addInput('identifiers','','hidden',$answer->identifiers);
         if(USession::get('activeUser')['id']==$idQuestionCreator){
             $this->jquery->attr('#score','min',-100,true);
             $this->jquery->attr('#score','max',$totalScore,true);
             $this->jquery->attr('#score','step',0.5,true);
             $scoreInput->setDisabled(false);
-            $form->addSubmit('sumbitCorrection','Correct');
+            $form->addButton('submitCorrection','submit');
+            $this->jquery->postFormOnClick('#submitCorrection',Router::path('correct.answer'),'frmCorrectionAnswers','',['hasLoader'=>'internal']);
+
         }else{
             $this->jquery->attr('#Comment','disabled','',true);
             $scoreInput->setDisabled(true);
