@@ -1,6 +1,6 @@
 <?php
 return array(
-	"siteUrl"=>"http://127.0.0.1:8090/",
+	"siteUrl"=>"https://qcm-app-ubiquity.herokuapp.com/",
 	"database"=>array(
 			"type"=>"mysql",
 			"dbName"=>"qcm-app",
