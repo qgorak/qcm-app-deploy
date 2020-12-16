@@ -124,7 +124,7 @@ class CorrectionController extends ControllerBase{
         $answer->scoreUser = $userAnswer->points;
         $totalScore += $answer->getScore();
         $totalScore += $userAnswer->points;
-        $dt = $this->uiService->longAnswerTable($answer,$questionCreator->getId());
+        $dt = $this->uiService->longAnswerForm($answer,$questionCreator->getId(),$totalScore);
         $acc->addItem(array($question->getCaption().'----'.$totalScore,$dt));
         return [$totalScore,$score];
     }
