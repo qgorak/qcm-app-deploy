@@ -93,7 +93,8 @@ class CorrectionUIService {
             $this->jquery->postFormOnClick('#submitCorrection',Router::path('correct.answer'),'frmCorrectionAnswers','',['hasLoader'=>'internal']);
 
         }else{
-            $this->jquery->attr('#Comment','disabled','',true);
+            $this->jquery->attr('#score','step',0.5,true);
+            $this->jquery->attr('#comment','disabled','',true);
             $scoreInput->setDisabled(true);
         }
         return $form;
