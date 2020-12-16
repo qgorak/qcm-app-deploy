@@ -119,16 +119,20 @@ class CorrectionController extends ControllerBase{
     }
 
     private function correctShortAnswer($acc,$question,$userAnswer){
+        $questionCreator = $question->getUser();
         $answer = $question->getAnswers()[0];
-        $userAnswer = json_decode($userAnswer);
+        $userAnswerValue = json_decode($userAnswer);
         $score=0;
         $totalScore=0;
-        $answer->value=$userAnswer->answer;
-        $answer->scoreUser=0;
+        $answer->value=$userAnswerValue->answer;
+        $answer->scoreUser=$userAnswerValue->points;
+        $answer->comment = $userAnswerValue->comment;
+        $answer->identifiers = $userAnswer->getidUser().','.$userAnswer->getidExam().','.$userAnswer->getidQuestion();
+        $frm = $this->uiService->shortAnswerForm($answer,$questionCreator->getId(),$totalScore);
         $totalScore+=$answer->getScore();
-        $dt = $this->uiService->shortAnswerTable($answer);
+        $score+=$userAnswerValue->points;
         $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
-        $acc->addItem(array($question->getCaption().$label,$dt));
+        $acc->addItem(array($question->getCaption().$label,$frm));
         return [$totalScore,$score];
     }
 
@@ -144,9 +148,9 @@ class CorrectionController extends ControllerBase{
         $answer->identifiers = $userAnswer->getidUser().','.$userAnswer->getidExam().','.$userAnswer->getidQuestion();
         $totalScore += $answer->getScore();
         $score += $userAnswerValue->points;
-        $dt = $this->uiService->longAnswerForm($answer,$questionCreator->getId(),$totalScore);
+        $frm = $this->uiService->longAnswerForm($answer,$questionCreator->getId(),$totalScore);
         $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
-        $acc->addItem(array($question->getCaption().$label,$dt));
+        $acc->addItem(array($question->getCaption().$label,$frm));
         return [$totalScore,$score];
     }
 

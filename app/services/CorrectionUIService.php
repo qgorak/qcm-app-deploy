@@ -57,29 +57,35 @@ class CorrectionUIService {
         return $dt;
     }
 
-    public function longAnswerTable($answer,$idQuestionCreator) {
-        $dt=$this->jquery->semantic()->dataTable('dtCorrectionAnswers', Answer::class,array($answer));
-        $dt->setFields ( [
-            'value',
-            'scoreUser',
-            'comment',
-        ] );
-        $dt->setCaptions ( [
-            'User answer',
-            'scoreUser',
-            'Commentaire',
-        ] );
-        $dt->fieldAsTextarea('value','disabled');
+    public function shortAnswerForm($answer,$idQuestionCreator,$totalScore) {
+        $form=$this->jquery->semantic()->htmlForm('frmCorrectionAnswers'.$answer->getId());
+        $form->addInput('userAnswer','userAnswer','text',$answer->value)->setDisabled();
+        $listAnswer = $this->jquery->semantic()->htmlList('listAnswer',json_decode($answer->getCaption()));
+        $listAnswer->addHeader('5','Expected answers:');
+        $listAnswer->setTitle('Expected answers:');
+        $listAnswer->setCelled();
+        $form->addItem($listAnswer);
+        $scoreInput = $form->addInput('score','userScore','number',$answer->scoreUser);
+        $form->addItem(new HtmlFormTextarea("comment","comment",$answer->comment));
+        $form->addInput('identifiers','','hidden',$answer->identifiers);
         if(USession::get('activeUser')['id']==$idQuestionCreator){
-            $dt->fieldAsInput('comment',['test'=>'test']);
-            $dt->insertDefaultButtonIn(4,'plus');
-            $dt->fieldAsInput('scoreUser');
-            $dt->setEdition(true);
+            $this->jquery->attr('#score','min',-100,true);
+            $this->jquery->attr('#score','max',$totalScore,true);
+            $this->jquery->attr('#score','step',0.5,true);
+            $scoreInput->setDisabled(false);
+            $form->addButton('submitCorrection'.$answer->getId(),'submit');
+            $this->jquery->postFormOnClick('#submitCorrection'.$answer->getId(),Router::path('correct.answer'),'frmCorrectionAnswers'.$answer->getId(),'',['hasLoader'=>'internal']);
+        }else{
+            $this->jquery->attr('#score','step',0.5,true);
+            $this->jquery->attr('#comment','disabled','',true);
+            $scoreInput->setDisabled(true);
         }
-        return $dt;
+        $this->jquery->attr('#userAnswer','disabled','',true);
+        return $form;
     }
+
     public function longAnswerForm($answer,$idQuestionCreator,$totalScore) {
-        $form=$this->jquery->semantic()->htmlForm('frmCorrectionAnswers');
+        $form=$this->jquery->semantic()->htmlForm('frmCorrectionAnswers'.$answer->getId());
         $form->addItem(new HtmlFormTextarea("userAnswer","userAnwser",$answer->value));
         $scoreInput = $form->addInput('score','userScore','number',$answer->scoreUser);
         $form->addItem(new HtmlFormTextarea("comment","comment",$answer->comment));
@@ -89,8 +95,8 @@ class CorrectionUIService {
             $this->jquery->attr('#score','max',$totalScore,true);
             $this->jquery->attr('#score','step',0.5,true);
             $scoreInput->setDisabled(false);
-            $form->addButton('submitCorrection','submit');
-            $this->jquery->postFormOnClick('#submitCorrection',Router::path('correct.answer'),'frmCorrectionAnswers','',['hasLoader'=>'internal']);
+            $form->addButton('submitCorrection'.$answer->getId(),'submit');
+            $this->jquery->postFormOnClick('#submitCorrection'.$answer->getId(),Router::path('correct.answer'),'frmCorrectionAnswers'.$answer->getId(),'',['hasLoader'=>'internal']);
         }else{
             $this->jquery->attr('#score','step',0.5,true);
             $this->jquery->attr('#comment','disabled','',true);
@@ -99,4 +105,6 @@ class CorrectionUIService {
         $this->jquery->attr('#userAnswer','disabled','',true);
         return $form;
     }
+
+
 }
