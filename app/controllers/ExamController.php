@@ -43,7 +43,7 @@ class ExamController extends ControllerBase{
     }
     
     private function displayMyExam() {
-        $exam=$this->loader->all();
+        $exam=$this->loader->my();
         $exams=$this->jquery->semantic()->dataTable('myExam',Exam::class,$exam);
         $exams->setFields([
         	'dated',

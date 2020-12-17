@@ -22,6 +22,10 @@ class ExamDAOLoader {
 	public function all(): array {
 		return DAO::getAll ( Exam::class );
 	}
+
+    public function my(): array {
+        return DAO::uGetAll(Exam::class,'qcm.idUser = ?',true,[USession::get('activeUser')['id']]);;
+    }
 	
 	public function clear(): void {
 		DAO::deleteAll ( Exam::class, '1=1' );
