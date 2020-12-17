@@ -2,7 +2,7 @@ AddDefaultCharset UTF-8
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On
-	RewriteBase /qcm-hfl/
+	RewriteBase /
 	
 	RewriteCond %{REQUEST_FILENAME} !-f  
 	RewriteCond %{HTTP_ACCEPT} !(.*images.*)
