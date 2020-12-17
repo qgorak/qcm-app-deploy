@@ -6,6 +6,7 @@ use Ubiquity\utils\http\USession;
 use models\Exam;
 use models\Usergroup;
 use models\User;
+use models\Group;
 
 class NotificationDAOLoader{
     
@@ -35,9 +36,9 @@ class NotificationDAOLoader{
     }
     
     public function notifications(){
-    	$user=DAO::getById(User::class, USession::get('activeUser')['id']);
-    	$userGroups=DAO::getAll(Usergroup::class,"idUser=? AND status='1'",false,[$user->getId()]);
-    	foreach($user->getGroups() as $group){
+    	$userMyGroups=DAO::getAll(Group::class,"idUser=?",false,USession::get('activeUser')['id']);
+    	$userGroups=DAO::getAll(Usergroup::class,"idUser=? AND status='1'",false,[USession::get('activeUser')['id']]);
+    	foreach($userMyGroups as $group){
     		if(DAO::getOne(Usergroup::class,'idGroup=? AND status="0"',false,[$group->getId()])!=null){
     			return "true";
     		}
