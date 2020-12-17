@@ -1,3 +1,18 @@
-{{q['myGroups'] | raw }}
-{{q['inGroups'] | raw }}
-{{script_foot | raw }}
+{{ q['msg'] | raw }}
+<div class="ui styled accordion">
+  <div class="title">
+    <i class="dropdown icon"></i>
+    Mes groupes
+  </div>
+  <div class="content">
+    {{q['myGroups'] | raw }}
+  </div>
+  <div class="title">
+    <i class="dropdown icon"></i>
+    Les groupes auxquels j'appartiens
+  </div>
+  <div class="content">
+    {{q['inGroups'] | raw }}
+  </div>
+</div>
+{{script_foot | raw}}

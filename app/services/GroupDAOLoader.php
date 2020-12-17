@@ -109,5 +109,12 @@ class GroupDAOLoader {
 	    }
 	    return $retour;
 	}
+	
+	public function alreadyDemand($groupId,$userId){
+	    if(DAO::getOne(Usergroup::class,'idGroup=? AND idUser=?',false,[$groupId,$userId])!=null){
+	        return true;
+	    }
+	    return false;
+	}
 }
 

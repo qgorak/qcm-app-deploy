@@ -41,6 +41,19 @@ class GroupController extends ControllerBase{
         $myGroups = $this->loader->myGroups();
         $inGroups=$this->loader->inGroups();
         $dt=new UIService($this->jquery);
+        $this->jquery->execAtLast("$('#addGroup').click(function() {
+        	$('#addModal').modal('show');
+        });
+        $('#addForm-submit-0').click(function() {
+        	$('#addModal').modal('hide');
+        });
+        $('#joinGroup').click(function() {
+        	$('#joinModal').modal('show');
+        });
+        $('#joinForm-submit-0').click(function() {
+        	$('#joinModal').modal('hide');
+        });
+            $('.ui.accordion').accordion();");
         $dt->displayMyGroups($myGroups, $inGroups);
     }
     
@@ -48,20 +61,41 @@ class GroupController extends ControllerBase{
      * @route('/','name'=>'group')
      */
     public function index(){
-        $this->jquery->ajaxOnClick('#addGroup',Router::path ('groupAdd',[""]),'#response',[
-            'hasloader'=>'internal'
+        $groupForm=$this->jquery->semantic()->dataForm('addForm', Group::class);
+        $groupForm->setFields([
+            "name",
+            "description",
+            "submit"
         ]);
-        $this->jquery->ajaxOnClick('#joinGroup',Router::path ('groupJoin',[""]),'#response',[
-            'hasloader'=>'internal'
+        $groupForm->setCaptions([
+            TranslatorManager::trans('name',[],'main'),
+            TranslatorManager::trans('description',[],'main')
+        ]);
+        $groupForm->fieldAsInput('name',[
+            'rules'=>'empty'
+        ]);
+        $groupForm->fieldAsTextarea('description',[
+            'rules'=>'empty'
+        ]);
+        $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),'#response',[
+            'value'=>TranslatorManager::trans('addSubmit',[],'main')
+        ]);
+        $joinForm=$this->jquery->semantic()->dataForm('joinForm',Usergroup::class);
+        $joinForm->setFields([
+            'GroupKey',
+            'submit'
+        ]);
+        $joinForm->setCaptions([
+            TranslatorManager::trans('groupKey',[],'main')
+        ]);
+        $joinForm->fieldAsInput('GroupKey',[
+            'rules'=>'empty'
+        ]);
+        $joinForm->fieldAsSubmit('submit','green',Router::path('joinSubmit'),'#response',[
+            'value'=>TranslatorManager::trans('joinSubmit',[],'main')
         ]);
         $this->displayMyGroups();
-        $this->_index($this->jquery->renderView('GroupController/display.html',[],true));
-    }
-    
-    private function _index($response = '') {
-        $this->jquery->renderView ( 'GroupController/index.html', [
-            'response' => $response
-        ] );
+        $this->jquery->renderView('GroupController/index.html');
     }
     
     private function _viewGroup($id){
@@ -84,6 +118,49 @@ class GroupController extends ControllerBase{
     }
     
     /**
+     * @post("add","name"=>"GroupAddSubmit")
+     */
+    public function addSubmit(){
+        $group = new Group();
+        URequest::setPostValuesToObject($group);
+        $group->setKeyCode(uniqid());
+        $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
+        $group->setUser($user);
+        $this->loader->add($group);
+        $this->displayMyGroups();
+        $msg=$this->jquery->semantic()->htmlMessage('msg','Votre groupe a bien été créé',['success']);
+        $msg->setTimeout(3000);
+        $this->jquery->renderView('GroupController/display.html');
+    }
+    
+    /**
+     * @post("join","name"=>"joinSubmit")
+     */
+    public function joinSubmit(){
+        $user=USession::get('activeUser')['id'];
+        $group=$this->loader->getByKey(URequest::post('GroupKey'));
+        if($group!=null){
+            if(!($this->loader->isInGroup($group->getId(), $user) || $this->loader->isCreator($group->getId(), $user) || $this->loader->alreadyDemand($group->getId(), $user))){
+                $userGroup=new Usergroup();
+                $userGroup->setIdGroup($group->getId());
+                $userGroup->setIdUser($user);
+                $userGroup->setStatus(0);
+                DAO::save($userGroup);
+                $msg=$this->jquery->semantic()->htmlMessage('msg','Votre groupe a bien été créé',['success']);
+            }
+            else{
+                $msg=$this->jquery->semantic()->htmlMessage('msg','Vous n\'êtes pas autorisé à rejoindre ce groupe',['warning']);
+            }
+        }
+        else{
+            $msg=$this->jquery->semantic()->htmlMessage('msg','Le groupe n\'existe pas',['error']);
+        }
+        $msg->setTimeout(3000); 
+        $this->displayMyGroups();
+        $this->jquery->renderView('GroupController/display.html');
+    }
+    
+    /**
      * @get('view/{id}','name'=>'groupView')
      * @param mixed $id
      */
@@ -95,98 +172,6 @@ class GroupController extends ControllerBase{
         else{
             $this->_index($this->jquery->renderView('GroupController/view.html',[],true));
         }
-    }
-    
-    /**
-     * @get("add","name"=>"groupAdd")
-     */
-    public function addGroup(){
-        $groupForm=$this->jquery->semantic()->dataForm('groupForm', Group::class);
-        $groupForm->setFields([
-            "name",
-            "description",
-            "submit"
-        ]);
-        $groupForm->setCaptions([
-            TranslatorManager::trans('name',[],'main'),
-            TranslatorManager::trans('description',[],'main')
-        ]);
-        $groupForm->fieldAsInput('name',[
-            'rules'=>'empty'
-        ]);
-        $groupForm->fieldAsTextarea('description',[
-            'rules'=>'empty'
-        ]);
-        $groupForm->fieldAsSubmit('submit',null,Router::path('GroupAddSubmit'),'#response',[
-            'value'=>TranslatorManager::trans('addSubmit',[],'main')
-        ]);
-
-        if(URequest::isAjax()){
-            $this->jquery->renderView('GroupController/add.html');
-        }
-        else{
-            $this->_index($this->jquery->renderView('GroupController/add.html',[],true));
-        }
-    }
-    
-    /**
-     * @post("add","name"=>"GroupAddSubmit")
-     */
-    public function addSubmit(){
-        $group = new Group();
-        URequest::setPostValuesToObject($group);
-        $group->setKeyCode(uniqid());
-        $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
-        $group->setUser($user);
-        $this->loader->add($group);
-        $this->displayMyGroups();
-        $this->jquery->renderView('GroupController/display.html');
-    }
-    
-    /**
-     * @get("join","name"=>"groupJoin")
-     */
-    public function joinGroup(){
-		$groupForm=$this->jquery->semantic()->dataForm('groupForm',Usergroup::class);
-		$groupForm->setFields([
-			'GroupKey',
-			'submit'
-		]);
-		$groupForm->setCaptions([
-		    TranslatorManager::trans('groupKey',[],'main')
-		]);
-		$groupForm->fieldAsInput('GroupKey',[
-			'rules'=>'empty'
-		]);
-		$groupForm->fieldAsSubmit('submit',null,Router::path('joinSubmit'),'#response',[
-		    'value'=>TranslatorManager::trans('joinSubmit',[],'main')
-		]);
-		$this->displayMyGroups();
-		if(URequest::isAjax()){
-		    $this->jquery->renderView('GroupController/join.html');
-		}
-		else{
-		    $this->_index($this->jquery->renderView('GroupController/join.html',[],true));
-		}
-    }
-    
-    /**
-     * @post("join","name"=>"joinSubmit")
-     */
-    public function joinSubmit(){
-    	$user=USession::get('activeUser')['id'];   	
-    	$group=$this->loader->getByKey(URequest::post('GroupKey')); 
-    	if($group!=null){
-    	    if(!($this->loader->isInGroup($group->getId(), $user) || $this->loader->isCreator($group->getId(), $user))){
-    	        $userGroup=new Usergroup();
-    	        $userGroup->setIdGroup($group->getId());
-    	        $userGroup->setIdUser($user);
-    	        $userGroup->setStatus(0);
-    	        DAO::save($userGroup);
-    	    }
-    	}
-    	$this->displayMyGroups();
-    	$this->jquery->renderView('GroupController/display.html');
     }
     
     /**

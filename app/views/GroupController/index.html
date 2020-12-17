@@ -1,13 +1,42 @@
 <div class="ui container">
-	<a  id="addGroup" href="{{path('groupAdd')}}" data-target="#response" class="ui green button">
+	<a  id="addGroup" class="ui green button">
 	{{t('addSubmit',[],'main')}}
 	</a>
-	<a id="joinGroup" href="{{path('groupJoin')}}" data-target="#response" class="ui green button">
+	<a id="joinGroup" class="ui green button">
 	{{t('joinSubmit',[],'main')}}
 	</a>
 	<a href="{{path('group')}}" class="ui primary button">{{t('seeGroups',[],'main')}}</a>
 	<div id="response">
-	{{ response | raw }}
+	<div class="ui styled accordion">
+	  <div class="title">
+	    <i class="dropdown icon"></i>
+	    Mes groupes
+	  </div>
+	  <div class="content">
+	    {{q['myGroups'] | raw }}
+	  </div>
+	  <div class="title">
+	    <i class="dropdown icon"></i>
+	    Les groupes auxuqels j'appartiens
+	  </div>
+	  <div class="content">
+	    {{q['inGroups'] | raw }}
+	  </div>
+	</div>
+	</div>
+	<div id="addModal" class="ui fullscreen modal" style="padding:10px;">
+	<div class="header">Créer un groupe</div>
+	  <i class="close icon"></i>
+	  <div class="content">
+	  	{{ q['addForm'] | raw }}
+	  </div>
+	</div>
+	<div id="joinModal" class="ui fullscreen modal" style="padding:10px;">
+	<div class="header">Créer un groupe</div>
+	  <i class="close icon"></i>
+	  <div class="content">
+	  	{{ q['joinForm'] | raw }}
+	  </div>
 	</div>
 </div>
 {{script_foot | raw}}
