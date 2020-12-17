@@ -34,4 +34,21 @@ class NotificationDAOLoader{
         return $examNotif;
     }
     
+    public function notifications(){
+    	$user=DAO::getById(User::class, USession::get('activeUser')['id']);
+    	$userGroups=DAO::getAll(Usergroup::class,"idUser=? AND status='1'",false,[$user->getId()]);
+    	foreach($user->getGroups() as $group){
+    		if(DAO::getOne(Usergroup::class,'idGroup=? AND status="0"',false,[$group->getId()])!=null){
+    			return "true";
+    		}
+    	}	
+    	foreach($userGroups as $group){
+    		$exam=DAO::getOne(Exam::class,'idGroup=? AND datef>now()',false,[$group->getIdGroup()]);
+    		if($exam!=null){
+    			return "true";
+    		}
+    	}
+    	return "false";
+    }
+    
 }

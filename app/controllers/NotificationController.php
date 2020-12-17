@@ -77,14 +77,8 @@ class NotificationController extends ControllerBase{
      * @get('json','name'=>'notification.json')
      */
     public function json(){
-        $exam=$this->loader->getExamNotification();
-        $groupDemand=$this->loader->getGroupNotification();
-        if(count($groupDemand)==0 && count($exam)==0){
-            echo "false";
-        }
-        else{
-            echo "true";
-        }
+        $notif=$this->loader->notifications();
+        echo $notif;
     }
 }
 
