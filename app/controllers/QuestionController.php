@@ -245,8 +245,7 @@ class QuestionController extends ControllerBase {
      */
     public function displayMyQuestions() {
     	$dt=$this->uiService->getQuestionDataTable($this->loader->my());
-    	var_dump($this->loader->my());
-    	$this->jquery->renderView( 'QuestionController/template/myQuestions.html', [] ,true);
+    	$this->jquery->renderView( 'QuestionController/template/myQuestions.html', [] );
     }
     
     /**
