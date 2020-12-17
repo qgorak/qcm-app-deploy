@@ -10,4 +10,3 @@ class EmailManager{
         $exams=DAO::getAll(Exam::class);
     }
 }
-

@@ -38,11 +38,11 @@ class ExamDAOLoader {
 	}
 	
 	public function allMyQCM(){
-	    return DAO::uGetAll(Qcm::class,'idUser=?',false,[USession::get('activeUser')['id']]);
+	    return DAO::getAll(Qcm::class,'idUser=?',false,[USession::get('activeUser')['id']]);
 	}
 	
 	public function allMyGroup(){
-	    return DAO::uGetAll(Group::class,"idUser=?",false,[USession::get('activeUser')['id']]);
+	    return DAO::getAll(Group::class,"idUser=?",false,[USession::get('activeUser')['id']]);
 	}
 }
 
