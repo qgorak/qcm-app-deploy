@@ -97,7 +97,9 @@ class QuestionController extends ControllerBase {
      * @get("delete/{id}",'name'=>'question.delete')
      */
     public function delete($id) {
-        if($this->loader->get($id)->getIdUser()==USession::get('activeUser')['id']){
+        $question = $this->loader->get($id);
+        $creator = $question->getUser();
+        if($creator->getId()==USession::get('activeUser')['id']){
             $this->loader->remove($id);
         }
     }
