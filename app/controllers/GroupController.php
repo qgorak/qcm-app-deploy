@@ -44,14 +44,8 @@ class GroupController extends ControllerBase{
         $this->jquery->execAtLast("$('#addGroup').click(function() {
         	$('#addModal').modal('show');
         });
-        $('#addForm-submit-0').click(function() {
-        	$('#addModal').modal('hide');
-        });
         $('#joinGroup').click(function() {
         	$('#joinModal').modal('show');
-        });
-        $('#joinForm-submit-0').click(function() {
-        	$('#joinModal').modal('hide');
         });
             $('.ui.accordion').accordion();");
         $dt->displayMyGroups($myGroups, $inGroups);
@@ -80,6 +74,7 @@ class GroupController extends ControllerBase{
         $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),'#response',[
             'value'=>TranslatorManager::trans('addSubmit',[],'main')
         ]);
+        $groupForm->onSuccess("$('#addModal').modal('hide');");
         $joinForm=$this->jquery->semantic()->dataForm('joinForm',Usergroup::class);
         $joinForm->setFields([
             'GroupKey',
@@ -94,6 +89,7 @@ class GroupController extends ControllerBase{
         $joinForm->fieldAsSubmit('submit','green',Router::path('joinSubmit'),'#response',[
             'value'=>TranslatorManager::trans('joinSubmit',[],'main')
         ]);
+        $joinForm->onSuccess("$('#joinModal').modal('hide');");
         $this->displayMyGroups();
         $this->jquery->renderView('GroupController/index.html');
     }
