@@ -13,24 +13,25 @@ abstract class ControllerBase extends Controller{
 	protected $headerView = "@activeTheme/main/vHeader.html";
 	protected $footerView = "@activeTheme/main/vFooter.html";
 
-	public function initialize() {
-	    if(USession::get('activeUser',false)){
-	        USession::delete('language');
-	        TranslatorManager::setLocale(USession::get('activeUser')['language']);
-	    }
-	    else{
-	        TranslatorManager::setLocale(USession::get('language'));
-	    }
+	public function initialize() {	    
 		if (! URequest::isAjax ()) {
 		    $user = USession::get('activeUser');
 		    $this->loadView ( $this->headerView ,[
 		        'user' => $user
 		    ] );
 		    if(USession::get('activeUser',false)){
+		    	USession::delete('language');
+		    	TranslatorManager::setLocale(USession::get('activeUser')['language']);
 		        $this->loadView('/main/UI/userNavbar.html');
 		    }
 		    else{
-		        $this->loadView('/main/UI/Navbar.html',['lang'=>USession::get('language')]);
+		    	if(!USession::get('language',false)){
+		    		USession::set('language','en_EN');
+		    		$language='en_EN';
+		    	}
+		    	$language=USession::get('language');
+		    	TranslatorManager::setLocale(USession::get('language'));
+		        $this->loadView('/main/UI/Navbar.html',['lang'=>$language]);
 		    }
 		    $this->loadView('/main/UI/AuthModal.html');
 		}
