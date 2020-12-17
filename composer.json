@@ -49,6 +49,6 @@
     "post-create-project-cmd": [
       "@php vendor/phpmv/ubiquity-devtools/src/Ubiquity composer-create-project",
       "@php vendor/phpmv/ubiquity-devtools/src/Ubiquity init-cache"
-    ],
+    ]
   }
 }
