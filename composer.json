@@ -11,7 +11,9 @@
   "require": {
     "php": "^7.4",
     "phpmv/ubiquity": "dev-master",
-    "twig/twig": "^3.0"
+    "twig/twig": "^3.0",
+    "phpmv/ubiquity-acl": "dev-main",
+    "phpmv/php-mv-ui": "^2.2"
   },
   "license": "Apache-2.0",
   "authors": [
@@ -48,8 +50,5 @@
       "@php vendor/phpmv/ubiquity-devtools/src/Ubiquity composer-create-project",
       "@php vendor/phpmv/ubiquity-devtools/src/Ubiquity init-cache"
     ],
-    "post-install-cmd": [
-         "chmod -R 777 public/"
-     ]
   }
 }
