@@ -10,8 +10,8 @@ use Ubiquity\utils\http\USession;
 use models\Answer;
 use models\Question;
 use models\Tag;
-use services\QuestionDAOLoader;
-use services\UIService;
+use services\DAO\QuestionDAOLoader;
+use services\UI\UIService;
 
 /**
  * Controller QuestionController
@@ -32,7 +32,7 @@ class QuestionController extends ControllerBase {
     
     /**
      *
-     * @param \services\QuestionDAOLoader $loader
+     * @param \services\DAO\QuestionDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;
@@ -53,8 +53,8 @@ class QuestionController extends ControllerBase {
         $answer->setScore(0);
         array_push($answer_array,$answer);
         USession::set('answers',$answer_array);
-        $toolbar=$this->uiService->questionBankToolbar();
-        $modal=$this->uiService->modal();
+        $this->uiService->questionBankToolbar();
+        $this->uiService->modal();
         $this->jquery->ajax('get', Router::path('question.my'),"#myquestions",[
             'hasLoader'=>true
         ]);
@@ -232,7 +232,7 @@ class QuestionController extends ControllerBase {
     	       array_push($tagObjects,$tag);
     	   }
     	   $questions = $this->loader->getByTags($tagObjects);
-    	   $dt=$this->uiService->getQuestionDataTable($questions);
+    	   $this->uiService->getQuestionDataTable($questions);
     	   $this->_index($this->jquery->renderView ( 'QuestionController/template/myQuestions.html',[
     	   ],true));
         }else{
@@ -244,7 +244,7 @@ class QuestionController extends ControllerBase {
      * @get("displayMyQuestions","name"=>"question.my")
      */
     public function displayMyQuestions() {
-    	$dt=$this->uiService->getQuestionDataTable($this->loader->my());
+    	$this->uiService->getQuestionDataTable($this->loader->my());
     	$this->jquery->renderView( 'QuestionController/template/myQuestions.html', [] );
     }
     

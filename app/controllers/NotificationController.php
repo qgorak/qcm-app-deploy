@@ -2,7 +2,7 @@
 namespace controllers;
 
 use Ubiquity\controllers\Router;
-use services\NotificationDAOLoader;
+use services\DAO\NotificationDAOLoader;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use Ubiquity\utils\http\USession;
 
@@ -24,7 +24,7 @@ class NotificationController extends ControllerBase{
     
     /**
      *
-     * @param \services\GroupDAOLoader $loader
+     * @param \services\DAO\GroupDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;

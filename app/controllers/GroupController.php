@@ -5,13 +5,14 @@ use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use models\Group;
-use services\GroupDAOLoader;
+use services\DAO\GroupDAOLoader;
 use models\User;
 use Ubiquity\utils\http\USession;
 use models\Usergroup;
 use Ubiquity\translation\TranslatorManager;
-use services\UIService;
+use services\UI\UIService;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
+use services\UI\GroupUIService;
 
 /**
  * Controller GroupController
@@ -31,7 +32,7 @@ class GroupController extends ControllerBase{
     
     /**
      *
-     * @param \services\GroupDAOLoader $loader
+     * @param \services\DAO\GroupDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;
@@ -40,14 +41,7 @@ class GroupController extends ControllerBase{
     private function displayMyGroups() {
         $myGroups = $this->loader->myGroups();
         $inGroups=$this->loader->inGroups();
-        $dt=new UIService($this->jquery);
-        $this->jquery->execAtLast("$('#addGroup').click(function() {
-        	$('#addModal').modal('show');
-        });
-        $('#joinGroup').click(function() {
-        	$('#joinModal').modal('show');
-        });
-            $('.ui.accordion').accordion();");
+        $dt=new GroupUIService($this->jquery);
         $dt->displayMyGroups($myGroups, $inGroups);
     }
     
@@ -55,41 +49,6 @@ class GroupController extends ControllerBase{
      * @route('/','name'=>'group')
      */
     public function index(){
-        $groupForm=$this->jquery->semantic()->dataForm('addForm', Group::class);
-        $groupForm->setFields([
-            "name",
-            "description",
-            "submit"
-        ]);
-        $groupForm->setCaptions([
-            TranslatorManager::trans('name',[],'main'),
-            TranslatorManager::trans('description',[],'main')
-        ]);
-        $groupForm->fieldAsInput('name',[
-            'rules'=>'empty'
-        ]);
-        $groupForm->fieldAsTextarea('description',[
-            'rules'=>'empty'
-        ]);
-        $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),'#response',[
-            'value'=>TranslatorManager::trans('addSubmit',[],'main')
-        ]);
-        $groupForm->onSuccess("$('#addModal').modal('hide');");
-        $joinForm=$this->jquery->semantic()->dataForm('joinForm',Usergroup::class);
-        $joinForm->setFields([
-            'GroupKey',
-            'submit'
-        ]);
-        $joinForm->setCaptions([
-            TranslatorManager::trans('groupKey',[],'main')
-        ]);
-        $joinForm->fieldAsInput('GroupKey',[
-            'rules'=>'empty'
-        ]);
-        $joinForm->fieldAsSubmit('submit','green',Router::path('joinSubmit'),'#response',[
-            'value'=>TranslatorManager::trans('joinSubmit',[],'main')
-        ]);
-        $joinForm->onSuccess("$('#joinModal').modal('hide');");
         $this->displayMyGroups();
         $this->jquery->renderView('GroupController/index.html');
     }

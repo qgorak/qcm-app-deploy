@@ -6,7 +6,7 @@ use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\Tag;
 use models\User;
-use services\UIService;
+use services\UI\UIService;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
  /**
  * Controller TagController

@@ -1,13 +1,11 @@
 <?php
 namespace controllers;
 
-use Ajax\semantic\widgets\business\user\FormLogin;
 use Ubiquity\orm\DAO;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use models\Useranswer;
-use services\CorrectionUIService;
-use services\ExamDAOLoader;
-use models\Answer;
+use services\UI\CorrectionUIService;
+use services\DAO\ExamDAOLoader;
 use Ubiquity\utils\http\URequest;
 
 /**
@@ -34,7 +32,7 @@ class CorrectionController extends ControllerBase{
     
     /**
      *
-     * @param \services\ExamDAOLoader $loader
+     * @param \services\DAO\ExamDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;

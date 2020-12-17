@@ -4,8 +4,7 @@ use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\User;
-use services\AuthUIService;
-use Ubiquity\utils\http\UResponse;
+use services\UI\AuthUIService;
 
 /**
  * Auth Controller BaseAuthController
@@ -32,7 +31,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      * @get("/loginForm",'name'=>'loginform')
      */
     public function loginform(){
-        $frm = $this->uiService->loginForm();
+        $this->uiService->loginForm();
         $this->jquery->renderView('BaseAuthController/login.html',[]);
 
     }
@@ -41,7 +40,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      * @get("/registerForm",'name'=>'registerform')
      */
     public function registerform(){
-        $frm = $this->uiService->registerForm();
+        $this->uiService->registerForm();
         $this->jquery->renderView('BaseAuthController/register.html',[]);
         
     }
@@ -50,9 +49,9 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      * @post("/login",'name'=>'loginPost')
      */
     public function loginPost(){
-        $frm = $this->uiService->loginForm();
+        $this->uiService->loginForm();
         $info=$this->_connect();
-        $msg = $this->uiService->loginErrorMessage($info);
+        $this->uiService->loginErrorMessage($info);
         if(gettype($this->_connect())!=="string"){
             $this->onConnect($this->_connect());
             $this->jquery->clear_compile();
@@ -81,7 +80,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
                 URequest::setValuesToObject($instance);
                 $instance->setPassword(URequest::post('password'));
                 DAO::insert($instance);
-                $msg=$this->uiService->loginErrorMessage('Success');
+                $this->uiService->loginErrorMessage('Success');
                 $this->jquery->renderView('BaseAuthController/register.html',[]);
             }
         }

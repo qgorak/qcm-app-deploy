@@ -13,6 +13,10 @@ body{
 	border-bottom:1px solid rgba(34,36,38,.15);
 }
 
+.ui.styled.accordion{
+	width:100%;
+}
+
 .menu.links{
 	background-color: #f8f9fa!important;
 	padding: 10px 0;

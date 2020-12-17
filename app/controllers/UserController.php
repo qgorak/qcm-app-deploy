@@ -6,7 +6,7 @@ use Ubiquity\security\acl\controllers\AclControllerTrait;
 use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
-use services\UserDAOLoader;
+use services\DAO\UserDAOLoader;
 
 
 /**
@@ -27,7 +27,7 @@ class UserController extends ControllerBase{
     
     /**
      *
-     * @param \services\UserDAOLoader $loader
+     * @param \services\DAO\UserDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;

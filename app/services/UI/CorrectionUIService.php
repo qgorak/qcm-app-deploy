@@ -1,6 +1,6 @@
 <?php
 
-namespace services;
+namespace services\UI;
 
 use Ajax\php\ubiquity\JsUtils;
 use models\Answer;

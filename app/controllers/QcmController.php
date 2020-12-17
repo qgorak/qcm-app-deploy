@@ -6,10 +6,9 @@ use Ubiquity\controllers\Router;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\Qcm;
-use models\Question;
-use services\QcmDAOLoader;
-use services\QuestionDAOLoader;
-use services\UIService;
+use services\DAO\QcmDAOLoader;
+use services\DAO\QuestionDAOLoader;
+use services\UI\UIService;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 
 /**
@@ -37,7 +36,7 @@ class QcmController extends ControllerBase{
     
     /**
      *
-     * @param \services\QcmDAOLoader $loader
+     * @param \services\DAO\QcmDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;
@@ -51,13 +50,13 @@ class QcmController extends ControllerBase{
 	    $myQuestions = array();
 	    $myQuestions['notchecked'] = $questionLoader->my();
 	    $myQuestions['checked'] = array();
-	    $modal=$this->uiService->modal();
+	    $this->uiService->modal();
 	    USession::set('questions', $myQuestions);
 	    $this->jquery->getHref('#addQcm', '',[
 	        'hasLoader'=>'internal',
 	        'historize'=>false
 	    ]);
-	    $dt = $this->uiService->getQcmDataTable($this->loader->my());
+	    $this->uiService->getQcmDataTable($this->loader->my());
 	    $this->_index($this->jquery->renderView ( 'QcmController/templates/myQcm.html',[
 	        'msg' => $msg
 	    ],true));
@@ -73,7 +72,7 @@ class QcmController extends ControllerBase{
 	 * @get("add","name"=>'qcm.add')
 	 */
 	public function add() {
-	    $frmQcm = $this->uiService->qcmForm();
+	    $this->uiService->qcmForm();
 	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
 	        'hasLoader'=>'internal'
 	    ]);
@@ -102,8 +101,8 @@ class QcmController extends ControllerBase{
 	 * @get("questionBankImport","name"=>'qcm.display.bank')
 	 */
 	public function displayQuestionBankImport(){
-	    $dtQuestionNotChecked = $this->uiService->questionDataTable('dtQuestionNotChecked',USession::get('questions')['notchecked'],false);
-	    $dtQuestionChecked = $this->uiService->questionDataTable('dtQuestionChecked',USession::get('questions')['checked'],true);
+	    $this->uiService->questionDataTable('dtQuestionNotChecked',USession::get('questions')['notchecked'],false);
+	    $this->uiService->questionDataTable('dtQuestionChecked',USession::get('questions')['checked'],true);
 	    $this->jquery->getHref('#cancel', '',[
 	        'hasLoader'=>'internal',
 	        'historize'=>false

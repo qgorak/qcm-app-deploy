@@ -13,8 +13,7 @@ use DateTime;
 use models\Exam;
 use models\Group;
 use models\Qcm;
-use models\Question;
-use services\ExamDAOLoader;
+use services\DAO\ExamDAOLoader;
 use models\Useranswer;
 use services\datePickerTranslator;
 
@@ -36,7 +35,7 @@ class ExamController extends ControllerBase{
     
     /**
      *
-     * @param \services\ExamDAOLoader $loader
+     * @param \services\DAO\ExamDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;
@@ -205,7 +204,7 @@ class ExamController extends ControllerBase{
 
     private function ExamEnd(){
         $this->jquery->exec('$("#btNext").css("display","none");',true);
-        $bt=$this->jquery->semantic()->htmlButton('result','See result');
+        $this->jquery->semantic()->htmlButton('result','See result');
         $this->jquery->ajaxOnClick('#result', Router::path('Correction.myExam', [
             USession::get('exam_id'),
             USession::get('activeUser')['id']
@@ -217,7 +216,7 @@ class ExamController extends ControllerBase{
      * @get('oversee/{id}','name'=>'examStart')
      */
     public function ExamOverseePage($id){
-        $exam=$this->loader->get($id);
+        $this->loader->get($id);
         $this->jquery->renderView('ExamController/oversee.html',);
     }
     private function postMultipleAnswerData(){

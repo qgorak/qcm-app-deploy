@@ -1,6 +1,6 @@
 <?php
 
-namespace services;
+namespace services\UI;
 
 use Ajax\php\ubiquity\JsUtils;
 use Ajax\semantic\html\collections\HtmlMessage;
@@ -11,7 +11,6 @@ use Ubiquity\orm\DAO;
 use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
-use models\Group;
 use models\Qcm;
 use models\Question;
 use models\Tag;
@@ -193,49 +192,7 @@ class UIService {
 	    		'attr' => 'data-ajax'
 	    ] );
 	}
-	
-	public function displayMyGroups($myGroups,$inGroups){
-		$dtMyGroups = $this->jquery->semantic ()->dataTable ( 'myGroups', Group::class, $myGroups );
-		$dtMyGroups->setFields ( [
-			'id',
-			'name',
-			'description',
-			'keyCode'
-		] );
-		$dtMyGroups->setCaptions([
-			'id',
-			TranslatorManager::trans('name',[],'main'),
-			TranslatorManager::trans('description',[],'main'),
-			TranslatorManager::trans('groupKey',[],'main')
-		]);
-		$dtMyGroups->setIdentifierFunction ( 'getId' );
-		$dtMyGroups->addAllButtons(false);
-		$this->jquery->getOnClick('._display', Router::path ('groupView',[""]),'#response',[
-			'hasLoader'=>'internal',
-			'attr'=>'data-ajax'
-		]);
-		$this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '#response', [
-			'hasLoader' => 'internal',
-			'attr' => 'data-ajax'
-		] );
-		$this->jquery->getOnClick ( '._edit', Router::path ('groupDemand',[""]), '#response', [
-			'hasLoader' => 'internal',
-			'attr' => 'data-ajax'
-		] );
-		$dtInGroups = $this->jquery->semantic ()->dataTable ( 'inGroups', Group::class, $inGroups );
-		$dtInGroups->setFields ( [
-			'id',
-			'name',
-			'description'
-		] );
-		$dtInGroups->setCaptions([
-			'id',
-			TranslatorManager::trans('name',[],'main'),
-			TranslatorManager::trans('description',[],'main')
-		]);
-		$dtInGroups->setIdentifierFunction ( 'getId' );
-	}
-	
+		
 	public function groupJoinDemand($users){
 		$usersDt=$this->jquery->semantic()->dataTable('usersDemand',User::class,$users);
 		$usersDt->setFields([

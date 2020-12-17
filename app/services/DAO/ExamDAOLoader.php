@@ -1,6 +1,6 @@
 <?php
 
-namespace services;
+namespace services\DAO;
 
 use Ubiquity\orm\DAO;
 use models\Exam;
