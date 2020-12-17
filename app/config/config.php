@@ -21,7 +21,7 @@ return array(
 	"test"=>false,
 	"debug"=>true,
 	"logger"=>function (){return new \Ubiquity\log\libraries\UMonolog(array (
-  'host' => '127.0.0.1',
+  'host' => 'qcm-app-ubiquity.herokuapp.com',
   'port' => 8090,
   'sessionName' => 's5fc15c2d88353',
 )['sessionName'],\Monolog\Logger::INFO);},
