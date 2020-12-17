@@ -11,7 +11,7 @@ use models\Answer;
 use models\Question;
 use models\Tag;
 use services\DAO\QuestionDAOLoader;
-use services\UI\UIService;
+use services\UI\QuestionUIService;
 
 /**
  * Controller QuestionController
@@ -40,9 +40,8 @@ class QuestionController extends ControllerBase {
     
     public function initialize(){
         parent::initialize();
-        $this->uiService = new UIService ( $this->jquery );
+        $this->uiService = new QuestionUIService( $this->jquery );
     }
-    
 
     /**
      * @route('/','name'=>'question')

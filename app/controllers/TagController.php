@@ -6,7 +6,6 @@ use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\Tag;
 use models\User;
-use services\UI\UIService;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
  /**
  * Controller TagController
@@ -21,7 +20,6 @@ class TagController extends ControllerBase{
     
     public function initialize() {
         parent::initialize ();
-        $this->uiService = new UIService ( $this->jquery );
     }
     
 	public function index(){

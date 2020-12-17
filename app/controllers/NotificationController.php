@@ -5,6 +5,7 @@ use Ubiquity\controllers\Router;
 use services\DAO\NotificationDAOLoader;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use Ubiquity\utils\http\USession;
+use Ubiquity\translation\TranslatorManager;
 
 /**
  * Controller NotificationController
@@ -65,10 +66,10 @@ class NotificationController extends ControllerBase{
         $groupDemand=$this->loader->getGroupNotification();
         $notifJson=[];
         foreach($exam as $value){
-            array_push($notifJson,['id'=>$value->getId(),'title'=>'Examen en cours','timer'=>strtotime($value->getDated())-strtotime(date("Y-m-d H:i:s"))]);
+            array_push($notifJson,['id'=>$value->getId(),'title'=>TranslatorManager::trans('examUnderway',[],'main'),'timer'=>strtotime($value->getDated())-strtotime(date("Y-m-d H:i:s"))]);
         }
         foreach($groupDemand as $value){
-            array_push($notifJson,['id'=>$value->getId(),'title'=>'Demande d\'accès au groupe','timer'=>null]);
+            array_push($notifJson,['id'=>$value->getId(),'title'=>TranslatorManager::trans('joiningDemand',[],'main'),'timer'=>null]);
         }
         return $notifJson;
     }

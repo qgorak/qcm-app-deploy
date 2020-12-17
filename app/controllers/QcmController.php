@@ -8,8 +8,8 @@ use Ubiquity\utils\http\USession;
 use models\Qcm;
 use services\DAO\QcmDAOLoader;
 use services\DAO\QuestionDAOLoader;
-use services\UI\UIService;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
+use services\UI\QcmUIService;
 
 /**
  * Controller QcmController
@@ -20,19 +20,18 @@ use Ubiquity\security\acl\controllers\AclControllerTrait;
 class QcmController extends ControllerBase{
     use AclControllerTrait;
     
-    private $uiService;
-    
-    public function initialize() {
-        parent::initialize ();
-        $this->uiService = new UIService ( $this->jquery );
-    }
-    
     /**
      *
      * @autowired
      * @var QcmDAOLoader
      */
     private $loader;
+    private $uiService;
+    
+    public function initialize() {
+        parent::initialize ();
+        $this->uiService = new QcmUIService( $this->jquery );
+    }
     
     /**
      *
@@ -148,7 +147,6 @@ class QcmController extends ControllerBase{
 	 */
 	public function filterQuestionBank() {
 	    $this->displayQuestionBankImport();
-
 	}
 	
 	/**

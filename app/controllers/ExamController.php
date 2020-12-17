@@ -1,12 +1,10 @@
 <?php
 namespace controllers;
 
-use Ajax\service\JArray;
 use Ubiquity\controllers\Router;
 use Ubiquity\controllers\Startup;
 use Ubiquity\orm\DAO;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
-use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use DateTime;
@@ -16,6 +14,7 @@ use models\Qcm;
 use services\DAO\ExamDAOLoader;
 use models\Useranswer;
 use services\datePickerTranslator;
+use services\UI\ExamUIService;
 
 /**
  * Controller ExamController
@@ -32,6 +31,12 @@ class ExamController extends ControllerBase{
      * @var ExamDAOLoader
      */
     private $loader;
+    private $uiService;
+    
+    public function initialize() {
+        parent::initialize ();
+        $this->uiService = new ExamUIService( $this->jquery );
+    }
     
     /**
      *
@@ -43,21 +48,7 @@ class ExamController extends ControllerBase{
     
     private function displayMyExam() {
         $exam=$this->loader->my();
-        $exams=$this->jquery->semantic()->dataTable('myExam',Exam::class,$exam);
-        $exams->setFields([
-        	'dated',
-        	'datef',
-        	'qcm',
-        	'group'
-        ]);
-        $exams->setCaptions([
-            TranslatorManager::trans('startDate',[],'main'),
-            TranslatorManager::trans('endDate',[],'main'),
-            TranslatorManager::trans('qcm',[],'main'),
-            TranslatorManager::trans('group',[],'main')
-        ]);
-        $exams->setValueFunction('qcm',function($v){return $v->getName();});
-        $exams->setValueFunction('group',function($v){return $v->getName();});
+        $this->uiService->displayMyExams($exam);
     }
     
     /**
@@ -84,20 +75,7 @@ class ExamController extends ControllerBase{
     public function add(){
         $qcm=$this->loader->allMyQCM();
         $groups=$this->loader->allMyGroup();
-        $exam=$this->jquery->semantic()->dataForm('exam',new Exam());
-        $exam->setFields([
-        	'idQcm',
-        	'idGroup'
-        ]);
-        $exam->setCaptions([
-            TranslatorManager::trans('qcm',[],'main'),
-            TranslatorManager::trans('group',[],'main')
-        ]);
-        $exam->fieldAsDropDown('idQcm',JArray::modelArray($qcm,'getId','getName'));
-        $exam->fieldAsDropDown('idGroup',JArray::modelArray($groups,'getId','getName'));
-        $this->jquery->postFormOnClick('#examSubmit',Router::path ('examAddSubmit'),'examAdd','#response',[
-        	'hasloader'=>'internal'
-        ]);
+        $this->uiService->examForm($qcm,$groups);
         $this->jquery->renderView('ExamController/add.html',['lang'=>USession::get('activeUser')['language']]);
     }
     

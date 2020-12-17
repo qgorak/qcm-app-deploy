@@ -1,12 +1,12 @@
 <?php
 namespace controllers;
 
-use Ubiquity\controllers\Router;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use services\DAO\UserDAOLoader;
+use services\UI\UserUIService;
 
 
 /**
@@ -24,6 +24,12 @@ class UserController extends ControllerBase{
      * @var UserDAOLoader
      */
     private $loader;
+    private $uiService;
+    
+    public function initialize(){
+        parent::initialize();
+        $this->uiService = new UserUIService( $this->jquery );
+    }
     
     /**
      *
@@ -36,22 +42,7 @@ class UserController extends ControllerBase{
     private function displayMyInfo($id){
         $user=$this->loader->get($id);
         $user->code_style='default';
-        $info=$this->jquery->semantic()->dataForm('myInfo',$user);
-        $info->setFields([
-            'language',
-        	'code_style',
-            'submitLang'
-        ]);
-        $info->setCaptions([
-            TranslatorManager::trans('language',[],'main'),
-        	TranslatorManager::trans('code_style',[],'main')
-        ]);
-        $info->setIdentifierFunction ( 'getId' );
-        $info->fieldAsDropDown('language',['en_EN'=>'English','fr_FR'=>'Français']);
-        $info->fieldAsDropDown('code_style',['dark'=>TranslatorManager::trans('dark',[],'main'),'default'=>TranslatorManager::trans('light',[],'main')]);
-        $info->fieldAsSubmit('submitLang',null, Router::path('langSubmit'),'#response',[
-            'value'=>TranslatorManager::trans('submitLang',[],'main')
-        ]);
+        $this->uiService->displayInfos();
     }
     
     /**

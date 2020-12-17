@@ -1,7 +1,7 @@
 <table id="notifications" class="ui celled striped table">
   <thead>
     <tr><th colspan="2">
-      Notifications
+      {{t('notifications',[],'main')}}
     </th>
   </tr></thead>
   <tbody>
@@ -12,10 +12,10 @@
       </td>
       <td id="timer-{{i.id}}"class="collapsing">
       {% if i.timer is not null %}
-        <span>{{i.timer}} restantes</span>
+        <span>{{i.timer}} {{t('left',[],'main')}}</span>
         <script>createTimer({{i.timer}},'#timer-{{i.id}}','{{path('exam.get',[i.id])}}')</script>
       {% else %}
-      	<a href="{{path('groupDemand',[i.id])}}">Voir la demande</a>
+      	<a href="{{path('groupDemand',[i.id])}}">{{t('seeDemand',[],'main')}}</a>
       {% endif %}
       </td>
     </tr>
