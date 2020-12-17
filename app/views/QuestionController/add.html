@@ -1,3 +1,4 @@
+<div id="response">
 <a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</a>
 <div id="tagMenu" class="ui menu">
   <a class="browse item">
@@ -20,7 +21,5 @@
 {{ q['questionForm'] | raw }}
 </div>
 <div id="response-form"></div>
-<script>
-includeCkEditor('{{identifier}}','{{lang}}');
-</script>
 {{ script_foot | raw }}
+</div>

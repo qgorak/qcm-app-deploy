@@ -54,30 +54,13 @@ class QuestionController extends ControllerBase {
         USession::set('answers',$answer_array);
         $this->uiService->questionBankToolbar();
         $this->uiService->modal();
-        $this->jquery->ajax('get', Router::path('question.my'),"#myquestions",[
-            'hasLoader'=>true
-        ]);
         $this->jquery->ajax('get', Router::path('tag.my'),"#myTags",[
             'hasLoader'=>true
         ]);
-        $this->jquery->ajaxOn('change','#input-Filter', Router::path('question.getBy.tags',['']),"#myquestions",[
-            'method' => 'post',
-            'params' =>'{"tags":$("#input-Filter").val()}',
-            'hasLoader'=>'internal'
-        ]);
-        $this->jquery->getHref('#add', '',[
-            'hasLoader'=>'internal',
-            'historize'=>false
-        ]);
-        $this->_index ($this->jquery->renderView('QuestionController/template/QuestionBank.html',['msg'=>$msg],true), [
-        ] );
+        $myquestions=$this->displayMyQuestions();
+        $this->jquery->renderView('QuestionController/index.html',['msg'=>$msg,'myquestions'=>$myquestions]);
     }
-    
-    private function _index($response='') {
-        $this->jquery->renderView ( 'QuestionController/index.html', [
-            'response' => $response
-        ] );
-    }
+
     
     private function getMultipleChoicesJquery(){
         $this->jquery->execOn('click','.button-add','var clone = $(".box:first").clone();
@@ -94,25 +77,19 @@ class QuestionController extends ControllerBase {
      */
     public function add() {
     	$types=$this->loader->getTypeq();
-        $this->jquery->getHref('#cancel', '',[
-            'hasLoader'=>'internal',
-            'historize'=>false
-        ]);
         $this->uiService->tagManagerJquery();
-
         $frm = $this->uiService->questionForm ('',$types);
         $frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit'), '#response', [
             'ajax' => [
                 'hasLoader' => 'internal',
-                'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}'
+                'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}',
+                'jsCallback'=>'window.history.pushState("", "", "/question/");'
             ]
         ] );
 
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
-        $this->jquery->renderView ( 'QuestionController/add.html', [
-            'identifier'=>'#questionForm-ckcontent',
-            'lang'=>$lang
-        ]) ;
+        $this->jquery->exec('includeCkEditor("#questionForm-ckcontent","'.$lang.'");',true);
+        $this->jquery->renderView ( 'QuestionController/add.html', []) ;
     }
 	
     
@@ -120,7 +97,9 @@ class QuestionController extends ControllerBase {
      * @get("delete/{id}",'name'=>'question.delete')
      */
     public function delete($id) {
-    	$this->loader->remove($id);
+        if($this->loader->get($id)->getIdUser()==USession::get('activeUser')['id']){
+            $this->loader->remove($id);
+        }
     }
     
     /**
@@ -242,7 +221,7 @@ class QuestionController extends ControllerBase {
      */
     public function displayMyQuestions() {
     	$this->uiService->getQuestionDataTable($this->loader->my());
-    	$this->jquery->renderView( 'QuestionController/template/myQuestions.html', [] );
+    	return $this->jquery->renderView( 'QuestionController/template/myQuestions.html', [] ,true);
     }
     
     /**

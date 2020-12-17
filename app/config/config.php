@@ -1,6 +1,6 @@
 <?php
 return array(
-	"siteUrl"=>"https://qcm-app-ubiquity.herokuapp.com/",
+	"siteUrl"=>"http://127.0.0.1/",
 	"database"=>array(
 			"type"=>"mysql",
 			"dbName"=>"qcm-app",
@@ -16,7 +16,7 @@ return array(
 	"namespaces"=>array(),
 	"templateEngine"=>"Ubiquity\\views\\engine\\Twig",
 	"templateEngineOptions"=>array(
-			"cache"=>true
+			"cache"=>false
 			),
 	"test"=>false,
 	"debug"=>false,
