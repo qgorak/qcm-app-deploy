@@ -120,7 +120,7 @@ class GroupController extends ControllerBase{
         $groupForm->fieldAsSubmit('submit',null,Router::path('GroupAddSubmit'),'#response',[
             'value'=>TranslatorManager::trans('addSubmit',[],'main')
         ]);
-        $this->displayMyGroups();
+
         if(URequest::isAjax()){
             $this->jquery->renderView('GroupController/add.html');
         }
