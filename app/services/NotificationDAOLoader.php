@@ -36,7 +36,7 @@ class NotificationDAOLoader{
     }
     
     public function notifications(){
-    	$userMyGroups=DAO::getAll(Group::class,"idUser=?",false,USession::get('activeUser')['id']);
+    	$userMyGroups=DAO::getAll(Group::class,"idUser=?",false,[USession::get('activeUser')['id']]);
     	$userGroups=DAO::getAll(Usergroup::class,"idUser=? AND status='1'",false,[USession::get('activeUser')['id']]);
     	foreach($userMyGroups as $group){
     		if(DAO::getOne(Usergroup::class,'idGroup=? AND status="0"',false,[$group->getId()])!=null){

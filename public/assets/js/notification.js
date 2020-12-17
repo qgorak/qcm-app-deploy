@@ -3,10 +3,8 @@ function GetData(path) {
         'url': path,
         'method': 'GET',
         'async': true
-    }).done(function (data) {
-		
+    }).done(function (data) {	
         if (data=="false") {
-			console.log(data);
             $("#notificationCircle").css("visibility", "hidden");
         } else {
             $("#notificationCircle").css("visibility", "visible");
