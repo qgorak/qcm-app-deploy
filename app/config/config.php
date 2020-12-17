@@ -8,7 +8,7 @@ return array(
 			"port"=>3306,
 			"user"=>"qcm-app",
 			"password"=>"lIwM8pFuUd7mA6Rv",
-			"options"=>array(PDO::ATTR_PERSISTENT=>true),
+			"options"=>array(PDO::ATTR_PERSISTENT=>true,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC),
 			"cache"=>false,
 			"wrapper"=>"Ubiquity\\db\\providers\\pdo\\PDOWrapper"
 			),
@@ -16,15 +16,10 @@ return array(
 	"namespaces"=>array(),
 	"templateEngine"=>"Ubiquity\\views\\engine\\Twig",
 	"templateEngineOptions"=>array(
-			"cache"=>false
+			"cache"=>true
 			),
 	"test"=>false,
-	"debug"=>true,
-	"logger"=>function (){return new \Ubiquity\log\libraries\UMonolog(array (
-  'host' => 'qcm-app-ubiquity.herokuapp.com',
-  'port' => 8090,
-  'sessionName' => 's5fc15c2d88353',
-)['sessionName'],\Monolog\Logger::INFO);},
+	"debug"=>false,
 	"di"=>array(
 			"@exec"=>array("jquery"=>function ($controller){
 						return \Ubiquity\core\Framework::diSemantic($controller);
@@ -39,8 +34,5 @@ return array(
 			"models"=>"models",
 			"controllers"=>"controllers",
 			"rest"=>""
-			),
-	"isRest"=>function (){
-			return \Ubiquity\utils\http\URequest::getUrlParts()[0]==="rest";
-		}
+			)
 	);
