@@ -97,7 +97,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     
     protected function _connect() {
         if(URequest::isPost()){
-            $user=DAO::getOne(User::class,"email = ?",true,[URequest::post('email')]);
+            $user=DAO::getOne(User::class,"email = ?",false,[URequest::post('email')]);
             if($user!==null){
                 if(URequest::post('password')==$user->getPassword()){
                     return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()];

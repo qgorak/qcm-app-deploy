@@ -4,7 +4,7 @@ class MyUploadAdapter {
         this.loader = loader;
 
         // URL where to send files.
-        this.url = 'http://127.0.0.1:8090/image/add';
+        this.url = '/image/add';
     }
 
     // Starts the upload process.
