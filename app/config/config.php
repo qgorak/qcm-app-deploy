@@ -8,7 +8,7 @@ return array(
 			"port"=>3306,
 			"user"=>"qcm-app",
 			"password"=>"lIwM8pFuUd7mA6Rv",
-			"options"=>array(),
+			"options"=>array(PDO::ATTR_PERSISTENT=>true),
 			"cache"=>false,
 			"wrapper"=>"Ubiquity\\db\\providers\\pdo\\PDOWrapper"
 			),
