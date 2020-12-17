@@ -121,8 +121,6 @@ class QuestionController extends ControllerBase {
      */
     public function delete($id) {
     	$this->loader->remove($id);
-    	$msg = $this->jquery->semantic()->htmlMessage('','success !');
-    	$this->index($msg);
     }
     
     /**

@@ -129,8 +129,9 @@ class QuestionUIService {
 	    $dt->setIdentifierFunction ( 'getId' );
 	    $dt->setColWidths([0=>9,1=>2,2=>1,3=>2]);
 	    $dt->setEdition ();
-	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), '#response', [
+	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), '', [
 	        'hasLoader' => 'internal',
+	        'jsCallback'=>'$(self).closest("tr").remove();',
 	        'attr' => 'data-ajax'
 	    ] );
 	    $this->jquery->ajaxOnClick ( '._display', Router::path('question.preview',['']) , '#response-modal', [
