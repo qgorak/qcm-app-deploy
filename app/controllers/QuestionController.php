@@ -56,9 +56,11 @@ class QuestionController extends ControllerBase {
         $toolbar=$this->uiService->questionBankToolbar();
         $modal=$this->uiService->modal();
         $this->jquery->ajax('get', Router::path('question.my'),"#myquestions",[
-            'hasLoader'=>false,
+            'async'=>false,
+            'hasLoader'=>false
         ]);
         $this->jquery->ajax('get', Router::path('tag.my'),"#myTags",[
+            'async'=>false,
             'hasLoader'=>false,
         ]);
         $this->jquery->ajaxOn('change','#input-Filter', Router::path('question.getBy.tags',['']),"#myquestions",[
