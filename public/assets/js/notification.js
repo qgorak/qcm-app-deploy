@@ -2,7 +2,6 @@ function GetData(path) {
     $.ajax({
         'url': path,
         'method': 'GET',
-        'timeout': 1000,
         'async': true
     }).done(function (data) {
 		
