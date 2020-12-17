@@ -32,8 +32,7 @@ class TagController extends ControllerBase{
 	 * @get("my","name"=>'tag.my')
 	 */
 	public function my(){
-	    $userid = USession::get('activeUser')['id'];
-	    $tags = DAO::getAll( Tag::class, 'idUser='.$userid,false);
+	    $tags = DAO::getAll( Tag::class, 'idUser=?',false,[USession::get('activeUser')['id']]);
 	    $this->jquery->renderView ( 'TagController/my.html', [
 	        'tags'=>$tags
 	    ]);

@@ -56,10 +56,10 @@ class QuestionController extends ControllerBase {
         $toolbar=$this->uiService->questionBankToolbar();
         $modal=$this->uiService->modal();
         $this->jquery->ajax('get', Router::path('question.my'),"#myquestions",[
-            'hasLoader'=>false
+            'hasLoader'=>true
         ]);
         $this->jquery->ajax('get', Router::path('tag.my'),"#myTags",[
-            'hasLoader'=>false
+            'hasLoader'=>true
         ]);
         $this->jquery->ajaxOn('change','#input-Filter', Router::path('question.getBy.tags',['']),"#myquestions",[
             'method' => 'post',
@@ -239,13 +239,14 @@ class QuestionController extends ControllerBase {
            $this->displayMyQuestions();
         }
     }
-    
+
     /**
      * @get("displayMyQuestions","name"=>"question.my")
      */
     public function displayMyQuestions() {
     	$dt=$this->uiService->getQuestionDataTable($this->loader->my());
-    	$this->_index($this->jquery->renderView( 'QuestionController/template/myQuestions.html', [] ,true));
+    	var_dump($this->loader->my());
+    	$this->jquery->renderView( 'QuestionController/template/myQuestions.html', [] ,true);
     }
     
     /**

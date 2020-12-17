@@ -174,23 +174,7 @@ class UIService {
 	    $dt->setCaptions([
 	        TranslatorManager::trans('caption',[],'main')
 	    ]);
-		$dt->setValueFunction('tags',function($tags){
-		    if($tags!=null){
-			$res=[];
-			foreach ($tags as $tag){
-				$label=new HtmlLabel($tag->getId(),$tag->getName());
-				$res[]=$label->setClass('ui '.$tag->getColor().' label');
-			}
-			return $res;
-		    }
-			});
-        $dt->setValueFunction('typeq', function ($typeq) {
-            if ($typeq != null) {
-                $label = new HtmlLabel('',$typeq->getCaption());
-                $label->setClass('ui circular label');
-                return $label;
-            }
-        });
+
 	    $dt->setIdentifierFunction ( 'getId' );
 	    $dt->setColWidths([0=>9,1=>2,2=>1,3=>2]);
 	    $dt->setEdition ();

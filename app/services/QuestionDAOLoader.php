@@ -41,8 +41,8 @@ class QuestionDAOLoader {
 	}
 	
 	public function my(): array{
-	    $userid = USession::get('activeUser')['id'];
-	    return DAO::getAll( Question::class, 'idUser='.$userid,true);
+        $myquestions = DAO::getAll( Question::class, 'idUser=?',false,[USession::get('activeUser')['id']]);
+	    return $myquestions;
 	}
 
 	public function clear(): void {
