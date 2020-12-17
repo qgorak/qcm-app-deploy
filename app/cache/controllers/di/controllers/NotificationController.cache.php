@@ -1,2 +1,2 @@
 <?php
-return array("loader"=>function(){return new services\NotificationDAOLoader();});
+return array("loader"=>function(){return new services\DAO\NotificationDAOLoader();});
