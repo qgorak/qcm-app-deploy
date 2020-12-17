@@ -5,7 +5,9 @@ namespace services\UI;
 use Ajax\php\ubiquity\JsUtils;
 use Ubiquity\controllers\Router;
 use Ubiquity\translation\TranslatorManager;
+use Ubiquity\utils\http\URequest;
 use models\Group;
+use models\User;
 use models\Usergroup;
 
 class GroupUIService {
@@ -99,5 +101,30 @@ class GroupUIService {
         	$('#joinModal').modal('show');
         });
             $('.ui.accordion').accordion();");
+	}
+	
+	public function groupJoinDemand($users){
+	    $usersDt=$this->jquery->semantic()->dataTable('usersDemand',User::class,$users);
+	    $usersDt->setFields([
+	        'firstname',
+	        'lastname',
+	        'email',
+	        'accept',
+	        'refuse'
+	    ]);
+	    $usersDt->setCaptions([
+	        TranslatorManager::trans('firstname',[],'main'),
+	        TranslatorManager::trans('lastname',[],'main'),
+	        TranslatorManager::trans('email',[],'main')
+	    ]);
+	    $usersDt->setIdentifierFunction ( 'getId' );
+	    $usersDt->insertDefaultButtonIn('accept','check','accept',false);
+	    $usersDt->insertDefaultButtonIn('refuse','remove','refuse',false);
+	    $this->jquery->ajaxOnClick('.accept',Router::path('groupDemandAccept',['true',URequest::getUrlParts()[2]]),'#response',[
+	        'attr'=>'data-ajax'
+	    ]);
+	    $this->jquery->ajaxOnClick('.refuse',Router::path('groupDemandAccept',['false',URequest::getUrlParts()[2]]),'#response',[
+	        'attr'=>'data-ajax'
+	    ]);
 	}
 }

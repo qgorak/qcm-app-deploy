@@ -2,14 +2,14 @@
 <div class="ui styled accordion">
   <div class="title">
     <i class="dropdown icon"></i>
-    Mes groupes
+    {{t('myGroups',[],'main')}}
   </div>
   <div class="content">
     {{q['myGroups'] | raw }}
   </div>
   <div class="title">
     <i class="dropdown icon"></i>
-    Les groupes auxquels j'appartiens
+    {{t('inGroups',[],'main')}}
   </div>
   <div class="content">
     {{q['inGroups'] | raw }}

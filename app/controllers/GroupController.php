@@ -10,7 +10,6 @@ use models\User;
 use Ubiquity\utils\http\USession;
 use models\Usergroup;
 use Ubiquity\translation\TranslatorManager;
-use services\UI\UIService;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use services\UI\GroupUIService;
 
@@ -29,7 +28,12 @@ class GroupController extends ControllerBase{
      * @var GroupDAOLoader
      */
     private $loader;
+    private $uiService;
     
+    public function initialize(){
+        parent::initialize();
+        $this->uiService = new GroupUIService( $this->jquery );
+    }
     /**
      *
      * @param \services\DAO\GroupDAOLoader $loader
@@ -41,8 +45,7 @@ class GroupController extends ControllerBase{
     private function displayMyGroups() {
         $myGroups = $this->loader->myGroups();
         $inGroups=$this->loader->inGroups();
-        $dt=new GroupUIService($this->jquery);
-        $dt->displayMyGroups($myGroups, $inGroups);
+        $this->uiService->displayMyGroups($myGroups, $inGroups);
     }
     
     /**
@@ -83,7 +86,7 @@ class GroupController extends ControllerBase{
         $group->setUser($user);
         $this->loader->add($group);
         $this->displayMyGroups();
-        $msg=$this->jquery->semantic()->htmlMessage('msg','Votre groupe a bien été créé',['success']);
+        $msg=$this->jquery->semantic()->htmlMessage('msg',TranslatorManager::trans('createGroupSucceed',[],'main'),['success']);
         $msg->setTimeout(3000);
         $this->jquery->renderView('GroupController/display.html');
     }
@@ -101,14 +104,14 @@ class GroupController extends ControllerBase{
                 $userGroup->setIdUser($user);
                 $userGroup->setStatus(0);
                 DAO::save($userGroup);
-                $msg=$this->jquery->semantic()->htmlMessage('msg','Votre groupe a bien été créé',['success']);
+                $msg=$this->jquery->semantic()->htmlMessage('msg',TranslatorManager::trans('joinSucceed',[],'main'),['success']);
             }
             else{
-                $msg=$this->jquery->semantic()->htmlMessage('msg','Vous n\'êtes pas autorisé à rejoindre ce groupe',['warning']);
+                $msg=$this->jquery->semantic()->htmlMessage('msg',TranslatorManager::trans('joinWarning',[],'main'),['warning']);
             }
         }
         else{
-            $msg=$this->jquery->semantic()->htmlMessage('msg','Le groupe n\'existe pas',['error']);
+            $msg=$this->jquery->semantic()->htmlMessage('msg',TranslatorManager::trans('joinFailed',[],'main'),['error']);
         }
         $msg->setTimeout(3000); 
         $this->displayMyGroups();
@@ -141,8 +144,7 @@ class GroupController extends ControllerBase{
     
     private function demand($id){
         $users=$this->loader->getJoiningDemand($id);
-		$dt=new UIService($this->jquery);
-		$dt->groupJoinDemand($users);
+		$this->uiService->groupJoinDemand($users);
     }
     
     /**
