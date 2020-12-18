@@ -5,6 +5,7 @@ use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\User;
 use services\UI\AuthUIService;
+use Ubiquity\contents\transformation\transformers\Crypt;
 
 /**
  * Auth Controller BaseAuthController
@@ -78,10 +79,10 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             if(DAO::getOne(User::class,"email = ?",true,[URequest::post("email")])===null){
                 $instance=new User();
                 URequest::setValuesToObject($instance);
-                $instance->setPassword(URequest::post('password'));
+                $instance->setPassword(Crypt::transform(URequest::post('password')));
                 DAO::insert($instance);
                 $this->uiService->loginErrorMessage('Success');
-                $this->jquery->renderView('BaseAuthController/register.html',[]);
+                $this->jquery->renderView('BaseAuthController/register.html',[]);          
             }
         }
     }
@@ -98,7 +99,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         if(URequest::isPost()){
             $user=DAO::getOne(User::class,"email = ?",false,[URequest::post('email')]);
             if($user!==null){
-                if(URequest::post('password')==$user->getPassword()){
+                if(URequest::post('password')==Crypt::reverse($user->getPassword())){
                     return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()];
                 }
                 else{

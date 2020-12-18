@@ -12,3 +12,4 @@ AclManager::start();
 AclManager::initFromProviders([
     new AclCacheProvider()
 ]);
+\Ubiquity\security\data\EncryptionManager::start($config);
