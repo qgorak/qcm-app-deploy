@@ -77,18 +77,17 @@ class QuestionController extends ControllerBase {
      */
     public function add() {
     	$types=$this->loader->getTypeq();
-        $this->uiService->tagManagerJquery();
-        $frm = $this->uiService->questionForm ('',$types);
-        $frm->fieldAsSubmit ( 'submit', 'green', Router::path('question.submit'), '#response', [
-            'ajax' => [
+
+        $frm = $this->uiService->questionForm (new Question(),$types);
+        $this->jquery->postFormOnClick( '#submit',  Router::path('question.submit'),'questionForm', '#response', [
                 'hasLoader' => 'internal',
                 'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}',
                 'jsCallback'=>'window.history.pushState("", "", "/question/");'
-            ]
         ] );
 
+        
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
-        $this->jquery->exec('includeCkEditor("#questionForm-ckcontent","'.$lang.'");',true);
+        $this->jquery->exec('includeCkEditor("#ckcontent","'.$lang.'");',true);
         $this->jquery->renderView ( 'QuestionController/add.html', []) ;
     }
 	
@@ -328,16 +327,14 @@ class QuestionController extends ControllerBase {
     }
     
     private function getTagPostData(){
-        $post = URequest::getDatas();
+        $post = URequest::getDatas()['tags'];
         $tagsObjects = array();
-        if (\array_key_exists ( 'tags', $post  )){
-            $tags = $post['tags'];
-            for ($i = 0; $i < \count($tags); $i++) {
+            $tagsId = explode(',',$post);
+            for ($i = 0; $i < count($tagsId); $i++) {
                 $tagToInsert = new Tag();
-                $tagToInsert->setId($tags[$i]['name']);
-                \array_push($tagsObjects,$tagToInsert);
+                $tagToInsert->setId($tagsId[$i]);
+                array_push($tagsObjects,$tagToInsert);
             }
-        }
         return $tagsObjects;
     }
 }

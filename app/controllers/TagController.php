@@ -3,6 +3,7 @@ namespace controllers;
 
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
+use Ubiquity\utils\http\UResponse;
 use Ubiquity\utils\http\USession;
 use models\Tag;
 use models\User;
@@ -40,17 +41,18 @@ class TagController extends ControllerBase{
 	 * @post("submit","name"=>'tag.submit')
 	 */
 	public function submit(){
-	    if(DAO::getOne(Tag::class,"idUser=? AND name=?",false,[USession::get('activeUser')['id'],URequest::post('nametag')])==null){
+	    if(DAO::getOne(Tag::class,"idUser=? AND name=?",false,[USession::get('activeUser')['id'],URequest::getPost()['tag']])==null && (URequest::getPost()['tag']!='')){
 	        $tag = new Tag();
 	        $creator= new User();
 	        $creator->setId(USession::get('activeUser')['id']);
-	        $tag->setName(URequest::getPost()['nametag']);
+	        $tag->setName(URequest::getPost()['tag']);
 	        $tag->setUser($creator);
 	        $colors = ['red','orange','yellow','olive','green','teal','blue','violet','purple','pink','brown','grey','black'];
 	        $color = $colors[array_rand($colors)];
 	        $tag->setColor($color);
 	        DAO::insert($tag);
+            echo json_encode($tag);
 	    }
-        $this->my();
+
 	}
 }

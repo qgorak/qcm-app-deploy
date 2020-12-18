@@ -2,7 +2,11 @@
 
 namespace services\UI;
 
+use Ajax\bootstrap\html\HtmlDropdown;
 use Ajax\php\ubiquity\JsUtils;
+use Ajax\semantic\html\collections\form\HtmlFormDropdown;
+use Ajax\semantic\html\collections\form\HtmlFormInput;
+use Ajax\semantic\html\elements\HtmlLabel;
 use Ajax\service\JArray;
 use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
@@ -32,80 +36,65 @@ class QuestionUIService {
 	    $toolbar->setClass('ui top attached menu');
 	    return $toolbar;
 	}
+
+    public function questionFormTags(){
+        $mytags = DAO::getAll( Tag::class, 'idUser='.USession::get('activeUser')['id'],false);
+        $dd= $this->jquery->semantic()->htmlDropdown('tags',"",array())->asSelect('tags',true);
+        $dd->addHeaderItem('Your tags','tags');
+            foreach ($mytags as $tag) {
+                $label = $this->jquery->semantic()->htmlLabel('', '');
+                $label->setClass('ui '.$tag->getColor().' empty circular label');
+                $dd->addItem($label . $tag->getName(), $tag->getId());
+            }
+        $dd->addItem('hiddentag')->setStyle('display:none;');
+        $dd->setDefaultText('Assign Tag');
+        $taginput=$this->jquery->semantic()->htmlInput('addTag','text','','Enter Tag');
+        $taginput->addIcon('tag');
+        $taginput->setClass('ui right labeled left icon input');
+        $taginput->addLabel('',false,'plus')->setClass('ui green icon button');
+        $this->jquery->postOnClick('#label-div-addTag', Router::path('tag.submit'), '{tag:$("#addTag").val()}','',[
+            'hasLoader'=>'internal',
+            'jsCallback'=>'$("input[name=addTag]").val(null);var tag = $.parseJSON(data);var mySelect = $("#tags .item:last");
+            mySelect.after(
+        $("<a></a>").addClass("item").attr("data-value",tag._rest.id).html("<div id=\'\' class=\'ui "+ tag._rest.color+ " empty circular label\'></div>"+ tag._rest.name)
+    );'
+        ]);
+        $dd->addHeaderItem()->setContent($taginput)->setClass('');
+        return $dd;
+    }
 	
 	public function modal(){
 	    $modal = $this->jquery->semantic()->htmlModal('modal');
 	    $modal ->addContent('<div id="response-modal"></div>');
 	}	
 	
-	public function questionForm($question='',array $types) {
-	    if($question==''){
-	        $q = new Question ();
-	    }else{
-	        $q =$question;
-	    }
-	    $frm = $this->jquery->semantic ()->dataForm ( 'questionForm', $q );
-	    $frm->setFields ( [
-	        'submit',
-	        'caption',
-	        'addbody',
-	        'ckcontent',
-	        'typeq',
-	    ] );
-	    $frm->setCaptions([
-	        'submit',
-	        'caption',
-	        'addbody',
-	        '',
-	        'Type'
-	    ]);
-	    $frm->fieldAsButton('addbody','ui green button',[
-	        'content'=>'Add body',
-	        'click'=>'$("#field-questionForm-ckcontent").show();$(this).hide();'
-	    ]);
-	    $frm->fieldAsInput ( 'caption', [
-	        'rules' => [
-	            'empty',
-	            'length[5]'
-	        ]
-	    ] )->setValue(1000);
-	    $frm->fieldAsDropDown ( 'typeq', $types,false,[
-	        'rules' => [
-	            'empty',
-	        ]
-	        
-	    ]);
-	    $q->typeq=$q->getIdTypeq();
-	    
+	public function questionForm($question,$types) {
+	    $frm = $this->jquery->semantic ()->htmlForm( 'questionForm');
+	    $frm->addErrorMessage();
+        $frm->addButton('submit','submit','green')->setFloated()->asSubmit();
+        $frm->addHeader('Create Question',3,true);
+        $dd = $this->questionFormTags();
+        $field=$frm->addField('tags')->setWidth(5);
+        $field->setContent($dd);
+        $fields=$frm->addFields();
+        $fields->addInput('caption','caption')->addRule("empty")->setWidth(15);
+        $fields->addDropdown('typeq',$types,'type','')->addRule("empty")->setWidth(2);
+        $frm->addInput('ckcontent','','text',$question->getCaption())->setStyle('display:none');
+        $frm->addButton('addbody','Add Body','','$("#field-ckcontent").show();$(this).hide();');
 	    $frm->setValidationParams ( [
 	        "on" => "blur",
 	        "inline" => true
 	    ] );
-	    
-	    $this->jquery->getOnClick ( '#dropdown-questionForm-typeq-0 .menu .item', 'question/getform', '#response-form', [
+	    $this->jquery->getOnClick ( '#dropdown-typeq .menu .item', 'question/getform', '#response-form', [
 	        'stopPropagation'=>false,
 	        'attr' => 'data-value',
 	        'hasLoader' => false,
-	        'jsCallback' =>'$("#input-dropdown-questionForm-typeq-0").attr("name","typeq");
-                                $("#input-dropdown-questionForm-typeq-0").val($(self).attr("data-value"))'
+	        'jsCallback' =>'$("#dropdown-typeq").attr("name","typeq");
+                                $("#dropdown-typeq").val($(self).attr("data-value"))'
 	    ] );
 	    return $frm;
 	}
-	
-	public function tagManagerJquery(){
-	    $this->jquery->ajax('get',Router::path('tag.my'),'#tagManager',[
-	        'hasLoader'=>'internal',
-	        'historize'=>false,
-	        'jsCallback'=>'$("#tagMenu").popup({
-   								 popup : $("#tagPopup"),
-    						     on : "click"
-							});;'
-	    ]);
-	    $this->jquery->postFormOnClick('#addTag', Router::path('tag.submit'), 'tagForm','#tagManager',[
-	        'hasLoader'=>'internal',
-	        'jsCallback'=>"$('#nametag').val('');"
-	    ]);
-	}
+
 	
 	public function getQuestionDataTable($questions){
 	    $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $questions );
@@ -125,10 +114,19 @@ class QuestionUIService {
 	    $dt->setCaptions([
 	        TranslatorManager::trans('caption',[],'main')
 	    ]);
-	    
 	    $dt->setIdentifierFunction ( 'getId' );
 	    $dt->setColWidths([0=>9,1=>2,2=>1,3=>2]);
 	    $dt->setEdition ();
+        $dt->setValueFunction('tags', function ($tags) {
+            if ($tags != null) {
+                $res = [];
+                foreach ($tags as $tag) {
+                    $label = new HtmlLabel($tag->getId(), $tag->getName());
+                    $res[] = $label->setClass('ui ' . $tag->getColor() . ' label');
+                }
+                return $res;
+            }
+        });
 	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), '', [
 	        'hasLoader' => 'internal',
 	        'jsCallback'=>'$(self).closest("tr").remove();',
