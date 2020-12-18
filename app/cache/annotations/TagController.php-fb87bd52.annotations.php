@@ -5,10 +5,10 @@ return array(
   '#uses' => array (
   'DAO' => 'Ubiquity\\orm\\DAO',
   'URequest' => 'Ubiquity\\utils\\http\\URequest',
+  'UResponse' => 'Ubiquity\\utils\\http\\UResponse',
   'USession' => 'Ubiquity\\utils\\http\\USession',
   'Tag' => 'models\\Tag',
   'User' => 'models\\User',
-  'UIService' => 'services\\UI\\UIService',
   'AclControllerTrait' => 'Ubiquity\\security\\acl\\controllers\\AclControllerTrait',
 ),
   '#traitMethodOverrides' => array (

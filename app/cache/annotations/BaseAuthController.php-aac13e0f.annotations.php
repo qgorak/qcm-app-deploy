@@ -8,6 +8,7 @@ return array(
   'USession' => 'Ubiquity\\utils\\http\\USession',
   'User' => 'models\\User',
   'AuthUIService' => 'services\\UI\\AuthUIService',
+  'Crypt' => 'Ubiquity\\contents\\transformation\\transformers\\Crypt',
 ),
   '#traitMethodOverrides' => array (
   'controllers\\BaseAuthController' => 

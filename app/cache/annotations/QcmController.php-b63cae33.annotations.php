@@ -10,8 +10,8 @@ return array(
   'Qcm' => 'models\\Qcm',
   'QcmDAOLoader' => 'services\\DAO\\QcmDAOLoader',
   'QuestionDAOLoader' => 'services\\DAO\\QuestionDAOLoader',
-  'UIService' => 'services\\UI\\UIService',
   'AclControllerTrait' => 'Ubiquity\\security\\acl\\controllers\\AclControllerTrait',
+  'QcmUIService' => 'services\\UI\\QcmUIService',
 ),
   '#traitMethodOverrides' => array (
   'controllers\\QcmController' => 

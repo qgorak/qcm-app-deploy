@@ -3,12 +3,10 @@
 return array(
   '#namespace' => 'controllers',
   '#uses' => array (
-  'JArray' => 'Ajax\\service\\JArray',
   'Router' => 'Ubiquity\\controllers\\Router',
   'Startup' => 'Ubiquity\\controllers\\Startup',
   'DAO' => 'Ubiquity\\orm\\DAO',
   'AclControllerTrait' => 'Ubiquity\\security\\acl\\controllers\\AclControllerTrait',
-  'TranslatorManager' => 'Ubiquity\\translation\\TranslatorManager',
   'URequest' => 'Ubiquity\\utils\\http\\URequest',
   'USession' => 'Ubiquity\\utils\\http\\USession',
   'DateTime' => 'DateTime',
@@ -18,6 +16,7 @@ return array(
   'ExamDAOLoader' => 'services\\DAO\\ExamDAOLoader',
   'Useranswer' => 'models\\Useranswer',
   'datePickerTranslator' => 'services\\datePickerTranslator',
+  'ExamUIService' => 'services\\UI\\ExamUIService',
 ),
   '#traitMethodOverrides' => array (
   'controllers\\ExamController' => 

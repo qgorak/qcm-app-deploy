@@ -12,7 +12,7 @@ return array(
   'Question' => 'models\\Question',
   'Tag' => 'models\\Tag',
   'QuestionDAOLoader' => 'services\\DAO\\QuestionDAOLoader',
-  'UIService' => 'services\\UI\\UIService',
+  'QuestionUIService' => 'services\\UI\\QuestionUIService',
 ),
   '#traitMethodOverrides' => array (
   'controllers\\QuestionController' => 

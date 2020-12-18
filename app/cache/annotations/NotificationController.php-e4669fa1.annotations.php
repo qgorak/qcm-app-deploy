@@ -7,6 +7,7 @@ return array(
   'NotificationDAOLoader' => 'services\\DAO\\NotificationDAOLoader',
   'AclControllerTrait' => 'Ubiquity\\security\\acl\\controllers\\AclControllerTrait',
   'USession' => 'Ubiquity\\utils\\http\\USession',
+  'TranslatorManager' => 'Ubiquity\\translation\\TranslatorManager',
 ),
   '#traitMethodOverrides' => array (
   'controllers\\NotificationController' => 
