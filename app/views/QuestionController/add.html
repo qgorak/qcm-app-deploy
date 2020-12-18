@@ -1,8 +1,12 @@
 <div id="response">
-<div class="ui segment" >
+<div class="ui text container segment">
 	<a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</a>
 {{ q['questionForm'] | raw }}
 </div>
+	<div id="questionBody"style="display:none;margin-bottom: 15px">
+	<div id="ckeditor">
+	</div>
+	</div>
 <div id="response-form"></div>
 {{ script_foot | raw }}
 </div>

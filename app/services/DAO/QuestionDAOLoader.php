@@ -66,5 +66,9 @@ class QuestionDAOLoader {
 	public function getTypeq(){
 		return [1=>'QCM',2=>'courte',3=>'longue',4=>'code'];
 	}
+
+    public function getIconTypeq(){
+        return [[1,'QCM','check square'],[2,'courte','bars'],[3,'longue','align left'],[4,'code','code']];
+    }
 }
 

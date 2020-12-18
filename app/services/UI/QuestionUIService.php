@@ -71,21 +71,27 @@ class QuestionUIService {
 	public function questionForm($question,$types) {
 	    $frm = $this->jquery->semantic ()->htmlForm( 'questionForm');
 	    $frm->addErrorMessage();
-        $frm->addButton('submit','submit','green')->setFloated()->asSubmit();
-        $frm->addHeader('Create Question',3,true);
-        $dd = $this->questionFormTags();
-        $field=$frm->addField('tags')->setWidth(5);
+        $frm->addDivider();
+        $dd = $this->questionFormTags()->setStyle('width:300px;');
+        $field=$frm->addField('tags');
         $field->setContent($dd);
+        $field->addContent($this->jquery->semantic()->htmlButton('submit','submit','green right floated '));
+        $frm->addDivider();
+        $ddType= $this->jquery->semantic()->htmlDropdown('typeq',"",array())->asSelect('typeq');
+        for ($i=0;$i<count($types);$i++){
+            $ddType->addItem($types[$i][1],$types[$i][0])->addIcon($types[$i][2]);
+        }
+        $ddType->setDefaultText('Select type');
         $fields=$frm->addFields();
-        $fields->addInput('caption','caption')->addRule("empty")->setWidth(15);
-        $fields->addDropdown('typeq',$types,'type','')->addRule("empty")->setWidth(2);
-        $frm->addInput('ckcontent','','text',$question->getCaption())->setStyle('display:none');
-        $frm->addButton('addbody','Add Body','','$("#field-ckcontent").show();$(this).hide();');
+        $fields->addInput('caption',null,'text','New question')->addRule("empty")->setWidth(12);
+        $fields->addItem($ddType);
+        $frm->addCheckbox('addbody','Add Body','','toggle');
+        $this->jquery->execOn('change','#addbody','$("#questionBody").toggle()');
 	    $frm->setValidationParams ( [
 	        "on" => "blur",
 	        "inline" => true
 	    ] );
-	    $this->jquery->getOnClick ( '#dropdown-typeq .menu .item', 'question/getform', '#response-form', [
+	    $this->jquery->getOnClick ( '#typeq .menu .item', 'question/getform', '#response-form', [
 	        'stopPropagation'=>false,
 	        'attr' => 'data-value',
 	        'hasLoader' => false,

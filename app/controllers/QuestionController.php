@@ -76,7 +76,7 @@ class QuestionController extends ControllerBase {
      * @get("add",'name'=>'question.add')
      */
     public function add() {
-    	$types=$this->loader->getTypeq();
+    	$types=$this->loader->getIconTypeq();
 
         $frm = $this->uiService->questionForm (new Question(),$types);
         $this->jquery->postFormOnClick( '#submit',  Router::path('question.submit'),'questionForm', '#response', [
@@ -87,7 +87,7 @@ class QuestionController extends ControllerBase {
 
         
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
-        $this->jquery->exec('includeCkEditor("#ckcontent","'.$lang.'");',true);
+        $this->jquery->exec('includeCkEditor("#ckeditor","'.$lang.'");',true);
         $this->jquery->renderView ( 'QuestionController/add.html', []) ;
     }
 	
