@@ -84,11 +84,11 @@ class GroupController extends ControllerBase{
         $group->setKeyCode(uniqid());
         $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
         $group->setUser($user);
-        $this->loader->add($group);
+        $newGroup=$this->loader->add($group);
         $this->displayMyGroups();
         $msg=$this->jquery->semantic()->htmlMessage('msg',TranslatorManager::trans('createGroupSucceed',[],'main'),['success']);
         $msg->setTimeout(3000);
-        $this->jquery->renderView('GroupController/display.html');
+        echo $newGroup;
     }
     
     /**
@@ -138,8 +138,6 @@ class GroupController extends ControllerBase{
      */
     public function groupDelete(string $id){
         $this->loader->remove ( $id );
-        $this->displayMyGroups();
-        $this->jquery->renderView('GroupController/display.html');
     }
     
     private function demand($id){

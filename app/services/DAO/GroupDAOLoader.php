@@ -14,11 +14,12 @@ class GroupDAOLoader {
 		return DAO::getById ( Group::class, $id );
 	}
 
-	public function add(Group $group): void {
+	public function add(Group $group) {
 	    $creator = new User();
 	    $creator->setId(USession::get('activeUser')['id']);
 	    $group->setUser($creator);
-		DAO::insert ( $group );
+		DAO::insert ( $group ); 
+		return json_encode($group);
 	}
 	
 	public function all(): array {

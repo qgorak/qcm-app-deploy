@@ -35,8 +35,19 @@ class GroupUIService {
 	    $groupForm->fieldAsTextarea('description',[
 	        'rules'=>'empty'
 	    ]);
-	    $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),'#response',[
-	        'value'=>TranslatorManager::trans('addSubmit',[],'main')
+	    $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),"window",[
+	        'value'=>TranslatorManager::trans('addSubmit',[],'main'),
+	        'ajax'=>['jsCallback'=>'$("#myGroups tbody").append("<tr id=\'myGroups-tr-"+JSON.parse(data)._rest.id+"\' class=\'_element\' data-ajax="+JSON.parse(data)._rest.id+">
+	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-0\' data-field=\'id\'>"+JSON.parse(data)._rest.id+"</td>
+	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-1\' data-field=\'name\'>"+JSON.parse(data)._rest.name+"</td>
+	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-2\' data-field=\'description\'>"+JSON.parse(data)._rest.description+"</td>
+	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-3\' data-field=\'keyCode\'>"+JSON.parse(data)._rest.keyCode+"</td>
+	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-4\' >
+		<button class=\'ui button icon _display basic\' data-ajax="+JSON.parse(data)._rest.id+"><i id=\'icon-\' class=\'icon eye\'></i></button>
+		<button class=\'ui button icon _edit basic\' data-ajax="+JSON.parse(data)._rest.id+"><i id=\'icon-\' class=\'icon edit\'></i></button>
+		<button class=\'ui button icon _delete red basic\' data-ajax="+JSON.parse(data)._rest.id+"><i id=\'icon-\' class=\'icon remove\'></i></button>
+	</td>
+</tr>")']
 	    ]);
 	    $groupForm->onSuccess("$('#addModal').modal('hide');");
 	    $joinForm=$this->jquery->semantic()->dataForm('joinForm',Usergroup::class);
@@ -73,10 +84,10 @@ class GroupUIService {
 			'hasLoader'=>'internal',
 			'attr'=>'data-ajax'
 		]);
-		$this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '#response', [
+		$this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '', [
 			'hasLoader' => 'internal',
 			'attr' => 'data-ajax',
-		    'jsCallback'=>'$(".ui.accordion").accordion("open",0);'
+		    'jsCallback'=>'$(".ui.accordion").accordion("open",0);$(self).closest("tr").remove()'
 		] );
 		$this->jquery->getOnClick ( '._edit', Router::path ('groupDemand',[""]), '#response', [
 			'hasLoader' => 'internal',
