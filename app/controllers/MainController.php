@@ -31,7 +31,7 @@ class MainController extends ControllerBase{
         elseif($lang=='fr_FR'){
             USession::set('language','fr_FR');
         }
-        header('location:/');
+        \header('location:/');
     }
 
 }

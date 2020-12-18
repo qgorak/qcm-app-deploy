@@ -50,7 +50,7 @@ class QuestionController extends ControllerBase {
         $answer_array= array();
         $answer = new Answer();
         $answer->setScore(0);
-        array_push($answer_array,$answer);
+        \array_push($answer_array,$answer);
         USession::set('answers',$answer_array);
         $this->uiService->questionBankToolbar();
         $this->uiService->modal();
@@ -201,13 +201,13 @@ class QuestionController extends ControllerBase {
      */
     public function getByTags() {
         $postTags = URequest::getInput('tags');
-        if(strlen($postTags['tags'])>0){
-           $tagIdArray = explode(',',URequest::getPost()['tags']);
+        if(\strlen($postTags['tags'])>0){
+           $tagIdArray = \explode(',',URequest::getPost()['tags']);
     	   $tagObjects = array();
     	   $tag = new Tag();
     	   foreach($tagIdArray as $tagId) {
     	       $tag->setId($tagId);
-    	       array_push($tagObjects,$tag);
+    	       \array_push($tagObjects,$tag);
     	   }
     	   $questions = $this->loader->getByTags($tagObjects);
     	   $this->uiService->getQuestionDataTable($questions);
@@ -282,15 +282,15 @@ class QuestionController extends ControllerBase {
     }
 
     private function getQcmAnswersData($post){
-        if(strlen($post['answers'])>0){
-            $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
+        if(\strlen($post['answers'])>0){
+            $strAnswersArray = \explode("&", \str_replace( '&amp;', '&', $post['answers']));
             $postAnswers = array();
             foreach($strAnswersArray as $item) {
-                $array = explode("=", $item);
-                array_push($postAnswers,$array);
+                $array = \explode("=", $item);
+                \array_push($postAnswers,$array);
             }
             $answerObjects = array();
-            for ($i = 0; $i < count($postAnswers); $i += 2) {
+            for ($i = 0; $i < \count($postAnswers); $i += 2) {
                 $answerToInsert = new Answer();
                 $answerToInsert->setCaption($postAnswers[$i][1]);
                 $answerToInsert->setScore($postAnswers[$i+1][1]);
@@ -301,27 +301,27 @@ class QuestionController extends ControllerBase {
     }
 
     private function getShortAnswersData($post){
-        if(strlen($post['answers'])>0){
-            $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
+        if(\strlen($post['answers'])>0){
+            $strAnswersArray = \explode("&", \str_replace( '&amp;', '&', $post['answers']));
             $postAnswers = array();
             foreach($strAnswersArray as $item) {
-                $array = explode("=", $item);
-                array_push($postAnswers,$array);
+                $array = \explode("=", $item);
+                \array_push($postAnswers,$array);
             }
             $answersPossibilities = array();
-            for ($i = 0; $i < count($postAnswers)-1; $i ++) {
+            for ($i = 0; $i < \count($postAnswers)-1; $i ++) {
                 $answersPossibilities[$i]=$postAnswers[$i+1][1];
             }
         }
         $answer = new Answer();
-        $answer->setCaption(json_encode($answersPossibilities));
+        $answer->setCaption(\json_encode($answersPossibilities));
         $answer->setScore($postAnswers[0][1]);
         return array($answer);
     }
 
     private function getLongAnswerData($post){
-        $strAnswersArray = explode("&", str_replace( '&amp;', '&', $post['answers']));
-        $array = explode("=", $strAnswersArray[0]);
+        $strAnswersArray = \explode("&", \str_replace( '&amp;', '&', $post['answers']));
+        $array = \explode("=", $strAnswersArray[0]);
         $answer=new Answer();
         $answer->setScore($array[1]);
         return array($answer);
@@ -330,12 +330,12 @@ class QuestionController extends ControllerBase {
     private function getTagPostData(){
         $post = URequest::getDatas();
         $tagsObjects = array();
-        if (array_key_exists ( 'tags', $post  )){
+        if (\array_key_exists ( 'tags', $post  )){
             $tags = $post['tags'];
-            for ($i = 0; $i < count($tags); $i++) {
+            for ($i = 0; $i < \count($tags); $i++) {
                 $tagToInsert = new Tag();
                 $tagToInsert->setId($tags[$i]['name']);
-                array_push($tagsObjects,$tagToInsert);
+                \array_push($tagsObjects,$tagToInsert);
             }
         }
         return $tagsObjects;

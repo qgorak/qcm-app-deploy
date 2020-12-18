@@ -19,7 +19,7 @@ class GroupDAOLoader {
 	    $creator->setId(USession::get('activeUser')['id']);
 	    $group->setUser($creator);
 		DAO::insert ( $group ); 
-		return json_encode($group);
+		return \json_encode($group);
 	}
 	
 	public function all(): array {
@@ -57,7 +57,7 @@ class GroupDAOLoader {
 	    $users=[];
 	    $userGroups=DAO::uGetAll(Usergroup::class,"idGroup=? AND status=0",false,[$id]);
 	    foreach($userGroups as $value){
-	        array_push($users,DAO::getById(User::class, $value->getIdUser(),false));
+	        \array_push($users,DAO::getById(User::class, $value->getIdUser(),false));
 	    }
 	    return $users;
 	}

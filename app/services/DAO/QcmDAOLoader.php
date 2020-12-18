@@ -29,7 +29,7 @@ class QcmDAOLoader {
 	
 	public function my(): array{
 	    $userid = USession::get('activeUser')['id'];
-	    return DAO::getAll( Qcm::class, 'idUser='.$userid);
+	    return DAO::getAll( Qcm::class, 'idUser=?',false,[$userid]);
 	}
 
 	public function clear(): void {

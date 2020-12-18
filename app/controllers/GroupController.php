@@ -81,7 +81,7 @@ class GroupController extends ControllerBase{
     public function addSubmit(){
         $group = new Group();
         URequest::setPostValuesToObject($group);
-        $group->setKeyCode(uniqid());
+        $group->setKeyCode(\uniqid());
         $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
         $group->setUser($user);
         $newGroup=$this->loader->add($group);

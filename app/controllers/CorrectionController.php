@@ -80,12 +80,12 @@ class CorrectionController extends ControllerBase{
      */
     public function correctAnswer(){
         $post =URequest::getPost();
-        $identifiers = explode(',',$post['identifiers']);
+        $identifiers = \explode(',',$post['identifiers']);
         $userAnswer = DAO::getOne(Useranswer::class,'idUser=? and idExam=? and idQuestion=?',false,[$identifiers[0],$identifiers[1],$identifiers[2]]);
-        $userAnswerValue = json_decode($userAnswer);
+        $userAnswerValue = \json_decode($userAnswer);
         $userAnswerValue->points=$post["score"];
         $userAnswerValue->comment=$post["comment"];
-        $userAnswer->setValue(json_encode($userAnswerValue));
+        $userAnswer->setValue(\json_encode($userAnswerValue));
         DAO::update($userAnswer);
 
     }
@@ -93,7 +93,7 @@ class CorrectionController extends ControllerBase{
     
     private function correctQcmAnswer($acc,$question,$userAnswer){
         $answers = $question->getAnswers();
-        $userAnswers = json_decode($userAnswer);
+        $userAnswers = \json_decode($userAnswer);
         $answersToDisplay=array();
         $score=0;
         $totalScore=0;
@@ -108,7 +108,7 @@ class CorrectionController extends ControllerBase{
                 }
             }
             $totalScore += $answer->getScore();
-            array_push($answersToDisplay,$answer); 
+            \array_push($answersToDisplay,$answer); 
         }
         $dt = $this->uiService->correctionAnswersDataTable($answersToDisplay);
         $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
@@ -119,7 +119,7 @@ class CorrectionController extends ControllerBase{
     private function correctShortAnswer($acc,$question,$userAnswer){
         $questionCreator = $question->getUser();
         $answer = $question->getAnswers()[0];
-        $userAnswerValue = json_decode($userAnswer);
+        $userAnswerValue = \json_decode($userAnswer);
         $score=0;
         $totalScore=0;
         $answer->value=$userAnswerValue->answer;
@@ -137,7 +137,7 @@ class CorrectionController extends ControllerBase{
     private function correctLongAnswer($acc,$question,$userAnswer){
         $questionCreator = $question->getUser();
         $answer = $question->getAnswers()[0];
-        $userAnswerValue = json_decode($userAnswer);
+        $userAnswerValue = \json_decode($userAnswer);
         $score=0;
         $totalScore=0;
         $answer->value = $userAnswerValue->answer;
@@ -151,8 +151,5 @@ class CorrectionController extends ControllerBase{
         $acc->addItem(array($question->getCaption().$label,$frm));
         return [$totalScore,$score];
     }
-
-    
- 
 }
 

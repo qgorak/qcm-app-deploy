@@ -85,8 +85,8 @@ class ExamController extends ControllerBase{
     public function addSubmit(){
         $lang=USession::get('activeUser')['language'];
         $exam=new Exam();
-        $dated=str_replace(',','',URequest::post('dated'));
-        $datef=str_replace(',','',URequest::post('datef'));
+        $dated=\str_replace(',','',URequest::post('dated'));
+        $datef=\str_replace(',','',URequest::post('datef'));
         if($lang=='fr_FR'){
             $translator = new datePickerTranslator();
             $dated=$translator->translate($dated);
@@ -94,8 +94,8 @@ class ExamController extends ControllerBase{
         }
         $dated = new DateTime($dated);
         $datef = new DateTime($datef);
-        $exam->setDated(date_format($dated,'Y-m-d H:i'));
-        $exam->setDatef(date_format($datef,'Y-m-d H:i'));
+        $exam->setDated(\date_format($dated,'Y-m-d H:i'));
+        $exam->setDatef(\date_format($datef,'Y-m-d H:i'));
         $exam->setQcm(DAO::getById(Qcm::class,URequest::post('idQcm'),false));
         $exam->setGroup(DAO::getById(Group::class,URequest::post('idGroup'),false));
         $exam->setOptions(URequest::post('options'));
@@ -165,8 +165,8 @@ class ExamController extends ControllerBase{
             $userAnswer->setQuestion($question);
             DAO::insert($userAnswer);
             unset($remainingQuestions[0]);
-            if (count($remainingQuestions) > 0) {
-                $remainingQuestions = array_values($remainingQuestions);
+            if (\count($remainingQuestions) > 0) {
+                $remainingQuestions = \array_values($remainingQuestions);
                 $question = $remainingQuestions[0];
                 USession::set('questions_exam', $remainingQuestions);
                 $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -199,7 +199,7 @@ class ExamController extends ControllerBase{
     }
     private function postMultipleAnswerData(){
         $userAnswer = new Useranswer();
-        $userAnswer->setValue(json_encode(URequest::getDatas()));
+        $userAnswer->setValue(\json_encode(URequest::getDatas()));
         $userAnswer->setIdUser(USession::get('activeUser')['id']);
         $userAnswer->setIdExam(USession::get('exam_id'));
         return $userAnswer;
@@ -211,7 +211,7 @@ class ExamController extends ControllerBase{
         $value['points'] = 0;
         $value['comment'] = '';
         $userAnswer = new Useranswer();
-        $userAnswer->setValue(json_encode($value));
+        $userAnswer->setValue(\json_encode($value));
         $userAnswer->setIdUser(USession::get('activeUser')['id']);
         $userAnswer->setIdExam(USession::get('exam_id'));
         return $userAnswer;

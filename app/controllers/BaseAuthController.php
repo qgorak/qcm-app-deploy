@@ -52,7 +52,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         $this->uiService->loginForm();
         $info=$this->_connect();
         $this->uiService->loginErrorMessage($info);
-        if(gettype($this->_connect())!=="string"){
+        if(\gettype($this->_connect())!=="string"){
             $this->onConnect($this->_connect());
             $this->jquery->clear_compile();
             echo 'logged';
@@ -66,7 +66,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      */
     public function terminate(){
         USession::terminate ();
-        header('location:/');
+        \header('location:/');
         exit();
     }
     
@@ -90,7 +90,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         $urlParts=$this->getOriginalURL();
         USession::set($this->_getUserSessionKey(), $connected);
         if(isset($urlParts)){
-            $this->_forward(implode("/",$urlParts));
+            $this->_forward(\implode("/",$urlParts));
         }
     }
     

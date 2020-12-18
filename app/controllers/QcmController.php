@@ -87,7 +87,7 @@ class QcmController extends ControllerBase{
 	    foreach ($myQuestions['notchecked'] as $key => $value) {
 	        if($value->getId()==$id){
 	            $question = $value;
-	            array_push($myQuestions['checked'],$question);
+	            \array_push($myQuestions['checked'],$question);
 	            unset($myQuestions['notchecked'][$key]);
 	            break;
 	        }    
@@ -133,7 +133,7 @@ class QcmController extends ControllerBase{
 	    foreach ($myQuestions['checked'] as $key => $value) {
 	        if($value->getId()==$id){
 	            $question = $value;
-	            array_push($myQuestions['notchecked'],$question);
+	            \array_push($myQuestions['notchecked'],$question);
 	            unset($myQuestions['checked'][$key]);
 	            break;
 	        }

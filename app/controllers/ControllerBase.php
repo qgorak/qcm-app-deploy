@@ -51,7 +51,7 @@ abstract class ControllerBase extends Controller{
 	}
 	
 	public function onInvalidControl() {
-	    header('location:/');
+	    \header('location:/');
 	}
 }
 

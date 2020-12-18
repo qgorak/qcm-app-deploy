@@ -61,15 +61,15 @@ class NotificationController extends ControllerBase{
     }
     
     private function getNotifications(){
-        date_default_timezone_set('Europe/Paris');
+        \date_default_timezone_set('Europe/Paris');
         $exam=$this->loader->getExamNotification();
         $groupDemand=$this->loader->getGroupNotification();
         $notifJson=[];
         foreach($exam as $value){
-            array_push($notifJson,['id'=>$value->getId(),'title'=>TranslatorManager::trans('examUnderway',[],'main'),'timer'=>strtotime($value->getDated())-strtotime(date("Y-m-d H:i:s"))]);
+            \array_push($notifJson,['id'=>$value->getId(),'title'=>TranslatorManager::trans('examUnderway',[],'main'),'timer'=>\strtotime($value->getDated())-\strtotime(\date("Y-m-d H:i:s"))]);
         }
         foreach($groupDemand as $value){
-            array_push($notifJson,['id'=>$value->getId(),'title'=>TranslatorManager::trans('joiningDemand',[],'main'),'timer'=>null]);
+            \array_push($notifJson,['id'=>$value->getId(),'title'=>TranslatorManager::trans('joiningDemand',[],'main'),'timer'=>null]);
         }
         return $notifJson;
     }
