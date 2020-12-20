@@ -71,11 +71,10 @@ class QuestionUIService {
 	public function questionForm($question,$types) {
 	    $frm = $this->jquery->semantic ()->htmlForm( 'questionForm');
 	    $frm->addErrorMessage();
-        $frm->addDivider();
         $dd = $this->questionFormTags()->setStyle('width:300px;');
         $field=$frm->addField('tags');
         $field->setContent($dd);
-        $field->addContent($this->jquery->semantic()->htmlButton('submit','submit','green right floated '));
+        $field->addContent($this->jquery->semantic()->htmlButton('submit','Submit','positive right floated '));
         $frm->addDivider();
         $ddType= $this->jquery->semantic()->htmlDropdown('typeq',"",array())->asSelect('typeq');
         for ($i=0;$i<count($types);$i++){

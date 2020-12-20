@@ -1,9 +1,12 @@
    {{ msg | raw}}
-<div class="ui container segment">
+
 <form id="frmAnswer" class="ui form" name="frmAnswer">
-<div class="ui divider"></div>
-   <div class="ui grid">
-  <div class="form-group box">
+  <div class="ui container grid" style="border-top:1px solid rgba(34,36,38,.15);margin-top: 0px;">
+  <div class="form-group box row">
+    <div class="three wide column">
+      <p></p>
+    </div>
+    <div class="ten wide column" >
     <i class="square outline icon"></i>
     <div class="ui input">
       <input type="text" name="caption[]" value="{{ answer.caption }}" placeholder="Entrez le titre de la réponse" >
@@ -12,10 +15,13 @@
       <input id="score" type="number" min="-100" max="100" step=".5" name="score[]"  value="0" >
     </div>
     <a   class="ui red button button-remove"  >Delete answer</a>
-    <div class="ui divider"></div>
+    </div>
+    <div class="three wide column">
+      <p></p>
+    </div>
   </div>
-   </div>
+  </div>
   <a class="ui green button button-add">Add answer</a>
 </form>
-</div>
+
 {{ script_foot | raw }}

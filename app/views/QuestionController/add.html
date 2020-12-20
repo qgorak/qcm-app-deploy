@@ -1,12 +1,31 @@
 <div id="response">
-<div class="ui text container segment">
-	<a id="cancel" href="{{path('question')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</a>
-{{ q['questionForm'] | raw }}
-</div>
-	<div id="questionBody"style="display:none;margin-bottom: 15px">
-	<div id="ckeditor">
-	</div>
-	</div>
+	<div class="ui segment container" style="padding: 0 0 0 0;">
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="three wide column">
+					<a id="cancel" href="{{path('question')}}" data-target="#response" class="ui button"><i class="left arrow icon"></i> {{t('cancel',[],'main')}}</a>
+				</div>
+				<div class="ten wide column">
+					{{ q['questionForm'] | raw }}
+				</div>
+				<div class="three wide column" style="padding:5px;">
+					<div class="ui info message" style="height:100%;">
+						<div class="header">
+							Need help ?
+						</div>
+						<ul class="list">
+							<li></li>
+							<li>Click here to show tutorial</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="questionBody"style="display:none">
+			<div id="ckeditor">
+			</div>
+		</div>
 <div id="response-form"></div>
 {{ script_foot | raw }}
+</div>
 </div>
