@@ -146,11 +146,11 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         if($user!=null){
             $mail = new MailManager();
             $mail->to(URequest::post('email'));
+            $newPassword=$this->randomPassword();
+            $user->setPassword(password_hash($newPassword,PASSWORD_DEFAULT));
+            $mail->setNewPassword($newPassword);
             if (MailerManager::send($mail)) {
-                $newPassword=$this->randomPassword();
-                $user->setPassword(password_hash($newPassword,PASSWORD_DEFAULT));
                 $this->loader->update($user);
-                $mail->body();
                 echo 'Your new password has been sent';
             } else {
                 echo 'Error sending the message';

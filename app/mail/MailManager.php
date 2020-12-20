@@ -8,7 +8,18 @@ use Ubiquity\mailer\MailerManager;
   */
 class MailManager extends \Ubiquity\mailer\AbstractMail {
 
-	/**
+    
+    private $newPassword;
+    
+    public function getNewPassword(){
+        return $this->newPassword;
+    }
+
+    public function setNewPassword($newPassword){
+        $this->newPassword = $newPassword;
+    }
+
+    /**
 	 *
 	 * {@inheritdoc}
 	 * @see \Ubiquity\mailer\AbstractMail::initialize()
@@ -24,6 +35,6 @@ class MailManager extends \Ubiquity\mailer\AbstractMail {
 	 * @see \Ubiquity\mailer\AbstractMail::body()
 	 */
 	public function body() {
-		return "Reset password";
+		return "Your new password is ".$this->getNewPassword();
 	}
 }
