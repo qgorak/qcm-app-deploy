@@ -14,7 +14,8 @@
     "twig/twig": "^3.0",
     "phpmv/ubiquity-acl": "dev-main",
     "phpmv/php-mv-ui": "^2.2",
-    "phpmv/ubiquity-security": "^0.0.1"
+    "phpmv/ubiquity-security": "^0.0.1",
+    "phpmv/ubiquity-mailer": "^0.0.6"
   },
   "license": "Apache-2.0",
   "authors": [

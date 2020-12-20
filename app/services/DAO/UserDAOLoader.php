@@ -29,6 +29,10 @@ class UserDAOLoader {
     public function update(User $user): bool {
         return DAO::update ( $user );
     }
+    
+    public function getByEmail($email){
+        return DAO::getOne(User::class,'email=?',false,[$email]);
+    }
    
 }
 

@@ -1,21 +1,39 @@
 <?php
 namespace controllers;
+use Ubiquity\controllers\Router;
+use Ubiquity\mailer\MailerManager;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\User;
 use services\UI\AuthUIService;
-use Ubiquity\contents\transformation\transformers\Crypt;
+use mail\MailManager;
+use services\DAO\UserDAOLoader;
 
 /**
  * Auth Controller BaseAuthController
  */
 class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     
+    /**
+     *
+     * @autowired
+     * @var UserDAOLoader
+     */
+    private $loader;
     private $uiService;
+    
+    /**
+     *
+     * @param \services\DAO\UserDAOLoader $loader
+     */
+    public function setLoader($loader) {
+        $this->loader = $loader;
+    }
     
     public function initialize(){
         $this->uiService = new AuthUIService ( $this->jquery );
+        MailerManager::start();
     }
     
     public function getSession()
@@ -34,7 +52,6 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     public function loginform(){
         $this->uiService->loginForm();
         $this->jquery->renderView('BaseAuthController/login.html',[]);
-
     }
     
     /**
@@ -112,6 +129,37 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         }
         return "Error !";
     }
+
+    /**
+     * @get("/resetForm",'name'=>'resetForm')
+     */
+    public function resetPasswordForm(){
+        $this->uiService->resetPasswordForm();
+        $this->jquery->renderView('BaseAuthController/reset.html',[]);
+    }
+    
+    /**
+     * @post('/resetPassword','name'=>'resetPassword')
+     */
+    public function resetPassword() {
+        $user=$this->loader->getByEmail(URequest::post('email'));
+        if($user!=null){
+            $mail = new MailManager();
+            $mail->to(URequest::post('email'));
+            if (MailerManager::send($mail)) {
+                $newPassword=$this->randomPassword();
+                $user->setPassword(password_hash($newPassword,PASSWORD_DEFAULT));
+                $this->loader->update($user);
+                $mail->body();
+                echo 'Your new password has been sent';
+            } else {
+                echo 'Error sending the message';
+            }
+        }
+        else{
+            echo 'This email doesn\t exist';
+        }
+    }
     
     /**
      * {@inheritDoc}
@@ -130,5 +178,16 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     }
     public function _displayInfoAsString(){
         return true;
+    }
+    
+    private function randomPassword() {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890*//^&;:!';
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 10; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass); //turn the array into a string
     }
 }

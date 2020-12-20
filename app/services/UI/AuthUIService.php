@@ -3,7 +3,6 @@
 namespace services\UI;
 
 use Ajax\php\ubiquity\JsUtils;
-use Ajax\semantic\html\modules\HtmlDropdown;
 use Ubiquity\controllers\Router;
 use models\User;
 
@@ -49,6 +48,19 @@ class AuthUIService {
 	        ]
 	    ] );
 	    return $frm;
+	}
+	
+	public function resetPasswordForm(){
+	    $form=$this->jquery->semantic()->dataForm('resetForm', new User());
+	    $form->setFields([
+	        'email',
+	        'submit'
+	    ]);
+	    $form->setCaptions([
+	        'Saisir votre email'
+	    ]);
+	    $form->fieldAsInput('email');
+	    $form->fieldAsSubmit('submit',null,Router::path('resetPassword'),'.header');
 	}
 	
 	public function registerForm(){
