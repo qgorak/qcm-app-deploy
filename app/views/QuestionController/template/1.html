@@ -6,22 +6,37 @@
     <div class="three wide column">
       <p></p>
     </div>
-    <div class="ten wide column" >
-    <i class="square outline icon"></i>
-    <div class="ui input">
-      <input type="text" name="caption[]" value="{{ answer.caption }}" placeholder="Entrez le titre de la réponse" >
+    <div class="ten wide column" style="border-bottom:1px solid rgba(34,36,38,.15);">
+      <div class="ui fitted checkbox">
+        <input type="checkbox">
+        <label></label>
+      </div>
+    <div class="ui transparent input">
+      <input style="width:200px;" type="text" name="caption[]" value="{{ answer.caption }}" placeholder="Entrez le titre de la réponse" >
     </div>
-    <div class="ui input" style="width:75px;">
+    <div class="ui transparent input" style="width:75px;">
       <input id="score" type="number" min="-100" max="100" step=".5" name="score[]"  value="0" >
     </div>
-    <a   class="ui red button button-remove"  >Delete answer</a>
+    <a   class="circular ui icon button button-remove"  style="float:right;" ><i class="x circle icon"></i></a>
     </div>
     <div class="three wide column">
       <p></p>
     </div>
   </div>
   </div>
-  <a class="ui green button button-add">Add answer</a>
+  <div class="ui container grid">
+    <div class="row" style="padding-top: 0;">
+      <div class="three wide column">
+        <p></p>
+      </div>
+      <div class="ten wide column">
+  <a class=" ui green icon button button-add" style="margin-bottom: 10px;"><i class="plus icon"></i>Add answer</a>
+      </div>
+      <div class="three wide column">
+        <p></p>
+      </div>
+    </div>
+  </div>
 </form>
 
 {{ script_foot | raw }}
