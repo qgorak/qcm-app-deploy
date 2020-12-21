@@ -53,9 +53,9 @@ class GroupDAOLoader {
 		return DAO::getOne(Group::class,"keyCode=?",true,[$key]);
 	}
 	
-	public function getJoiningDemand($id){
+	public function getJoiningDemand($groupId){
 	    $users=[];
-	    $userGroups=DAO::uGetAll(Usergroup::class,"idGroup=? AND status=0",false,[$id]);
+	    $userGroups=DAO::uGetAll(Usergroup::class,"idGroup=? AND status=0",false,[$groupId]);
 	    foreach($userGroups as $value){
 	        \array_push($users,DAO::getById(User::class, $value->getIdUser(),false));
 	    }
@@ -88,8 +88,7 @@ class GroupDAOLoader {
 	}
 	
 	public function isCreator($groupId,$userId){
-	    $group=DAO::getById(Group::class, $groupId);
-	    if($group->getUser()==$userId){
+	    if(DAO::getOne(Group::class,'id=? AND idUser=?',false,[$groupId,$userId])!=null){
 	        return true;
 	    }
 	    return false;

@@ -12,6 +12,7 @@ use models\Usergroup;
 use Ubiquity\translation\TranslatorManager;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use services\UI\GroupUIService;
+use Ubiquity\controllers\Startup;
 
 /**
  * Controller GroupController
@@ -56,6 +57,7 @@ class GroupController extends ControllerBase{
         $this->jquery->renderView('GroupController/index.html');
     }
     
+
     private function _viewGroup($id){
         $users=$this->loader->getUsers($id);
         $usersDt=$this->jquery->semantic()->dataTable('dtUsers',User::class,$users);
@@ -127,9 +129,6 @@ class GroupController extends ControllerBase{
         if(URequest::isAjax()){
             $this->jquery->renderView('GroupController/view.html');
         }
-        else{
-            $this->_index($this->jquery->renderView('GroupController/view.html',[],true));
-        }
     }
     
     /**
@@ -140,9 +139,9 @@ class GroupController extends ControllerBase{
         $this->loader->remove ( $id );
     }
     
-    private function demand($id){
-        $users=$this->loader->getJoiningDemand($id);
-		$this->uiService->groupJoinDemand($users);
+    private function demand($groupId){
+        $users=$this->loader->getJoiningDemand($groupId);
+        $this->uiService->groupJoinDemand($users,$groupId);
     }
     
     /**
@@ -150,29 +149,28 @@ class GroupController extends ControllerBase{
      * @param mixed $id
      */
     public function getUserDemand($id){
-        $this->demand($id);
         if(URequest::isAjax()){
-            $this->jquery->renderView('GroupController/demand.html');
+            if($this->loader->isCreator($id,USession::get('activeUser')['id'])){
+                $this->demand($id);
+                $this->jquery->renderView('GroupController/demand.html');
+            }
+            else{
+                //FORWARD TO 403 FORBIDDEN
+            }
         }
-        else{
-            $this->_index($this->jquery->renderView('GroupController/demand.html',[],true));
-        }
-    }
+   }
     
     /**
-     * @get('valid/{bool}/{groupId}/{userId}','name'=>'groupDemandAccept')
-     * @param mixed $userId
-     * @param mixed $groupId
-     * @param mixed $bool
+     * @post('valid','name'=>'groupDemandAccept')
      */
-    public function acceptDemand($bool,$groupId,$userId){
-        if($bool=="true"){
-            $this->loader->acceptDemand($groupId,$userId);
+    public function acceptDemand(){
+        if(URequest::post('valid')){
+            $this->loader->acceptDemand(URequest::post('group'),URequest::post('user'));
         }
-        elseif($bool=="false"){
-            $this->loader->refuseDemand($groupId,$userId);
+        else{
+            $this->loader->acceptDemand(URequest::post('group'),URequest::post('user'));
         }
-        $this->demand($groupId);
+        $this->demand(URequest::post('group'));
         $this->jquery->renderView('GroupController/demand.html');
     }
     

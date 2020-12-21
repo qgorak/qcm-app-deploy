@@ -1,43 +1,45 @@
 <div class="ui container">
-	<a  id="addGroup" class="ui green button">
-	{{t('addSubmit',[],'main')}}
-	</a>
-	<a id="joinGroup" class="ui green button">
-	{{t('joinSubmit',[],'main')}}
-	</a>
-	<a href="{{path('group')}}" class="ui primary button">{{t('seeGroups',[],'main')}}</a>
-	<div id="response">
-	<div class="ui styled accordion">
-	  <div class="title">
-	    <i class="dropdown icon"></i>
-	    {{t('myGroups',[],'main')}}
-	  </div>
-	  <div class="content">
-	    {{q['myGroups'] | raw }}
-	  </div>
-	  <div class="title">
-	    <i class="dropdown icon"></i>
-	    {{t('inGroups',[],'main')}}
-	  </div>
-	  <div class="content">
-	    {{q['inGroups'] | raw }}
-	  </div>
-	</div>
+	<div class="ui grid">
+		<div class="four wide column">
+			<ul>
+				<li><a  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</a></li>
+				<li><a id="joinGroup" class="ui green button">{{t('joinSubmit',[],'main')}}</a></li>
+				<li><a href="{{path('group')}}" class="ui primary button">{{t('seeGroups',[],'main')}}</a></li>
+			</ul>
+		</div>
+		<div id="response" class="twelve wide column">
+			<div class="ui styled accordion">
+				  <div class="title">
+					    <i class="dropdown icon"></i>
+					    {{t('myGroups',[],'main')}}
+				  </div>
+				  <div class="content">
+				    	{{q['myGroups'] | raw }}
+				  </div>
+				  <div class="title">
+				    <i class="dropdown icon"></i>
+				    	{{t('inGroups',[],'main')}}
+				  </div>
+				  <div class="content">
+				    	{{q['inGroups'] | raw }}
+				  </div>
+			</div>
+		</div>
 	</div>
 	<div id="addModal" class="ui fullscreen modal" style="padding:10px;">
-	<div class="header">{{t('addSubmit',[],'main')}}</div>
-	  <i class="close icon"></i>
-	  <div class="content">
-	  	{{ q['addForm'] | raw }}
-	  	{{ q['groupAddSubmit'] | raw }}
-	  </div>
+		<div class="header">{{t('addSubmit',[],'main')}}</div>
+		  	<i class="close icon"></i>
+		  	<div class="content">
+		  		{{ q['addForm'] | raw }}
+		  		{{ q['groupAddSubmit'] | raw }}
+		 	 </div>
 	</div>
 	<div id="joinModal" class="ui fullscreen modal" style="padding:10px;">
-	<div class="header">{{t('joinSubmit',[],'main')}}</div>
-	  <i class="close icon"></i>
-	  <div class="content">
-	  	{{ q['joinForm'] | raw }}
-	  </div>
+		<div class="header">{{t('joinSubmit',[],'main')}}</div>
+		  	<i class="close icon"></i>
+		  	<div class="content">
+		  		{{ q['joinForm'] | raw }}
+		  	</div>
 	</div>
 </div>
 {{script_foot | raw}}

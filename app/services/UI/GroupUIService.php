@@ -37,7 +37,7 @@ class GroupUIService {
 	    ]);
 	    $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),"window",[
 	        'value'=>TranslatorManager::trans('addSubmit',[],'main'),
-	        'ajax'=>['jsCallback'=>'$("#myGroups tbody").append("<tr id=\'myGroups-tr-"+JSON.parse(data)._rest.id+"\' class=\'_element\' data-ajax="+JSON.parse(data)._rest.id+">
+	        'ajax'=>['jsCallback'=>'if($("#myGroups tbody").children("tr:first").attr("id")=="htmltablecontent--0"){$("#myGroups tbody tr:first-child").remove();};$("#myGroups tbody").append("<tr id=\'myGroups-tr-"+JSON.parse(data)._rest.id+"\' class=\'_element\' data-ajax="+JSON.parse(data)._rest.id+">
 	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-0\' data-field=\'id\'>"+JSON.parse(data)._rest.id+"</td>
 	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-1\' data-field=\'name\'>"+JSON.parse(data)._rest.name+"</td>
 	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-2\' data-field=\'description\'>"+JSON.parse(data)._rest.description+"</td>
@@ -80,10 +80,6 @@ class GroupUIService {
 		]);
 		$dtMyGroups->setIdentifierFunction ( 'getId' );
 		$dtMyGroups->addAllButtons(false);
-		$this->jquery->getOnClick('._display', Router::path ('groupView',[""]),'#response',[
-			'hasLoader'=>'internal',
-			'attr'=>'data-ajax'
-		]);
 		$this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '', [
 			'hasLoader' => 'internal',
 			'attr' => 'data-ajax',
@@ -114,7 +110,7 @@ class GroupUIService {
             $('.ui.accordion').accordion();");
 	}
 	
-	public function groupJoinDemand($users){
+	public function groupJoinDemand($users,$groupId){
 	    $usersDt=$this->jquery->semantic()->dataTable('usersDemand',User::class,$users);
 	    $usersDt->setFields([
 	        'firstname',
@@ -131,11 +127,8 @@ class GroupUIService {
 	    $usersDt->setIdentifierFunction ( 'getId' );
 	    $usersDt->insertDefaultButtonIn('accept','check','accept',false);
 	    $usersDt->insertDefaultButtonIn('refuse','remove','refuse',false);
-	    $this->jquery->ajaxOnClick('.accept',Router::path('groupDemandAccept',['true',URequest::getUrlParts()[2]]),'#response',[
-	        'attr'=>'data-ajax'
-	    ]);
-	    $this->jquery->ajaxOnClick('.refuse',Router::path('groupDemandAccept',['false',URequest::getUrlParts()[2]]),'#response',[
-	        'attr'=>'data-ajax'
-	    ]);
+	    $usersDt->setProperty('group', $groupId);
+	    $this->jquery->postOnClick('.accept',Router::path('groupDemandAccept'),'{"valid":true,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
+	    $this->jquery->postOnClick('.refuse',Router::path('groupDemandAccept'),'{"valide":false,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
 	}
 }
