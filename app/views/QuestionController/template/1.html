@@ -1,20 +1,20 @@
    {{ msg | raw}}
 
 <form id="frmAnswer" class="ui form" name="frmAnswer">
-  <div class="ui container grid" style="border-top:1px solid rgba(34,36,38,.15);margin-top: 0px;">
+  <div class="ui container grid" style="margin-top: 0px;">
   <div class="form-group box row">
     <div class="three wide column">
       <p></p>
     </div>
     <div class="ten wide column" style="border-bottom:1px solid rgba(34,36,38,.15);">
-      <div class="ui fitted checkbox">
-        <input type="checkbox">
+      <div class="ui fitted checkbox" style="min-height: 14px;">
+        <input type="checkbox" disabled>
         <label></label>
       </div>
     <div class="ui transparent input">
       <input style="width:200px;" type="text" name="caption[]" value="{{ answer.caption }}" placeholder="Entrez le titre de la réponse" >
     </div>
-    <div class="ui transparent input" style="width:75px;">
+    <div class="ui input" style="width:75px;">
       <input id="score" type="number" min="-100" max="100" step=".5" name="score[]"  value="0" >
     </div>
     <a   class="circular ui icon button button-remove"  style="float:right;" ><i class="x circle icon"></i></a>

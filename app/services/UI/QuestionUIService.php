@@ -70,27 +70,26 @@ class QuestionUIService {
 	
 	public function questionForm($question,$types) {
 	    $frm = $this->jquery->semantic ()->htmlForm( 'questionForm');
-	    $frm->addErrorMessage();
         $dd = $this->questionFormTags()->setStyle('width:300px;');
         $field=$frm->addField('tags');
         $field->setContent($dd);
         $field->addContent($this->jquery->semantic()->htmlButton('submit','Submit','positive right floated '));
         $frm->addDivider();
         $ddType= $this->jquery->semantic()->htmlDropdown('typeq',"",array())->asSelect('typeq');
-        for ($i=0;$i<count($types);$i++){
-            $ddType->addItem($types[$i][1],$types[$i][0])->addIcon($types[$i][2]);
-        }
         $ddType->setDefaultText('Select type');
         $fields=$frm->addFields();
         $fields->addInput('caption',null,'text','New question')->addRule("empty")->setWidth(12);
-        $fields->addItem($ddType);
+        $dd = $fields->addDropdown('typeq',array(),'','')->asSelect()->addRule('empty')->setWidth(4);
+        for ($i=0;$i<count($types);$i++){
+            $dd->addItem($types[$i][1],$types[$i][0])->addIcon($types[$i][2]);
+        }
         $frm->addCheckbox('addbody','Add Body','','toggle');
         $this->jquery->execOn('change','#addbody','$("#questionBody").toggle()');
 	    $frm->setValidationParams ( [
 	        "on" => "blur",
 	        "inline" => true
 	    ] );
-	    $this->jquery->getOnClick ( '#typeq .menu .item', 'question/getform', '#response-form', [
+	    $this->jquery->getOnClick ( '#dropdown-typeq .menu .item', 'question/getform', '#response-form', [
 	        'stopPropagation'=>false,
 	        'attr' => 'data-value',
 	        'hasLoader' => false,
