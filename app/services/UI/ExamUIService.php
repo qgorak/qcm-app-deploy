@@ -4,9 +4,13 @@ namespace services\UI;
 
 use Ajax\php\ubiquity\JsUtils;
 use Ajax\service\JArray;
+use models\User;
 use Ubiquity\controllers\Router;
+use Ubiquity\orm\DAO;
 use Ubiquity\translation\TranslatorManager;
 use models\Exam;
+use models\Group;
+use models\Usergroup;
 use models\Question;
 
 class ExamUIService {
@@ -36,6 +40,23 @@ class ExamUIService {
 	    $exams->setValueFunction('qcm',function($v){return $v->getName();});
 	    $exams->setValueFunction('group',function($v){return $v->getName();});
 	}
+
+    public function OverseeUsersDataTable($exam){
+        $usersg=DAO::getOneToMany($exam->getGroup(),'usergroups');
+        $users=[];
+        foreach($usersg as $userg){
+            array_push($users,$userg->getUser());
+        }
+        $dt=$this->jquery->semantic()->dataTable('OverseeUserDt',User::class,$users);
+        $dt->setFields([
+            'firstname',
+            'lastname',
+        ]);
+        $dt->setTargetSelector("#oversee-user");
+        $dt->getOnRow("click","sTest/show","#oversee-user",["attr"=>"data-ajax","preventDefault"=>false,"stopPropagation"=>false]);
+        $dt->setActiveRowSelector("active");
+        return $dt;
+    }
 
     public function displayMyExamsInProgress($exams){
 	    foreach($exams as $exam){
@@ -104,4 +125,5 @@ class ExamUIService {
 	        'hasloader'=>'internal'
 	    ]);
 	}
+
 }

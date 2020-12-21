@@ -137,7 +137,7 @@
 function createTimer(second,identifier,link){
 	var timer = new Timer({
 	  tick    : 1,
-	  ontick  : function(ms) { $(identifier).html(Math.round(ms / 1000) + " restantes"); },
+	  ontick  : function(ms) { $(identifier).html(new Date(Math.round(ms / 1000) * 1000).toISOString().substr(11, 8) + " restant");  },
 	  onend   : function() { $(identifier).html("<a href="+link+">Accéder à l'exam</a>"); }
 	});
 //start timer for 10 seconds

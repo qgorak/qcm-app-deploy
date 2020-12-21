@@ -1,4 +1,12 @@
-Oversee
+
+
+        <div class="ui visible sidebar" style="top:100px">
+{{q['OverseeUserDt'] | raw }}
+        </div>
+<div class="ui container">
+    Oversee
+</div>
+
 <script>
     var ws = new WebSocket("ws:/127.0.0.1:2346");
     ws.onopen = function() {

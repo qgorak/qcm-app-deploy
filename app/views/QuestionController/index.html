@@ -3,10 +3,10 @@
 <div class="ui grid stackable">
  <div class="row">
    <div class="right aligned twelve wide column">
-   	<div id="add" href="{{path('question.add')}}" data-target="#response" class="ui green button">
+   	<div id="add" href="{{path('question.add')}}" style="margin-top:15px;" data-target="#response" class="ui green button">
 	{{t('newItem',[],'main')}}
 	</div>
-      <div class="ui segment container">
+      <div class="ui container" style="padding:10px;">
    <div id="bank">
    
 	{{q['QuestionBank'] | raw }}

@@ -201,7 +201,8 @@ class ExamController extends ControllerBase{
      * @get('oversee/{id}','name'=>'exam.oversee')
      */
     public function ExamOverseePage($id){
-        $this->loader->get($id);
+        $exam = $this->loader->get($id);
+        $this->uiService->OverseeUsersDataTable($exam);
         $this->jquery->renderView('ExamController/oversee.html',);
     }
     private function postMultipleAnswerData(){
