@@ -1,23 +1,78 @@
 <div id="response">
-    <div class="main ui segment container">
-    <div class="ui horizontal statistics">
-    <div class="statistic">
-        <div class="value">
-            {{ nbQuestion | raw }}
+    <div class="main ui container">
+    <h2 class="ui header">
+        <i class="settings icon"></i>
+        <div class="content">
+            Account Settings
+            <div class="sub header">Manage your preferences</div>
         </div>
-        <div class="label">
-            Questions
+    </h2>
+    <div >
+        <div class="ui stackable two column grid">
+            <div class="column">
+                <div class="ui equal width center aligned padded grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui segment statistic">
+                                <div class="value">
+                                    {{ nbQuestion | raw }}
+                                </div>
+                                <div class="label">
+                                    Question
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="ui segment statistic">
+                                <div class="value">
+                                    {{ nbQcm | raw }}
+                                </div>
+                                <div class="label">
+                                    Qcm
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui segment statistic">
+                                <div class="value">
+                                    {{ nbGroup | raw }}
+                                </div>
+                                <div class="label">
+                                    Groups
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="ui segment statistic">
+                                <div class="value">
+                                    {{ nbExam | raw }}
+                                </div>
+                                <div class="label">
+                                    Exams
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="column">
+                        <div class="ui segment statistic">
+                            <div class="value">
+                                {{ nbUsers | raw }}<i class="users icon"></i>
+                            </div>
+                            <div class="label">
+                                Users in your Groups
+                            </div>
+
+                        </div>
+                    </div>
+                    </div>
+                </div>
+       </div>
+            <div class="column">qsd</div>
         </div>
     </div>
-    <div class="statistic">
-        <div class="value">
-            {{ nbQuestion | raw }}
-        </div>
-        <div class="label">
-            Groupes
-        </div>
-    </div>
-</div>
     </div>
 {{ script_foot | raw }}
 </div>
