@@ -41,6 +41,15 @@ class QuestionController extends ControllerBase {
     public function initialize(){
         parent::initialize();
         $this->uiService = new QuestionUIService( $this->jquery );
+        if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/trainerNavbar.html');
+            $this->jquery->getHref ( 'a', '#response', [
+                'hasLoader' => 'internal'
+            ] );
+        }
+        $this->jquery->attr('#trainermode','class','item active',true);
+
+
     }
 
     /**
@@ -57,6 +66,10 @@ class QuestionController extends ControllerBase {
         $this->jquery->ajax('get', Router::path('tag.my'),"#myTags",[
             'hasLoader'=>true
         ]);
+        $this->jquery->getHref ( '#add', '#response', [
+            'hasLoader' => 'internal',
+            'historize'=>false
+        ] );
         $myquestions=$this->displayMyQuestions();
         $this->jquery->renderView('QuestionController/index.html',['msg'=>$msg,'myquestions'=>$myquestions]);
     }
@@ -76,8 +89,10 @@ class QuestionController extends ControllerBase {
      * @get("add",'name'=>'question.add')
      */
     public function add() {
+        $this->jquery->getHref ( '#cancel', '#response', [
+            'hasLoader' => 'internal'
+        ] );
     	$types=$this->loader->getIconTypeq();
-
         $frm = $this->uiService->questionForm (new Question(),$types);
         $this->jquery->postFormOnClick( '#submit',  Router::path('question.submit'),'questionForm', '#response', [
                 'hasLoader' => 'internal',

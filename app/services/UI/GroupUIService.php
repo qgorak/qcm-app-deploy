@@ -89,6 +89,10 @@ class GroupUIService {
 			'hasLoader' => 'internal',
 			'attr' => 'data-ajax'
 		] );
+        $this->jquery->getOnClick('._display', Router::path ('groupView',[""]),'#response',[
+            'hasLoader'=>'internal',
+            'attr'=>'data-ajax'
+        ]);
 		$dtInGroups = $this->jquery->semantic ()->dataTable ( 'inGroups', Group::class, $inGroups );
 		$dtInGroups->setFields ( [
 			'id',

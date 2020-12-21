@@ -36,6 +36,13 @@ class ExamController extends ControllerBase{
     public function initialize() {
         parent::initialize ();
         $this->uiService = new ExamUIService( $this->jquery );
+        $this->jquery->attr('#trainermode','class','item active',true);
+        if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/trainerNavbar.html');
+            $this->jquery->getHref ( '.trainermenu', '#response', [
+                'hasLoader' => 'internal'
+            ] );
+        }
     }
     
     /**

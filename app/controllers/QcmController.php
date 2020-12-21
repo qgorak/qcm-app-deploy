@@ -31,6 +31,13 @@ class QcmController extends ControllerBase{
     public function initialize() {
         parent::initialize ();
         $this->uiService = new QcmUIService( $this->jquery );
+        if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/trainerNavbar.html');
+            $this->jquery->getHref ( '.trainermenu', '#response', [
+                'hasLoader' => 'internal'
+            ] );
+        }
+        $this->jquery->attr('#trainermode','class','item active',true);
     }
     
     /**

@@ -1,8 +1,7 @@
+<div id="response">
 <div class="ui container">
-	<a  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</a>
-	<a id="joinGroup" class="ui green button">{{t('joinSubmit',[],'main')}}</a>
-	<a href="{{path('group')}}" class="ui primary button">{{t('seeGroups',[],'main')}}</a>
-	<div id="response">
+	<div  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</div>
+	<div id="joinGroup" class="ui green button">{{t('joinSubmit',[],'main')}}</div>
 		<div class="ui styled accordion">
 			  <div class="title">
 				    <i class="dropdown icon"></i>
@@ -35,5 +34,6 @@
 	  	<div class="content">
 	  		{{ q['joinForm'] | raw }}
 	  	</div>
-</div>
+
 {{script_foot | raw}}
+</div>

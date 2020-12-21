@@ -34,6 +34,13 @@ class GroupController extends ControllerBase{
     public function initialize(){
         parent::initialize();
         $this->uiService = new GroupUIService( $this->jquery );
+        if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/trainerNavbar.html');
+            $this->jquery->getHref ( 'a', '#response', [
+                'hasLoader' => 'internal'
+            ] );
+        }
+        $this->jquery->attr('#trainermode','class','item active',true);
     }
     /**
      *
@@ -127,6 +134,9 @@ class GroupController extends ControllerBase{
     public function viewGroup($id){
         $this->_viewGroup($id);
         if(URequest::isAjax()){
+            $this->jquery->getHref ( '#cancel', '#response', [
+                'hasLoader' => 'internal'
+            ] );
             $this->jquery->renderView('GroupController/view.html');
         }
     }
@@ -152,6 +162,9 @@ class GroupController extends ControllerBase{
         if(URequest::isAjax()){
             if($this->loader->isCreator($id,USession::get('activeUser')['id'])){
                 $this->demand($id);
+                $this->jquery->getHref ( '#cancel', '#response', [
+                    'hasLoader' => 'internal'
+                ] );
                 $this->jquery->renderView('GroupController/demand.html');
             }
             else{
