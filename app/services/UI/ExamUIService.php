@@ -92,21 +92,28 @@ class ExamUIService {
     }
 
     public function displayMyComingExams($exams){
+        foreach($exams as $exam){
+            $exam->timer['time']=\strtotime($exam->getDatef())-\strtotime(\date("Y-m-d H:i:s"));
+            $exam->timer['id']=$exam->getId();
+        }
         $dt=$this->jquery->semantic()->dataTable('myComingExams',Exam::class,$exams);
         $dt->setFields([
             'qcm',
             'group',
             'dated',
             'datef',
+            'timer'
         ]);
         $dt->setCaptions([
             TranslatorManager::trans('qcm',[],'main'),
             TranslatorManager::trans('group',[],'main'),
             TranslatorManager::trans('startDate',[],'main'),
-            TranslatorManager::trans('endDate',[],'main')
+            TranslatorManager::trans('endDate',[],'main'),
+            'time before up'
         ]);
         $dt->setValueFunction('qcm',function($v){return $v->getName();});
         $dt->setValueFunction('group',function($v){return $v->getName();});
+        $dt->setValueFunction('timer',function($v){ return '<div id="timer-'.$v['id'].'"></div><script>createTimer('.$v['time'].',"#timer-'.$v['id'].'","'.Router::path('exam.get',[$v['id']]).'")</script>';});
     }
 	
 	public function examForm($qcm,$groups){
