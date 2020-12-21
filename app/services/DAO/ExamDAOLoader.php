@@ -48,5 +48,8 @@ class ExamDAOLoader {
 	public function allMyGroup(){
 	    return DAO::getAll(Group::class,"idUser=?",false,[USession::get('activeUser')['id']]);
 	}
+    public function allMyExamInProgress(){
+        return DAO::uGetAll(Exam::class,"qcm.idUser=? AND datef>now()",true,[USession::get('activeUser')['id']]);
+    }
 }
 

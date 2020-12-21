@@ -6,7 +6,8 @@ use models\Group;
 use models\Qcm;
 use models\Question;
 use models\Usergroup;
-use services\DAO\NotificationDAOLoader;
+use services\DAO\ExamDAOLoader;
+use services\UI\ExamUIService;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\UResponse;
@@ -27,13 +28,13 @@ class DashboardController extends ControllerBase{
     /**
      *
      * @autowired
-     * @var NotificationDAOLoader
+     * @var ExamDAOLoader
      */
     private $loader;
 
     /**
      *
-     * @param \services\DAO\NotificationDAOLoader $loader
+     * @param \services\DAO\ExamDAOLoader $loader
      */
     public function setLoader($loader) {
         $this->loader = $loader;
@@ -41,6 +42,7 @@ class DashboardController extends ControllerBase{
 
     public function initialize() {
         parent::initialize ();
+        $this->uiService = new ExamUIService( $this->jquery );
         if (! URequest::isAjax ()) {
             $this->loadView('/main/UI/trainerNavbar.html');
             $this->jquery->getHref ( '.trainermenu', '#response', [
@@ -59,6 +61,8 @@ class DashboardController extends ControllerBase{
         $countQcm=DAO::count(Qcm::class,'idUser=?',[USession::get('activeUser')['id']]);
         $countExam=DAO::uCount(Exam::class,'qcm.idUser = ?',[USession::get('activeUser')['id']]);
         $countUserInMyGroups=DAO::uCount(Usergroup::class,'group.idUser = ? and status=1',[USession::get('activeUser')['id']]);
+        $examInProgress =$this->loader->allMyExamInProgress();
+        $dt = $this->uiService->displayMyExams($examInProgress);
         $this->jquery->renderView("DashboardController/index.html",[
             'nbQuestion'=>$countQuestion,
             'nbGroup'=>$countGroup,
