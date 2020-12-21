@@ -198,7 +198,7 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     * @get('oversee/{id}','name'=>'examStart')
+     * @get('oversee/{id}','name'=>'exam.oversee')
      */
     public function ExamOverseePage($id){
         $this->loader->get($id);

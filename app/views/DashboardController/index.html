@@ -71,12 +71,20 @@
        </div>
             <div class="column">
                 <h2 class="ui header">
-                <i class="chart bar icon"></i>
+                <i id="ExamIcon" class="circle small red icon"></i>
                 <div class="content">
                     Exam in progress
                 </div>
             </h2>
-                {{q['myExam'] | raw }}</div>
+                {{q['myExam'] | raw }}
+                <h2 class="ui header">
+                    <i class="chart bar icon"></i>
+                    <div class="content">
+                        Upcoming Exam
+                    </div>
+                </h2>
+                {{q['myComingExams'] | raw }}
+            </div>
         </div>
     </div>
     </div>

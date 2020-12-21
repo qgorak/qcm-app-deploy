@@ -36,6 +36,57 @@ class ExamUIService {
 	    $exams->setValueFunction('qcm',function($v){return $v->getName();});
 	    $exams->setValueFunction('group',function($v){return $v->getName();});
 	}
+
+    public function displayMyExamsInProgress($exams){
+	    foreach($exams as $exam){
+	        $exam->timer['time']=\strtotime($exam->getDatef())-\strtotime(\date("Y-m-d H:i:s"));
+            $exam->timer['id']=$exam->getId();
+        }
+        $dt=$this->jquery->semantic()->dataTable('myExam',Exam::class,$exams);
+        $dt->setFields([
+            'qcm',
+            'group',
+            'datef',
+            'timer'
+        ]);
+        $dt->setCaptions([
+            TranslatorManager::trans('qcm',[],'main'),
+            TranslatorManager::trans('group',[],'main'),
+            TranslatorManager::trans('endDate',[],'main'),
+            'remaining time'
+        ]);
+        $dt->insertDisplayButtonIn(4,false);
+        $dt->setIdentifierFunction ( 'getId' );
+        $dt->setValueFunction('qcm',function($v){return $v->getName();});
+        $dt->setValueFunction('group',function($v){return $v->getName();});
+        $dt->setValueFunction('timer',function($v){ return '<div id="timer-'.$v['id'].'"></div><script>createTimer('.$v['time'].',"#timer-'.$v['id'].'","'.Router::path('exam.get',[$v['id']]).'")</script>';});
+        $this->jquery->ajaxOnClick ( '._display', Router::path('exam.oversee',['']) , '#response', [
+            'hasLoader' => 'internal',
+            'historize' => 'true',
+            'method' => 'get',
+            'attr' => 'data-ajax',
+        ] );
+        $this->jquery->exec('$("#ExamIcon").transition("set looping").transition("fade", "2000ms");',true);
+        return $dt;
+    }
+
+    public function displayMyComingExams($exams){
+        $dt=$this->jquery->semantic()->dataTable('myComingExams',Exam::class,$exams);
+        $dt->setFields([
+            'qcm',
+            'group',
+            'dated',
+            'datef',
+        ]);
+        $dt->setCaptions([
+            TranslatorManager::trans('qcm',[],'main'),
+            TranslatorManager::trans('group',[],'main'),
+            TranslatorManager::trans('startDate',[],'main'),
+            TranslatorManager::trans('endDate',[],'main')
+        ]);
+        $dt->setValueFunction('qcm',function($v){return $v->getName();});
+        $dt->setValueFunction('group',function($v){return $v->getName();});
+    }
 	
 	public function examForm($qcm,$groups){
 	    $exam=$this->jquery->semantic()->dataForm('exam',new Exam());

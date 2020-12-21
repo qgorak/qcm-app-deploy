@@ -62,7 +62,9 @@ class DashboardController extends ControllerBase{
         $countExam=DAO::uCount(Exam::class,'qcm.idUser = ?',[USession::get('activeUser')['id']]);
         $countUserInMyGroups=DAO::uCount(Usergroup::class,'group.idUser = ? and status=1',[USession::get('activeUser')['id']]);
         $examInProgress =$this->loader->allMyExamInProgress();
-        $dt = $this->uiService->displayMyExams($examInProgress);
+        $examComing =$this->loader->allMyComingExam();
+        $dti = $this->uiService->displayMyExamsInProgress($examInProgress);
+        $dtc = $this->uiService->displayMyComingExams($examComing);
         $this->jquery->renderView("DashboardController/index.html",[
             'nbQuestion'=>$countQuestion,
             'nbGroup'=>$countGroup,
