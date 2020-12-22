@@ -53,7 +53,8 @@ class GroupController extends ControllerBase{
     private function displayMyGroups() {
         $myGroups = $this->loader->myGroups();
         $inGroups=$this->loader->inGroups();
-        $this->uiService->displayMyGroups($myGroups, $inGroups);
+        $waitGroups=$this->loader->waitGroups();
+        $this->uiService->displayMyGroups($myGroups, $inGroups,$waitGroups);
     }
     
     /**
