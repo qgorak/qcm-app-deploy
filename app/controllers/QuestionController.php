@@ -344,12 +344,14 @@ class QuestionController extends ControllerBase {
     private function getTagPostData(){
         $post = URequest::getDatas()['tags'];
         $tagsObjects = array();
+        if($post!==''){
             $tagsId = explode(',',$post);
             for ($i = 0; $i < count($tagsId); $i++) {
                 $tagToInsert = new Tag();
                 $tagToInsert->setId($tagsId[$i]);
                 array_push($tagsObjects,$tagToInsert);
             }
+        }
         return $tagsObjects;
     }
 }
