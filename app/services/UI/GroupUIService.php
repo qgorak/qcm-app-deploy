@@ -119,7 +119,7 @@ class GroupUIService {
 		    TranslatorManager::trans('name',[],'main'),
 		    TranslatorManager::trans('description',[],'main')
 		]);
-		$dtWait->fieldAsElement('wait','i','hourglass icon loading');
+		$dtWait->fieldAsElement('wait','i','hourglass icon');
 		$dtWait->setIdentifierFunction ( 'getId' );
 		
 		
@@ -148,8 +148,8 @@ class GroupUIService {
 	        TranslatorManager::trans('email',[],'main')
 	    ]);
 	    $usersDt->setIdentifierFunction ( 'getId' );
-	    $usersDt->insertDefaultButtonIn('accept','check','accept',false);
-	    $usersDt->insertDefaultButtonIn('refuse','remove','refuse',false);
+	    $usersDt->insertDefaultButtonIn('accept','user plus','accept',false);
+	    $usersDt->insertDefaultButtonIn('refuse','user times','refuse',false);
 	    $usersDt->setProperty('group', $groupId);
 	    $this->jquery->postOnClick('.accept',Router::path('groupDemandAccept'),'{"valid":true,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
 	    $this->jquery->postOnClick('.refuse',Router::path('groupDemandAccept'),'{"valide":false,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
@@ -160,7 +160,8 @@ class GroupUIService {
 	    $usersDt->setFields([
 	        'firstname',
 	        'lastname',
-	        'email'
+	        'email',
+	        'delete'
 	    ]);
 	    $usersDt->setCaptions([
 	        TranslatorManager::trans('firstname',[],'main'),
@@ -169,7 +170,7 @@ class GroupUIService {
 	    ]);
 	    $usersDt->setIdentifierFunction ( 'getId' );
 	    $usersDt->setProperty('group', $id);
-	    $usersDt->addDeleteButton(false);
-	    $this->jquery->postOnClick('._delete',Router::path('banUser'),'{"group":$("#dtUsers").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
+	    $usersDt->insertDefaultButtonIn('delete','user times','delete',false);
+	    $this->jquery->postOnClick('.delete',Router::path('banUser'),'{"group":$("#dtUsers").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
 	}
 }

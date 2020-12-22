@@ -1,9 +1,9 @@
-<div class="ui container">
-<H1>{{t('title',[],'main')}}</H1>	
+<h1>{{t('title',[],'main')}}</h1>	
 	{{question.caption}}
-	<H1>{{t('answer',[],'main')}}</H1>	
+	<h1>{{t('answer',[],'main')}}</h1>	
+	<ul>
 	{% for item in answers %}
             <li>{{ item.caption }}</li>
     {% endfor %}
-</div>
+	</ul>
 {{ script_foot | raw }}

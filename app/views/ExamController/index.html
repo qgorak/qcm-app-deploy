@@ -1,8 +1,12 @@
-<div class="ui container">
-	<a  id="addExam" class="ui green button">
-	{{t('createExam',[],'main')}}
-	</a>
+<div class="main ui container">
 	<div id="response">
+		<h2 class="ui header" style="margin-top:15px;">
+			<i class="pencil alternate icon"></i>
+			<div class="content">Exam</div>
+		</h2>
+		<a  id="addExam" class="ui green button">
+			{{t('createExam',[],'main')}}
+		</a>
 	{{ response | raw }}
 	</div>
 </div>
