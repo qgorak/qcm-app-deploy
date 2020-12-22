@@ -1,7 +1,20 @@
- <div class="ui visible sidebar" style="top:100px">
-	{{q['OverseeUserDt'] | raw }}
+<div id="response">
+<div class="ui stackable two column grid">
+    <div class="row">
+    <div class="three wide column">
+
+{{q['OverseeUserDt'] | raw }}
+    </div>
+    <div class="thirteen wide column">
+        <div id="response-overseeuser">
+        Welcome to the oversee console, click on a user to start.
+        </div>
+    </div>
+
+    </div>
 </div>
-<div class="ui container">
-    Oversee
-</div>
+
+
 {{script_foot | raw }}
+</div>
+

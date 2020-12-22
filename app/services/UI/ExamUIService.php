@@ -52,8 +52,8 @@ class ExamUIService {
             'firstname',
             'lastname',
         ]);
-        $dt->setTargetSelector("#oversee-user");
-        $dt->getOnRow("click","sTest/show","#oversee-user",["attr"=>"data-ajax","preventDefault"=>false,"stopPropagation"=>false]);
+        $dt->setIdentifierFunction( 'getId' );
+        $dt->getOnRow("click",Router::path('exam.overseeuser',[$exam->getId()]),"#response-overseeuser",["attr"=>"data-ajax","preventDefault"=>false,"stopPropagation"=>false]);
         $dt->setActiveRowSelector("active");
         return $dt;
     }

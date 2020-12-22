@@ -1,6 +1,7 @@
 <?php
 namespace controllers;
 
+use models\User;
 use Ubiquity\controllers\Router;
 use Ubiquity\controllers\Startup;
 use Ubiquity\orm\DAO;
@@ -11,6 +12,7 @@ use DateTime;
 use models\Exam;
 use models\Group;
 use models\Qcm;
+use models\Question;
 use services\DAO\ExamDAOLoader;
 use models\Useranswer;
 use services\datePickerTranslator;
@@ -208,7 +210,7 @@ class ExamController extends ControllerBase{
     }
     
     /**
-     * @get('oversee/{id}','name'=>'exam.oversee')
+     * @get('oversee/{id}/','name'=>'exam.oversee')
      */
     public function ExamOverseePage($id){
         $exam = $this->loader->get($id);
@@ -222,8 +224,22 @@ class ExamController extends ControllerBase{
         };',true);
         $this->uiService->OverseeUsersDataTable($exam);
         $this->jquery->renderView('ExamController/oversee.html',);
+
     }
-    
+
+    /**
+     * @get('overseeuser/{idExam}/{idUser}','name'=>'exam.overseeuser')
+     */
+    public function ExamOverseeUser($idExam,$idUser){
+        $exam = $this->loader->get($idExam);
+        $qcm=$exam->getQcm();
+        $user = DAO::getById ( User::class , $idUser );
+        $questionsExam = DAO::getManyToMany($qcm, 'questions');
+        $countAnswer = DAO::count(Useranswer::class,'idExam = ? AND idUser = ?',[$exam->getId(),$idUser]);
+        $countQuestion = count($questionsExam);
+        $this->jquery->renderView('ExamController/overseeuser.html',['nbQuestion'=>$countQuestion,'nbAnswer'=>$countAnswer]);
+    }
+
     private function postMultipleAnswerData(){
         $userAnswer = new Useranswer();
         $userAnswer->setValue(\json_encode(URequest::getDatas()));
