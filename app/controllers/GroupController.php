@@ -67,21 +67,7 @@ class GroupController extends ControllerBase{
 
     private function _viewGroup($id){
         $users=$this->loader->getUsers($id);
-        $usersDt=$this->jquery->semantic()->dataTable('dtUsers',User::class,$users);
-        $usersDt->setFields([
-            'firstname',
-            'lastname',
-            'email'
-        ]);
-        $usersDt->setCaptions([
-            TranslatorManager::trans('firstname',[],'main'),
-            TranslatorManager::trans('lastname',[],'main'),
-            TranslatorManager::trans('email',[],'main')
-        ]);
-        $usersDt->setIdentifierFunction ( 'getId' );
-        $usersDt->setProperty('group', $id);
-        $usersDt->addDeleteButton(false);
-        $this->jquery->postOnClick('._delete',Router::path('banUser'),'{"group":$("#dtUsers").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
+        $this->uiService->viewGroup($users, $id);
     }
     
     /**

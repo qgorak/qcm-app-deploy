@@ -20,10 +20,12 @@ $ws_worker->onMessage = function($connection, $data) use ($ws_worker)
         $ws_worker->users[$connection->id]=$connection;
     }
     if(isset($dataArray->target,$dataArray->cheat)){
-        $id=$connection->id;
-        $connection=$ws_worker->users[$dataArray->target];
-        $string='L\'utilisateur d\'id '.$id.' a triché';
-        $connection->send($string);
+        if(isset($ws_worker->users[$dataArray->target])){
+            $send['id']=$connection->id;
+            $send['count']=$dataArray->cheat;
+            $connection=$ws_worker->users[$dataArray->target];
+            $connection->send(json_encode($send));
+        }
     }
 };
 
