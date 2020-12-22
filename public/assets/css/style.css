@@ -46,6 +46,22 @@ body{
   	color:rgba(255,255,255,.9);
 }
 
+.loading {
+  animation: rotation 2s linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  50%{
+  	transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
 #field-questionForm-ckcontent{
 	display:none;
 }

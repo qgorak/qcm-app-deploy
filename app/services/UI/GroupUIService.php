@@ -18,7 +18,7 @@ class GroupUIService {
         $this->semantic = $jq->semantic ();
     }
     
-    public function displayMyGroups($myGroups,$inGroups){
+    public function displayMyGroups($myGroups,$inGroups,$waitInGroups){
 	    $groupForm=$this->jquery->semantic()->dataForm('addForm', Group::class);
 	    $groupForm->setFields([
 	        "name",
@@ -93,6 +93,7 @@ class GroupUIService {
             'hasLoader'=>'internal',
             'attr'=>'data-ajax'
         ]);
+        
 		$dtInGroups = $this->jquery->semantic ()->dataTable ( 'inGroups', Group::class, $inGroups );
 		$dtInGroups->setFields ( [
 			'id',
@@ -105,6 +106,24 @@ class GroupUIService {
 			TranslatorManager::trans('description',[],'main')
 		]);
 		$dtInGroups->setIdentifierFunction ( 'getId' );
+		
+		$dtWait=$this->jquery->semantic()->dataTable('waitInGroups', Group::class, $waitInGroups);
+		$dtWait->setFields ( [
+		    'id',
+		    'name',
+		    'description',
+		    'wait'
+		] );
+		$dtWait->setCaptions([
+		    'id',
+		    TranslatorManager::trans('name',[],'main'),
+		    TranslatorManager::trans('description',[],'main')
+		]);
+		$dtWait->fieldAsElement('wait','i','hourglass icon loading');
+		$dtWait->setIdentifierFunction ( 'getId' );
+		
+		
+		
 		$this->jquery->execAtLast("$('#addGroup').click(function() {
         	$('#addModal').modal('show');
         });

@@ -32,7 +32,11 @@ class GroupDAOLoader {
 	}
 
 	public function inGroups(){
-	    return $this->getAllGroups(USession::get('activeUser')['id']);	    
+	    return $this->getAllGroups(USession::get('activeUser')['id'],"1");	    
+	}
+	
+	public function waitGroups(){
+	    return $this->getAllGroups(USession::get('activeUser')['id'],"0");	 
 	}
 	
 	public function clear(): void {
@@ -101,9 +105,9 @@ class GroupDAOLoader {
 	    return false;
 	}
 	
-	public function getAllGroups($userId){
+	public function getAllGroups($userId,$status){
 	    $retour=[];
-	    $userGroups=DAO::uGetAll(Usergroup::class,"idUser=? AND status='1'",false,[$userId]);
+	    $userGroups=DAO::getAll(Usergroup::class,"idUser=? AND status=?",false,[$userId,$status]);
 	    foreach($userGroups as $value){
 	        array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
 	    }

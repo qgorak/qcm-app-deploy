@@ -1,5 +1,5 @@
-<div id="response">
 <div class="ui container">
+	<div id="response">
 	<div  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</div>
 	<div id="joinGroup" class="ui green button">{{t('joinSubmit',[],'main')}}</div>
 		<div class="ui styled accordion">
@@ -16,6 +16,13 @@
 			  </div>
 			  <div class="content">
 			    	{{q['inGroups'] | raw }}
+			  </div>
+			  <div class="title">
+			    <i class="dropdown icon"></i>
+			    	{{t('waitInGroups',[],'main')}}
+			  </div>
+			  <div class="content">
+			    	{{q['waitInGroups'] | raw }}
 			  </div>
 		</div>
 	</div>
