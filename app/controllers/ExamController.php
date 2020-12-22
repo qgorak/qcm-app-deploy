@@ -117,6 +117,7 @@ class ExamController extends ControllerBase{
     public function getExam($id){
         $exam=$this->loader->get($id);
         $qcm=$exam->getQcm();
+        $target=$qcm->getUser();
         $date=$exam->getDated();
         $this->jquery->getOnClick('#startExam', Router::path('exam.start',['']),'#response',[
         		'attr'=>'data-ajax',
@@ -125,14 +126,24 @@ class ExamController extends ControllerBase{
         $bt=$this->jquery->semantic()->htmlButton('btNext','next');
         $bt->addToProperty('style', 'display:none;');
         $this->jquery->postFormOnClick("#btNext", Router::path('exam.next'), 'frmUserAnswer','#response');
-        $this->jquery->exec('var ws = new WebSocket("ws:/127.0.0.1:2346");
-    ws.onopen = function() {
-        alert("connection success");
-        ws.send("Connected to exam");
-    };
-    ws.onmessage = function(e) {
-        alert("message from server：" + e.data);
-    };',true);
+        $this->jquery->exec('var count=0;
+        var ws = new WebSocket("ws:/127.0.0.1:2346");
+        ws.onopen=function(){
+            ws.send(\'{"id":'.USession::get('activeUser')['id'].'}\');
+        };
+        $(window).on("blur focus", function (e) {
+        var prevType = $(this).data("prevType");
+        if (prevType != e.type) {
+    		if (e.type=="blur"){
+            count++;
+            ws.send(\'{"target":'.$target.',"cheat":\'+count+\'}\');
+        }
+    	}
+        $(this).data("prevType", e.type);
+        });
+        ws.onmessage = function(e) {
+           console.log(e.data);
+        };',true);
         $this->jquery->renderView('ExamController/exam.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
     }
     
@@ -186,7 +197,6 @@ class ExamController extends ControllerBase{
         }
     }
     
-
     private function ExamEnd(){
         $this->jquery->exec('$("#btNext").css("display","none");',true);
         $this->jquery->semantic()->htmlButton('result','See result');
@@ -202,9 +212,18 @@ class ExamController extends ControllerBase{
      */
     public function ExamOverseePage($id){
         $exam = $this->loader->get($id);
+        $this->jquery->exec('var count=0;
+        var ws = new WebSocket("ws:/127.0.0.1:2346");
+        ws.onopen=function(){
+            ws.send(\'{"id":'.USession::get('activeUser')['id'].'}\');
+        };
+        ws.onmessage = function(e) {
+            console.log(e.data);
+        };',true);
         $this->uiService->OverseeUsersDataTable($exam);
         $this->jquery->renderView('ExamController/oversee.html',);
     }
+    
     private function postMultipleAnswerData(){
         $userAnswer = new Useranswer();
         $userAnswer->setValue(\json_encode(URequest::getDatas()));

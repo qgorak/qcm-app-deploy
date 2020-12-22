@@ -42,7 +42,7 @@ class UserController extends ControllerBase{
     private function displayMyInfo($id){
         $user=$this->loader->get($id);
         $user->code_style='default';
-        $this->uiService->displayInfos();
+        $this->uiService->displayInfos($user);
     }
     
     /**

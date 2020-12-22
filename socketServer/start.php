@@ -6,29 +6,25 @@ require_once './vendor/autoload.php';
 $ws_worker = new Worker("websocket://0.0.0.0:2346");
 
 // 4 processes
-$ws_worker->count = 4;
+$ws_worker->count = 1;
 
-// Emitted when new connection come
-$ws_worker->onConnect = function($connection)
-{
-    // Emitted when websocket handshake done
-    $connection->onWebSocketConnect = function($connection)
-    {
-        echo "New connection\n";
-    };
-};
+$ws_worker->users=[];
 
 // Emitted when data is received
-$ws_worker->onMessage = function($connection, $data)
-{
-    // Send hello $data
-    $connection->send('hello ');
-};
-
-// Emitted when connection closed
-$ws_worker->onClose = function($connection)
-{
-    echo "Connection closed";
+$ws_worker->onMessage = function($connection, $data) use ($ws_worker)
+{   
+    global $ws_worker;
+    $dataArray=json_decode($data);
+    if(isset($dataArray->id)){
+        $connection->id=$dataArray->id;
+        $ws_worker->users[$connection->id]=$connection;
+    }
+    if(isset($dataArray->target,$dataArray->cheat)){
+        $id=$connection->id;
+        $connection=$ws_worker->users[$dataArray->target];
+        $string='L\'utilisateur d\'id '.$id.' a triché';
+        $connection->send($string);
+    }
 };
 
 // Run worker

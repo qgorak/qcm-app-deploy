@@ -16,7 +16,7 @@ class UserUIService {
 		$this->semantic = $jq->semantic ();
 	}
 	
-	public function displayInfos(){
+	public function displayInfos($user){
         $info=$this->jquery->semantic()->dataForm('myInfo',$user);
         $info->setFields([
             'language',
