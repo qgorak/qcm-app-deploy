@@ -63,7 +63,10 @@ class DashboardController extends ControllerBase{
         $countUserInMyGroups=DAO::uCount(Usergroup::class,'group.idUser = ? and status=1',[USession::get('activeUser')['id']]);
         $examInProgress =$this->loader->allMyExamInProgress();
         $examComing =$this->loader->allMyComingExam();
-        $dti = $this->uiService->displayMyExamsInProgress($examInProgress);
+        if($examInProgress!=array()) {
+            $headeri = $this->jquery->semantic()->htmlHeader('headerExamInProgress', 2, '<div class="content">Exam in progress</div>')->addIcon('circle small red');;
+            $dti = $this->uiService->displayMyExamsInProgress($examInProgress);
+        }
         $dtc = $this->uiService->displayMyComingExams($examComing);
         $this->jquery->renderView("DashboardController/index.html",[
             'nbQuestion'=>$countQuestion,

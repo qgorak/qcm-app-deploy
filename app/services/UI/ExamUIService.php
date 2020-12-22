@@ -87,7 +87,7 @@ class ExamUIService {
             'method' => 'get',
             'attr' => 'data-ajax',
         ] );
-        $this->jquery->exec('$("#ExamIcon").transition("set looping").transition("fade", "2000ms");',true);
+        $this->jquery->exec('$("#icon-headerExamInProgress").transition("set looping").transition("fade", "2000ms");',true);
         return $dt;
     }
 
