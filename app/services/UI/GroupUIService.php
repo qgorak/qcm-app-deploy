@@ -82,14 +82,17 @@ class GroupUIService {
 		$this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '', [
 			'hasLoader' => 'internal',
 			'attr' => 'data-ajax',
+		    'listenerOn'=>'body',
 		    'jsCallback'=>'$(".ui.accordion").accordion("open",0);$(self).closest("tr").remove()'
 		] );
 		$this->jquery->getOnClick ( '._edit', Router::path ('groupDemand',[""]), '#response', [
 			'hasLoader' => 'internal',
+		    'listenerOn'=>'body',
 			'attr' => 'data-ajax'
 		] );
         $this->jquery->getOnClick('._display', Router::path ('groupView',[""]),'#response',[
             'hasLoader'=>'internal',
+            'listenerOn'=>'body',
             'attr'=>'data-ajax'
         ]);
         
