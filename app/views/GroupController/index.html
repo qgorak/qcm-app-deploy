@@ -2,11 +2,11 @@
 	<div id="response">
 	<h2 class="ui header" style="margin-top:15px;">
 		<i class="users icon"></i>
-		<div class="content">Groups</div>
+		<div class="content">Group</div>
 	</h2>
 	<div  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</div>
 	<div id="joinGroup" class="ui green button">{{t('joinSubmit',[],'main')}}</div>
-		<div class="ui styled accordion">
+		<div class="ui styled accordion" style="margin-top:15px;">
 			  <div class="title">
 				    <i class="dropdown icon"></i>
 				    {{t('myGroups',[],'main')}}
@@ -45,6 +45,25 @@
 	  	<div class="content">
 	  		{{ q['joinForm'] | raw }}
 	  	</div>
+<script>
+$("._delete").click(function(event) {
+    if (event && event.stopPropagation) event.stopPropagation();
+    if (event && event.preventDefault) event.preventDefault();
+    url = \'http://127.0.0.1:8090/group/delete\';
+    url = url + \'/\' + ($(this).attr(\'data-ajax\') || \'\');
+    var self = this;
+    $(this).addClass(\'loading\');
+    $.ajax({
+        \'url\': url,
+        \'method\': \'GET\',
+        \'async\': true
+    }).done(function(data, textStatus, jqXHR) {
 
+        $(self).removeClass(\'loading\');
+        $(".ui.accordion").accordion("open", 0);
+        $(self).closest("tr").remove()
+    });
+});
+</script>
 {{script_foot | raw}}
 </div>

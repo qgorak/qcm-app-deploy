@@ -29,6 +29,10 @@ body{
 	width:100%;
 }
 
+.ui.cards{
+	margin:0 !important;
+}
+
 .menu.links{
 	background-color: #f8f9fa!important;
 	padding: 10px 0;

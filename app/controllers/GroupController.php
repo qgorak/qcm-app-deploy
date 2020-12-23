@@ -1,7 +1,6 @@
 <?php
 namespace controllers;
 
-use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use models\Group;
@@ -12,7 +11,6 @@ use models\Usergroup;
 use Ubiquity\translation\TranslatorManager;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use services\UI\GroupUIService;
-use Ubiquity\controllers\Startup;
 
 /**
  * Controller GroupController

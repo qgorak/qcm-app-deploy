@@ -16,14 +16,14 @@ $ws_worker->onMessage = function($connection, $data) use ($ws_worker)
     global $ws_worker;
     $dataArray=json_decode($data);
     if(isset($dataArray->id)){
-        $connection->id=$dataArray->id;
-        $ws_worker->users[$connection->id]=$connection;
+        $ws_worker->users[$dataArray->id]=$connection->id;
     }
     if(isset($dataArray->target,$dataArray->cheat)){
         if(isset($ws_worker->users[$dataArray->target])){
             $send['id']=$connection->id;
             $send['count']=$dataArray->cheat;
-            $connection=$ws_worker->users[$dataArray->target];
+            $id=$ws_worker->users[$dataArray->target];
+            $connection=$ws_worker->connections[$id];
             $connection->send(json_encode($send));
         }
     }

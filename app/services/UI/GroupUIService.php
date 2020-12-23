@@ -5,7 +5,6 @@ namespace services\UI;
 use Ajax\php\ubiquity\JsUtils;
 use Ubiquity\controllers\Router;
 use Ubiquity\translation\TranslatorManager;
-use Ubiquity\utils\http\URequest;
 use models\Group;
 use models\User;
 use models\Usergroup;
@@ -37,7 +36,7 @@ class GroupUIService {
 	    ]);
 	    $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),"window",[
 	        'value'=>TranslatorManager::trans('addSubmit',[],'main'),
-	        'ajax'=>['jsCallback'=>'if($("#myGroups tbody").children("tr:first").attr("id")=="htmltablecontent--0"){$("#myGroups tbody tr:first-child").remove();};$("#myGroups tbody").append("<tr id=\'myGroups-tr-"+JSON.parse(data)._rest.id+"\' class=\'_element\' data-ajax="+JSON.parse(data)._rest.id+">
+	        'ajax'=>['jsCallback'=>'$("#addForm-name-0").val("");$("#addForm-description-0").val("");if($("#myGroups tbody").children("tr:first").attr("id")=="htmltablecontent--0"){$("#myGroups tbody tr:first-child").remove();};$("#myGroups tbody").append("<tr id=\'myGroups-tr-"+JSON.parse(data)._rest.id+"\' class=\'_element\' data-ajax="+JSON.parse(data)._rest.id+">
 	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-0\' data-field=\'id\'>"+JSON.parse(data)._rest.id+"</td>
 	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-1\' data-field=\'name\'>"+JSON.parse(data)._rest.name+"</td>
 	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-2\' data-field=\'description\'>"+JSON.parse(data)._rest.description+"</td>
@@ -47,7 +46,7 @@ class GroupUIService {
 		<button class=\'ui button icon _edit basic\' data-ajax="+JSON.parse(data)._rest.id+"><i id=\'icon-\' class=\'icon edit\'></i></button>
 		<button class=\'ui button icon _delete red basic\' data-ajax="+JSON.parse(data)._rest.id+"><i id=\'icon-\' class=\'icon remove\'></i></button>
 	</td>
-</tr>")']
+</tr>");']
 	    ]);
 	    $groupForm->onSuccess("$('#addModal').modal('hide');");
 	    $joinForm=$this->jquery->semantic()->dataForm('joinForm',Usergroup::class);
