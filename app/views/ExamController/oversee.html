@@ -1,20 +1,38 @@
-<div id="response">
-<div class="ui stackable two column grid">
-    <div class="row">
-    <div class="three wide column">
-
-{{q['OverseeUserDt'] | raw }}
-    </div>
-    <div class="thirteen wide column">
-        <div id="response-overseeuser">
-        Welcome to the oversee console, click on a user to start.
-        </div>
-    </div>
-
-    </div>
+<div class="ui container" style="margin-top:15px;">
+	<div id="response">
+		<div class="ui stackable two column grid">
+		    <div class="row">
+		    	<div class="three wide column">
+					{{q['OverseeUserDt'] | raw }}
+		    	</div>
+		    	<div class="thirteen wide column">
+		        	<div id="response-overseeuser">
+		        	Welcome to the oversee console, click on a user to start.
+		        	</div>
+		    	</div>
+			</div>
+		</div>
+	</div>
 </div>
-
-
+<div class="ui coupled modal cheat">
+<div class="ui icon message">
+  <i class="warning icon"></i>
+  <div class="content">
+    <div class="header">
+      {{t('alert',[],main)}}
+    </div>
+    <p><span class="cheatingUser"></span> {{t('cheat',[],main)}}</p>
+  </div>
+</div>
+<button class="ui button cheatButton">{{t('send',[],main)}}</button>
+</div>
+<div class="ui coupled modal sendMessage">
+<div class="ui form">
+  <div class="field">
+    <label>{{t('alertUser',[],main)}}</label>
+    <textarea name="message"></textarea>
+  </div>
+  <button id="submitMessage" class="ui button" type="submit">{{t('send',[],main)}}</button>
+</div>
+</div>
 {{script_foot | raw }}
-</div>
-

@@ -58,7 +58,7 @@ class QuestionDAOLoader {
 	    $creator->setId(USession::get('activeUser')['id']);
 	    $item->setUser($creator);
 	    $item->setTags($tags);
-		DAO::deleteAll( Answer::class , 'idQuestion='.$item->getId());
+	    DAO::deleteAll( Answer::class ,'idQuestion=?',[$item->getId()]);
 		DAO::update($item);
 		DAO::insertOrUpdateAllManyToMany($item);
 	}

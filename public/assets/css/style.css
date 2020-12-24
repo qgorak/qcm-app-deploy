@@ -1,4 +1,4 @@
-@keyframes loader {
+@keyframes hourglassRotation {
   from {
     transform: rotate(0deg);
   }
@@ -63,12 +63,16 @@ body{
 }
 
 .hourglass {
-  animation: loader 4s ease-in-out infinite;
+  animation: hourglassRotation 4s ease-in-out infinite;
 }
 
 
 #field-questionForm-ckcontent{
 	display:none;
+}
+
+.modal{
+	padding:10px;	
 }
 
 #bank{

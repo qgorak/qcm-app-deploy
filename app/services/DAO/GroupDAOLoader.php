@@ -59,7 +59,7 @@ class GroupDAOLoader {
 	
 	public function getJoiningDemand($groupId){
 	    $users=[];
-	    $userGroups=DAO::uGetAll(Usergroup::class,"idGroup=? AND status=0",false,[$groupId]);
+	    $userGroups=DAO::getAll(Usergroup::class,"idGroup=? AND status=0",false,[$groupId]);
 	    foreach($userGroups as $value){
 	        \array_push($users,DAO::getById(User::class, $value->getIdUser(),false));
 	    }
@@ -80,7 +80,7 @@ class GroupDAOLoader {
 	
 	public function getUsers($groupId){
 	    $users=[];
-	    $userGroup=DAO::uGetAll(Usergroup::class,"idGroup=? AND status='1'",false,[$groupId]);
+	    $userGroup=DAO::getAll(Usergroup::class,"idGroup=? AND status='1'",false,[$groupId]);
 	    foreach($userGroup as $value){
 	        array_push($users,DAO::getById(User::class,$value->getIdUser(),false));
 	    }

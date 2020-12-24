@@ -138,13 +138,17 @@ class ExamController extends ControllerBase{
         if (prevType != e.type) {
     		if (e.type=="blur"){
             count++;
-            ws.send(\'{"target":'.$target.',"cheat":\'+count+\'}\');
+            ws.send(\'{"user":'.json_encode(USession::get('activeUser')).',"target":'.$target.',"cheat":\'+count+\'}\');
         }
     	}
         $(this).data("prevType", e.type);
         });
         ws.onmessage = function(e) {
-           console.log(e.data);
+            console.log(e.data);
+           var obj=JSON.parse(e.data);
+           if("message" in obj){
+            alert(obj.message);
+           }
         };',true);
         $this->jquery->renderView('ExamController/exam.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
     }
@@ -214,14 +218,23 @@ class ExamController extends ControllerBase{
      */
     public function ExamOverseePage($id){
         $exam = $this->loader->get($id);
-        $this->jquery->exec('var count=0;
+        $this->jquery->exec('var obj;var count=0;
         var ws = new WebSocket("ws:/127.0.0.1:2346");
         ws.onopen=function(){
             ws.send(\'{"id":'.USession::get('activeUser')['id'].'}\');
         };
         ws.onmessage = function(e) {
             console.log(e.data);
-        };',true);
+            obj=JSON.parse(e.data);
+            if("cheat" in obj){
+            $(".cheatingUser").html(obj.user.firstname+" "+obj.user.lastname);
+            $(".cheat").modal("show");
+            }
+        };
+        $(".coupled.modal").modal({allowMultiple: true});
+        $(".sendMessage").modal("attach events", ".cheatButton","show");
+        $("#submitMessage").click(function(){alert("ok");ws.send(\'{"id":'.USession::get('activeUser')['id'].',"target":"\'+obj.user.id+\'","message":"\'+$("textarea[name=message]").val()+\'"}\')});
+        ',true);
         $this->uiService->OverseeUsersDataTable($exam);
         $this->jquery->renderView('ExamController/oversee.html',);
 
@@ -233,11 +246,12 @@ class ExamController extends ControllerBase{
     public function ExamOverseeUser($idExam,$idUser){
         $exam = $this->loader->get($idExam);
         $qcm=$exam->getQcm();
-        $user = DAO::getById ( User::class , $idUser );
+        $answers=$this->loader->getUserAnswers($idUser);
+        $this->uiService->displayUserAnswers($answers);
         $questionsExam = DAO::getManyToMany($qcm, 'questions');
         $countAnswer = DAO::count(Useranswer::class,'idExam = ? AND idUser = ?',[$exam->getId(),$idUser]);
         $countQuestion = count($questionsExam);
-        $this->jquery->renderView('ExamController/overseeuser.html',['nbQuestion'=>$countQuestion,'nbAnswer'=>$countAnswer]);
+        $this->jquery->renderView('ExamController/overseesuser.html',['nbQuestion'=>$countQuestion,'nbAnswer'=>$countAnswer]);
     }
 
     private function postMultipleAnswerData(){
