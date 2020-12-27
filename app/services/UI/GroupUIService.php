@@ -49,21 +49,6 @@ class GroupUIService {
 </tr>");']
 	    ]);
 	    $groupForm->onSuccess("$('#addModal').modal('hide');");
-	    $joinForm=$this->jquery->semantic()->dataForm('joinForm',Usergroup::class);
-	    $joinForm->setFields([
-	        'GroupKey',
-	        'submit'
-	    ]);
-	    $joinForm->setCaptions([
-	        TranslatorManager::trans('groupKey',[],'main')
-	    ]);
-	    $joinForm->fieldAsInput('GroupKey',[
-	        'rules'=>'empty'
-	    ]);
-	    $joinForm->fieldAsSubmit('submit','green',Router::path('joinSubmit'),'#response',[
-	        'value'=>TranslatorManager::trans('joinSubmit',[],'main')
-	    ]);
-	    $joinForm->onSuccess("$('#joinModal').modal('hide');");
 		$dtMyGroups = $this->jquery->semantic ()->dataTable ( 'myGroups', Group::class, $myGroups );
 		$dtMyGroups->setFields ( [
 			'id',
@@ -175,4 +160,21 @@ class GroupUIService {
 	    $usersDt->insertDefaultButtonIn('delete','user times','delete',false);
 	    $this->jquery->postOnClick('.delete',Router::path('banUser'),'{"group":$("#dtUsers").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
 	}
+	public function joinform(){
+        $joinForm=$this->jquery->semantic()->dataForm('joinForm',Usergroup::class);
+        $joinForm->setFields([
+            'GroupKey',
+            'submit'
+        ]);
+        $joinForm->setCaptions([
+            TranslatorManager::trans('groupKey',[],'main')
+        ]);
+        $joinForm->fieldAsInput('GroupKey',[
+            'rules'=>'empty'
+        ]);
+        $joinForm->fieldAsSubmit('submit','green',Router::path('joinSubmit'),'#response-joinform',[
+            'value'=>TranslatorManager::trans('joinSubmit',[],'main')
+        ]);
+
+    }
 }

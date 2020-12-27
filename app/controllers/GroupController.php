@@ -37,8 +37,8 @@ class GroupController extends ControllerBase{
             $this->jquery->getHref ( 'a', '#response', [
                 'hasLoader' => 'internal'
             ] );
+            $this->jquery->attr('#trainermode','class','item active',true);
         }
-        $this->jquery->attr('#trainermode','class','item active',true);
     }
     /**
      *
@@ -84,6 +84,8 @@ class GroupController extends ControllerBase{
         $msg->setTimeout(3000);
         echo $newGroup;
     }
+
+
     
     /**
      * @post("join","name"=>"joinSubmit")
@@ -98,18 +100,25 @@ class GroupController extends ControllerBase{
                 $userGroup->setIdUser($user);
                 $userGroup->setStatus(0);
                 DAO::save($userGroup);
-                $msg=$this->jquery->semantic()->htmlMessage('msg',TranslatorManager::trans('joinSucceed',[],'main'),['success']);
+                $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('joinSucceed',[],'main'),'class'=> 'success','position'=>'center top']);
             }
             else{
-                $msg=$this->jquery->semantic()->htmlMessage('msg',TranslatorManager::trans('joinWarning',[],'main'),['warning']);
+                $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('joinWarning',[],'main'),'position'=>'center top','class'=>'error']);
             }
         }
         else{
-            $msg=$this->jquery->semantic()->htmlMessage('msg',TranslatorManager::trans('joinFailed',[],'main'),['error']);
+            $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('joinFailed',[],'main'),'position'=>'center top','class'=>'error']);
         }
-        $msg->setTimeout(3000); 
-        $this->displayMyGroups();
-        $this->jquery->renderView('GroupController/display.html');
+        $frm = $this->uiService->joinForm();
+        $this->jquery->renderView('GroupController/join.html');
+    }
+
+    /**
+     * @get("joinform","name"=>"joinForm")
+     */
+    public function joinForm(){
+        $frm = $this->uiService->joinForm();
+        $this->jquery->renderView('GroupController/join.html');
     }
     
     /**

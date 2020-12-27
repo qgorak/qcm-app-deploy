@@ -7,7 +7,6 @@
 		</div>
 	</h2>
 	<div  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</div>
-	<div id="joinGroup" class="ui green button">{{t('joinSubmit',[],'main')}}</div>
 		<div class="ui styled accordion" style="margin-top:15px;">
 			  <div class="title">
 				    <i class="dropdown icon"></i>
@@ -41,11 +40,4 @@
 	  		{{ q['groupAddSubmit'] | raw }}
 	 	 </div>
 </div>
-<div id="joinModal" class="ui fullscreen modal" style="padding:10px;">
-	<div class="header">{{t('joinSubmit',[],'main')}}</div>
-	  	<i class="close icon"></i>
-	  	<div class="content">
-	  		{{ q['joinForm'] | raw }}
-	  	</div>
 {{script_foot | raw}}
-</div>

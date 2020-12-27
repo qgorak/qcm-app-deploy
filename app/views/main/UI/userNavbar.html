@@ -7,6 +7,9 @@
 			<i class="bell icon"></i>
 			<i id="notificationCircle" style="visibility: hidden" class="top right inverted orange corner circle icon"></i>
 		</i></a>
+		<div class="item">
+			<div id="joingroup" class="ui primary button">{{t('joinSubmit',[],'main')}}</div>
+		</div>
 		<a class="item" href="{{path('terminate')}}">{{t('logout',[],'main')}}</a>
 		<a class="item" href="{{path('user')}}">
 			<i class="icons">
@@ -17,5 +20,12 @@
 	</div>
 </div>
 </div>
-
+<div id="joinModal" class="ui fullscreen modal" style="padding:10px;">
+	<div class="header">Join a group</div>
+	<i class="close icon"></i>
+	<div class="content">
+		<div id="response-joinform">
+		</div>
+	</div>
+</div>
 
