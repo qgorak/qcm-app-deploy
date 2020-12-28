@@ -8,10 +8,14 @@ use models\User;
 use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\translation\TranslatorManager;
+use Ubiquity\utils\http\USession;
 use models\Exam;
 use models\Group;
 use models\Usergroup;
 use models\Question;
+use models\Answer;
+use Ajax\semantic\html\elements\HtmlIcon;
+use Ajax\semantic\html\elements\HtmlButton;
 
 class ExamUIService {
     
@@ -51,13 +55,29 @@ class ExamUIService {
         $dt->setFields([
             'firstname',
             'lastname',
+            'msg',
+            'warning'
         ]);
+        $dt->setCaptions([
+            'firstname',
+            'lastname',
+            'Envoyer un message'
+        ]);
+        $dt->fieldAsIcon('warning');
+        $dt->setValueFunction('msg',function($v,$e){return new HtmlButton('msg-'.$e->getId(),'send',null,'
+        sendMessage('.$e->getId().');
+        $(".user").html("'.$e->getFirstname().' '.$e->getLastname().'");
+        $(".cheat").modal("show");
+        ');});
         $dt->setIdentifierFunction( 'getId' );
-        $dt->getOnRow("click",Router::path('exam.overseeuser',[$exam->getId()]),"#response-overseeuser",["attr"=>"data-ajax","preventDefault"=>false,"stopPropagation"=>false]);
         $dt->setActiveRowSelector("active");
         return $dt;
     }
 
+    public function displayUserAnswers($answers){
+        $dt=$this->jquery->semantic()->dataTable('userAnswers',Answer::class,$answers);
+    }
+    
     public function displayMyExamsInProgress($exams){
 	    foreach($exams as $exam){
 	        $exam->timer['time']=\strtotime($exam->getDatef())-\strtotime(\date("Y-m-d H:i:s"));

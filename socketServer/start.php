@@ -10,9 +10,13 @@ $ws_worker->count = 1;
 
 $ws_worker->users=[];
 
-// Emitted when data is received
-$ws_worker->onMessage = function($connection, $data) use ($ws_worker)
-{   
+$ws_worker->onClose = function($connection) use ($ws_worker){
+    if (($key = array_search($connection->id, $ws_worker->users)) !== false) {
+        unset($ws_worker->users[$key]);
+    }
+};
+
+$ws_worker->onMessage = function($connection, $data) use ($ws_worker){   
     global $ws_worker;
     $dataArray=json_decode($data);
     if(isset($dataArray->id)){
@@ -35,5 +39,4 @@ $ws_worker->onMessage = function($connection, $data) use ($ws_worker)
     $connection->send($data);
 };
 
-// Run worker
 Worker::runAll();

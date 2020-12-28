@@ -14,25 +14,14 @@
 		</div>
 	</div>
 </div>
-<div class="ui coupled modal cheat">
-<div class="ui icon message">
-  <i class="warning icon"></i>
-  <div class="content">
-    <div class="header">
-      {{t('alert',[],'main')}}
-    </div>
-    <p><span class="cheatingUser"></span> {{t('cheat',[],'main')}}</p>
-  </div>
-</div>
-<button class="ui button cheatButton">{{t('sendMessage',[],'main')}}</button>
-</div>
-<div class="ui coupled modal sendMessage">
+<div class="ui modal cheat">
 <div class="ui form">
   <div class="field">
-    <label>{{t('alertUser',[],'main')}}</label>
+    <label>{{t('alertUser',[],'main')}} <span class="user"></span></label>
     <textarea name="message"></textarea>
   </div>
   <button id="submitMessage" class="ui button" type="submit">{{t('send',[],'main')}}</button>
+  <button id="cancelMessage" class="ui button cancel">{{t('cancel',[],'main')}}</button>
 </div>
 </div>
 {{script_foot | raw }}
