@@ -8,13 +8,8 @@ use models\User;
 use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\translation\TranslatorManager;
-use Ubiquity\utils\http\USession;
 use models\Exam;
-use models\Group;
-use models\Usergroup;
-use models\Question;
 use models\Answer;
-use Ajax\semantic\html\elements\HtmlIcon;
 use Ajax\semantic\html\elements\HtmlButton;
 
 class ExamUIService {
@@ -49,7 +44,7 @@ class ExamUIService {
         $usersg=DAO::getOneToMany($exam->getGroup(),'usergroups');
         $users=[];
         foreach($usersg as $userg){
-            array_push($users,$userg->getUser());
+            \array_push($users,$userg->getUser());
         }
         $dt=$this->jquery->semantic()->dataTable('OverseeUserDt',User::class,$users);
         $dt->setFields([
@@ -75,7 +70,7 @@ class ExamUIService {
     }
 
     public function displayUserAnswers($answers){
-        $dt=$this->jquery->semantic()->dataTable('userAnswers',Answer::class,$answers);
+        $this->jquery->semantic()->dataTable('userAnswers',Answer::class,$answers);
     }
     
     public function displayMyExamsInProgress($exams){
@@ -152,5 +147,4 @@ class ExamUIService {
 	        'hasloader'=>'internal'
 	    ]);
 	}
-
 }

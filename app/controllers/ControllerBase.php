@@ -54,4 +54,3 @@ abstract class ControllerBase extends Controller{
 	    \header('location:/');
 	}
 }
-

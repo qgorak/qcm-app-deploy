@@ -40,7 +40,6 @@ class CorrectionController extends ControllerBase{
     
     public function index() {
     }
-
     
     /**
      * @route('myresult/{idExam}/{idUser}','name'=>'Correction.myExam')
@@ -90,7 +89,6 @@ class CorrectionController extends ControllerBase{
 
     }
 
-    
     private function correctQcmAnswer($acc,$question,$userAnswer){
         $answers = $question->getAnswers();
         $userAnswers = \json_decode($userAnswer);
@@ -152,4 +150,3 @@ class CorrectionController extends ControllerBase{
         return [$totalScore,$score];
     }
 }
-

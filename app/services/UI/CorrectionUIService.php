@@ -105,6 +105,4 @@ class CorrectionUIService {
         $this->jquery->attr('#userAnswer','disabled','',true);
         return $form;
     }
-
-
 }

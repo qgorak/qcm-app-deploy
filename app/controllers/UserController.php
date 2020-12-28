@@ -72,4 +72,3 @@ class UserController extends ControllerBase{
         $this->jquery->renderView('UserController/display.html');
     }
 }
-

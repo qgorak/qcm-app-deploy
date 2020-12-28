@@ -82,7 +82,7 @@ class GroupDAOLoader {
 	    $users=[];
 	    $userGroup=DAO::getAll(Usergroup::class,"idGroup=? AND status='1'",false,[$groupId]);
 	    foreach($userGroup as $value){
-	        array_push($users,DAO::getById(User::class,$value->getIdUser(),false));
+	        \array_push($users,DAO::getById(User::class,$value->getIdUser(),false));
 	    }
 	    return $users;
 	}
@@ -109,7 +109,7 @@ class GroupDAOLoader {
 	    $retour=[];
 	    $userGroups=DAO::getAll(Usergroup::class,"idUser=? AND status=?",false,[$userId,$status]);
 	    foreach($userGroups as $value){
-	        array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
+	        \array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
 	    }
 	    return $retour;
 	}
@@ -121,4 +121,3 @@ class GroupDAOLoader {
 	    return false;
 	}
 }
-

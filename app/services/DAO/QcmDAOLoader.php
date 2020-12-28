@@ -19,7 +19,7 @@ class QcmDAOLoader {
         $qcm->setUser($creator);
         $questions = USession::get('questions');
         $qcm->setQuestions($questions['checked']);
-        $qcm->setCdate(date_create()->format('Y-m-d H:i:s'));
+        $qcm->setCdate(\date_create()->format('Y-m-d H:i:s'));
 		DAO::insert($qcm,true);
 	}
 
@@ -44,4 +44,3 @@ class QcmDAOLoader {
 		return DAO::update ( $item );
 	}
 }
-

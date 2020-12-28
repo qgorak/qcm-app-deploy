@@ -136,21 +136,20 @@ class QcmUIService {
                 return $res;
             }
         });
-            $dt->setValueFunction('typeq', function ($typeq) {
-                if ($typeq != null) {
-                    $label = new HtmlLabel('', $typeq->getCaption());
-                    $label->setClass('ui circular label');
-                    return $label;
-                }
-            });
-                $dt->setIdentifierFunction('getId');
-                $dt->setColWidths([
-                    0 => 9,
-                    1 => 2,
-                    2 => 1,
-                    3 => 2
-                ]);
-                return $dt;
+        $dt->setValueFunction('typeq', function ($typeq) {
+            if ($typeq != null) {
+                $label = new HtmlLabel('', $typeq->getCaption());
+                $label->setClass('ui circular label');
+                return $label;
+            }
+        });
+        $dt->setIdentifierFunction('getId');
+        $dt->setColWidths([
+            0 => 9,
+            1 => 2,
+            2 => 1,
+            3 => 2
+        ]);
+        return $dt;
     }
-    
 }

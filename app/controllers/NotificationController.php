@@ -82,4 +82,3 @@ class NotificationController extends ControllerBase{
         echo $notif;
     }
 }
-

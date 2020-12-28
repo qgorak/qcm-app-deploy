@@ -2,10 +2,7 @@
 
 namespace services\UI;
 
-use Ajax\bootstrap\html\HtmlDropdown;
 use Ajax\php\ubiquity\JsUtils;
-use Ajax\semantic\html\collections\form\HtmlFormDropdown;
-use Ajax\semantic\html\collections\form\HtmlFormInput;
 use Ajax\semantic\html\elements\HtmlLabel;
 use Ajax\service\JArray;
 use Ubiquity\controllers\Router;
@@ -99,7 +96,6 @@ class QuestionUIService {
 	    return $frm;
 	}
 
-	
 	public function getQuestionDataTable($questions){
 	    $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $questions );
 	    $msg = new HtmlMessage ( '', TranslatorManager::trans('noDisplay',[],'main') );
@@ -147,5 +143,4 @@ class QuestionUIService {
 	        'attr' => 'data-ajax'
 	    ] );
 	}
-	
 }

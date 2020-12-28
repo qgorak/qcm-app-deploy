@@ -8,7 +8,6 @@ use Ubiquity\mailer\MailerManager;
   */
 class MailManager extends \Ubiquity\mailer\AbstractMail {
 
-    
     private $newPassword;
     
     public function getNewPassword(){

@@ -3,7 +3,6 @@ namespace controllers;
 
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
-use Ubiquity\utils\http\UResponse;
 use Ubiquity\utils\http\USession;
 use models\Tag;
 use models\User;
@@ -48,11 +47,10 @@ class TagController extends ControllerBase{
 	        $tag->setName(URequest::getPost()['tag']);
 	        $tag->setUser($creator);
 	        $colors = ['red','orange','yellow','olive','green','teal','blue','violet','purple','pink','brown','grey','black'];
-	        $color = $colors[array_rand($colors)];
+	        $color = $colors[\array_rand($colors)];
 	        $tag->setColor($color);
 	        DAO::insert($tag);
-            echo json_encode($tag);
+            echo \json_encode($tag);
 	    }
-
 	}
 }

@@ -40,6 +40,7 @@ class GroupController extends ControllerBase{
             $this->jquery->attr('#trainermode','class','item active',true);
         }
     }
+    
     /**
      *
      * @param \services\DAO\GroupDAOLoader $loader
@@ -109,7 +110,7 @@ class GroupController extends ControllerBase{
         else{
             $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('joinFailed',[],'main'),'position'=>'center top','class'=>'error']);
         }
-        $frm = $this->uiService->joinForm();
+        $this->uiService->joinForm();
         $this->jquery->renderView('GroupController/join.html');
     }
 
@@ -117,7 +118,7 @@ class GroupController extends ControllerBase{
      * @get("joinform","name"=>"joinForm")
      */
     public function joinForm(){
-        $frm = $this->uiService->joinForm();
+        $this->uiService->joinForm();
         $this->jquery->renderView('GroupController/join.html');
     }
     

@@ -6,7 +6,6 @@ use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\USession;
 use models\Question;
 use models\User;
-use models\Tag;
 use models\Answer;
 
 class QuestionDAOLoader {
@@ -71,4 +70,3 @@ class QuestionDAOLoader {
         return [[1,'QCM','check square'],[2,'courte','bars'],[3,'longue','align left'],[4,'code','code']];
     }
 }
-

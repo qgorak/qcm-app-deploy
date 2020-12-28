@@ -33,5 +33,4 @@ class MainController extends ControllerBase{
         }
         \header('location:/');
     }
-
 }

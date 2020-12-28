@@ -48,8 +48,6 @@ class QuestionController extends ControllerBase {
             ] );
         }
         $this->jquery->attr('#trainermode','class','item active',true);
-
-
     }
 
     /**
@@ -93,7 +91,7 @@ class QuestionController extends ControllerBase {
             'hasLoader' => 'internal'
         ] );
     	$types=$this->loader->getIconTypeq();
-        $frm = $this->uiService->questionForm (new Question(),$types);
+        $this->uiService->questionForm (new Question(),$types);
         $this->jquery->postFormOnClick( '#submit',  Router::path('question.submit'),'questionForm', '#response', [
                 'hasLoader' => 'internal',
                 'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}',
@@ -308,7 +306,7 @@ class QuestionController extends ControllerBase {
                 $answerToInsert = new Answer();
                 $answerToInsert->setCaption($postAnswers[$i][1]);
                 $answerToInsert->setScore($postAnswers[$i+1][1]);
-                array_push($answerObjects,$answerToInsert);
+                \array_push($answerObjects,$answerToInsert);
             }
         }
         return $answerObjects;
@@ -345,11 +343,11 @@ class QuestionController extends ControllerBase {
         $post = URequest::getDatas()['tags'];
         $tagsObjects = array();
         if($post!==''){
-            $tagsId = explode(',',$post);
-            for ($i = 0; $i < count($tagsId); $i++) {
+            $tagsId = \explode(',',$post);
+            for ($i = 0; $i < \count($tagsId); $i++) {
                 $tagToInsert = new Tag();
                 $tagToInsert->setId($tagsId[$i]);
-                array_push($tagsObjects,$tagToInsert);
+                \array_push($tagsObjects,$tagToInsert);
             }
         }
         return $tagsObjects;

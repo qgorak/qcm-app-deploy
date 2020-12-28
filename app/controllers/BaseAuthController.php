@@ -1,6 +1,5 @@
 <?php
 namespace controllers;
-use Ubiquity\controllers\Router;
 use Ubiquity\mailer\MailerManager;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
@@ -118,7 +117,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         if(URequest::isPost()){
             $user=DAO::getOne(User::class,"email = ?",false,[URequest::post('email')]);
             if($user!==null){
-                if (password_verify(URequest::post('password'),$user->getPassword())){
+                if (\password_verify(URequest::post('password'),$user->getPassword())){
                     return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()];
                 }
                 else{
@@ -147,7 +146,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $mail = new MailManager();
             $mail->to(URequest::post('email'));
             $newPassword=$this->randomPassword();
-            $user->setPassword(password_hash($newPassword,PASSWORD_DEFAULT));
+            $user->setPassword(\password_hash($newPassword,PASSWORD_DEFAULT));
             $mail->setNewPassword($newPassword);
             if (MailerManager::send($mail)) {
                 $this->loader->update($user);
@@ -185,9 +184,9 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         $pass = array(); //remember to declare $pass as an array
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
         for ($i = 0; $i < 10; $i++) {
-            $n = rand(0, $alphaLength);
+            $n = \rand(0, $alphaLength);
             $pass[] = $alphabet[$n];
         }
-        return implode($pass); //turn the array into a string
+        return \implode($pass); //turn the array into a string
     }
 }

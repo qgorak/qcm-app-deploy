@@ -1,7 +1,6 @@
 <?php
 namespace controllers;
 
-use models\User;
 use Ubiquity\controllers\Router;
 use Ubiquity\controllers\Startup;
 use Ubiquity\orm\DAO;
@@ -12,7 +11,6 @@ use DateTime;
 use models\Exam;
 use models\Group;
 use models\Qcm;
-use models\Question;
 use services\DAO\ExamDAOLoader;
 use models\Useranswer;
 use services\datePickerTranslator;
@@ -138,7 +136,7 @@ class ExamController extends ControllerBase{
         if (prevType != e.type) {
     		if (e.type=="blur"){
             count++;
-            ws.send(\'{"user":'.json_encode(USession::get('activeUser')).',"target":'.$target.',"cheat":\'+count+\'}\');
+            ws.send(\'{"user":'.\json_encode(USession::get('activeUser')).',"target":'.$target.',"cheat":\'+count+\'}\');
         }
     	}
         $(this).data("prevType", e.type);
@@ -241,7 +239,6 @@ class ExamController extends ControllerBase{
         ',true);
         $this->uiService->OverseeUsersDataTable($exam);
         $this->jquery->renderView('ExamController/oversee.html');
-
     }
 
     /**
@@ -254,7 +251,7 @@ class ExamController extends ControllerBase{
         $this->uiService->displayUserAnswers($answers);
         $questionsExam = DAO::getManyToMany($qcm, 'questions');
         $countAnswer = DAO::count(Useranswer::class,'idExam = ? AND idUser = ?',[$exam->getId(),$idUser]);
-        $countQuestion = count($questionsExam);
+        $countQuestion = \count($questionsExam);
         $this->jquery->renderView('ExamController/overseeUser.html',['nbQuestion'=>$countQuestion,'nbAnswer'=>$countAnswer]);
     }
 
@@ -278,4 +275,3 @@ class ExamController extends ControllerBase{
         return $userAnswer;
     }
 }
-

@@ -1,7 +1,6 @@
 <?php
 namespace models;
 
-use Ubiquity\orm\DAO;
 /**
  * @table('user')
 */

@@ -10,8 +10,10 @@ use models\User;
 use models\Usergroup;
 
 class GroupUIService {
+    
     protected $jquery;
     protected $semantic;
+    
     public function __construct(JsUtils $jq) {
         $this->jquery = $jq;
         $this->semantic = $jq->semantic ();
@@ -117,7 +119,7 @@ class GroupUIService {
         $('#joinGroup').click(function() {
         	$('#joinModal').modal('show');
         });
-            $('.ui.accordion').accordion();");
+            $('.ui.accordion').accordion({exclusive: false});");
 	}
 	
 	public function groupJoinDemand($users,$groupId){
@@ -160,6 +162,7 @@ class GroupUIService {
 	    $usersDt->insertDefaultButtonIn('delete','user times','delete',false);
 	    $this->jquery->postOnClick('.delete',Router::path('banUser'),'{"group":$("#dtUsers").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
 	}
+	
 	public function joinform(){
         $joinForm=$this->jquery->semantic()->dataForm('joinForm',Usergroup::class);
         $joinForm->setFields([
@@ -175,6 +178,5 @@ class GroupUIService {
         $joinForm->fieldAsSubmit('submit','green',Router::path('joinSubmit'),'#response-joinform',[
             'value'=>TranslatorManager::trans('joinSubmit',[],'main')
         ]);
-
     }
 }

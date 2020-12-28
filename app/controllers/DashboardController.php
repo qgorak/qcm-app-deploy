@@ -10,10 +10,7 @@ use services\DAO\ExamDAOLoader;
 use services\UI\ExamUIService;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
-use Ubiquity\utils\http\UResponse;
 use Ubiquity\utils\http\USession;
-use models\Tag;
-use models\User;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 /**
  * Controller DashboardController
@@ -49,7 +46,6 @@ class DashboardController extends ControllerBase{
                 'hasLoader' => 'internal'
             ] );
         }
-
     }
 
     /**
@@ -64,10 +60,10 @@ class DashboardController extends ControllerBase{
         $examInProgress =$this->loader->allMyExamInProgress();
         $examComing =$this->loader->allMyComingExam();
         if($examInProgress!=array()) {
-            $headeri = $this->jquery->semantic()->htmlHeader('headerExamInProgress', 2, '<div class="content">Exam in progress</div>')->addIcon('circle small red');;
-            $dti = $this->uiService->displayMyExamsInProgress($examInProgress);
+            $this->jquery->semantic()->htmlHeader('headerExamInProgress', 2, '<div class="content">Exam in progress</div>')->addIcon('circle small red');;
+            $this->uiService->displayMyExamsInProgress($examInProgress);
         }
-        $dtc = $this->uiService->displayMyComingExams($examComing);
+        $this->uiService->displayMyComingExams($examComing);
         $this->jquery->renderView("DashboardController/index.html",[
             'nbQuestion'=>$countQuestion,
             'nbGroup'=>$countGroup,
@@ -76,6 +72,4 @@ class DashboardController extends ControllerBase{
             'nbUsers'=>$countUserInMyGroups
         ]);
     }
-
-
 }
