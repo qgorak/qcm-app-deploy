@@ -235,7 +235,7 @@ class ExamController extends ControllerBase{
         $("#cancelMessage").click(function(){$(".cheat").modal("hide");});
         function sendMessage(target){
         $( "#submitMessage" ).unbind( "click" );
-        $("#submitMessage").click(function(event){ws.send(\'{"id":'.USession::get('activeUser')['id'].',"target":"\'+target+\'","message":"\'+$("textarea[name=message]").val()+\'"}\');event.stopPropagation();});
+        $("#submitMessage").click(function(event){ws.send(\'{"id":'.USession::get('activeUser')['id'].',"target":"\'+target+\'","message":"\'+$("textarea[name=message]").val()+\'"}\');$(".cheat").modal("hide");$("textarea[name=message]").val("");event.stopPropagation();});
         
         }
         ',true);
