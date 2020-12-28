@@ -1,8 +1,8 @@
 <div class="ui container">
-	<H1>QCM: {{ name }}</H1>
 	<div class="container">
 	<form id="frmUserAnswer" name="frmUserAnswer">
 		<div id="response">
+			<H1>QCM: {{ name }}</H1>
 			{{ response | raw }} 
 			<a id="startExam" data-ajax="{{ id }}"class="ui green button"> Commencer Exam </a>
 		</div>
