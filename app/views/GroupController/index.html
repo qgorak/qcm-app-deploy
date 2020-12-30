@@ -1,22 +1,22 @@
 <div id="response">
-<div class="main ui container">
-	<h2 class="ui header" style="margin-top:15px;">
-		<div class="content">
-			My Groups
+	{{script_foot | raw}}
+	<div class="main ui container">
+		<h2 class="ui header" style="margin-top:15px;">
+			<div class="content">
+				My Groups
+			</div>
+		</h2>
+		<div  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</div>
+			{{q['mygroupsacc'] | raw }}
 		</div>
-	</h2>
-	<div  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</div>
-		{{q['mygroupsacc'] | raw }}
-	</div>
-
-
+</div>
 <div id="addModal" class="ui fullscreen modal" style="padding:10px;">
-	<div class="header">{{t('addSubmit',[],'main')}}</div>
-	  	<i class="close icon"></i>
-	  	<div class="content">
-	  		{{ q['addForm'] | raw }}
-	  		{{ q['groupAddSubmit'] | raw }}
-	 	 </div>
+<div class="header">{{t('addSubmit',[],'main')}}</div>
+  	<i class="close icon"></i>
+  	<div class="content">
+  		{{ q['addForm'] | raw }}
+  		{{ q['groupAddSubmit'] | raw }}
+ 	 </div>
 </div>
 <div id="demandModal" class="ui fullscreen modal" style="padding:10px;">
 	<div class="header">Pending demands</div>
@@ -24,6 +24,4 @@
 	<div class="content">
 		<div id="response-demand"></div>
 	</div>
-</div>
-{{script_foot | raw}}
 </div>

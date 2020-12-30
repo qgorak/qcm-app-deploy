@@ -39,9 +39,8 @@ class GroupUIService {
 	    ]);
 	    $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),"#response",[
 	        'value'=>TranslatorManager::trans('addSubmit',[],'main'),
-	        'ajax'=>['before'=>'$("#addModal").modal("hide");','hasLoader'=>false,'historize'=>false,'jsCallback'=>'$(".dimmer").remove();']
+	        'ajax'=>['hasLoader'=>false,'historize'=>false,'before'=>'$("#addModal").modal("hide");$("#addForm")[0].reset();']
 	    ]);
-	    $groupForm->onSuccess("");
 		$dtMyGroups = $this->jquery->semantic ()->dataTable ( 'myGroups', Group::class, $myGroups );
 		$dtMyGroups->setFields ( [
 			'id',
@@ -62,7 +61,11 @@ class GroupUIService {
             'hasLoader' => 'internal',
             'attr' => 'data-ajax'
         ]);
-        $this->jquery->ajaxOnClick('._demand',Router::path ('groupDemand',[""]),'#response-demand',['attr'=>'data-ajax','jsCallback'=>'$("#demandModal").modal("show");']);
+        $this->jquery->ajaxOnClick('._demand',Router::path ('groupDemand',[""]),'#response-demand',[
+            'attr'=>'data-ajax',
+            'jsCallback'=>'$("#demandModal").modal("show");'
+            
+        ]);
 		$this->jquery->postOnClick('.delete',Router::path('banUser'),'{"group":$("#dtUsers").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
 	}
 	
@@ -84,8 +87,12 @@ class GroupUIService {
 	    $usersDt->insertDefaultButtonIn('accept','user plus','accept',false);
 	    $usersDt->insertDefaultButtonIn('refuse','user times','refuse',false);
 	    $usersDt->setProperty('group', $groupId);
-	    $this->jquery->postOnClick('.accept',Router::path('groupDemandAccept'),'{"valid":true,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response-demand");
-	    $this->jquery->postOnClick('.refuse',Router::path('groupDemandAccept'),'{"valide":false,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response-demand");
+	    $this->jquery->postOnClick('.accept',Router::path('groupDemandAccept'),'{"valid":true,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response-demand",[
+	        'listenerOn'=>'body'
+	    ]);
+	    $this->jquery->postOnClick('.refuse',Router::path('groupDemandAccept'),'{"valide":false,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response-demand",[
+	        'listenerOn'=>'body'
+	    ]);
 	}
 	
 	public function viewGroup($users,$id){
@@ -121,6 +128,7 @@ class GroupUIService {
             'rules'=>'empty'
         ]);
         $joinForm->fieldAsSubmit('submit','green',Router::path('joinSubmit'),'#response-joinform',[
+            'listenerOn'=>'body',
             'value'=>TranslatorManager::trans('joinSubmit',[],'main')
         ]);
     }
@@ -130,6 +138,7 @@ class GroupUIService {
         $acc->setStyled();
         return $acc;
     }
+    
     public function groupTitleGrid($group){
         $grid=$this->jquery->semantic()->htmlGrid('grid',1,3);
         $grid->getItem(0)->setWidth(3)->setContent($group->getName());
@@ -158,7 +167,7 @@ class GroupUIService {
         $bt->setFloated();
         $label = $this->jquery->semantic()->htmlLabel('labelDemand',DAO::count(Usergroup::class,'idGroup=? AND status=0',[$group->getId()]));
         $label->setClass('ui tiny label floating red');
-        $label->setStyle('padding-top:5px;');
+        $label->setStyle('padding-top:5px;z-index:0;');
         $bt->addContent($label);
         $bt->setProperty('data-ajax',$group->getId());
         return $bt;

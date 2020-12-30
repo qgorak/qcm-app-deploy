@@ -55,7 +55,7 @@ class GroupController extends ControllerBase{
         $this->uiService->displayMyGroups($myGroups);
         $acc = $this->uiService->groupAccordion($myGroups);
         foreach($myGroups as $group){
-            $name = $group->getName();
+            $group->getName();
             $users=$this->loader->getUsers($group->getId());
             $content = $this->uiService->viewGroup($users,$group->getId());
             $grid=$this->uiService->groupTitleGrid($group);
@@ -67,13 +67,14 @@ class GroupController extends ControllerBase{
      * @route('/','name'=>'group')
      */
     public function index(){
-        $this->displayMyGroups();
-        $this->jquery->execAtLast("$('#addGroup').click(function() {
-        	$('#addModal').modal('show');
-        });");
+        $this->_index();
         $this->jquery->renderView('GroupController/index.html');
     }
     
+    private function _index(){
+        $this->displayMyGroups();
+        $this->jquery->_add_event('#addGroup','$("#addModal").modal("show");','click');
+    }
 
     private function _viewGroup($id){
         $users=$this->loader->getUsers($id);
@@ -90,10 +91,9 @@ class GroupController extends ControllerBase{
         $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
         $group->setUser($user);
         $this->loader->add($group);
-        $this->index();
+        $this->_index();
+        $this->jquery->renderView('GroupController/display.html');
     }
-
-
     
     /**
      * @post("join","name"=>"joinSubmit")
@@ -149,7 +149,8 @@ class GroupController extends ControllerBase{
      */
     public function groupDelete(string $id){
         $this->loader->remove ( $id );
-        $this->index();
+        $this->_index();
+        $this->jquery->renderView('GroupController/display.html');
     }
     
     private function demand($groupId){
