@@ -32,7 +32,8 @@ class AuthUIService {
 	            'empty',
 	            'length[5]'
 	        ]]);
-	    $frm->fieldAs( 'password','password', [
+	    $frm->fieldAsInput( 'password', [
+	        'inputType'=>'password',
 	        'rules' => [
 	            'empty',
 	            'length[5]'
@@ -80,8 +81,8 @@ class AuthUIService {
 	    $frm->setCaptions([
 	        TranslatorManager::trans('firstname',[],'main'),
 	        TranslatorManager::trans('lastname',[],'main'),
-	        TranslatorManager::trans('password',[],'main'),
 	        TranslatorManager::trans('email',[],'main'),
+	        TranslatorManager::trans('password',[],'main'),
 	        TranslatorManager::trans('language',[],'main')
 	    ]);
 	    $frm->fieldAsInput ( 'email', [
@@ -90,6 +91,7 @@ class AuthUIService {
 	            'length[5]'
 	        ]]);
 	    $frm->fieldAsInput ( 'password', [
+	        'inputType'=>'password',
 	        'rules' => [
 	            'empty',
 	            'length[5]'
