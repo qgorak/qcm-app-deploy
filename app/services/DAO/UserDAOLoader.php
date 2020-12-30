@@ -2,8 +2,11 @@
 
 namespace services\DAO;
 
+use models\Group;
+use models\Usergroup;
 use Ubiquity\orm\DAO;
 use models\User;
+use Ubiquity\utils\http\USession;
 
 class UserDAOLoader {
     
@@ -29,5 +32,22 @@ class UserDAOLoader {
     
     public function getByEmail($email){
         return DAO::getOne(User::class,'email=?',false,[$email]);
+    }
+
+    private function getAllGroups($userId,$status){
+        $retour=[];
+        $userGroups=DAO::getAll(Usergroup::class,"idUser=? AND status=?",false,[$userId,$status]);
+        foreach($userGroups as $value){
+            \array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
+        }
+        return $retour;
+    }
+
+    public function inGroups(){
+        return $this->getAllGroups(USession::get('activeUser')['id'],"1");
+    }
+
+    public function waitGroups(){
+        return $this->getAllGroups(USession::get('activeUser')['id'],"0");
     }
 }

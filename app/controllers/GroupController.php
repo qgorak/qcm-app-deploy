@@ -1,6 +1,7 @@
 <?php
 namespace controllers;
 
+use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use models\Group;
@@ -34,7 +35,7 @@ class GroupController extends ControllerBase{
         $this->uiService = new GroupUIService( $this->jquery );
         if (! URequest::isAjax ()) {
             $this->loadView('/main/UI/trainerNavbar.html');
-            $this->jquery->getHref ( 'a', '#response', [
+            $this->jquery->getHref ( '.trainermenu', '#response', [
                 'hasLoader' => 'internal'
             ] );
             $this->jquery->attr('#trainermode','class','item active',true);
@@ -51,9 +52,15 @@ class GroupController extends ControllerBase{
     
     private function displayMyGroups() {
         $myGroups = $this->loader->myGroups();
-        $inGroups=$this->loader->inGroups();
-        $waitGroups=$this->loader->waitGroups();
-        $this->uiService->displayMyGroups($myGroups, $inGroups,$waitGroups);
+        $this->uiService->displayMyGroups($myGroups);
+        $acc = $this->uiService->groupAccordion($myGroups);
+        foreach($myGroups as $group){
+            $name = $group->getName();
+            $users=$this->loader->getUsers($group->getId());
+            $content = $this->uiService->viewGroup($users,$group->getId());
+            $grid=$this->uiService->groupTitleGrid($group);
+            $acc->addItem(array($grid,$content));
+        }
     }
     
     /**
@@ -61,6 +68,9 @@ class GroupController extends ControllerBase{
      */
     public function index(){
         $this->displayMyGroups();
+        $this->jquery->execAtLast("$('#addGroup').click(function() {
+        	$('#addModal').modal('show');
+        });");
         $this->jquery->renderView('GroupController/index.html');
     }
     
@@ -79,11 +89,8 @@ class GroupController extends ControllerBase{
         $group->setKeyCode(\uniqid());
         $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
         $group->setUser($user);
-        $newGroup=$this->loader->add($group);
-        $this->displayMyGroups();
-        $msg=$this->jquery->semantic()->htmlMessage('msg',TranslatorManager::trans('createGroupSucceed',[],'main'),['success']);
-        $msg->setTimeout(3000);
-        echo $newGroup;
+        $this->loader->add($group);
+        $this->index();
     }
 
 
@@ -142,6 +149,7 @@ class GroupController extends ControllerBase{
      */
     public function groupDelete(string $id){
         $this->loader->remove ( $id );
+        $this->index();
     }
     
     private function demand($groupId){
@@ -179,6 +187,7 @@ class GroupController extends ControllerBase{
             $this->loader->acceptDemand(URequest::post('group'),URequest::post('user'));
         }
         $this->demand(URequest::post('group'));
+        $this->jquery->ajax('get',Router::path('group'),'#response');
         $this->jquery->renderView('GroupController/demand.html');
     }
     
@@ -187,7 +196,6 @@ class GroupController extends ControllerBase{
      */
     public function banUser(){
         $this->loader->banUser(URequest::post('group'), URequest::post('user'));
-        $this->_viewGroup(URequest::post('group'));
-        $this->jquery->renderView('GroupController/view.html');
+        $this->index();
     }
 }

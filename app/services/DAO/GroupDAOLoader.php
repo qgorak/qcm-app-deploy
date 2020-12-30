@@ -31,13 +31,6 @@ class GroupDAOLoader {
 	    return $user->getGroups();
 	}
 
-	public function inGroups(){
-	    return $this->getAllGroups(USession::get('activeUser')['id'],"1");	    
-	}
-	
-	public function waitGroups(){
-	    return $this->getAllGroups(USession::get('activeUser')['id'],"0");	 
-	}
 	
 	public function clear(): void {
 		DAO::deleteAll ( Group::class, '1=1' );
@@ -104,15 +97,7 @@ class GroupDAOLoader {
 	    }
 	    return false;
 	}
-	
-	public function getAllGroups($userId,$status){
-	    $retour=[];
-	    $userGroups=DAO::getAll(Usergroup::class,"idUser=? AND status=?",false,[$userId,$status]);
-	    foreach($userGroups as $value){
-	        \array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
-	    }
-	    return $retour;
-	}
+
 	
 	public function alreadyDemand($groupId,$userId){
 	    if(DAO::getOne(Usergroup::class,'idGroup=? AND idUser=?',false,[$groupId,$userId])!=null){

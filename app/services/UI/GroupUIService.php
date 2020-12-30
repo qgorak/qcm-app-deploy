@@ -4,6 +4,7 @@ namespace services\UI;
 
 use Ajax\php\ubiquity\JsUtils;
 use Ubiquity\controllers\Router;
+use Ubiquity\orm\DAO;
 use Ubiquity\translation\TranslatorManager;
 use models\Group;
 use models\User;
@@ -19,7 +20,7 @@ class GroupUIService {
         $this->semantic = $jq->semantic ();
     }
     
-    public function displayMyGroups($myGroups,$inGroups,$waitInGroups){
+    public function displayMyGroups($myGroups){
 	    $groupForm=$this->jquery->semantic()->dataForm('addForm', Group::class);
 	    $groupForm->setFields([
 	        "name",
@@ -36,21 +37,11 @@ class GroupUIService {
 	    $groupForm->fieldAsTextarea('description',[
 	        'rules'=>'empty'
 	    ]);
-	    $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),"window",[
+	    $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),"#response",[
 	        'value'=>TranslatorManager::trans('addSubmit',[],'main'),
-	        'ajax'=>['jsCallback'=>'$("#addForm-name-0").val("");$("#addForm-description-0").val("");if($("#myGroups tbody").children("tr:first").attr("id")=="htmltablecontent--0"){$("#myGroups tbody tr:first-child").remove();};$("#myGroups tbody").append("<tr id=\'myGroups-tr-"+JSON.parse(data)._rest.id+"\' class=\'_element\' data-ajax="+JSON.parse(data)._rest.id+">
-	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-0\' data-field=\'id\'>"+JSON.parse(data)._rest.id+"</td>
-	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-1\' data-field=\'name\'>"+JSON.parse(data)._rest.name+"</td>
-	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-2\' data-field=\'description\'>"+JSON.parse(data)._rest.description+"</td>
-	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-3\' data-field=\'keyCode\'>"+JSON.parse(data)._rest.keyCode+"</td>
-	<td id=\'htmltr-myGroups-tr-"+JSON.parse(data)._rest.id+"-4\' >
-		<button class=\'ui button icon _display basic\' data-ajax="+JSON.parse(data)._rest.id+"><i id=\'icon-\' class=\'icon eye\'></i></button>
-		<button class=\'ui button icon _edit basic\' data-ajax="+JSON.parse(data)._rest.id+"><i id=\'icon-\' class=\'icon edit\'></i></button>
-		<button class=\'ui button icon _delete red basic\' data-ajax="+JSON.parse(data)._rest.id+"><i id=\'icon-\' class=\'icon remove\'></i></button>
-	</td>
-</tr>");']
+	        'ajax'=>['before'=>'$("#addModal").modal("hide");','hasLoader'=>false,'historize'=>false,'jsCallback'=>'$(".dimmer").remove();']
 	    ]);
-	    $groupForm->onSuccess("$('#addModal').modal('hide');");
+	    $groupForm->onSuccess("");
 		$dtMyGroups = $this->jquery->semantic ()->dataTable ( 'myGroups', Group::class, $myGroups );
 		$dtMyGroups->setFields ( [
 			'id',
@@ -66,60 +57,13 @@ class GroupUIService {
 		]);
 		$dtMyGroups->setIdentifierFunction ( 'getId' );
 		$dtMyGroups->addAllButtons(false);
-		$this->jquery->getOnClick ( '._delete', Router::path ('groupDelete',[""]), '', [
-			'hasLoader' => 'internal',
-			'attr' => 'data-ajax',
-		    'listenerOn'=>'body',
-		    'jsCallback'=>'$(".ui.accordion").accordion("open",0);$(self).closest("tr").remove()'
-		] );
-		$this->jquery->getOnClick ( '._edit', Router::path ('groupDemand',[""]), '#response', [
-			'hasLoader' => 'internal',
-		    'listenerOn'=>'body',
-			'attr' => 'data-ajax'
-		] );
-        $this->jquery->getOnClick('._display', Router::path ('groupView',[""]),'#response',[
-            'hasLoader'=>'internal',
-            'listenerOn'=>'body',
-            'attr'=>'data-ajax'
+		$this->jquery->getOnClick('._delete',Router::path ('groupDelete',[""]),'#response',[
+            'historize'=>false,
+            'hasLoader' => 'internal',
+            'attr' => 'data-ajax'
         ]);
-        
-		$dtInGroups = $this->jquery->semantic ()->dataTable ( 'inGroups', Group::class, $inGroups );
-		$dtInGroups->setFields ( [
-			'id',
-			'name',
-			'description'
-		] );
-		$dtInGroups->setCaptions([
-			'id',
-			TranslatorManager::trans('name',[],'main'),
-			TranslatorManager::trans('description',[],'main')
-		]);
-		$dtInGroups->setIdentifierFunction ( 'getId' );
-		
-		$dtWait=$this->jquery->semantic()->dataTable('waitInGroups', Group::class, $waitInGroups);
-		$dtWait->setFields ( [
-		    'id',
-		    'name',
-		    'description',
-		    'wait'
-		] );
-		$dtWait->setCaptions([
-		    'id',
-		    TranslatorManager::trans('name',[],'main'),
-		    TranslatorManager::trans('description',[],'main')
-		]);
-		$dtWait->fieldAsElement('wait','i','hourglass icon');
-		$dtWait->setIdentifierFunction ( 'getId' );
-		
-		
-		
-		$this->jquery->execAtLast("$('#addGroup').click(function() {
-        	$('#addModal').modal('show');
-        });
-        $('#joinGroup').click(function() {
-        	$('#joinModal').modal('show');
-        });
-            $('.ui.accordion').accordion({exclusive: false});");
+        $this->jquery->ajaxOnClick('._demand',Router::path ('groupDemand',[""]),'#response-demand',['attr'=>'data-ajax','jsCallback'=>'$("#demandModal").modal("show");']);
+		$this->jquery->postOnClick('.delete',Router::path('banUser'),'{"group":$("#dtUsers").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
 	}
 	
 	public function groupJoinDemand($users,$groupId){
@@ -140,8 +84,8 @@ class GroupUIService {
 	    $usersDt->insertDefaultButtonIn('accept','user plus','accept',false);
 	    $usersDt->insertDefaultButtonIn('refuse','user times','refuse',false);
 	    $usersDt->setProperty('group', $groupId);
-	    $this->jquery->postOnClick('.accept',Router::path('groupDemandAccept'),'{"valid":true,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
-	    $this->jquery->postOnClick('.refuse',Router::path('groupDemandAccept'),'{"valide":false,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
+	    $this->jquery->postOnClick('.accept',Router::path('groupDemandAccept'),'{"valid":true,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response-demand");
+	    $this->jquery->postOnClick('.refuse',Router::path('groupDemandAccept'),'{"valide":false,"group":$("#usersDemand").attr("group"),"user":$(this).attr("data-ajax")}',"#response-demand");
 	}
 	
 	public function viewGroup($users,$id){
@@ -157,11 +101,12 @@ class GroupUIService {
 	        TranslatorManager::trans('lastname',[],'main'),
 	        TranslatorManager::trans('email',[],'main')
 	    ]);
+	    $usersDt->setClass(['ui single line very basic table']);
 	    $usersDt->setIdentifierFunction ( 'getId' );
 	    $usersDt->setProperty('group', $id);
-	    $usersDt->insertDefaultButtonIn('delete','user times','delete',false);
-	    $this->jquery->postOnClick('.delete',Router::path('banUser'),'{"group":$("#dtUsers").attr("group"),"user":$(this).attr("data-ajax")}',"#response");
-	}
+	    $usersDt->insertDefaultButtonIn('delete','ban','delete');
+	    return $usersDt;
+    }
 	
 	public function joinform(){
         $joinForm=$this->jquery->semantic()->dataForm('joinForm',Usergroup::class);
@@ -178,5 +123,44 @@ class GroupUIService {
         $joinForm->fieldAsSubmit('submit','green',Router::path('joinSubmit'),'#response-joinform',[
             'value'=>TranslatorManager::trans('joinSubmit',[],'main')
         ]);
+    }
+
+    public function groupAccordion($groups){
+        $acc = $this->jquery->semantic()->htmlAccordion('mygroupsacc');
+        $acc->setStyled();
+        return $acc;
+    }
+    public function groupTitleGrid($group){
+        $grid=$this->jquery->semantic()->htmlGrid('grid',1,3);
+        $grid->getItem(0)->setWidth(3)->setContent($group->getName());
+        $grid->getItem(1)->setWidth(5)->setContent($group->getDescription());
+        $grid->getItem(2)->setWidth(2)->setContent($group->getKeyCode());
+        $grid->addItem($this->groupOptionButton($group));
+        $grid->addItem($this->groupDemandButton($group));
+        $grid->setStyle('display:inline-block;width:100%');
+        return $grid;
+    }
+
+    private function groupOptionButton($group){
+        $dd=$this->jquery->semantic()->htmlDropdown('dd-'.$group->getId())->addIcon('ellipsis vertical');
+        $dd->addItems(["see Exams","Delete"]);
+        $dd->getItem(1)->setProperty('data-ajax',$group->getId())->addClass('_delete');
+        $dd->setClass('dropdown ui button');
+        $dd->setStyle("background:none;margin-top:4px;");
+        $dd->setFloated();
+        return $dd;
+    }
+    private function groupDemandButton($group){
+        $bt=$this->jquery->semantic()->htmlButton('btDemand');
+        $icons=$this->jquery->semantic()->htmlIconGroups("icons3",["user","add"],"large");
+        $bt->addContent($icons->toCorner());
+        $bt->addClass('_demand');
+        $bt->setFloated();
+        $label = $this->jquery->semantic()->htmlLabel('labelDemand',DAO::count(Usergroup::class,'idGroup=? AND status=0',[$group->getId()]));
+        $label->setClass('ui tiny label floating red');
+        $label->setStyle('padding-top:5px;');
+        $bt->addContent($label);
+        $bt->setProperty('data-ajax',$group->getId());
+        return $bt;
     }
 }

@@ -1,37 +1,15 @@
+<div id="response">
 <div class="main ui container">
-	<div id="response">
 	<h2 class="ui header" style="margin-top:15px;">
-		<i class="users icon"></i>
 		<div class="content">
-			Group
+			My Groups
 		</div>
 	</h2>
 	<div  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</div>
-		<div class="ui styled accordion" style="margin-top:15px;">
-			  <div class="title">
-				    <i class="dropdown icon"></i>
-				    {{t('myGroups',[],'main')}}
-			  </div>
-			  <div class="content">
-			    	{{q['myGroups'] | raw }}
-			  </div>
-			  <div class="title">
-			    <i class="dropdown icon"></i>
-			    	{{t('inGroups',[],'main')}}
-			  </div>
-			  <div class="content">
-			    	{{q['inGroups'] | raw }}
-			  </div>
-			  <div class="title">
-			    <i class="dropdown icon"></i>
-			    	{{t('waitInGroups',[],'main')}}
-			  </div>
-			  <div class="content">
-			    	{{q['waitInGroups'] | raw }}
-			  </div>
-		</div>
+		{{q['mygroupsacc'] | raw }}
 	</div>
-</div>
+
+
 <div id="addModal" class="ui fullscreen modal" style="padding:10px;">
 	<div class="header">{{t('addSubmit',[],'main')}}</div>
 	  	<i class="close icon"></i>
@@ -40,4 +18,12 @@
 	  		{{ q['groupAddSubmit'] | raw }}
 	 	 </div>
 </div>
+<div id="demandModal" class="ui fullscreen modal" style="padding:10px;">
+	<div class="header">Pending demands</div>
+	<i class="close icon"></i>
+	<div class="content">
+		<div id="response-demand"></div>
+	</div>
+</div>
 {{script_foot | raw}}
+</div>

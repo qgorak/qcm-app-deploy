@@ -1,6 +1,9 @@
 <?php
 namespace controllers;
 
+use models\Group;
+use models\Usergroup;
+use Ubiquity\orm\DAO;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use Ubiquity\translation\TranslatorManager;
 use Ubiquity\utils\http\URequest;
@@ -42,14 +45,16 @@ class UserController extends ControllerBase{
     private function displayMyInfo($id){
         $user=$this->loader->get($id);
         $user->code_style='default';
-        $this->uiService->displayInfos($user);
+        $waitGroups =$this->loader->waitGroups();
+        $groups =$this->loader->inGroups();
+        $this->uiService->displayInfos($user,$groups,$waitGroups);
     }
     
     /**
      * @route('/','name'=>'user')
      */
     public function index(){
-        $this->displayMyInfo(USession::get('activeUser')['id']);
+        $this->displayMyInfo($userId = USession::get('activeUser')['id']);
         $this->_index($this->jquery->renderView('UserController/display.html',[],true));
     }
     

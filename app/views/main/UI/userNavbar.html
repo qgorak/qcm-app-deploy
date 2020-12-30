@@ -10,13 +10,13 @@
 		<div class="item">
 			<div id="joingroup" class="ui primary button">{{t('joinSubmit',[],'main')}}</div>
 		</div>
-		<a class="item" href="{{path('terminate')}}">{{t('logout',[],'main')}}</a>
-		<a class="item" href="{{path('user')}}">
-			<i class="icons">
+		<div id="menuaccount" class="ui dropdown icon item">
 			<i class="user icon"></i>
-			<i class="user icon"></i>
-			</i>
-		</a>
+			<div class="menu">
+				<a class="item" href="{{path('user')}}">My account</a>
+				<a class="item" href="{{path('terminate')}}">{{t('logout',[],'main')}}</a>
+			</div>
+		</div>
 	</div>
 </div>
 </div>
@@ -28,4 +28,5 @@
 		</div>
 	</div>
 </div>
+
 
