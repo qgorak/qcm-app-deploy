@@ -17,7 +17,7 @@ class AuthUIService {
 	
 	public function loginForm(){
 	    $u = new User();
-	    $frm = $this->jquery->semantic ()->dataForm ( 'loginForm', $u);
+	    $frm = $this->jquery->semantic ()->dataForm ('loginForm', $u);
 	    $frm->setFields ( [
 	        'email',
 	        'password',
@@ -62,7 +62,7 @@ class AuthUIService {
 	        'Saisir votre email'
 	    ]);
 	    $form->fieldAsInput('email');
-	    $form->fieldAsSubmit('submit',null,Router::path('resetPassword'),'.header');
+	    $form->fieldAsSubmit('submit',null,Router::path('resetPassword'),'#responseauth');
 	}
 	
 	public function registerForm(){
@@ -112,9 +112,9 @@ class AuthUIService {
 	    return $frm;
 	}
 	
-	public function loginErrorMessage($message){
+	public function loginErrorMessage($message,$icon){
 	    $msg = $this->jquery->semantic()->htmlMessage('msglogin',$message);
-	    $msg->setIcon('check');
+	    $msg->setIcon($icon);
 	    return $msg;
 	}
 }

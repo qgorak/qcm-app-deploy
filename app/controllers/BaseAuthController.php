@@ -50,67 +50,28 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      */
     public function loginform(){
         $this->uiService->loginForm();
-        $this->jquery->renderView('BaseAuthController/login.html',[]);
-    }
-    
-    /**
-     * @get("/registerForm",'name'=>'registerform')
-     */
-    public function registerform(){
-        $this->uiService->registerForm();
-        $this->jquery->renderView('BaseAuthController/register.html',[]);
-        
+        $this->jquery->renderView('BaseAuthController/login.html');
     }
     
     /**
      * @post("/login",'name'=>'loginPost')
      */
     public function loginPost(){
-        $this->uiService->loginForm();
         $info=$this->_connect();
-        $this->uiService->loginErrorMessage($info);
-        if(\gettype($this->_connect())!=="string"){
+        if(!\array_key_exists('error',$info)){
             $this->onConnect($this->_connect());
             $this->jquery->clear_compile();
             echo 'logged';
-        }else{
-            $this->jquery->renderView('BaseAuthController/login.html',[]);
         }
-    }
-    
-    /**
-     * @get("/terminate","name"=>"terminate")
-     */
-    public function terminate(){
-        USession::terminate ();
-        \header('location:/');
-        exit();
-    }
-    
-    /**
-     * @post("/register",'name'=>'registerPost')
-     */
-    public function registerPost(){
-        if(URequest::isPost()){
-            if(DAO::getOne(User::class,"email = ?",true,[URequest::post("email")])===null){
-                $instance=new User();
-                URequest::setValuesToObject($instance);
-                if(URequest::password_hash('password')){
-                    $instance->setPassword(URequest::post('password'));
-                }
-                DAO::insert($instance);
-                $this->uiService->loginErrorMessage('Success');
-                $this->jquery->renderView('BaseAuthController/register.html',[]);          
-            }
+        else{
+            $this->uiService->loginForm();
+            $this->uiService->loginErrorMessage($info['error'],'x');
+            $this->jquery->renderView('BaseAuthController/login.html');
         }
     }
     
     protected function onConnect($connected) {
-        $urlParts=$this->getOriginalURL();
         USession::set($this->_getUserSessionKey(), $connected);
-        if(isset($urlParts)){
-            $this->_forward(\implode("/",$urlParts));
-        }
     }
     
     protected function _connect() {
@@ -121,12 +82,49 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
                     return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()];
                 }
                 else{
-                    return "Wrong password !";
+                    return ['error'=>'Wrong password !'];
                 }
             }
-            return "Wrong email !";
+            return ['error'=>'Wrong email !'];
         }
-        return "Error !";
+        return ['error'=>'Error !'];
+    }
+    
+    /**
+     * @get("/registerForm",'name'=>'registerform')
+     */
+    public function registerform(){
+        $this->uiService->registerForm();
+        $this->jquery->renderView('BaseAuthController/register.html');
+    }
+    
+    /**
+     * @post("/register",'name'=>'registerPost')
+     */
+    public function registerPost(){
+        if(DAO::getOne(User::class,"email = ?",true,[URequest::post("email")])===null){
+            $instance=new User();
+            URequest::setValuesToObject($instance);
+            if(URequest::password_hash('password')){
+                $instance->setPassword(URequest::post('password'));
+            }
+            DAO::insert($instance);
+            $this->uiService->loginErrorMessage('You successfully registered','check');
+        }
+        else{
+            $this->uiService->registerForm();
+            $this->uiService->loginErrorMessage('This email already exist !','x');
+        }
+        $this->jquery->renderView('BaseAuthController/register.html');
+    }
+    
+    /**
+     * @get("/terminate","name"=>"terminate")
+     */
+    public function terminate(){
+        USession::terminate ();
+        \header('location:/');
+        exit();
     }
 
     /**
@@ -134,7 +132,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      */
     public function resetPasswordForm(){
         $this->uiService->resetPasswordForm();
-        $this->jquery->renderView('BaseAuthController/reset.html',[]);
+        $this->jquery->renderView('BaseAuthController/reset.html');
     }
     
     /**
@@ -150,13 +148,18 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $mail->setNewPassword($newPassword);
             if (MailerManager::send($mail)) {
                 $this->loader->update($user);
-                echo 'Your new password has been sent';
-            } else {
-                echo 'Error sending the message';
+                $this->uiService->loginErrorMessage('Your new password has been sent','check');
+            }
+            else{
+                $this->uiService->loginErrorMessage('Error sending the message','x');
+                $this->uiService->resetPasswordForm();
+                $this->jquery->renderView('BaseAuthController/reset.html');
             }
         }
         else{
-            echo 'This email doesn\t exist';
+            $this->uiService->loginErrorMessage('This email doesn\'t exist','x');
+            $this->uiService->resetPasswordForm();
+            $this->jquery->renderView('BaseAuthController/reset.html');
         }
     }
     
