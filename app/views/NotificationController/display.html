@@ -5,6 +5,16 @@
     </th>
   </tr></thead>
   <tbody>
+  {% if notifications|length == 0 %}
+	<tr id="htmltablecontent--0">
+		<td id="htmltr-htmltablecontent--0-0" class="" rowspan="1" colspan="2">
+			<div class="ui message icon">
+				<i class="icon info circle"></i>
+				<div class="content">nothing to display</div>
+			</div>
+		</td>
+  	</tr>
+  {% endif %}
   {% for i in notifications  %}
     <tr>
       <td class="collapsing">
