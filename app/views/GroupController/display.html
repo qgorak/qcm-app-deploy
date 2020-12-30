@@ -4,7 +4,9 @@
 		<div class="content">
 			My Groups
 		</div>
+		<div class="sub header">Manage your groups</div>
 	</h2>
-	<div  id="addGroup" class="ui green button">{{t('addSubmit',[],'main')}}</div>
+				<div  id="addGroup" class="ui green button" style="margin-bottom:1em;">{{t('addSubmit',[],'main')}}</div>
 		{{q['mygroupsacc'] | raw }}
+		{{q['nogroupsmsg'] | raw }}
 	</div>

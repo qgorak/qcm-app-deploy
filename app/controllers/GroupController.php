@@ -55,11 +55,10 @@ class GroupController extends ControllerBase{
         $this->uiService->displayMyGroups($myGroups);
         $acc = $this->uiService->groupAccordion($myGroups);
         foreach($myGroups as $group){
-            $group->getName();
             $users=$this->loader->getUsers($group->getId());
-            $content = $this->uiService->viewGroup($users,$group->getId());
+            $content = $this->uiService->viewGroup($users,$group->getId(),$group->getKeyCode());
             $grid=$this->uiService->groupTitleGrid($group);
-            $acc->addItem(array($grid,$content));
+            $acc->addItem(array($grid,$group->getDescription().$content));
         }
     }
     
@@ -91,6 +90,7 @@ class GroupController extends ControllerBase{
         $user=DAO::getOne(User::class,"id=?",true,[USession::get('activeUser')['id']]);
         $group->setUser($user);
         $this->loader->add($group);
+        $this->jquery->semantic()->toast('body',['message'=>'Group created','class'=> 'success','position'=>'center top']);
         $this->_index();
         $this->jquery->renderView('GroupController/display.html');
     }
@@ -150,6 +150,7 @@ class GroupController extends ControllerBase{
     public function groupDelete(string $id){
         $this->loader->remove ( $id );
         $this->_index();
+        $this->jquery->semantic()->toast('body',['message'=>'group deleted','class'=> 'success','position'=>'center top']);
         $this->jquery->renderView('GroupController/display.html');
     }
     

@@ -98,14 +98,33 @@ pre {tab-size: 4;}
 .ck.ck-editor {
 	width:100% !important;
 }
-#grid *
-{
-	padding-top: 0;
+
+#mygroupsacc .title{
+	padding:0 0 5px 0;
+	vertical-align: middle;
+}
+#gridTitleGroup .column{
+	padding: 14px 0 5px 15px;
+	height:100%;
+}
+#gridTitleGroup{
+	height: 50px;
+	margin: 0;
+	padding:0;
+}
+.active #labelName{
+	background-color: lightgrey;
+	border-color: transparent;
+}
+#mygroupsacc .icon.dropdown{
+	display: none;
 }
 #btDemand{
 	background:none;
 	position:relative;
 	padding-right: 0;
-	margin-top:2px;
+	padding-top: 0;
+	margin-top:15px;
+	margin-bottom:5px;
 	margin-right:10px
 }

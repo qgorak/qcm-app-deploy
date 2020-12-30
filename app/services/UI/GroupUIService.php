@@ -38,6 +38,7 @@ class GroupUIService {
 	        'rules'=>'empty'
 	    ]);
 	    $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),"#response",[
+	        'class'=>'fluid ui green button',
 	        'value'=>TranslatorManager::trans('addSubmit',[],'main'),
 	        'ajax'=>['hasLoader'=>false,'historize'=>false,'before'=>'$("#addModal").modal("hide");$("#addForm")[0].reset();']
 	    ]);
@@ -95,7 +96,7 @@ class GroupUIService {
 	    ]);
 	}
 	
-	public function viewGroup($users,$id){
+	public function viewGroup($users,$id,$key){
 	    $usersDt=$this->jquery->semantic()->dataTable('dtUsers',User::class,$users);
 	    $usersDt->setFields([
 	        'firstname',
@@ -108,10 +109,13 @@ class GroupUIService {
 	        TranslatorManager::trans('lastname',[],'main'),
 	        TranslatorManager::trans('email',[],'main')
 	    ]);
+	    $msg = $this->jquery->semantic()->htmlMessage('emptyUsersDtMsg','share this link:<a>'.$key.'</a>');
+        $msg->setHeader('Empty group');
+	    $usersDt->setEmptyMessage($msg);
 	    $usersDt->setClass(['ui single line very basic table']);
 	    $usersDt->setIdentifierFunction ( 'getId' );
 	    $usersDt->setProperty('group', $id);
-	    $usersDt->insertDefaultButtonIn('delete','ban','delete');
+	    $usersDt->insertDefaultButtonIn('delete','ban','delete')->setVisibleHover(true);
 	    return $usersDt;
     }
 	
@@ -136,14 +140,20 @@ class GroupUIService {
     public function groupAccordion($groups){
         $acc = $this->jquery->semantic()->htmlAccordion('mygroupsacc');
         $acc->setStyled();
+        if(count($groups)==0){
+            $this->jquery->semantic()->htmlMessage('nogroupsmsg','no groups');
+            $acc->setStyle('display:none');
+        }
         return $acc;
     }
     
     public function groupTitleGrid($group){
-        $grid=$this->jquery->semantic()->htmlGrid('grid',1,3);
-        $grid->getItem(0)->setWidth(3)->setContent($group->getName());
-        $grid->getItem(1)->setWidth(5)->setContent($group->getDescription());
-        $grid->getItem(2)->setWidth(2)->setContent($group->getKeyCode());
+        $grid=$this->jquery->semantic()->htmlGrid('gridTitleGroup',1,3);
+        $labelName = $this->jquery->semantic()->htmlLabel('labelName',$group->getName())->setBasic();
+        $labelNbUsers = $this->jquery->semantic()->htmlLabel('labelNbUsers',DAO::count(Usergroup::class,'idGroup=? and status=1',[$group->getId()]),'users');
+        $grid->getItem(0)->setWidth(3)->setContent($labelName);
+        $grid->getItem(1)->setWidth(5)->setContent($labelNbUsers);
+        $grid->getItem(2)->setWidth(2);
         $grid->addItem($this->groupOptionButton($group));
         $grid->addItem($this->groupDemandButton($group));
         $grid->setStyle('display:inline-block;width:100%');
@@ -152,10 +162,10 @@ class GroupUIService {
 
     private function groupOptionButton($group){
         $dd=$this->jquery->semantic()->htmlDropdown('dd-'.$group->getId())->addIcon('ellipsis vertical');
-        $dd->addItems(["see Exams","Delete"]);
-        $dd->getItem(1)->setProperty('data-ajax',$group->getId())->addClass('_delete');
+        $dd->addItems(['<i class="pencil alternate icon"></i>See exams','<i class="key icon"></i>Copy link','<i class="delete icon"></i>Delete']);
+        $dd->getItem(2)->setProperty('data-ajax',$group->getId())->addClass('_delete');
         $dd->setClass('dropdown ui button');
-        $dd->setStyle("background:none;margin-top:4px;");
+        $dd->setStyle("background:none;padding-top:20px");
         $dd->setFloated();
         return $dd;
     }
