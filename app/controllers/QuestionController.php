@@ -92,13 +92,6 @@ class QuestionController extends ControllerBase {
         ] );
     	$types=$this->loader->getIconTypeq();
         $this->uiService->questionForm (new Question(),$types);
-        $this->jquery->postFormOnClick( '#submit',  Router::path('question.submit'),'questionForm', '#response', [
-                'hasLoader' => 'internal',
-                'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData(),"tags":$("#checkedTagForm").serializeArray()}',
-                'jsCallback'=>'window.history.pushState("", "", "/question/");'
-        ] );
-
-        
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
         $this->jquery->exec('includeCkEditor("#ckeditor","'.$lang.'");',true);
         $this->jquery->renderView ( 'QuestionController/add.html', []) ;
@@ -234,7 +227,7 @@ class QuestionController extends ControllerBase {
      * @get("displayMyQuestions","name"=>"question.my")
      */
     public function displayMyQuestions() {
-    	$this->uiService->getQuestionDataTable($this->loader->my());
+    	$this->uiService->getQuestionDataTable($this->loader->my(),$this->loader->getTypeq());
     	return $this->jquery->renderView( 'QuestionController/template/myQuestions.html', [] ,true);
     }
     
@@ -244,7 +237,7 @@ class QuestionController extends ControllerBase {
     public function submit() {
         $question= new Question ();
         URequest::setValuesToObject($question);
-        $question->setIdTypeq(URequest::post('typeq'));
+        $question->setIdTypeq(URequest::post('type'));
         $tagsObjects = $this->getTagPostData();
         $answerObjects = $this->getAnswersPostData();
         $this->loader->add ( $question, $tagsObjects );
@@ -252,8 +245,7 @@ class QuestionController extends ControllerBase {
             $answer->setQuestion($question);
             DAO::insert($answer,true);
         }
-        $msg = $this->jquery->semantic()->htmlMessage('','success !');
-        $this->index($msg);
+        $this->index();
     }
     
     /**
@@ -277,7 +269,7 @@ class QuestionController extends ControllerBase {
     
     private function getAnswersPostData(){
         $post = URequest::getDatas();
-        switch ($post['typeq']) {
+        switch ($post['type']) {
             case 1:
                 $answerObjects=$this->getQcmAnswersData($post);
                 break;
@@ -340,7 +332,7 @@ class QuestionController extends ControllerBase {
     }
     
     private function getTagPostData(){
-        $post = URequest::getDatas()['tags'];
+        $post = URequest::getDatas()['mytags'];
         $tagsObjects = array();
         if($post!==''){
             $tagsId = \explode(',',$post);

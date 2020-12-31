@@ -86,9 +86,7 @@ body{
 	padding:12px;
 }
 
-#dtItems tbody tr:hover {
-	background:whitesmoke;
-}
+
 #_userInfo{
 	display:none;
 }
@@ -128,3 +126,13 @@ pre {tab-size: 4;}
 	margin-bottom:5px;
 	margin-right:10px
 }
+#questionForm-submit-0{
+	margin-right: 100%;
+	width: 150px;
+}
+#message-questionForm-message-0{
+	display: none;
+}
+#dropdown-questionForm-mytags-0 .menu{
+	max-height: 300px;
+ }

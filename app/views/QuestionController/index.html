@@ -1,31 +1,23 @@
 <div id="response">
 {{ msg | raw}}
-<div class="ui grid stackable">
- <div class="row">
-   <div class="right aligned twelve wide column">
-   	<div id="add" href="{{path('question.add')}}" style="margin-top:15px;" data-target="#response" class="ui green button">
+    <div class="main ui container">
+        <h2 class="ui header" style="margin-top:15px">
+            <div class="content">
+                Questions
+            </div>
+            <div class="sub header">Manage your questions</div>
+        </h2>
+   	<div id="add" href="{{path('question.add')}}" data-target="#response" class="ui green button">
 	{{t('newItem',[],'main')}}
 	</div>
-      <div class="ui container" style="padding:10px;">
-   <div id="bank">
-   
+
+   <div id="bank" style="margin-top:15px">
 	{{q['QuestionBank'] | raw }}
 	<div id="myquestions">
         {{ myquestions | raw}}
 </div>
 </div>
-</div>
-</div>
-  <div class="four wide column mobile hidden">
-    <img src="public/assets/img/undraw_Questions_re_1fy7.svg" class="ui large rounded image">
-  <div class="ui horizontal container segment">
-  <H4>tags</H4>
-    <div id="myTags">
     </div>
-    </div>
-  </div>
-</div>
-</div>
 {{ q['modal'] | raw }}
 {{script_foot | raw}}
 </div>
