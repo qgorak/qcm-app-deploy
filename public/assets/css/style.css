@@ -133,6 +133,24 @@ pre {tab-size: 4;}
 #message-questionForm-message-0{
 	display: none;
 }
-#dropdown-questionForm-mytags-0 .menu{
-	max-height: 300px;
+#dropdown-questionForm-mytags-0 > .menu{
+	max-height: 350px;
+	overflow: hidden;
  }
+#tagMenuScrolling{
+	max-height: 150px;
+}
+.hiddenform{
+	display: none;
+}
+#dropdown-questionForm-mytags-0 .ui.label.transition{
+	padding:0 0.785714em 0 0;
+	background: none;
+}
+
+#tagMenuScrolling:not(:empty) + #notagstxt{
+	display: none;
+}
+.ck-editor__editable {
+	min-height:200px;
+}
