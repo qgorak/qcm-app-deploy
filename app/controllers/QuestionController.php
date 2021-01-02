@@ -2,6 +2,7 @@
 
 namespace controllers;
 
+use Ajax\semantic\html\elements\HtmlLabel;
 use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
@@ -43,7 +44,7 @@ class QuestionController extends ControllerBase {
         $this->uiService = new QuestionUIService( $this->jquery );
         if (! URequest::isAjax ()) {
             $this->loadView('/main/UI/trainerNavbar.html');
-            $this->jquery->getHref ( 'a', '#response', [
+            $this->jquery->getHref ( '.trainermenu', '#response', [
                 'hasLoader' => 'internal'
             ] );
         }
@@ -343,5 +344,24 @@ class QuestionController extends ControllerBase {
             }
         }
         return $tagsObjects;
+    }
+
+    /**
+     * @post("jsonPagination","name"=>"question.json")
+     */
+    public function jsonPaginate() {
+        $questions = $this->loader->my(URequest::getPost()['p']);
+        $json= [];
+        foreach ($questions as $question){
+            $res = '';
+            foreach ($question->_rest['tags'] as $tag){
+                $res = $res.'<div class="ui '.$tag->_rest['color'].' label">'.$tag->_rest['name'].'</div>';
+            }
+            $question->_rest['tags']=$res;
+            $typeq = [1=>['name'=>'QCM','icon'=>'check square'],2=>['name'=>'courte','icon'=>'bars'],3=>['name'=>'longue','icon'=>'align left'],4=>['name'=>'code','icon'=>'code']];
+            $question->_rest['idTypeq']='<div class="ui label" style="display:inline-flex;"><i id="icon-" class="icon '.$typeq[$question->_rest['idTypeq']]['icon'].' square"></i>'.$typeq[$question->_rest['idTypeq']]['name'].'</div>';
+            array_push($json,$question->_rest);
+        }
+        echo json_encode($json);
     }
 }

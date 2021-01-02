@@ -112,7 +112,7 @@ class QuestionUIService {
 	}
 
 	public function getQuestionDataTable($questions,$typeq){
-	    $dt = $this->jquery->semantic ()->dataTable ( 'dtItems', Question::class, $questions );
+	    $dt = $this->jquery->semantic ()->JsonDataTable ( 'dtItems', Question::class, $questions );
 	    $msg = new HtmlMessage ( '', TranslatorManager::trans('noDisplay',[],'main') );
 	    $msg->addIcon ( "x" );
 	    $dt->setEmptyMessage ( $msg );
@@ -135,7 +135,7 @@ class QuestionUIService {
 	    $dt->setColWidths([0=>7,1=>4,2=>1,3=>2]);
 	    $dt->setEdition ();
         $dt->setValueFunction('tags', function ($tags) {
-            if ($tags != null) {
+            if ($tags != null and $tags != '__tags__') {
                 $res = [];
                 foreach ($tags as $tag) {
                     $label = new HtmlLabel($tag->getId(), $tag->getName());
@@ -145,11 +145,17 @@ class QuestionUIService {
             }
         });
         $dt->setValueFunction('idTypeq', function ($type) {
-            $typeq = [1=>['name'=>'QCM','icon'=>'check square'],2=>['name'=>'courte','icon'=>'bars'],3=>['name'=>'longue','icon'=>'align left'],4=>['name'=>'code','icon'=>'code']];
-            $label = new HtmlLabel('', $typeq[$type]['name'],$typeq[$type]['icon']);
-            $label->setStyle('display:inline-flex;');
-            return $label;
+            if($type!='__idTypeq__'){
+                $typeq = [1=>['name'=>'QCM','icon'=>'check square'],2=>['name'=>'courte','icon'=>'bars'],3=>['name'=>'longue','icon'=>'align left'],4=>['name'=>'code','icon'=>'code']];
+                $label = new HtmlLabel('', $typeq[$type]['name'],$typeq[$type]['icon']);
+                $label->setStyle('display:inline-flex;');
+                return $label;
+            }
+            return $type;
         });
+        $dt->paginate(1,DAO::count(Question::class,'idUser=?',[USession::get('activeUser')['id']]),10);
+        $this->jquery->html('#htmltr-dtItems-tr-__id__-1','__tags__',true);
+        $dt->setUrls(["question/jsonPagination"]);
 	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), '', [
 	        'hasLoader' => 'internal',
 	        'jsCallback'=>'$(self).closest("tr").remove();$("body").toast({position: "center top", message: "Sucess",class: "success", });',
