@@ -133,8 +133,18 @@ pre {tab-size: 4;}
 #message-questionForm-message-0{
 	display: none;
 }
+#field-questionForm-mytags-0 label{
+	display:none;
+}
+#dropdown-questionForm-mytags-0{
+	padding:0;
+	border:none;
+	box-shadow: none;
+}
 #dropdown-questionForm-mytags-0 > .menu{
 	max-height: 350px;
+	margin-top: 5px;
+	width: 350px;
 	overflow: hidden;
  }
 #tagMenuScrolling{
@@ -145,6 +155,7 @@ pre {tab-size: 4;}
 }
 #dropdown-questionForm-mytags-0 .ui.label.transition{
 	padding:0 0.785714em 0 0;
+	margin-top: 5px;
 	background: none;
 }
 
@@ -153,4 +164,11 @@ pre {tab-size: 4;}
 }
 .ck-editor__editable {
 	min-height:200px;
+}
+.tagsbutton{
+	padding: .78571429em 1.5em .78571429em!important;
+	margin:22px 0 0 0!important;
+}
+#dropdown-questionForm-mytags-0-icon{
+	display:none;
 }

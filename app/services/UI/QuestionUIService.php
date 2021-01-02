@@ -31,6 +31,11 @@ class QuestionUIService {
 	    $toolbar->addDropdownAsItem($dd);
 	    $toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
 	    $toolbar->setClass('ui top attached menu');
+	    $this->jquery->jsonArrayOn('change','#Filter','#dtItems-tr-__id__','question/getByTags/','post',[
+            "preventDefault"=>false,
+	        'stopPropagation'=>false,
+	        'params'=>'{tags:$("#input-Filter").val()}'
+        ]);
 	    return $toolbar;
 	}
 
@@ -42,7 +47,6 @@ class QuestionUIService {
                 $label->setClass('ui '.$tag->getColor().' label');
                 $res[$tag->getId()]=$label;
             }
-
         $taginput=$this->jquery->semantic()->htmlInput('addTag','text','','Enter Tag');
         $taginput->addIcon('tag');
         $taginput->setClass('ui right labeled left icon input');
@@ -57,6 +61,11 @@ class QuestionUIService {
         $("<a></a>").addClass("item").attr("data-value",tag._rest.id).html("<div id=\'\' class=\'ui "+ tag._rest.color+ " label\'>" + tag._rest.name +" </div>")
     );$("body").toast({position: "center top", message: "Tag created",class: "success", });'
         ]);
+        $this->jquery->execOn('change','#input-dropdown-questionForm-mytags-0','if(!$(this).val())
+    $("#field-questionForm-mytags-0 label").css("display", "none");
+else
+    $("#field-questionForm-mytags-0 label").css("display", "block");
+');
         return $res;
     }
 	
@@ -73,7 +82,7 @@ class QuestionUIService {
         $frm->setCaptions([
             '',
             '',
-            'Assign tags',
+            'Tags assigned:',
             'Caption',
             'Type',
             'Add Body'
@@ -89,7 +98,7 @@ class QuestionUIService {
 	    $frm->fieldAsInput('caption',['style'=>'width:69%;display:inline-table','rules'=>'empty']);
         $frm->fieldAsDropDown('type',['1'=>'<i class="check square icon"></i>QCM','2'=>'<i class="bars icon"></i>courte','3'=>'<i class="align left icon"></i>longue','4'=>'<i class="code icon"></i>Code'],false,['style'=>'width:30%;display:inline-table','rules'=>'empty']);
         $frm->fieldAsDropDown('mytags',$tags,true,[
-            'style'=>'width:69%;margin-top:15px',
+            'style'=>'width:132px;;margin-top:15px',
         ]);
         $frm->fieldAsSubmit('submit','green',Router::path('question.submit'),"#response",[
             'style'=>'display:block;margin-right:100%;width:150px;',
@@ -97,9 +106,9 @@ class QuestionUIService {
             'value'=>'Create question',
             'ajax'=>['hasLoader'=>true,'params'=>'{"answers":$("#frmAnswer").serialize(),"ckcontent":window.editor.getData()}','historize'=>false,'jsCallback'=>'$("body").toast({position: "center top", message: "Sucess",class: "success", });']
         ]);
-        $this->jquery->addClass('#text-dropdown-questionForm-mytags-0','default',true);
+        $this->jquery->addClass('#text-dropdown-questionForm-mytags-0','ui button tagsbutton',true);
         $this->jquery->addClass('#text-dropdown-questionForm-type-0','default',true);
-        $this->jquery->html('#text-dropdown-questionForm-mytags-0','Select Tags',true);
+        $this->jquery->html('#text-dropdown-questionForm-mytags-0','<i class="tags icon"></i><span class="text">Assign tags</span>',true);
         $this->jquery->html('#text-dropdown-questionForm-type-0','Select Type',true);
         $this->jquery->exec('$("#questionForm").fadeIn()',true);
         $this->jquery->getOnClick ( '#dropdown-questionForm-type-0 .menu .item', 'question/getform', '#response-form', [

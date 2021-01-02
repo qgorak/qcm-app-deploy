@@ -216,12 +216,10 @@ class QuestionController extends ControllerBase {
     	       \array_push($tagObjects,$tag);
     	   }
     	   $questions = $this->loader->getByTags($tagObjects);
-    	   $this->uiService->getQuestionDataTable($questions);
-    	   $this->_index($this->jquery->renderView ( 'QuestionController/template/myQuestions.html',[
-    	   ],true));
         }else{
-           $this->displayMyQuestions();
+            $questions = $this->loader->my();
         }
+        echo $this->getQuestionJsonArray($questions);
     }
 
     /**
@@ -351,6 +349,10 @@ class QuestionController extends ControllerBase {
      */
     public function jsonPaginate() {
         $questions = $this->loader->my(URequest::getPost()['p']);
+        echo $this->getQuestionJsonArray($questions);
+    }
+
+    private function getQuestionJsonArray($questions){
         $json= [];
         foreach ($questions as $question){
             $res = '';
@@ -359,9 +361,9 @@ class QuestionController extends ControllerBase {
             }
             $question->_rest['tags']=$res;
             $typeq = [1=>['name'=>'QCM','icon'=>'check square'],2=>['name'=>'courte','icon'=>'bars'],3=>['name'=>'longue','icon'=>'align left'],4=>['name'=>'code','icon'=>'code']];
-            $question->_rest['idTypeq']='<div class="ui label" style="display:inline-flex;"><i id="icon-" class="icon '.$typeq[$question->_rest['idTypeq']]['icon'].' square"></i>'.$typeq[$question->_rest['idTypeq']]['name'].'</div>';
+            $question->_rest['idTypeq']='<div class="ui label" style="display:inline-flex;"><i id="icon-" class="icon '.$typeq[$question->_rest['idTypeq']]['icon'].'"></i>'.$typeq[$question->_rest['idTypeq']]['name'].'</div>';
             array_push($json,$question->_rest);
         }
-        echo json_encode($json);
+        return json_encode($json);
     }
 }
