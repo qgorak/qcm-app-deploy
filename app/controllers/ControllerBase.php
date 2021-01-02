@@ -39,6 +39,7 @@ abstract class ControllerBase extends Controller{
 
 	public function finalize() {
 		if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/Footer.html');
 			$this->loadView ( $this->footerView );
 		}
 	}

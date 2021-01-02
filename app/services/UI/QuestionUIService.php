@@ -153,6 +153,7 @@ class QuestionUIService {
             }
             return $type;
         });
+        $dt->setCompact();
         $dt->paginate(1,DAO::count(Question::class,'idUser=?',[USession::get('activeUser')['id']]),10);
         $this->jquery->html('#htmltr-dtItems-tr-__id__-1','__tags__',true);
         $dt->setUrls(["question/jsonPagination"]);
