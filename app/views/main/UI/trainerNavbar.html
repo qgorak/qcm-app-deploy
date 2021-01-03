@@ -1,9 +1,31 @@
-<div class="ui secondary pointing menu">
-	<a class="trainermenu item" href="{{path('dashboard')}}"><i class="signal icon"></i>Dashboard</a>
-	<a class="trainermenu item" href="{{path('question')}}"><i class="question icon"></i>{{t('question',[],'main')}}</a>
-	<a class="trainermenu item" href="{{path('group')}}"><i class="users icon"></i>{{t('group',[],'main')}}</a>
-	<a class="trainermenu item" href="{{path('qcm')}}"><i class="tasks icon"></i>{{t('qcm',[],'main')}}</a>
-	<a class="trainermenu item" href="{{path('exam')}}"><i class="pencil alternate icon"></i>{{t('exam',[],'main')}}</a>
+<div class="ui grid">
+	<div class="two wide column" style="padding-right: 0;">
+<div  class="ui vertical menu" style="border-right: 2px solid rgba(34,36,38,.15);min-width:90px;width:100%;text-align: center;position: -webkit-sticky;position: sticky;top: 44px;height:calc( 100vh - 44px );">
+	<H3 class="header item">{{ user.email }}</H3>
+	<div class="ui divider"></div>
+			<div id="verticaliconmenu" class="ui vertical fluid labeled icon menu" style="border:none;box-shadow: none;background: transparent;">
+				<a class="trainermenu item" href="{{path('dashboard')}}">
+					<i class="signal icon"></i>
+					Dashboard
+				</a>
+				<a class="trainermenu item" href="{{path('group')}}">
+					<i class="users icon"></i>
+					Groups
+				</a>
+				<a class="trainermenu item" href="{{path('question')}}">
+					<i class="question icon"></i>
+					Questions
+				</a>
+				<a class="trainermenu item" href="{{path('qcm')}}">
+					<i class="tasks icon"></i>
+					Qcm
+				</a>
+				<a class="trainermenu item" href="{{path('exam')}}">
+					<i class="alternate pencil icon"></i>
+					Exam
+				</a>
+
 </div>
+		</div>
 
-
+	</div>

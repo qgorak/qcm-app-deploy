@@ -1,24 +1,29 @@
+<div class="fourteen wide column">
 <div id="response">
 {{ msg | raw}}
     <div class="main ui container">
-        <h2 class="ui header" style="margin-top:15px">
-            <div class="content">
-                Questions
-            </div>
-            <div class="sub header">Manage your questions</div>
-        </h2>
-   	<div id="add" href="{{path('question.add')}}" data-target="#response" class="ui green button">
-	{{t('newItem',[],'main')}}
-	</div>
-
-   <div id="bank" style="margin-top:15px">
+    <h2 class="ui header" style="margin-top: 1em" >
+        <div class="content">
+            Questions
+        </div>
+        <div class="sub header">Manage your questions</div>
+    </h2>
+    <div id="add" href="{{path('question.add')}}" data-target="#response"  class="ui primary button">
+        Create a question
+    </div>
+    </div>
+    <div class="main ui container">
+   <div id="bank" style="margin-top:15px;width: 100%">
 	{{q['QuestionBank'] | raw }}
 	<div id="myquestions">
         {{ myquestions | raw}}
 </div>
 </div>
     </div>
+</div>
 {{ q['modal'] | raw }}
 {{script_foot | raw}}
+</div>
+<!---close menu div --->
 </div>
 

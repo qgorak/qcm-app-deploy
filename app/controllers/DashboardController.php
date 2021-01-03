@@ -43,7 +43,8 @@ class DashboardController extends ControllerBase{
         if (! URequest::isAjax ()) {
             $this->loadView('/main/UI/trainerNavbar.html');
             $this->jquery->getHref ( '.trainermenu', '#response', [
-                'hasLoader' => 'internal'
+                'hasLoader' => 'internal',
+                'ajaxTransition'=>'fade in'
             ] );
         }
     }

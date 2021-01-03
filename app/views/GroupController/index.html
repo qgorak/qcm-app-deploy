@@ -1,18 +1,20 @@
+<div class="fourteen wide column">
 <div id="response">
 	{{script_foot | raw}}
 	<div class="main ui container">
-		<h2 class="ui header" style="margin-top:15px;">
+		<h2 class="ui header" style="margin-top:1em;">
 			<div class="content">
 				My Groups
 			</div>
 			<div class="sub header">Manage your groups</div>
 		</h2>
 
-				<div  id="addGroup" class="ui green button" style="margin-bottom:1em;">{{t('addSubmit',[],'main')}}</div>
+				<div  id="addGroup" class="ui primary button" style="margin-bottom:1em;">{{t('addSubmit',[],'main')}}</div>
 
 			{{q['mygroupsacc'] | raw }}
 			{{q['nogroupsmsg'] | raw }}
 		</div>
+	</div>
 </div>
 <div id="addModal" class="ui tiny modal" style="padding:10px;">
 <div class="header">{{t('addSubmit',[],'main')}}</div>
@@ -27,4 +29,6 @@
 	<div class="content">
 		<div id="response-demand"></div>
 	</div>
+</div>
+<!---close menu div --->
 </div>
