@@ -40,7 +40,7 @@ class NotificationController extends ControllerBase{
         ]);
         $notifJson=$this->getNotifications();
         USession::set('notifications',$notifJson);
-        $this->_index($this->jquery->renderView('NotificationController/settings.html',['notifications'=>$notifJson],true));
+        $this->_index($this->jquery->renderView('NotificationController/display.html',['notifications'=>$notifJson],true));
     }
     
     private function _index($response){
@@ -57,7 +57,7 @@ class NotificationController extends ControllerBase{
         if(USession::get('notifications')!=$notifJson){
             USession::set('notifications',$this->getNotifications());
         }
-        $this->jquery->renderView('NotificationController/settings.html',['notifications'=>$notifJson]);
+        $this->jquery->renderView('NotificationController/display.html',['notifications'=>$notifJson]);
     }
     
     private function getNotifications(){
