@@ -1,0 +1,31 @@
+<div class="main ui container">
+    <h2 class="ui header" style="margin-top:15px">
+        <div class="content">
+            Student Dashboard
+        </div>
+        <div class="sub header">See your results</div>
+    </h2>
+    <h4 class="ui header">
+        <i class="clock outline icon"></i>
+        <div class="content">
+            Pending demands
+        </div>
+    </h4>
+{{q['waitInGroups'] | raw }}
+    <div id="joingroup" class="ui primary button">{{t('joinSubmit',[],'main')}}</div>
+    <h4 class="ui header">
+        <i class="users icon"></i>
+        <div class="content">
+            Groups i'm in
+        </div>
+    </h4>
+{{q['inGroups'] | raw }}
+    <h4 class="ui header">
+        <i class="pencil icon"></i>
+        <div class="content">
+            Past exams
+        </div>
+    </h4>
+    {{q['pastExam'] | raw }}
+</div>
+{{script_foot | raw }}

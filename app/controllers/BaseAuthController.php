@@ -50,6 +50,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      */
     public function loginform(){
         $this->uiService->loginForm();
+        $this->jquery->getHref('#reset','#responseauth');
         $this->jquery->renderView('BaseAuthController/login.html');
     }
     

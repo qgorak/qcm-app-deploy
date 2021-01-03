@@ -92,7 +92,7 @@ class GroupController extends ControllerBase{
         $this->loader->add($group);
         $this->jquery->semantic()->toast('body',['message'=>'Group created','class'=> 'success','position'=>'center top']);
         $this->_index();
-        $this->jquery->renderView('GroupController/display.html');
+        $this->jquery->renderView('GroupController/settings.html');
     }
     
     /**
@@ -151,7 +151,7 @@ class GroupController extends ControllerBase{
         $this->loader->remove ( $id );
         $this->_index();
         $this->jquery->semantic()->toast('body',['message'=>'group deleted','class'=> 'success','position'=>'center top']);
-        $this->jquery->renderView('GroupController/display.html');
+        $this->jquery->renderView('GroupController/settings.html');
     }
     
     private function demand($groupId){

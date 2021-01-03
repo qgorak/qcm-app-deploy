@@ -3,6 +3,7 @@
 namespace services\UI;
 
 use Ajax\php\ubiquity\JsUtils;
+use models\Exam;
 use models\Group;
 use Ubiquity\controllers\Router;
 use Ubiquity\translation\TranslatorManager;
@@ -17,7 +18,7 @@ class UserUIService {
 		$this->semantic = $jq->semantic ();
 	}
 	
-	public function displayInfos($user,$groups,$waitInGroups){
+	public function displayInfos($user){
         $info=$this->jquery->semantic()->dataForm('myInfo',$user);
         $info->setFields([
             'language',
@@ -35,30 +36,48 @@ class UserUIService {
         $info->fieldAsSubmit('submitLang',null, Router::path('langSubmit'),'#response',[
             'value'=>TranslatorManager::trans('submitLang',[],'main')
         ]);
+	}
+
+    public function displayDashboard($groups,$waitInGroups,$exams){
         $dtWait=$this->jquery->semantic()->dataTable('waitInGroups', Group::class, $waitInGroups);
         $dtWait->setFields ( [
-            'id',
             'name',
             'description',
             'wait'
         ] );
         $dtWait->setCaptions([
-            'id',
             TranslatorManager::trans('name',[],'main'),
             TranslatorManager::trans('description',[],'main')
         ]);
         $dtWait->fieldAsElement('wait','i','hourglass icon');
         $dtWait->setIdentifierFunction ( 'getId' );
+        $dtWait->setClass(['ui single line very basic table']);
         $dtInGroups = $this->jquery->semantic ()->dataTable ( 'inGroups', Group::class, $groups );
         $dtInGroups->setFields ( [
             'name',
             'description'
         ] );
         $dtInGroups->setCaptions([
-            "Groups I'm in",
+            TranslatorManager::trans('name',[],'main'),
+            TranslatorManager::trans('description',[],'main')
         ]);
         $dtInGroups->setClass(['ui single line very basic table']);
         $dtInGroups->setIdentifierFunction ( 'getId' );
+        $dtInExams = $this->jquery->semantic ()->dataTable ( 'pastExam', Exam::class, $exams);
+        $dtInExams->setFields([
+            'dated',
+            'datef',
+            'qcm',
+            'group'
+        ]);
+        $dtInExams->setCaptions([
+            TranslatorManager::trans('startDate',[],'main'),
+            TranslatorManager::trans('endDate',[],'main'),
+            TranslatorManager::trans('qcm',[],'main'),
+            TranslatorManager::trans('group',[],'main')
+        ]);
+        $dtInExams->setValueFunction('qcm',function($v){return $v->getName();});
+        $dtInExams->setValueFunction('group',function($v){return $v->getName();});
 
-	}
+    }
 }

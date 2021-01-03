@@ -2,6 +2,7 @@
 
 namespace services\DAO;
 
+use models\Exam;
 use models\Group;
 use models\Usergroup;
 use Ubiquity\orm\DAO;
@@ -39,6 +40,15 @@ class UserDAOLoader {
         $userGroups=DAO::getAll(Usergroup::class,"idUser=? AND status=?",false,[$userId,$status]);
         foreach($userGroups as $value){
             \array_push($retour,DAO::getById(Group::class,$value->getIdGroup(),false));
+        }
+        return $retour;
+    }
+
+    public function getPastExam(){
+        $retour=[];
+        $groups = $this->getAllGroups(USession::get('activeUser')['id'],"1");
+        foreach($groups as $value){
+            $retour = array_merge($retour,DAO::uGetAll(Exam::class,"group.id=?",true,[$value->getId()]));
         }
         return $retour;
     }

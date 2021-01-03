@@ -45,9 +45,13 @@ class UserController extends ControllerBase{
     private function displayMyInfo($id){
         $user=$this->loader->get($id);
         $user->code_style='default';
+        $this->uiService->displayInfos($user);
+    }
+    private function displayMyDashboard($id){
         $waitGroups =$this->loader->waitGroups();
         $groups =$this->loader->inGroups();
-        $this->uiService->displayInfos($user,$groups,$waitGroups);
+        $exams =$this->loader->getPastExam();
+        $this->uiService->displayDashboard($groups,$waitGroups,$exams);
     }
     
     /**
@@ -55,15 +59,17 @@ class UserController extends ControllerBase{
      */
     public function index(){
         $this->displayMyInfo($userId = USession::get('activeUser')['id']);
-        $this->_index($this->jquery->renderView('UserController/display.html',[],true));
+        $this->jquery->renderView('UserController/settings.html',[]);
     }
-    
-    private function _index($response = '') {
-        $this->jquery->renderView ( 'UserController/index.html', [
-            'response' => $response
-        ] );
+
+    /**
+     * @route('dashboard','name'=>'studentDashboard')
+     */
+    public function studentDashboard(){
+        $this->displayMyDashboard($userId = USession::get('activeUser')['id']);
+        $this->jquery->renderView('UserController/studentDashboard.html',[]);
     }
-    
+
     /**
      * @post('lang','name'=>'langSubmit')
      */
@@ -74,6 +80,6 @@ class UserController extends ControllerBase{
         $this->displayMyInfo(USession::get('activeUser')['id']);
         TranslatorManager::setLocale($user->getLanguage());
         USession::set('activeUser',["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()]);
-        $this->jquery->renderView('UserController/display.html');
+        $this->jquery->renderView('UserController/settings.html');
     }
 }

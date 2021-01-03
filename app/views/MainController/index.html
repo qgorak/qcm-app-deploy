@@ -1,3 +1,26 @@
+<div id="particles-js">
+  <div  style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+    <div id="homecard">
+      <h2 class="ui header">
+        <i class="book icon"></i>
+        <div class="content">
+          Qcm-app
+          <div class="sub header">The new free online test maker to
+            create and manage online exams </div>
+        </div>
+      </h2>
+      <div style="padding: 1em">
+        {% if user != null %}
+          <a class="ui huge primary button" href="{{path('studentDashboard')}}" style="">Student Dashboard<i class="right user icon"></i></a>
+          <a class="ui huge primary button" href="{{path('dashboard')}}" style="">Trainer Dashboard<i class="right user icon"></i></a>
+        {% else %}
+        <a class="ui huge primary button register" style="">Get Started <i class="right arrow icon"></i></a>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
 <div class="ui vertical stripe segment"style="margin-top:10%;">
     <div class="ui middle aligned stackable grid container">
       <div class="row">
@@ -34,3 +57,13 @@
       </div>
     </div>
   </div>
+{{ js('js/particles/particles.js') }}
+{{ js('js/app.js') }}
+<script>
+  var count_particles, update;
+  count_particles = document.querySelector('.js-count-particles');
+  update = function() {
+    requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+</script>

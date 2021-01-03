@@ -1,22 +1,20 @@
 <div class="ui inverted segment" style="border-radius: 0; height:55px;padding: 0.5em 0.5em">
 <div id="primary-menu" class="ui inverted secondary menu" style="height:100%">
-	<a class="item" href="{{path('dashboard')}}" id="trainermode"><i class="cog icon"></i>Trainer mode</a>
 	<a class="item" href="{{path('_default')}}">{{t('home',[],'main')}} </a>
 	<div class="right menu">
 		<a class="item" href="{{path('notification')}}"><i class="icons">
 			<i class="bell outline icon"></i>
 			<i id="notificationCircle" style="visibility: hidden" class="top right inverted orange corner circle icon"></i>
 		</i></a>
-		<div class="item">
-			<div id="joingroup" class="ui primary button">{{t('joinSubmit',[],'main')}}</div>
-		</div>
 		<div id="menuaccount" class="ui dropdown icon item" style="padding:0.5em;">
 			<i class="user circle large icon"></i>
 			<i class="dropdown icon"></i>
 			<div class="menu">
-				<div class="header">{{ user.email }}</div>
-				<a class="item" href="{{path('user')}}">My account</a>
-				<a class="item" href="{{path('terminate')}}">{{t('logout',[],'main')}}</a>
+				<div class="header" style="width: 100%;text-align: center;">{{ user.email }}</div>
+				<a class="item" style="width: 100%;text-align: center;" href="{{path('user')}}">My account</a>
+				<a class="item" style="width: 100%;text-align: center;" href="{{path('studentDashboard')}}" >Student Dashboard</a>
+				<a class="item" style="width: 100%;text-align: center;" href="{{path('dashboard')}}" >Trainer Dashboard</a>
+				<a class="item" style="width: 100%;text-align: center;" href="{{path('terminate')}}">{{t('logout',[],'main')}}</a>
 			</div>
 		</div>
 	</div>
