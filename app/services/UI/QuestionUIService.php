@@ -23,21 +23,36 @@ class QuestionUIService {
 		$this->semantic = $jq->semantic ();
 	}
 	
-	public function questionBankToolbar(){
+	public function questionTagsFilterDd(){
 	    $mytags = DAO::getAll( Tag::class, 'idUser='.USession::get('activeUser')['id'],false);
-	    $dd = $this->jquery->semantic()->htmlDropdown('Filter','',JArray::modelArray ( $mytags, 'getId','getName' ));
-	    $dd->asSearch('tags',true);
-	    $toolbar = $this->jquery->semantic()->htmlMenu('QuestionBank');
-	    $toolbar->addDropdownAsItem($dd);
-	    $toolbar->addHeader(TranslatorManager::trans('questionBank',[],'main'));
-	    $toolbar->setClass('ui top attached menu');
-	    $this->jquery->jsonArrayOn('change','#Filter','#dtItems-tr-__id__','question/getByTags/','post',[
+        $res = [];
+        foreach ($mytags as $tag) {
+            $label = $this->jquery->semantic()->htmlLabel('', $tag->getName());
+            $label->setClass('ui '.$tag->getColor().' label');
+            $res[$tag->getId()]=$label;
+        }
+	    $dd = $this->jquery->semantic()->htmlDropdown('filterTags','',$res);
+	    $dd->asSelect('tags',true);
+	    $dd->setClass('ui multiple search dropdown item');
+	    $dd->setStyle('min-width:180px;padding-right:0');
+	    $dd->setDefaultText('<div style="margin-top:-3px;"class="ui basic button"><i class="tag icon"></i>Filter by tags</div>');
+	    $this->jquery->jsonArrayOn('change','#filterTags','#dtItems-tr-__id__','question/getByTags/','post',[
             "preventDefault"=>false,
 	        'stopPropagation'=>false,
-	        'params'=>'{tags:$("#input-Filter").val()}'
+	        'params'=>'{tags:$("#input-filterTags").val()}'
         ]);
-	    return $toolbar;
+	    return $dd;
 	}
+
+    public function questionTypeFilterDd(){
+        $types = ['1'=>'<i class="check square icon"></i>QCM','2'=>'<i class="bars icon"></i>courte','3'=>'<i class="align left icon"></i>longue','4'=>'<i class="code icon"></i>Code'];
+        $dd = $this->jquery->semantic()->htmlDropdown('filterType','',$types);
+        $dd->asSelect('type',0);
+        $dd->setClass('ui multiple search dropdown item');
+        $dd->setStyle('min-width:180px;padding-right:0');
+        $dd->setDefaultText('<div style="margin-top:-3px;"class="ui basic button"><i class="filter icon"></i>Filter by type</div>');
+        return $dd;
+    }
 
     public function questionFormTags(){
         $mytags = DAO::getAll( Tag::class, 'idUser='.USession::get('activeUser')['id'],false);
@@ -120,7 +135,7 @@ else
 	    return $frm;
 	}
 
-	public function getQuestionDataTable($questions,$typeq){
+	public function getQuestionDataTable($questions){
 	    $dt = $this->jquery->semantic ()->JsonDataTable ( 'dtItems', Question::class, $questions );
 	    $msg = new HtmlMessage ( '', TranslatorManager::trans('noDisplay',[],'main') );
 	    $msg->addIcon ( "x" );
@@ -131,6 +146,7 @@ else
 	        'idTypeq',
 	        'action'
 	    ] );
+	    $dt->setStyle('margin-top:2em;');
 	    $dt->insertDeleteButtonIn(3,true);
 	    $dt->insertEditButtonIn(3,true);
 	    $dt->insertDisplayButtonIn(3,true);
@@ -163,7 +179,7 @@ else
             return $type;
         });
         $dt->setCompact();
-        $dt->paginate(1,DAO::count(Question::class,'idUser=?',[USession::get('activeUser')['id']]),10);
+        $dt->paginate(1,DAO::count(Question::class,'idUser=?',[USession::get('activeUser')['id']]),30);
         $this->jquery->html('#htmltr-dtItems-tr-__id__-1','__tags__',true);
         $dt->setUrls(["question/jsonPagination"]);
 	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), '', [

@@ -1,29 +1,49 @@
-<div class="fourteen wide column">
+<div class="fourteen wide column" style="padding-left: 0;">
 <div id="response">
 {{ msg | raw}}
-    <div class="main ui container">
-    <h2 class="ui header" style="margin-top: 1em" >
-        <div class="content">
-            Questions
+    <div class="ui menu">
+        <div class="header item">
+            Question bank
         </div>
-        <div class="sub header">Manage your questions</div>
-    </h2>
-    <div id="add" href="{{path('question.add')}}" data-target="#response"  class="ui primary button">
-        Create a question
+        {{q['filterType'] | raw }}
+        {{q['filterTags'] | raw }}
+        <div class="right menu">
+            <div class="item">
+                <div id="add" href="{{path('question.add')}}" data-target="#response"  class="ui primary button">Create a question</div>
+            </div>
+        </div>
     </div>
-    </div>
-    <div class="main ui container">
-   <div id="bank" style="margin-top:15px;width: 100%">
-	{{q['QuestionBank'] | raw }}
-	<div id="myquestions">
+    <div id="scroll"  style="overflow-y: scroll;height: calc( 100vh - 95px );">
+<div class="main ui container">
+    <div style="margin-right: 2em;">
         {{ myquestions | raw}}
-</div>
-</div>
     </div>
+</div>
+</div>
+    <style>
+        body{overflow: hidden}
+        #filterTags-icon{
+            display: none;
+        }
+        #filterTags .ui.label.transition{
+            padding: 0 13px 0 0;
+            margin-top: 5px;
+            background: transparent;
+        }
+        #filterTags .ui.label.transition i{
+            color:black;
+        }
+        #filterType-icon{
+            display: none;
+        }
+        #filterTags .search{
+            width: 0!important;
+        }
+    </style>
+</div>
 </div>
 {{ q['modal'] | raw }}
 {{script_foot | raw}}
 </div>
 <!---close menu div --->
 </div>
-

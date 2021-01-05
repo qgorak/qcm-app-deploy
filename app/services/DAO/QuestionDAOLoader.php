@@ -41,7 +41,7 @@ class QuestionDAOLoader {
 	}
 	
 	public function my($page=1): array{
-        $myquestions =DAO::paginate(Question::class,$page,10,'idUser='.USession::get('activeUser')['id'],['tags']);
+        $myquestions =DAO::paginate(Question::class,$page,30,'idUser='.USession::get('activeUser')['id'],['tags']);
 	    return $myquestions;
 	}
 

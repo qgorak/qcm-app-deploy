@@ -60,8 +60,10 @@ class QuestionController extends ControllerBase {
         $answer->setScore(0);
         \array_push($answer_array,$answer);
         USession::set('answers',$answer_array);
-        $this->uiService->questionBankToolbar();
+        $this->uiService->questionTagsFilterDd();
+        $this->uiService->questionTypeFilterDd();
         $this->uiService->modal();
+        $this->jquery->exec('window.scrollTo(0, 0);',true);
         $this->jquery->ajax('get', Router::path('tag.my'),"#myTags",[
             'hasLoader'=>true
         ]);
