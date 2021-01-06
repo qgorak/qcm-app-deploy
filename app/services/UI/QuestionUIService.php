@@ -37,9 +37,8 @@ class QuestionUIService {
 	    $dd->setStyle('min-width:180px;padding-right:0');
 	    $dd->setDefaultText('<div style="margin-top:-3px;"class="ui basic button"><i class="tag icon"></i>Filter by tags</div>');
 	    $this->jquery->jsonArrayOn('change','#filterTags','#dtItems-tr-__id__','question/getByTags/','post',[
-            "preventDefault"=>false,
-	        'stopPropagation'=>false,
-	        'params'=>'{tags:$("#input-filterTags").val()}'
+	        'params'=>'{tags:$("#input-filterTags").val()}',
+            'jsCallback'=>'onLoad();$(".ui.dropdown.selection").dropdown({"action": "activate","on": "hover","showOnFocus": true});'
         ]);
 	    return $dd;
 	}
@@ -181,6 +180,7 @@ else
         $dt->paginate(1,DAO::count(Question::class,'idUser=?',[USession::get('activeUser')['id']]),30);
         $this->jquery->attr('.field .dropdown.icon','class','ellipsis vertical icon',true);
         $dt->setUrls(["question/jsonPagination"]);
+        $this->jquery->exec('function onLoad(){',true);
 	    $this->jquery->getOnClick ( '.field .ui.selection.dropdown .menu .item', Router::path ('question.delete',[""]), '', [
 	        'hasLoader' => 'internal',
 	        'jsCondition'=>'$(this).attr("data-value")==3',
@@ -199,5 +199,7 @@ else
 	        'before'=>'url = "'.Router::path('question.preview',['']).'"+$(this).closest("tr").attr("data-ajax");',
 	        'jsCallback'=>'$("#modal").modal("show");'
 	    ] );
+        $this->jquery->exec('}',true);
+        $dt->onPageChange('onLoad();$(".ui.dropdown.selection").dropdown({"action": "activate","on": "hover","showOnFocus": true});',true);
 	}
 }

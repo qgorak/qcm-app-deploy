@@ -63,7 +63,7 @@ class QuestionController extends ControllerBase {
         $this->uiService->questionTagsFilterDd();
         $this->uiService->questionTypeFilterDd();
         $this->uiService->modal();
-        $this->jquery->exec('window.scrollTo(0, 0);',true);
+        $this->jquery->exec('window.scrollTo(0, 0);onLoad();',true);
         $this->jquery->ajax('get', Router::path('tag.my'),"#myTags",[
             'hasLoader'=>true
         ]);
@@ -72,6 +72,7 @@ class QuestionController extends ControllerBase {
             'historize'=>false
         ] );
         $myquestions=$this->displayMyQuestions();
+
         $this->jquery->renderView('QuestionController/index.html',['msg'=>$msg,'myquestions'=>$myquestions]);
     }
 
