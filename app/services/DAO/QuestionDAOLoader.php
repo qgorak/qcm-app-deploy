@@ -16,17 +16,20 @@ class QuestionDAOLoader {
 	
 	public function getByTags($tags): ?array {
 	    $res=array();
+        $i=0;
 	    foreach($tags as $tag) {
-	        if (empty($res)) {
-	            $res = DAO::getManyToMany($tag, 'questions',true);
-	        }else{
-                $res = array_intersect($res,DAO::getManyToMany($tag, 'questions',true));
+            $temp = DAO::getManyToMany($tag, 'questions',['tags']);
+                if($i>0){
+                    $oldres = $res;
+                    $res = [];
+                }else{
 
-	            }
-	        }
-	        return $res;
-	  }
-
+                    $res=$temp;
+                }
+            $i++;
+	    }
+        return $res;
+         }
 	public function add(Question $item,array $tags): void {
 	    $creator = new User();
 	    $creator->setId(USession::get('activeUser')['id']);

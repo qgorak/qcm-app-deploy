@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div id="scroll"  style="overflow-y: scroll;height: calc( 100vh - 95px );">
+    <div id="scroll"  style="overflow-y: scroll;height: calc( 100vh - 95px );background: #fafbfc;">
 <div class="main ui container">
     <div style="margin-right: 2em;">
         {{ myquestions | raw}}
@@ -25,6 +25,23 @@
         #filterTags-icon{
             display: none;
         }
+
+        #htmltablecontent--0{
+            border-color: #c8e1ff;
+        }
+        #htmltr-htmltablecontent--0-3{
+            border-top-right-radius: .5em;
+        }
+        #htmltr-htmltablecontent--0-0{
+            border-bottom-right-radius: .5em;
+            border-bottom-left-radius: .5em;
+            border-top-left-radius: .5em;
+        }
+
+        #htmltablecontent--0 th{
+            background: #f0f8ff;
+        }
+
         #filterTags .ui.label.transition{
             padding: 0 13px 0 0;
             margin-top: 5px;
@@ -38,6 +55,22 @@
         }
         #filterTags .search{
             width: 0!important;
+        }
+        .field .ui.selection.dropdown{
+            max-width: 0;
+            min-width: 0;
+            padding: 0;
+            border: none;
+        }
+        .field .ui.selection.dropdown .menu{
+            min-width: 150px;
+            border: none;
+        }
+        .field .ui.selection.dropdown:hover .menu{
+            border: none;
+        }
+        .field .ui.selection.dropdown .dropdown.icon{
+            display: none;
         }
     </style>
 </div>

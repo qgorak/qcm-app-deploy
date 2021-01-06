@@ -144,20 +144,19 @@ else
 	        'caption',
 	        'tags',
 	        'idTypeq',
-	        'action'
+            'action2'
 	    ] );
 	    $dt->setStyle('margin-top:2em;');
-	    $dt->insertDeleteButtonIn(3,true);
-	    $dt->insertEditButtonIn(3,true);
-	    $dt->insertDisplayButtonIn(3,true);
-	    $dt->setClass(['ui very basic table']);
+	    $dt->setCompact(true);
 	    $dt->setCaptions([
 	        TranslatorManager::trans('caption',[],'main'),
-            'tags',
-            'type'
+            'Tags',
+            'Type'
 	    ]);
+        $dt->fieldAsDropDown('action2',[1=>'<i class="eye icon"></i>Preview',2=>'<i class="edit icon"></i>Edit',3=>'<i class="delete icon"></i>Delete']);
+	    $dt->setStyle('border-radius: .5em;margin-top:1em');
 	    $dt->setIdentifierFunction ( 'getId' );
-	    $dt->setColWidths([0=>7,1=>4,2=>1,3=>2]);
+	    $dt->setColWidths([0=>8,1=>5,2=>2,3=>1]);
 	    $dt->setEdition ();
         $dt->setValueFunction('tags', function ($tags) {
             if ($tags != null and $tags != '__tags__') {
@@ -178,24 +177,27 @@ else
             }
             return $type;
         });
-        $dt->setCompact();
-        $dt->paginate(1,DAO::count(Question::class,'idUser=?',[USession::get('activeUser')['id']]),30);
         $this->jquery->html('#htmltr-dtItems-tr-__id__-1','__tags__',true);
+        $dt->paginate(1,DAO::count(Question::class,'idUser=?',[USession::get('activeUser')['id']]),30);
+        $this->jquery->attr('.field .dropdown.icon','class','ellipsis vertical icon',true);
         $dt->setUrls(["question/jsonPagination"]);
-	    $this->jquery->getOnClick ( '._delete', Router::path ('question.delete',[""]), '', [
+	    $this->jquery->getOnClick ( '.field .ui.selection.dropdown .menu .item', Router::path ('question.delete',[""]), '', [
 	        'hasLoader' => 'internal',
+	        'jsCondition'=>'$(this).attr("data-value")==3',
 	        'jsCallback'=>'$(self).closest("tr").remove();$("body").toast({position: "center top", message: "Sucess",class: "success", });',
-	        'attr' => 'data-ajax'
+            'before'=>'url = "'.Router::path('question.delete',['']).'"+$(this).closest("tr").attr("data-ajax");',
 	    ] );
-	    $this->jquery->ajaxOnClick ( '._display', Router::path('question.preview',['']) , '#response-modal', [
+        $this->jquery->getOnClick ( '.field .ui.selection.dropdown .menu .item', Router::path ('question.patch',[""]), '#response', [
+            'hasLoader' => 'internal',
+            'jsCondition'=>'$(this).attr("data-value")==2',
+            'before'=>'url = "'.Router::path ('question.patch',[""]).'"+$(this).closest("tr").attr("data-ajax");',
+        ] );
+	    $this->jquery->ajaxOnClick ( '.field .ui.selection.dropdown .menu .item', Router::path('question.preview',['']) , '#response-modal', [
 	        'hasLoader' => 'internal',
 	        'method' => 'get',
-	        'attr' => 'data-ajax',
+            'jsCondition'=>'$(this).attr("data-value")==1',
+	        'before'=>'url = "'.Router::path('question.preview',['']).'"+$(this).closest("tr").attr("data-ajax");',
 	        'jsCallback'=>'$("#modal").modal("show");'
-	    ] );
-	    $this->jquery->getOnClick ( '._edit', Router::path ('question.patch',[""]), '#response', [
-	        'hasLoader' => 'internal',
-	        'attr' => 'data-ajax'
 	    ] );
 	}
 }

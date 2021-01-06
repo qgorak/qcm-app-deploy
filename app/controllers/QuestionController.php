@@ -217,6 +217,7 @@ class QuestionController extends ControllerBase {
     	       $tag->setId($tagId);
     	       \array_push($tagObjects,$tag);
     	   }
+
     	   $questions = $this->loader->getByTags($tagObjects);
         }else{
             $questions = $this->loader->my();
@@ -358,8 +359,11 @@ class QuestionController extends ControllerBase {
         $json= [];
         foreach ($questions as $question){
             $res = '';
+            $checkTags=array_key_exists('tags',$question->_rest);
+            if($checkTags!==false){
             foreach ($question->_rest['tags'] as $tag){
                 $res = $res.'<div class="ui '.$tag->_rest['color'].' label">'.$tag->_rest['name'].'</div>';
+            }
             }
             $question->_rest['tags']=$res;
             $typeq = [1=>['name'=>'QCM','icon'=>'check square'],2=>['name'=>'courte','icon'=>'bars'],3=>['name'=>'longue','icon'=>'align left'],4=>['name'=>'code','icon'=>'code']];
