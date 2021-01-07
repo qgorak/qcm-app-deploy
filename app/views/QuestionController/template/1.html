@@ -2,12 +2,12 @@
 
 <form id="frmAnswer" class="ui form" name="frmAnswer">
   <div class="ui container grid" style="margin-top: 0px;">
-  <div class="form-group box row">
+  <div class="form-group box row" style="padding:.3em 0">
     <div class="three wide column">
       <p></p>
     </div>
-    <div class="ten wide column" style="border-bottom:1px solid rgba(34,36,38,.15);">
-      <div class="ui fitted checkbox" style="min-height: 14px;">
+    <div class="ten wide column answer">
+      <div class="ui fitted read-only checkbox" style="min-height: 14px;">
         <input type="checkbox" disabled>
         <label></label>
       </div>
@@ -30,7 +30,17 @@
         <p></p>
       </div>
       <div class="ten wide column">
-  <a class=" ui green icon button button-add" style="margin-bottom: 10px;"><i class="plus icon"></i>Add answer</a>
+        <div style = "margin-bottom: 1em;">
+        <div class="ui fitted read-only checkbox" style="min-height: 14px;">
+          <input type="checkbox" disabled>
+          <label></label>
+        </div>
+        <div class="ui transparent input button-add" style="color:#c7c7c7;">
+          <div class="btn-content" >
+            Add answer
+          </div>
+        </div>
+      </div>
       </div>
       <div class="three wide column">
         <p></p>
@@ -38,5 +48,24 @@
     </div>
   </div>
 </form>
+<style>
 
+
+  .button-add:hover { border-color: #2185d0;}
+  .button-add{
+    border-bottom: 1px solid rgba(34,36,38,.15);
+    transition: border-color 0.2s linear;
+
+  }
+  .btn-content{
+    padding: .67857143em 1em;
+    cursor: text;
+  }
+  .answer:hover { border-color: #2185d0;}
+  .answer{
+    border-bottom:1px solid rgba(34,36,38,.15);
+    transition: border-color 0.2s linear;
+  }
+
+</style>
 {{ script_foot | raw }}

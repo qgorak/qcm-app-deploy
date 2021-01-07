@@ -1,8 +1,8 @@
 <div class="fourteen wide column" style="padding-left: 0;">
 <div id="response">
 {{ msg | raw}}
-    <div class="ui menu">
-        <div class="header item">
+    <div class="ui menu" id="qbankbar">
+        <div class="header item" style="border-bottom: 3px solid #2185d0;margin-bottom: -1px;padding-bottom: calc( 0.928571em - 4px )">
             Question bank
         </div>
         {{q['filterType'] | raw }}
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div id="scroll"  style="overflow-y: scroll;height: calc( 100vh - 95px );background: #fafbfc;">
+    <div id="scroll"  style="overflow-y: scroll;overflow-x: hidden;height: calc( 100vh - 95px );background: #fafbfc;">
 <div class="main ui container">
     <div style="margin-right: 2em;">
         {{ myquestions | raw}}
@@ -71,6 +71,9 @@
         }
         .field .ui.selection.dropdown .dropdown.icon{
             display: none;
+        }
+        #qbankbar .item:before {
+            background: none;
         }
     </style>
 </div>

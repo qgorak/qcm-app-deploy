@@ -89,7 +89,7 @@ else
 	}	
 	
 	public function questionForm($question,$types) {
-	    $frm = $this->jquery->semantic ()->dataForm( 'questionForm',$question)->setStyle('display:none;');
+	    $frm = $this->jquery->semantic ()->dataForm( 'questionForm',$question);
         $tags = $this->questionFormTags();
         $frm->addErrorMessage();
         $frm->addFields(['submit','mytags','caption','type','body']);
@@ -112,7 +112,7 @@ else
 	    $frm->fieldAsInput('caption',['style'=>'width:69%;display:inline-table','rules'=>'empty']);
         $frm->fieldAsDropDown('type',['1'=>'<i class="check square icon"></i>QCM','2'=>'<i class="bars icon"></i>courte','3'=>'<i class="align left icon"></i>longue','4'=>'<i class="code icon"></i>Code'],false,['style'=>'width:30%;display:inline-table','rules'=>'empty']);
         $frm->fieldAsDropDown('mytags',$tags,true,[
-            'style'=>'width:132px;;margin-top:15px',
+            'style'=>'width:132px;margin-top:0!important',
         ]);
         $frm->fieldAsSubmit('submit','green',Router::path('question.submit'),"#response",[
             'style'=>'display:block;margin-right:100%;width:150px;',
@@ -124,7 +124,7 @@ else
         $this->jquery->addClass('#text-dropdown-questionForm-type-0','default',true);
         $this->jquery->html('#text-dropdown-questionForm-mytags-0','<i class="tags icon"></i><span class="text">Assign tags</span>',true);
         $this->jquery->html('#text-dropdown-questionForm-type-0','Select Type',true);
-        $this->jquery->exec('$("#questionForm").fadeIn()',true);
+        $this->jquery->exec('$("#mainsegment").fadeIn()',true);
         $this->jquery->getOnClick ( '#dropdown-questionForm-type-0 .menu .item', 'question/getform', '#response-form', [
             "stopPropagation"=>false,
 	        'attr' => 'data-value',
@@ -146,7 +146,7 @@ else
             'action2'
 	    ] );
 	    $dt->setStyle('margin-top:2em;');
-	    $dt->setCompact(true);
+
 	    $dt->setCaptions([
 	        TranslatorManager::trans('caption',[],'main'),
             'Tags',

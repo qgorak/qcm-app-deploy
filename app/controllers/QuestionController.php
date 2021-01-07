@@ -81,7 +81,8 @@ class QuestionController extends ControllerBase {
         $this->jquery->execOn('click','.button-add','var clone = $(".box:first").clone();
                                                     clone.find("input:text").val("");
                                                     clone.find("#score").val(0);
-                                                    clone.insertAfter(".box:last")');
+                                                    clone.insertAfter(".box:last");
+                                                    $(".ui.transparent.input input:last").focus()');
         $this->jquery->exec('$(document).on("click", ".button-remove", function() {
                             $(this).closest(".box").remove();
                             });',true);
@@ -94,6 +95,7 @@ class QuestionController extends ControllerBase {
         $this->jquery->getHref ( '#cancel', '#response', [
             'hasLoader' => 'internal'
         ] );
+        $this->jquery->execOn('click','#submitQ','$("#questionForm-submit-0").click();');
     	$types=$this->loader->getIconTypeq();
         $this->uiService->questionForm (new Question(),$types);
         $lang=(USession::get('activeUser')['language']=='en_EN')? 'en' : 'fr';
