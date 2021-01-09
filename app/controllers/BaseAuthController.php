@@ -1,6 +1,7 @@
 <?php
 namespace controllers;
 use Google_Client;
+use Google_Service_Oauth2;
 use Ubiquity\mailer\MailerManager;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
@@ -51,12 +52,8 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      */
     public function loginform(){
         $this->uiService->loginForm();
-        $client = new Google_Client();
-        $client->setAuthConfig(__DIR__ . '/googleapikey/client_secret.json');
-        $client->setRedirectUri('http://127.0.0.1:8090/logingoogle');
-        $client->addScope("email");
-        $client->addScope("profile");
-        $this->jquery->attr('#google','href',$client->createAuthUrl(),true);
+
+        $this->jquery->attr('#google','href','/logingoogle',true);
         $this->jquery->getHref('#reset','#responseauth');
         $this->jquery->renderView('BaseAuthController/login.html');
     }
@@ -65,7 +62,20 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      * @get("/logingoogle",'name'=>'logingoogle')
      */
     public function logingoogle(){
-
+        $client = new Google_Client();
+        $client->setAuthConfig(__DIR__ . '/googleapikey/client_secret.json');
+        $client->setRedirectUri('http://127.0.0.1:8090/logingoogle');
+        $client->addScope("email");
+        $client->addScope("profile");
+        if (isset($_GET['code'])) {
+            $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+            $client->setAccessToken($token['access_token']);
+            $google_oauth = new Google_Service_Oauth2($client);
+            $google_account_info = $google_oauth->userinfo->get();
+            $this->checkGoogleAccount($google_account_info);
+        }else{
+            header('location: '.$client->createAuthUrl());
+        }
     }
 
 
@@ -84,6 +94,25 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $this->uiService->loginErrorMessage($info['error'],'x');
             $this->jquery->renderView('BaseAuthController/login.html');
         }
+    }
+
+    private function checkGoogleAccount($google_account_info){
+        $user=DAO::getOne(User::class,"email = ?",false,[$google_account_info->email]);
+        if($user!==null){
+            USession::set($this->_getUserSessionKey(),["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()]);
+        }else{
+            $user = new User();
+            $user->setEmail($google_account_info->email);
+            $user->setFirstname($google_account_info->given_name);
+            $user->setLastname($google_account_info->family_name);
+            $user->setLanguage(str_replace('-','_',URequest::getDefaultLanguage()));
+            $user->setPassword($this->randomPassword());
+            $user = DAO::insert($user);
+            $user = DAO::getOne(User::class,"email = ?",false,[$user->getEmail()]);
+            USession::set($this->_getUserSessionKey(),["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()]);
+        }
+        header('Location: /');
+        exit();
     }
 
     protected function onConnect($connected) {
