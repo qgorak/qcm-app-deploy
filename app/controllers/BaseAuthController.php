@@ -35,7 +35,6 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     public function initialize(){
         $this->uiService = new AuthUIService ( $this->jquery );
         MailerManager::start();
-
     }
 
     public function getSession()
@@ -52,7 +51,6 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      */
     public function loginform(){
         $this->uiService->loginForm();
-
         $this->jquery->attr('#google','href','/logingoogle',true);
         $this->jquery->getHref('#reset','#responseauth');
         $this->jquery->renderView('BaseAuthController/login.html');
@@ -88,6 +86,9 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $this->onConnect($this->_connect());
             $this->jquery->clear_compile();
             echo 'logged';
+            if(Usession::get('redirect')){
+                USession::delete('redirect');
+            }
         }
         else{
             $this->uiService->loginForm();
@@ -111,7 +112,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $user = DAO::getOne(User::class,"email = ?",false,[$user->getEmail()]);
             USession::set($this->_getUserSessionKey(),["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()]);
         }
-        header('Location: /');
+        \header('Location: /');
         exit();
     }
 
