@@ -50,14 +50,17 @@ class LinkController extends ControllerBase{
                     DAO::save($userGroup);
                     $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('joinSucceed',[],'main'),'class'=> 'success','position'=>'center top']);
                 }
+                else{
+                    $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('alreadyInGroup',[],'main'),'class'=> 'success','position'=>'center top']);
+                }
             }
             else{
                 USession::set('redirect',Router::path('joinLink',[$key]));
-                $this->jquery->semantic()->toast('body',['message'=>'Veuillez vous connecter','class'=> 'success','position'=>'center top']);
+                $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('notConnected'),'class'=> 'success','position'=>'center top']);
             }
         }
         else{
-            $this->jquery->semantic()->toast('body',['message'=>'Group not existing','class'=> 'warning','position'=>'center top']);
+            $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('notGroup'),'class'=> 'warning','position'=>'center top']);
         }
         $this->jquery->renderView('MainController/index.html');
     }

@@ -25,7 +25,7 @@
         <span>{{i.timer}} {{t('left',[],'main')}}</span>
         <script>createTimer({{i.timer}},'#timer-{{i.id}}','{{path('exam.get',[i.id])}}')</script>
       {% else %}
-      	<a href="{{path('groupDemand',[i.id])}}">{{t('seeDemand',[],'main')}}</a>
+      	<a href="{{path('group')}}">{{t('seeDemand',[],'main')}}</a>
       {% endif %}
       </td>
     </tr>
