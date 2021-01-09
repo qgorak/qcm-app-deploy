@@ -1,6 +1,8 @@
 <?php
 namespace controllers;
 
+use models\Answer;
+use models\User;
 use Ubiquity\orm\DAO;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use models\Useranswer;
@@ -51,11 +53,12 @@ class CorrectionController extends ControllerBase{
         $acc = $this->uiService->correctionAccordion();
         $userScore=0;
         $totalScore=0;
-        foreach($questions as $question){
-            $userAnswer = DAO::getOne(Useranswer::class,'idUser=? and idExam=? and idQuestion=?',false,[$idUser,$idExam,$question->getId()]);
+        $userAnswers = DAO::uGetAll(Useranswer::class,'idUser=? and exam.idQcm=?',['question'],[$idUser,$qcm->getId()]);
+        foreach($userAnswers as $userAnswer){
+            $question = $userAnswer->getQuestion();
             switch ($question->getIdTypeq()) {
                 case 1:
-                    $res=$this->correctQcmAnswer($acc,$question,$userAnswer); 
+                    $res=$this->correctQcmAnswer($acc,$question,$userAnswer);
                     $userScore+=$res[1];
                     $totalScore+=$res[0];
                     break;
@@ -90,7 +93,7 @@ class CorrectionController extends ControllerBase{
     }
 
     private function correctQcmAnswer($acc,$question,$userAnswer){
-        $answers = $question->getAnswers();
+        $answers = DAO::getAll(Answer::class,'idQuestion=?',false,[$question->getId()]);
         $userAnswers = \json_decode($userAnswer);
         $answersToDisplay=array();
         $score=0;
@@ -115,8 +118,8 @@ class CorrectionController extends ControllerBase{
     }
 
     private function correctShortAnswer($acc,$question,$userAnswer){
-        $questionCreator = $question->getUser();
-        $answer = $question->getAnswers()[0];
+        $questionCreator =  DAO::getOne(User::class,'id=?',false,[$question->getUser()]);
+        $answer = DAO::getOne(Answer::class,'idQuestion=?',false,[$question->getId()]);
         $userAnswerValue = \json_decode($userAnswer);
         $score=0;
         $totalScore=0;
@@ -133,8 +136,8 @@ class CorrectionController extends ControllerBase{
     }
 
     private function correctLongAnswer($acc,$question,$userAnswer){
-        $questionCreator = $question->getUser();
-        $answer = $question->getAnswers()[0];
+        $questionCreator =  DAO::getOne(User::class,'id=?',false,[$question->getUser()]);
+        $answer = DAO::getOne(Answer::class,'idQuestion=?',false,[$question->getId()]);
         $userAnswerValue = \json_decode($userAnswer);
         $score=0;
         $totalScore=0;

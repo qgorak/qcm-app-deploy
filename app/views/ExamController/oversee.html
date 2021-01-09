@@ -1,17 +1,18 @@
-<div class="ui container" style="margin-top:15px;">
+<div class="fourteen wide column" style="padding-left: 0;">
 	<div id="response">
-		<div class="ui stackable two column grid">
-		    <div class="row">
-		    	<div class="three wide column">
+		    <div style="display: flex">
+				<div id="response-overseeuser" style="display:flex; width: calc( 100% - 200px )!important;">
+					Welcome to the oversee console, click on a user to start.
+				</div>
+
+		    	<div style="display: flex">
 					{{q['OverseeUserDt'] | raw }}
 		    	</div>
-		    	<div class="thirteen wide column">
-		        	<div id="response-overseeuser">
-		        	Welcome to the oversee console, click on a user to start.
-		        	</div>
-		    	</div>
 			</div>
-		</div>
+	</div>
+</div>
+			</div>
+			</div>
 	</div>
 </div>
 <div class="ui modal cheat">
@@ -24,4 +25,11 @@
   <button id="cancelMessage" class="ui button cancel">{{t('cancel',[],'main')}}</button>
 </div>
 </div>
+<style>
+	#response-overseeuser .ui.main.container.segment{
+		width: 100%;
+	}
+</style>
 {{script_foot | raw }}
+<!---close menu div --->
+</div>

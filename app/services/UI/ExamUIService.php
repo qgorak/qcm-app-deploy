@@ -66,6 +66,7 @@ class ExamUIService {
         ');});
         $dt->setIdentifierFunction( 'getId' );
         $dt->setActiveRowSelector("active");
+        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['attr'=>'data-ajax']);
         return $dt;
     }
 

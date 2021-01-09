@@ -246,13 +246,9 @@ class ExamController extends ControllerBase{
      */
     public function ExamOverseeUser($idExam,$idUser){
         $exam = $this->loader->get($idExam);
-        $qcm=$exam->getQcm();
-        $answers=$this->loader->getUserAnswers($idUser);
-        $this->uiService->displayUserAnswers($answers);
-        $questionsExam = DAO::getManyToMany($qcm, 'questions');
         $countAnswer = DAO::count(Useranswer::class,'idExam = ? AND idUser = ?',[$exam->getId(),$idUser]);
-        $countQuestion = \count($questionsExam);
-        $this->jquery->renderView('ExamController/overseeUser.html',['nbQuestion'=>$countQuestion,'nbAnswer'=>$countAnswer]);
+        $this->jquery->ajax('get',Router::path('Correction.myExam',[$idExam,$idUser]),'#answers_accordion');
+        $this->jquery->renderView('ExamController/overseeUser.html',[]);
     }
 
     private function postMultipleAnswerData(){
