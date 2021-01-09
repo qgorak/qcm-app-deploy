@@ -56,11 +56,11 @@ class LinkController extends ControllerBase{
             }
             else{
                 USession::set('redirect',Router::path('joinLink',[$key]));
-                $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('notConnected'),'class'=> 'success','position'=>'center top']);
+                $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('notConnected',[],'main'),'class'=> 'success','position'=>'center top']);
             }
         }
         else{
-            $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('notGroup'),'class'=> 'warning','position'=>'center top']);
+            $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('notGroup',[],'main'),'class'=> 'warning','position'=>'center top']);
         }
         $this->jquery->renderView('MainController/index.html');
     }
