@@ -1,5 +1,6 @@
 <?php
 namespace controllers;
+use Google_Client;
 use Ubiquity\mailer\MailerManager;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
@@ -13,7 +14,7 @@ use services\DAO\UserDAOLoader;
  * Auth Controller BaseAuthController
  */
 class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
-    
+
     /**
      *
      * @autowired
@@ -21,7 +22,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
      */
     private $loader;
     private $uiService;
-    
+
     /**
      *
      * @param \services\DAO\UserDAOLoader $loader
@@ -29,12 +30,13 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     public function setLoader($loader) {
         $this->loader = $loader;
     }
-    
+
     public function initialize(){
         $this->uiService = new AuthUIService ( $this->jquery );
         MailerManager::start();
+
     }
-    
+
     public function getSession()
     {
         return $this->session;
@@ -44,16 +46,29 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     {
         $this->session = $session;
     }
-    
     /**
      * @get("/loginForm",'name'=>'loginform')
      */
     public function loginform(){
         $this->uiService->loginForm();
+        $client = new Google_Client();
+        $client->setAuthConfig(__DIR__ . '/googleapikey/client_secret.json');
+        $client->setRedirectUri('http://127.0.0.1:8090/logingoogle');
+        $client->addScope("email");
+        $client->addScope("profile");
+        $this->jquery->attr('#google','href',$client->createAuthUrl(),true);
         $this->jquery->getHref('#reset','#responseauth');
         $this->jquery->renderView('BaseAuthController/login.html');
     }
-    
+
+    /**
+     * @get("/logingoogle",'name'=>'logingoogle')
+     */
+    public function logingoogle(){
+
+    }
+
+
     /**
      * @post("/login",'name'=>'loginPost')
      */
@@ -70,11 +85,11 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $this->jquery->renderView('BaseAuthController/login.html');
         }
     }
-    
+
     protected function onConnect($connected) {
         USession::set($this->_getUserSessionKey(), $connected);
     }
-    
+
     protected function _connect() {
         if(URequest::isPost()){
             $user=DAO::getOne(User::class,"email = ?",false,[URequest::post('email')]);
@@ -90,7 +105,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         }
         return ['error'=>'Error !'];
     }
-    
+
     /**
      * @get("/registerForm",'name'=>'registerform')
      */
@@ -98,7 +113,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         $this->uiService->registerForm();
         $this->jquery->renderView('BaseAuthController/register.html');
     }
-    
+
     /**
      * @post("/register",'name'=>'registerPost')
      */
@@ -118,7 +133,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         }
         $this->jquery->renderView('BaseAuthController/register.html');
     }
-    
+
     /**
      * @get("/terminate","name"=>"terminate")
      */
@@ -135,7 +150,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         $this->uiService->resetPasswordForm();
         $this->jquery->renderView('BaseAuthController/reset.html');
     }
-    
+
     /**
      * @post('/resetPassword','name'=>'resetPassword')
      */
@@ -163,7 +178,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $this->jquery->renderView('BaseAuthController/reset.html');
         }
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Ubiquity\controllers\auth\AuthController::isValidUser()
@@ -171,18 +186,18 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     public function _isValidUser($action=null) {
         return USession::exists($this->_getUserSessionKey());
     }
-    
+
     public function _getBaseRoute() {
         return 'BaseAuthController';
     }
-    
+
     public function _insertJquerySemantic(){
         return false;
     }
     public function _displayInfoAsString(){
         return true;
     }
-    
+
     private function randomPassword() {
         $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890*//^&;:!';
         $pass = array(); //remember to declare $pass as an array
