@@ -1,11 +1,11 @@
 <div class="fourteen wide column" style="padding-left: 0;">
 	<div id="response">
 		    <div style="display: flex">
-				<div id="response-overseeuser" style="display:flex; width: calc( 100% - 200px )!important;">
+				<div id="response-overseeuser" style="display:flex; width: calc( 100% - 235px )!important;">
 					Welcome to the oversee console, click on a user to start.
 				</div>
 
-		    	<div style="display: flex">
+		    	<div style="display: flex;width: 235px">
 					{{q['OverseeUserDt'] | raw }}
 		    	</div>
 			</div>
@@ -28,6 +28,32 @@
 <style>
 	#response-overseeuser .ui.main.container.segment{
 		width: 100%;
+	}
+	#OverseeUserDt tbody {
+		display: block;
+	}
+	#OverseeUserDt thead {
+		display: flex;
+	}
+	#OverseeUserDt tr {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	#OverseeUserDt td {
+		display: block;
+	}
+	#OverseeUserDt #htmltr-htmltablecontent--0-1{
+		display: none;
+	}
+	#OverseeUserDt #htmltr-htmltablecontent--0-2{
+		display: none;
+	}
+	#OverseeUserDt #htmltr-htmltablecontent--0-3{
+		display: none;
+	}
+	#OverseeUserDt #htmltr-htmltablecontent--0-0{
+		width: 235px;
 	}
 </style>
 {{script_foot | raw }}

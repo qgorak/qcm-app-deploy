@@ -8,15 +8,69 @@ $ws_worker = new Worker("websocket://0.0.0.0:2346");
 // 4 processes
 $ws_worker->count = 1;
 
-$ws_worker->users=[];
+
+$ws_worker->exams=[];
 
 $ws_worker->onClose = function($connection) use ($ws_worker){
-    if (($key = array_search($connection->id, $ws_worker->users)) !== false) {
-        unset($ws_worker->users[$key]);
+    $exams = array_keys($ws_worker->exams);
+    foreach($exams as &$exam) {
+        if (($key = array_search($connection->id, $ws_worker->exams[$exam]['users'])) !== false) {
+            unset($ws_worker->exams[$exam]['users'][$key]);
+            if (isset($ws_worker->exams[$exam]['users'][$ws_worker->exams[$exam]['Owner']])) {
+                $id = $ws_worker->exams[$exam]['users'][$ws_worker->exams[$exam]['Owner']];
+                $connection = $ws_worker->connections[$id];
+                $users['usersLogged'] = array_keys($ws_worker->exams[$exam]['users']);
+                $users['Owner']= $ws_worker->exams[$exam]['Owner'];
+                $connection->send(json_encode($users));
+            }
+        }
+
     }
 };
 
-$ws_worker->onMessage = function($connection, $data) use ($ws_worker){   
+$ws_worker->onMessage = function($connection, $data) use ($ws_worker){
+    global $ws_worker;
+    $dataArray=json_decode($data);
+    if(isset($dataArray->exam,$dataArray->id,$dataArray->idOwner)){
+        $ws_worker->exams[$dataArray->exam]['users'][$dataArray->id]=$connection->id;
+        $ws_worker->exams[$dataArray->exam]['Owner']=$dataArray->idOwner;
+        if($dataArray->id!=$dataArray->idOwner) {
+            if (isset($ws_worker->exams[$dataArray->exam]['users'][$dataArray->idOwner])) {
+                $id = $ws_worker->exams[$dataArray->exam]['users'][$dataArray->idOwner];
+                $connection = $ws_worker->connections[$id];
+                $users['usersLogged'] = array_keys($ws_worker->exams[$dataArray->exam]['users']);
+                $users['Owner']= $ws_worker->exams[$dataArray->exam]['Owner'];
+                $connection->send(json_encode($users));
+            }
+        }
+    }
+    if(isset($dataArray->target,$dataArray->cheat)){
+        if(isset($ws_worker->exams[$dataArray->exam]['users'][$dataArray->target])){
+            $id=$ws_worker->exams[$dataArray->exam]['users'][$dataArray->target];
+            $connection=$ws_worker->connections[$id];
+            $connection->send($data);
+        }
+    }
+    if(isset($dataArray->target,$dataArray->message,$dataArray->exam)){
+        if(isset($ws_worker->exams[$dataArray->exam]['users'][$dataArray->target])){
+            $id=$ws_worker->exams[$dataArray->exam]['users'][$dataArray->target];
+            $connection=$ws_worker->connections[$id];
+            $connection->send($data);
+        }
+    }
+    if(isset($dataArray->action,$dataArray->id)){
+        if(isset($ws_worker->exams[$dataArray->exam]['users'][$dataArray->id])){
+            $id=$ws_worker->exams[$dataArray->exam]['users'][$dataArray->id];
+            $connection=$ws_worker->connections[$id];
+            $users['usersLogged'] = array_keys($ws_worker->exams[$dataArray->exam]['users']);
+            $users['Owner']= $ws_worker->exams[$dataArray->exam]['Owner'];
+            $connection->send(json_encode($users));
+        }
+    }
+
+
+
+/*$ws_worker->onMessage = function($connection, $data) use ($ws_worker){
     global $ws_worker;
     $dataArray=json_decode($data);
     if(isset($dataArray->id)){
@@ -36,7 +90,7 @@ $ws_worker->onMessage = function($connection, $data) use ($ws_worker){
             $connection->send($data);
         }
     }
-    $connection->send($data);
+    $connection->send($data);**/
 };
 
 Worker::runAll();

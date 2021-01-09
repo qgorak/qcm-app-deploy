@@ -129,14 +129,14 @@ class ExamController extends ControllerBase{
         $this->jquery->exec('var count=0;
         var ws = new WebSocket("ws:/127.0.0.1:2346");
         ws.onopen=function(){
-            ws.send(\'{"id":'.USession::get('activeUser')['id'].'}\');
+            ws.send(\'{"exam":'.$id.',"idOwner":'.$qcm->getUser().',"id":'.USession::get('activeUser')['id'].'}\');
         };
         $(window).on("blur focus", function (e) {
         var prevType = $(this).data("prevType");
         if (prevType != e.type) {
     		if (e.type=="blur"){
             count++;
-            ws.send(\'{"user":'.\json_encode(USession::get('activeUser')).',"target":'.$target.',"cheat":\'+count+\'}\');
+            ws.send(\'{"exam":'.$id.',"user":'.\json_encode(USession::get('activeUser')).',"target":'.$target.',"cheat":\'+count+\'}\');
         }
     	}
         $(this).data("prevType", e.type);
@@ -216,11 +216,14 @@ class ExamController extends ControllerBase{
      */
     public function ExamOverseePage($id){
         $exam = $this->loader->get($id);
+        $qcm = $exam->getQcm();
+        $idOwner = $qcm->getUser();
         $this->jquery->exec('
         var obj;var count=0;
         var ws = new WebSocket("ws:/127.0.0.1:2346");
         ws.onopen=function(){
-            ws.send(\'{"id":'.USession::get('activeUser')['id'].'}\');
+            ws.send(\'{"exam":'.$id.',"idOwner":'.$idOwner.',"id":'.USession::get('activeUser')['id'].'}\');
+            ws.send(\'{"exam":'.$id.',"id":'.USession::get('activeUser')['id'].',"action":"getuser"}\');
         };
         ws.onmessage = function(e) {
             console.log(e.data);
@@ -229,11 +232,25 @@ class ExamController extends ControllerBase{
             var index="#OverseeUserDt-icon-"+obj.user.id;
             $(index).addClass("exclamation triangle");
             }
+            
+            if("usersLogged" in obj){
+                $( "._element" ).each(function( index ) {
+                    child = index+1;
+                    x = $("._element:nth-child("+child+")").attr("data-ajax");
+                    var n = obj.usersLogged.indexOf(parseInt(x));
+                    var index="#OverseeUserDt-label-"+$("._element:nth-child("+child+")").attr("data-ajax");
+                    if(n!==-1){
+                        $(index).attr("class","ui green empty circular label");
+                    }else{
+                        $(index).attr("class","ui empty grey circular label disabled");
+                    }
+                })
+            }
         };
         $("#cancelMessage").click(function(){$(".cheat").modal("hide");});
         function sendMessage(target){
         $( "#submitMessage" ).unbind( "click" );
-        $("#submitMessage").click(function(event){ws.send(\'{"id":'.USession::get('activeUser')['id'].',"target":"\'+target+\'","message":"\'+$("textarea[name=message]").val()+\'"}\');$(".cheat").modal("hide");$("textarea[name=message]").val("");event.stopPropagation();});
+        $("#submitMessage").click(function(event){ws.send(\'{"exam":'.$id.',"id":'.USession::get('activeUser')['id'].',"target":"\'+target+\'","message":"\'+$("textarea[name=message]").val()+\'"}\');$(".cheat").modal("hide");$("textarea[name=message]").val("");event.stopPropagation();});
         
         }
         ',true);

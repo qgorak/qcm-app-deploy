@@ -48,16 +48,18 @@ class ExamUIService {
         }
         $dt=$this->jquery->semantic()->dataTable('OverseeUserDt',User::class,$users);
         $dt->setFields([
+            'status',
             'firstname',
             'lastname',
             'msg',
             'warning'
         ]);
         $dt->setCaptions([
-            'firstname',
-            'lastname',
-            'Envoyer un message'
+            'In Exam',
+            '',
+            ''
         ]);
+        $dt->fieldAsLabel('status',null,['class'=>'ui grey empty circular label']);
         $dt->fieldAsIcon('warning');
         $dt->setValueFunction('msg',function($v,$e){return new HtmlButton('msg-'.$e->getId(),'send',null,'
         sendMessage('.$e->getId().');
@@ -66,7 +68,7 @@ class ExamUIService {
         ');});
         $dt->setIdentifierFunction( 'getId' );
         $dt->setActiveRowSelector("active");
-        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['attr'=>'data-ajax']);
+        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'attr'=>'data-ajax']);
         return $dt;
     }
 
