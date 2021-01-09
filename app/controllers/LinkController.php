@@ -38,14 +38,14 @@ class LinkController extends ControllerBase{
      * @param string $key
      */
     public function joinByLink(string $key){
-        $user=USession::get('activeUser')['id'];
+        $user=USession::get('activeUser');
         $group=$this->loader->getByKey($key);
         if($group!=null){
             if($user!=null){
-                if(!($this->loader->isInGroup($group->getId(), $user) || $this->loader->isCreator($group->getId(), $user) || $this->loader->alreadyDemand($group->getId(), $user))){
+                if(!($this->loader->isInGroup($group->getId(), $user['id']) || $this->loader->isCreator($group->getId(), $user['id']) || $this->loader->alreadyDemand($group->getId(), $user['id']))){
                     $userGroup=new Usergroup();
                     $userGroup->setIdGroup($group->getId());
-                    $userGroup->setIdUser($user);
+                    $userGroup->setIdUser($user['id']);
                     $userGroup->setStatus(0);
                     DAO::save($userGroup);
                     $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('joinSucceed',[],'main'),'class'=> 'success','position'=>'center top']);
