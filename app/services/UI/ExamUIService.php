@@ -51,13 +51,6 @@ class ExamUIService {
             'status',
             'firstname',
             'lastname',
-            'msg',
-            'warning'
-        ]);
-        $dt->setCaptions([
-            'In Exam',
-            '',
-            ''
         ]);
         $dt->fieldAsLabel('status',null,['class'=>'ui grey empty circular label']);
         $dt->fieldAsIcon('warning');

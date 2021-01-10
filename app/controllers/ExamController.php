@@ -36,7 +36,6 @@ class ExamController extends ControllerBase{
     public function initialize() {
         parent::initialize ();
         $this->uiService = new ExamUIService( $this->jquery );
-        $this->jquery->attr('#trainermode','class','item active',true);
         if (! URequest::isAjax ()) {
             $this->loadView('/main/UI/trainerNavbar.html');
             $this->jquery->getHref ( '.trainermenu', '#response', [
@@ -110,7 +109,7 @@ class ExamController extends ControllerBase{
         $this->displayMyExam();
         $this->jquery->renderView('ExamController/display.html');
     }
-    
+
     
     /**
      * @get('oversee/{id}/','name'=>'exam.oversee')
@@ -155,6 +154,7 @@ class ExamController extends ControllerBase{
         
         }
         ',true);
+
         $this->uiService->OverseeUsersDataTable($exam);
         $this->jquery->renderView('ExamController/oversee.html');
     }
@@ -165,7 +165,7 @@ class ExamController extends ControllerBase{
     public function ExamOverseeUser($idExam,$idUser){
         $exam = $this->loader->get($idExam);
         $countAnswer = DAO::count(Useranswer::class,'idExam = ? AND idUser = ?',[$exam->getId(),$idUser]);
-        $this->jquery->ajax('get',Router::path('Correction.myExam',[$idExam,$idUser]),'#answers_accordion');
+        $this->jquery->ajax('get',Router::path('liveresult.exam',[$idExam,$idUser]),'#answers_accordion');
         $this->jquery->renderView('ExamController/overseeUser.html',[]);
     }
 

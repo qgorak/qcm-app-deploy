@@ -2,6 +2,7 @@
 namespace controllers;
 
 use models\Answer;
+use models\Question;
 use models\User;
 use Ubiquity\orm\DAO;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
@@ -49,11 +50,41 @@ class CorrectionController extends ControllerBase{
     public function result($idExam,$idUser){
         $exam = $this->loader->get($idExam);
         $qcm = $exam->getQcm();
-        $questions = DAO::getManyToMany($qcm, 'questions',true);
+        $userAnswers = DAO::uGetAll(Useranswer::class,'idUser=? and exam.idQcm=?',['question'],[$idUser,$qcm->getId()]);
+        $result = $this->correctExam($userAnswers);
+        $this->jquery->renderView('CorrectionController/result.html',['totalScore'=>$result[1],'userScore'=>$result[2]]);
+    }
+
+    /**
+     * @route('liveresult/{idExam}/{idUser}','name'=>'liveresult.exam')
+     */
+    public function liveresult($idExam,$idUser){
+        $exam = $this->loader->get($idExam);
+        $qcm = $exam->getQcm();
+        $questions = DAO::getManyToMany($qcm,'questions');
+        $countQ = count($questions);
+        $userAnswers = DAO::uGetAll(Useranswer::class,'idUser=? and exam.idQcm=?',['question'],[$idUser,$qcm->getId()]);
+        $counUA = count($userAnswers);
+        $res = $counUA/$countQ*100;
+        $result = $this->correctExam($userAnswers);
+        $this->jquery->semantic()->htmlProgress('Progression',$res);
+        $this->jquery->renderView('CorrectionController/liveresult.html',['totalScore'=>$result[1],'userScore'=>$result[2]]);
+    }
+
+    /**
+     * @route('correctUserAnswer/{idExam}/{idUser}/{idQuestion}','name'=>'liveresult.correctq')
+     */
+    public function liveresultCorrectQ($idExam,$idUser,$idQuestion){
+        $exam = $this->loader->get($idExam);
+        $question = DAO::getById(Question::class,$idQuestion);
+        $userAnswers = DAO::GetOne(Useranswer::class,'idUser=? and idExam=? and idQuestion=?',false,[$idUser,$idExam,$idQuestion]);
+        $this->jquery->renderView();
+    }
+
+    private function correctExam($userAnswers){
         $acc = $this->uiService->correctionAccordion();
         $userScore=0;
         $totalScore=0;
-        $userAnswers = DAO::uGetAll(Useranswer::class,'idUser=? and exam.idQcm=?',['question'],[$idUser,$qcm->getId()]);
         foreach($userAnswers as $userAnswer){
             $question = $userAnswer->getQuestion();
             switch ($question->getIdTypeq()) {
@@ -74,7 +105,7 @@ class CorrectionController extends ControllerBase{
                     break;
             }
         }
-        $this->jquery->renderView('CorrectionController/result.html',['totalScore'=>$totalScore,'userScore'=>$userScore]);
+        return [$acc,$totalScore,$userScore];
     }
 
     /**

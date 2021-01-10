@@ -9,12 +9,15 @@
 					{{q['OverseeUserDt'] | raw }}
 		    	</div>
 			</div>
+		<style>
+			body{
+				overflow: hidden;
+			}
+
+			</style>
 	</div>
 </div>
-			</div>
-			</div>
-	</div>
-</div>
+
 <div class="ui modal cheat">
 <div class="ui form">
   <div class="field">
@@ -37,24 +40,25 @@
 	}
 	#OverseeUserDt tr {
 		display: flex;
-		align-items: center;
-		justify-content: center;
+		cursor: pointer;
+
 	}
+	#OverseeUserDt tr:hover {
+		background: #f8f8f8;
+	}
+
+	#OverseeUserDt tr.active:hover {
+		background: #e0e0e0;
+	}
+
 	#OverseeUserDt td {
 		display: block;
+		border-top: none;
 	}
-	#OverseeUserDt #htmltr-htmltablecontent--0-1{
-		display: none;
+	#OverseeUserDt thead{
+		display: none!important;
 	}
-	#OverseeUserDt #htmltr-htmltablecontent--0-2{
-		display: none;
-	}
-	#OverseeUserDt #htmltr-htmltablecontent--0-3{
-		display: none;
-	}
-	#OverseeUserDt #htmltr-htmltablecontent--0-0{
-		width: 235px;
-	}
+
 </style>
 {{script_foot | raw }}
 <!---close menu div --->
