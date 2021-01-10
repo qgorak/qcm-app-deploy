@@ -3,6 +3,7 @@ namespace controllers;
 
 use models\Group;
 use models\Usergroup;
+use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\security\acl\controllers\AclControllerTrait;
 use Ubiquity\translation\TranslatorManager;
@@ -45,6 +46,23 @@ class UserController extends ControllerBase{
     private function displayMyInfo($id){
         $user=$this->loader->get($id);
         $user->code_style='default';
+        $this->jquery->execOn('click','#but_uploadr','var fd = new FormData();
+            var files = $("#file")[0].files[0];
+            fd.append("file",files);
+            $.ajax({
+                url: "/image/avatar",
+                type: "post",
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function(response){
+            if(response != 0){
+                alert("ok");
+            }else{
+                alert("file not uploaded");
+            }
+        },
+            });');
         $this->uiService->displayInfos($user);
     }
     private function displayMyDashboard($id){

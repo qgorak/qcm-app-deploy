@@ -1,4 +1,4 @@
-﻿CREATE TABLE `answer` (
+CREATE TABLE `answer` (
   `id` int(11) NOT NULL,
   `caption` varchar(42) DEFAULT NULL,
   `score` float DEFAULT 0,
@@ -111,6 +111,7 @@ CREATE TABLE `user` (
   `firstname` varchar(42) DEFAULT NULL,
   `lastname` varchar(42) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  'avatar' varchar(255) DEFAULT NULL,
   `language` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

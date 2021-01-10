@@ -1,7 +1,31 @@
 <div class="ui grid">
 	<div class="two wide column" style="padding-right: 0;">
 <div  class="ui vertical menu" style="border-right: 2px solid rgba(34,36,38,.15);min-width:90px;width:100%;text-align: center;position: -webkit-sticky;position: sticky;top: 44px;height:calc( 100vh - 44px );">
-	<H3 class="header item">{{ user.email }}</H3>
+	<a class="ui basic blue huge circular label" style="border-color:rgb(34,36,38,.15);margin-left:2px;justify-content:center;padding: .4em!important;margin-top: 1rem;display: flex">
+		{% if user.avatar == null %}
+		<div class="baseAvatar">
+			{{ user.initials }}
+		</div>
+		{% endif %}
+		<img id="avatar" style="margin-right: auto" class="ui avatar image" src="{{ user.avatar }}">
+		<div class="deck">
+		<div style="height: 50%;display: flex;font-size:0.8rem;color: black">
+
+			{{ user.firstname }} {{ user.lastname }}
+
+		</div>
+		<div style="height: 50%; font-size:0.6rem;color: darkgray">
+			{{ user.email }}
+			</h6>
+		</div>
+		</div>
+	</a>
+	<div style="display: flex;padding: .7em;">
+	<div class="ui mini circular label">
+		<i class="ui certificate icon"></i>
+		Free version
+	</div>
+</div>
 	<div class="ui divider"></div>
 			<div id="verticaliconmenu" class="ui vertical fluid labeled icon menu" style="border:none;box-shadow: none;background: transparent;">
 				<a class="trainermenu item" href="{{path('dashboard')}}">

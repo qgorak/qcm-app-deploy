@@ -100,7 +100,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
     private function checkGoogleAccount($google_account_info){
         $user=DAO::getOne(User::class,"email = ?",false,[$google_account_info->email]);
         if($user!==null){
-            USession::set($this->_getUserSessionKey(),["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()]);
+            USession::set($this->_getUserSessionKey(),["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage(),'avatar'=>$user->getAvatar()]);
         }else{
             $user = new User();
             $user->setEmail($google_account_info->email);
@@ -110,7 +110,7 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $user->setPassword($this->randomPassword());
             $user = DAO::insert($user);
             $user = DAO::getOne(User::class,"email = ?",false,[$user->getEmail()]);
-            USession::set($this->_getUserSessionKey(),["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()]);
+            USession::set($this->_getUserSessionKey(),["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage(),'avatar'=>$user->getAvatar()]);
         }
         \header('Location: /');
         exit();
@@ -125,7 +125,8 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $user=DAO::getOne(User::class,"email = ?",false,[URequest::post('email')]);
             if($user!==null){
                 if (\password_verify(URequest::post('password'),$user->getPassword())){
-                    return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage()];
+                    $initials = $user->getFirstname()[0].$user->getLastname()[0];
+                    return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage(),'avatar'=>$user->getAvatar(),'initials'=>$initials];
                 }
                 else{
                     return ['error'=>'Wrong password !'];

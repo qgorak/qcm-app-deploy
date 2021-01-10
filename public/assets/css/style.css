@@ -228,3 +228,28 @@ canvas{
 	-webkit-backdrop-filter: blur( 4px );
 	min-height: 100vh;margin-top:44px
 }
+
+.deck{
+	display: flex;
+	text-overflow: ellipsis;
+	/* Required for text-overflow to do anything */
+	white-space: nowrap;
+	overflow: hidden;
+	flex-direction: column;
+	margin: auto;
+}
+.baseAvatar{
+	background-color: black;
+	min-width: 2em;
+	height: 2em;
+	color: white;
+	text-align: center;
+	line-height: 38px;
+	border-radius: 50%;
+}
+@media only screen and (max-width: 1200px) {
+	#avatar{
+		display: none;
+
+	}
+}
