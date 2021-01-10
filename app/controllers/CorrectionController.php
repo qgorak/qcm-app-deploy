@@ -76,9 +76,26 @@ class CorrectionController extends ControllerBase{
      */
     public function liveresultCorrectQ($idExam,$idUser,$idQuestion){
         $exam = $this->loader->get($idExam);
-        $question = DAO::getById(Question::class,$idQuestion);
-        $userAnswers = DAO::GetOne(Useranswer::class,'idUser=? and idExam=? and idQuestion=?',false,[$idUser,$idExam,$idQuestion]);
-        $this->jquery->renderView();
+        $question = DAO::getById(Question::class,$idQuestion,false);
+        $userAnswer = DAO::GetOne(Useranswer::class,'idUser=? and idExam=? and idQuestion=?',false,[$idUser,$idExam,$idQuestion]);
+        $userScore=0;
+        switch ($question->getIdTypeq()) {
+            case 1:
+                $res=$this->correctQcmAnswer($question,$userAnswer);
+                $userScore+=$res[1];
+                $this->jquery->renderView('CorrectionController/templates/correctqcm.html',['caption'=>$question->getCaption()]);
+                break;
+            case 2:
+                $res=$this->correctShortAnswer($question,$userAnswer);
+                $userScore+=$res[1];
+                $this->jquery->renderView('CorrectionController/templates/correctshort.html',['caption'=>$question->getCaption(),'frm'=>$res[2][1]]);
+                break;
+            case 3:
+                $res=$this->correctLongAnswer($question,$userAnswer);
+                $userScore+=$res[1];
+                $this->jquery->renderView('CorrectionController/templates/correctlong.html',['caption'=>$question->getCaption(),'frm'=>$res[2][1]]);
+                break;
+        }
     }
 
     private function correctExam($userAnswers){
@@ -89,17 +106,20 @@ class CorrectionController extends ControllerBase{
             $question = $userAnswer->getQuestion();
             switch ($question->getIdTypeq()) {
                 case 1:
-                    $res=$this->correctQcmAnswer($acc,$question,$userAnswer);
+                    $res=$this->correctQcmAnswer($question,$userAnswer);
+                    $acc->addItem($res[2]);
                     $userScore+=$res[1];
                     $totalScore+=$res[0];
                     break;
                 case 2:
-                    $res=$this->correctShortAnswer($acc,$question,$userAnswer);
+                    $res=$this->correctShortAnswer($question,$userAnswer);
+                    $acc->addItem($res[2]);
                     $userScore+=$res[1];
                     $totalScore+=$res[0];
                     break;
                 case 3:
-                    $res=$this->correctLongAnswer($acc,$question,$userAnswer);
+                    $res=$this->correctLongAnswer($question,$userAnswer);
+                    $acc->addItem($res[2]);
                     $userScore+=$res[1];
                     $totalScore+=$res[0];
                     break;
@@ -123,7 +143,7 @@ class CorrectionController extends ControllerBase{
 
     }
 
-    private function correctQcmAnswer($acc,$question,$userAnswer){
+    private function correctQcmAnswer($question,$userAnswer){
         $answers = DAO::getAll(Answer::class,'idQuestion=?',false,[$question->getId()]);
         $userAnswers = \json_decode($userAnswer);
         $answersToDisplay=array();
@@ -144,11 +164,11 @@ class CorrectionController extends ControllerBase{
         }
         $dt = $this->uiService->correctionAnswersDataTable($answersToDisplay);
         $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
-        $acc->addItem(array($question->getCaption().$label,$dt));
-        return [$totalScore,$score];
+        $item = array($question->getCaption().$label,$dt);
+        return [$totalScore,$score,$item];
     }
 
-    private function correctShortAnswer($acc,$question,$userAnswer){
+    private function correctShortAnswer($question,$userAnswer){
         $questionCreator =  DAO::getOne(User::class,'id=?',false,[$question->getUser()]);
         $answer = DAO::getOne(Answer::class,'idQuestion=?',false,[$question->getId()]);
         $userAnswerValue = \json_decode($userAnswer);
@@ -162,11 +182,11 @@ class CorrectionController extends ControllerBase{
         $totalScore+=$answer->getScore();
         $score+=$userAnswerValue->points;
         $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
-        $acc->addItem(array($question->getCaption().$label,$frm));
-        return [$totalScore,$score];
+        $item = array($question->getCaption().$label,$frm);
+        return [$totalScore,$score,$item];
     }
 
-    private function correctLongAnswer($acc,$question,$userAnswer){
+    private function correctLongAnswer($question,$userAnswer){
         $questionCreator =  DAO::getOne(User::class,'id=?',false,[$question->getUser()]);
         $answer = DAO::getOne(Answer::class,'idQuestion=?',false,[$question->getId()]);
         $userAnswerValue = \json_decode($userAnswer);
@@ -180,7 +200,7 @@ class CorrectionController extends ControllerBase{
         $score += $userAnswerValue->points;
         $frm = $this->uiService->longAnswerForm($answer,$questionCreator->getId(),$totalScore);
         $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
-        $acc->addItem(array($question->getCaption().$label,$frm));
-        return [$totalScore,$score];
+        $item = array($question->getCaption().$label,$frm);
+        return [$totalScore,$score,$item];
     }
 }

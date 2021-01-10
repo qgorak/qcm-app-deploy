@@ -13,7 +13,7 @@ abstract class ControllerBase extends Controller{
 	protected $headerView = "@activeTheme/main/vHeader.html";
 	protected $footerView = "@activeTheme/main/vFooter.html";
 
-	public function initialize() {	    
+	public function initialize() {
 		if (! URequest::isAjax ()) {
 		    $user = USession::get('activeUser');
 		    $this->loadView ( $this->headerView ,[

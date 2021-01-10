@@ -62,7 +62,6 @@ class inExamController extends ControllerBase{
         ]);
         $bt=$this->jquery->semantic()->htmlButton('btNext','next');
         $bt->addToProperty('style', 'display:none;');
-        $this->jquery->postFormOnClick("#btNext", Router::path('exam.next'), 'frmUserAnswer','#response');
         $this->jquery->exec('var count=0;
         var ws = new WebSocket("ws:/127.0.0.1:2346");
         ws.onopen=function(){
@@ -78,6 +77,11 @@ class inExamController extends ControllerBase{
     	}
         $(this).data("prevType", e.type);
         });
+        $( "#IdPQ" ).change(function() {
+            idPQ = $( "#IdPQ" ).val();
+            ws.send(\'{"exam":'.$id.',"user":'.\json_encode(USession::get('activeUser')).',"target":'.$target.',"idPQ": \'+idPQ+\'}\');
+        });
+        $("#next").click(function(event){ws.send(\'{"exam":'.$id.',"id":'.USession::get('activeUser')['id'].',"target":"\'+target+\'","message":"\'+$("textarea[name=message]").val()+\'"}\');$(".cheat").modal("hide");$("textarea[name=message]").val("");event.stopPropagation();});
         ws.onmessage = function(e) {
             console.log(e.data);
            var obj=JSON.parse(e.data);
@@ -85,6 +89,12 @@ class inExamController extends ControllerBase{
             alert(obj.message);
            }
         };',true);
+        $this->jquery->postFormOnClick("#btNext", Router::path('exam.next'), 'frmUserAnswer','#response',[
+            'stopPropagation'=>false,
+            'preventDefault'=>false,
+            'before'=>'idPQ = $( "#IdQ" ).val();',
+            'jsCallback'=>'$( "#IdPQ" ).val(idPQ);$("#IdPQ").trigger("change");'
+        ]);
         $this->jquery->renderView('ExamController/exam.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
     }
 

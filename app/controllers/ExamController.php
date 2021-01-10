@@ -132,7 +132,11 @@ class ExamController extends ControllerBase{
             var index="#OverseeUserDt-icon-"+obj.user.id;
             $(index).addClass("exclamation triangle");
             }
-            
+            if(("idPQ" in obj) && ($("#idUser").val() == obj.user.id)){
+            var index="#OverseeUserDt-icon-"+obj.user.id;
+            $("#idNewQ").val(obj.idPQ);
+            $("#idNewQ").trigger("change");
+            }
             if("usersLogged" in obj){
                 $( "._element" ).each(function( index ) {
                     child = index+1;
@@ -166,7 +170,11 @@ class ExamController extends ControllerBase{
         $exam = $this->loader->get($idExam);
         $countAnswer = DAO::count(Useranswer::class,'idExam = ? AND idUser = ?',[$exam->getId(),$idUser]);
         $this->jquery->ajax('get',Router::path('liveresult.exam',[$idExam,$idUser]),'#answers_accordion');
-        $this->jquery->renderView('ExamController/overseeUser.html',[]);
+        $this->jquery->ajaxOn('change','#idNewQ',Router::path('liveresult.correctq',[$idExam,$idUser]),'',[
+            'jsCallback'=>'$("#accordion3").append(data)',
+            'attr'=>'value'
+        ]);
+        $this->jquery->renderView('ExamController/overseeUser.html',['idUser'=>$idUser]);
     }
 
 }

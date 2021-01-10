@@ -51,6 +51,13 @@ $ws_worker->onMessage = function($connection, $data) use ($ws_worker){
             $connection->send($data);
         }
     }
+    if(isset($dataArray->target,$dataArray->idPQ)){
+        if(isset($ws_worker->exams[$dataArray->exam]['users'][$dataArray->target])){
+            $id=$ws_worker->exams[$dataArray->exam]['users'][$dataArray->target];
+            $connection=$ws_worker->connections[$id];
+            $connection->send($data);
+        }
+    }
     if(isset($dataArray->target,$dataArray->message,$dataArray->exam)){
         if(isset($ws_worker->exams[$dataArray->exam]['users'][$dataArray->target])){
             $id=$ws_worker->exams[$dataArray->exam]['users'][$dataArray->target];
