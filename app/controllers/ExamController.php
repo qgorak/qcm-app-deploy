@@ -141,12 +141,15 @@ class ExamController extends ControllerBase{
                 $( "._element" ).each(function( index ) {
                     child = index+1;
                     x = $("._element:nth-child("+child+")").attr("data-ajax");
+                    y = $("._element:nth-child("+child+")").attr("id");
                     var n = obj.usersLogged.indexOf(parseInt(x));
                     var index="#OverseeUserDt-label-"+$("._element:nth-child("+child+")").attr("data-ajax");
                     if(n!==-1){
-                        $(index).attr("class","ui green empty circular label");
+                        alert(y)
+                        t = $("#"+y+" .status").attr("class","ui status empty green circular label");
+                        alert("#"+y+" .status");
                     }else{
-                        $(index).attr("class","ui empty grey circular label disabled");
+                        $("._element:nth-child("+child+")").closest(".label").attr("class","ui empty grey circular label disabled");
                     }
                 })
             }

@@ -44,21 +44,34 @@ class ExamUIService {
         $usersg=DAO::getOneToMany($exam->getGroup(),'usergroups');
         $users=[];
         foreach($usersg as $userg){
-            \array_push($users,$userg->getUser());
+            $user = $userg->getUser();
+            if($user->getAvatar()==NULL){
+                $user->setAvatar('#'.$user->getFirstname()[0].$user->getlastname()[0]);
+            }
+            \array_push($users,$user);
         }
         $dt=$this->jquery->semantic()->dataTable('OverseeUserDt',User::class,$users);
         $dt->setFields([
-            'status',
+            'avatar',
             'firstname',
             'lastname',
         ]);
-        $dt->fieldAsLabel('status',null,['class'=>'ui grey empty circular label']);
+    //    $dt->fieldAsLabel('status',null,['class'=>'ui grey empty circular label']);
+        $dt->fieldAsAvatar('avatar');
         $dt->fieldAsIcon('warning');
         $dt->setValueFunction('msg',function($v,$e){return new HtmlButton('msg-'.$e->getId(),'send',null,'
         sendMessage('.$e->getId().');
         $(".user").html("'.$e->getFirstname().' '.$e->getLastname().'");
         $(".cheat").modal("show");
         ');});
+        $dt->setValueFunction('avatar',function($a) {
+            if ($a[0] == '#') {
+                return '<div class="avatarDt"><div class="baseAvatarDt">'.$a[1].$a[2].'</div><div class="status ui grey empty circular label"></div></div>';
+            } else {
+                return '<img style="margin-right: auto" class="ui avatar image" src="'.$a.'">';
+            }
+        }
+        );
         $dt->setIdentifierFunction( 'getId' );
         $dt->setActiveRowSelector("active");
         $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'attr'=>'data-ajax']);
