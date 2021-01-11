@@ -34,7 +34,7 @@ class LinkController extends ControllerBase{
     
     /**
      * @allow('role'=>['@GUEST','@USER'])
-     * @get('link/{key}','name'=>'joinLink')
+     * @get('invitation/{key}','name'=>'joinLink')
      * @param string $key
      */
     public function joinByLink(string $key){
