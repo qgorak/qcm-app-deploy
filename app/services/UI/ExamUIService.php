@@ -68,7 +68,7 @@ class ExamUIService {
             if ($a[0] == '#') {
                 return '<div class="avatarDt"><div class="baseAvatarDt">'.$a[1].$a[2].'</div><div class="status ui grey empty circular label"></div></div>';
             } else {
-                return '<img style="margin-right: auto" class="ui avatar image" src="'.$a.'">';
+                return '<div class="avatarDt"><img style="margin-right: auto" class="ui avatar image" src="'.$a.'"><div class="status ui grey empty circular label"></div></div>';
             }
         }
         );
