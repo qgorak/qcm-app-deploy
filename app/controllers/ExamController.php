@@ -1,6 +1,7 @@
 <?php
 namespace controllers;
 
+use models\Question;
 use Ubiquity\controllers\Router;
 use Ubiquity\controllers\Startup;
 use Ubiquity\orm\DAO;
@@ -133,9 +134,9 @@ class ExamController extends ControllerBase{
             $(index).addClass("exclamation triangle");
             }
             if(("idPQ" in obj) && ($("#idUser").val() == obj.user.id)){
-            var index="#OverseeUserDt-icon-"+obj.user.id;
-            $("#idNewQ").val(obj.idPQ);
-            $("#idNewQ").trigger("change");
+             var index="#OverseeUserDt-icon-"+obj.user.id;
+             $("#idNewQ").val(obj.idPQ);
+             $("#idNewQ").trigger("change");
             }
             if("usersLogged" in obj){
                 $( "._element" ).each(function( index ) {
@@ -145,11 +146,9 @@ class ExamController extends ControllerBase{
                     var n = obj.usersLogged.indexOf(parseInt(x));
                     var index="#OverseeUserDt-label-"+$("._element:nth-child("+child+")").attr("data-ajax");
                     if(n!==-1){
-                        alert(y)
-                        t = $("#"+y+" .status").attr("class","ui status empty green circular label");
-                        alert("#"+y+" .status");
+                        $("#"+y+" .status").attr("class","ui status empty green circular label");
                     }else{
-                        $("._element:nth-child("+child+")").closest(".label").attr("class","ui empty grey circular label disabled");
+                        $("#"+y+" .status").attr("class","status ui grey empty circular label");
                     }
                 })
             }
@@ -162,8 +161,11 @@ class ExamController extends ControllerBase{
         }
         ',true);
 
+        $qcm = DAO::getById(Qcm::class,$qcm->getId(),true);
+        $countq=count($qcm->getQuestions());
         $this->uiService->OverseeUsersDataTable($exam);
-        $this->jquery->renderView('ExamController/oversee.html');
+        $group=DAO::getOne(Group::class,'keyCode=?',false,[$exam->getGroup()]);
+        $this->jquery->renderView('ExamController/oversee.html',['group'=>$group->getName(),'countQ'=>$countq]);
     }
 
     /**
@@ -174,10 +176,12 @@ class ExamController extends ControllerBase{
         $countAnswer = DAO::count(Useranswer::class,'idExam = ? AND idUser = ?',[$exam->getId(),$idUser]);
         $this->jquery->ajax('get',Router::path('liveresult.exam',[$idExam,$idUser]),'#answers_accordion');
         $this->jquery->ajaxOn('change','#idNewQ',Router::path('liveresult.correctq',[$idExam,$idUser]),'',[
-            'jsCallback'=>'$("#accordion3").append(data)',
+            'jsCallback'=>'$("#accordion3").append(data);$("#countUA").val(parseInt($("#countUA").val())+1);
+                           per =parseFloat(parseInt($("#countUA").val(), 10) * 100)/ parseInt($("#countQ").val(), 10);
+                           $("#Progression").progress({percent: per});',
             'attr'=>'value'
         ]);
-        $this->jquery->renderView('ExamController/overseeUser.html',['idUser'=>$idUser]);
+        $this->jquery->renderView('ExamController/overseeuser.html',['idUser'=>$idUser,'countUA'=>$countAnswer]);
     }
 
 }

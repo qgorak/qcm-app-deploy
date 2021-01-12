@@ -11,7 +11,7 @@ use Ubiquity\utils\http\USession;
 class ExamDAOLoader {
 
 	public function get($id): ?Exam {
-		return DAO::getById ( Exam::class, $id, true );
+		return DAO::getById(Exam::class,$id,true);
 	}
 
 	public function add(Exam $exam): void {

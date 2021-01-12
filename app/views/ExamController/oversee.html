@@ -1,4 +1,4 @@
-<div class="fourteen wide column" style="padding-left: 0;">
+<div class="fourteen wide column" style="padding-left: 0;padding-right: 0">
 	<div id="response">
 		    <div style="display: flex">
 				<div id="response-overseeuser" style="display:flex; width: calc( 100% - 235px )!important;">
@@ -6,7 +6,10 @@
 				</div>
 
 		    	<div style="display: flex;width: 235px">
+					<div class="deck" style="margin: 0;width: 235px;border: 1px solid #dededf">
+						<div class="ui label " style="display:flex;border-radius:0;padding-left: 1em;"><i class="ui users icon"></i> <div style="padding-left: 1em;">{{ group | raw }}</div></div>
 					{{q['OverseeUserDt'] | raw }}
+					</div>
 		    	</div>
 			</div>
 		<style>
@@ -15,6 +18,7 @@
 			}
 
 			</style>
+		<input id="countQ" type="hidden" value="{{ countQ | raw }}">
 	</div>
 </div>
 
