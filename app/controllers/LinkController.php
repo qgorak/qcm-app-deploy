@@ -64,7 +64,6 @@ class LinkController extends ControllerBase{
         else{
             $this->jquery->semantic()->toast('body',['message'=>TranslatorManager::trans('notGroup',[],'main'),'class'=> 'warning','position'=>'center top']);
         }
-        $this->jquery->execAtLast('setTimeout(function(){ window.location.replace("/"); }, 5000);');
         $this->jquery->renderView('MainController/index.html');
     }
     
