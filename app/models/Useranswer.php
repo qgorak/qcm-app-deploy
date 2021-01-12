@@ -1,107 +1,107 @@
 <?php
 namespace models;
 /**
- * @table('useranswer')
-*/
+ * @table("name"=>"useranswer")
+ */
 class Useranswer{
 	/**
-	 * @id
-	 * @column("name"=>"idUser","nullable"=>false,"dbType"=>"int(11)")
-	 * @validator("id","constraints"=>array("autoinc"=>true))
-	*/
+	 * @id()
+	 * @column("name"=>"idUser","dbType"=>"int(11)")
+	 * @validator("type"=>"id","constraints"=>["autoinc"=>true])
+	 */
 	private $idUser;
 
 	/**
-	 * @id
-	 * @column("name"=>"idExam","nullable"=>false,"dbType"=>"int(11)")
-	 * @validator("id","constraints"=>array("autoinc"=>true))
-	*/
+	 * @id()
+	 * @column("name"=>"idExam","dbType"=>"int(11)")
+	 * @validator("type"=>"id","constraints"=>["autoinc"=>true])
+	 */
 	private $idExam;
 
 	/**
-	 * @id
-	 * @column("name"=>"idQuestion","nullable"=>false,"dbType"=>"int(11)")
-	 * @validator("id","constraints"=>array("autoinc"=>true))
-	*/
+	 * @id()
+	 * @column("name"=>"idQuestion","dbType"=>"int(11)")
+	 * @validator("type"=>"id","constraints"=>["autoinc"=>true])
+	 */
 	private $idQuestion;
 
 	/**
-	 * @column("name"=>"value","nullable"=>false,"dbType"=>"text")
-	 * @validator("notNull")
-	*/
+	 * @column("name"=>"value","dbType"=>"text")
+	 * @validator("type"=>"notNull")
+	 */
 	private $value;
 
 	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\\Exam","name"=>"idExam","nullable"=>false)
-	*/
+	 * @manyToOne()
+	 * @joinColumn("className"=>"models\\Exam","name"=>"idExam")
+	 */
 	private $exam;
 
 	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\\Question","name"=>"idQuestion","nullable"=>false)
-	*/
+	 * @manyToOne()
+	 * @joinColumn("className"=>"models\\Question","name"=>"idQuestion")
+	 */
 	private $question;
 
 	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\\User","name"=>"idUser","nullable"=>false)
-	*/
+	 * @manyToOne()
+	 * @joinColumn("className"=>"models\\User","name"=>"idUser")
+	 */
 	private $user;
 
-	 public function getIdUser(){
+	public function getIdUser(){
 		return $this->idUser;
 	}
 
-	 public function setIdUser($idUser){
+	public function setIdUser($idUser){
 		$this->idUser=$idUser;
 	}
 
-	 public function getIdExam(){
+	public function getIdExam(){
 		return $this->idExam;
 	}
 
-	 public function setIdExam($idExam){
+	public function setIdExam($idExam){
 		$this->idExam=$idExam;
 	}
 
-	 public function getIdQuestion(){
+	public function getIdQuestion(){
 		return $this->idQuestion;
 	}
 
-	 public function setIdQuestion($idQuestion){
+	public function setIdQuestion($idQuestion){
 		$this->idQuestion=$idQuestion;
 	}
 
-	 public function getValue(){
+	public function getValue(){
 		return $this->value;
 	}
 
-	 public function setValue($value){
+	public function setValue($value){
 		$this->value=$value;
 	}
 
-	 public function getExam(){
+	public function getExam(){
 		return $this->exam;
 	}
 
-	 public function setExam($exam){
+	public function setExam($exam){
 		$this->exam=$exam;
 	}
 
-	 public function getQuestion(){
+	public function getQuestion(){
 		return $this->question;
 	}
 
-	 public function setQuestion($question){
+	public function setQuestion($question){
 		$this->question=$question;
 	}
 
-	 public function getUser(){
+	public function getUser(){
 		return $this->user;
 	}
 
-	 public function setUser($user){
+	public function setUser($user){
 		$this->user=$user;
 	}
 

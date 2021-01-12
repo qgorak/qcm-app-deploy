@@ -38,16 +38,22 @@ class User{
 	private $email;
 
 	/**
+	 * @column("name"=>"avatar","nullable"=>true,"dbType"=>"varchar(255)")
+	 * @validator("type"=>"length","constraints"=>["max"=>255])
+	 */
+	private $avatar;
+
+	/**
 	 * @column("name"=>"language","dbType"=>"varchar(32)")
 	 * @validator("type"=>"length","constraints"=>["max"=>32,"notNull"=>true])
 	 */
 	private $language;
 
 	/**
-	 * @column("name"=>"avatar","nullable"=>true,"dbType"=>"varchar(255)")
-	 * @validator("type"=>"length","constraints"=>["max"=>255])
+	 * @column("name"=>"confirmed","dbType"=>"text")
+	 * @validator("type"=>"notNull")
 	 */
-	private $avatar;
+	private $confirmed;
 
 	/**
 	 * @oneToMany("mappedBy"=>"user","className"=>"models\\Group")
@@ -119,6 +125,14 @@ class User{
 		$this->email=$email;
 	}
 
+	public function getAvatar(){
+		return $this->avatar;
+	}
+
+	public function setAvatar($avatar){
+		$this->avatar=$avatar;
+	}
+
 	public function getLanguage(){
 		return $this->language;
 	}
@@ -127,12 +141,12 @@ class User{
 		$this->language=$language;
 	}
 
-	public function getAvatar(){
-		return $this->avatar;
+	public function getConfirmed(){
+		return $this->confirmed;
 	}
 
-	public function setAvatar($avatar){
-		$this->avatar=$avatar;
+	public function setConfirmed($confirmed){
+		$this->confirmed=$confirmed;
 	}
 
 	public function getGroups(){
@@ -208,7 +222,7 @@ class User{
 	}
 
 	 public function __toString(){
-		return ($this->language??'no value').'';
+		return ($this->confirmed??'no value').'';
 	}
 
 }

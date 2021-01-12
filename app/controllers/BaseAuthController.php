@@ -2,6 +2,7 @@
 namespace controllers;
 use Google_Client;
 use Google_Service_Oauth2;
+use Ubiquity\controllers\Router;
 use Ubiquity\mailer\MailerManager;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
@@ -125,8 +126,13 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             $user=DAO::getOne(User::class,"email = ?",false,[URequest::post('email')]);
             if($user!==null){
                 if (\password_verify(URequest::post('password'),$user->getPassword())){
-                    $initials = $user->getFirstname()[0].$user->getLastname()[0];
-                    return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage(),'avatar'=>$user->getAvatar(),'initials'=>$initials];
+                    if($user->getConfirmed()=="1"){
+                        $initials = $user->getFirstname()[0].$user->getLastname()[0];
+                        return ["id"=>$user->getId(),"email"=>$user->getEmail(),"firstname"=>$user->getFirstname(),"lastname"=>$user->getLastname(),'language'=>$user->getLanguage(),'avatar'=>$user->getAvatar(),'initials'=>$initials];
+                    }
+                    else{
+                        return ['error'=>'Your account isn\'t verified, please check your email'];
+                    }
                 }
                 else{
                     return ['error'=>'Wrong password !'];
@@ -155,8 +161,16 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
             if(URequest::password_hash('password')){
                 $instance->setPassword(URequest::post('password'));
             }
+            $confirmedId=$instance->getFirstname().\uniqid();
+            $instance->setConfirmed($confirmedId);
             DAO::insert($instance);
-            $this->uiService->loginErrorMessage('You successfully registered','check');
+            $mail = new MailManager();
+            $mail->to($instance->getEmail());
+            $mail->subject = 'Welcome to QCM';
+            $link=Router::path('confirmUser',[$confirmedId]);
+            $mail->setBody('Please follow this link to confirm you account <a href="http://127.0.0.1:8090/'.$link.'">Activez votre compte</a>');
+            MailerManager::send($mail);
+            $this->uiService->loginErrorMessage('You successfully registered, please check your mail to verify your account','check');
         }
         else{
             $this->uiService->registerForm();
@@ -190,9 +204,10 @@ class BaseAuthController extends \Ubiquity\controllers\auth\AuthController{
         if($user!=null){
             $mail = new MailManager();
             $mail->to(URequest::post('email'));
+            $mail->subject = 'Reset password';
             $newPassword=$this->randomPassword();
             $user->setPassword(\password_hash($newPassword,PASSWORD_DEFAULT));
-            $mail->setNewPassword($newPassword);
+            $mail->setBody("Your new password is ".$newPassword);
             if (MailerManager::send($mail)) {
                 $this->loader->update($user);
                 $this->uiService->loginErrorMessage('Your new password has been sent','check');

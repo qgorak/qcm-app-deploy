@@ -1,86 +1,86 @@
 <?php
 namespace models;
 /**
- * @table('group')
-*/
+ * @table("name"=>"group")
+ */
 class Group{
 	/**
-	 * @id
-	 * @column("name"=>"id","nullable"=>false,"dbType"=>"int(11)")
-	 * @validator("id","constraints"=>array("autoinc"=>true))
-	*/
+	 * @id()
+	 * @column("name"=>"id","dbType"=>"int(11)")
+	 * @validator("type"=>"id","constraints"=>["autoinc"=>true])
+	 */
 	private $id;
 
 	/**
 	 * @column("name"=>"name","nullable"=>true,"dbType"=>"varchar(42)")
-	 * @validator("length","constraints"=>array("max"=>42))
-	*/
+	 * @validator("type"=>"length","constraints"=>["max"=>42])
+	 */
 	private $name;
 
 	/**
 	 * @column("name"=>"description","nullable"=>true,"dbType"=>"text")
-	*/
+	 */
 	private $description;
 
 	/**
-	 * @column("name"=>"keyCode","nullable"=>false,"dbType"=>"varchar(255)")
-	 * @validator("length","constraints"=>array("max"=>255,"notNull"=>true))
-	*/
+	 * @column("name"=>"keyCode","dbType"=>"varchar(255)")
+	 * @validator("type"=>"length","constraints"=>["max"=>255,"notNull"=>true])
+	 */
 	private $keyCode;
 
 	/**
 	 * @oneToMany("mappedBy"=>"group","className"=>"models\\Exam")
-	*/
+	 */
 	private $exams;
 
 	/**
 	 * @oneToMany("mappedBy"=>"group","className"=>"models\\Usergroup")
-	*/
+	 */
 	private $usergroups;
 
 	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\\User","name"=>"idUser","nullable"=>false)
-	*/
+	 * @manyToOne()
+	 * @joinColumn("className"=>"models\\User","name"=>"idUser")
+	 */
 	private $user;
 
-	 public function getId(){
+	public function getId(){
 		return $this->id;
 	}
 
-	 public function setId($id){
+	public function setId($id){
 		$this->id=$id;
 	}
 
-	 public function getName(){
+	public function getName(){
 		return $this->name;
 	}
 
-	 public function setName($name){
+	public function setName($name){
 		$this->name=$name;
 	}
 
-	 public function getDescription(){
+	public function getDescription(){
 		return $this->description;
 	}
 
-	 public function setDescription($description){
+	public function setDescription($description){
 		$this->description=$description;
 	}
 
-	 public function getKeyCode(){
+	public function getKeyCode(){
 		return $this->keyCode;
 	}
 
-	 public function setKeyCode($keyCode){
+	public function setKeyCode($keyCode){
 		$this->keyCode=$keyCode;
 	}
 
-	 public function getExams(){
+	public function getExams(){
 		return $this->exams;
 	}
 
-	 public function setExams($exams){
+	public function setExams($exams){
 		$this->exams=$exams;
 	}
 
@@ -88,11 +88,11 @@ class Group{
 		$this->exams[]=$exam;
 	}
 
-	 public function getUsergroups(){
+	public function getUsergroups(){
 		return $this->usergroups;
 	}
 
-	 public function setUsergroups($usergroups){
+	public function setUsergroups($usergroups){
 		$this->usergroups=$usergroups;
 	}
 
@@ -100,11 +100,11 @@ class Group{
 		$this->usergroups[]=$usergroup;
 	}
 
-	 public function getUser(){
+	public function getUser(){
 		return $this->user;
 	}
 
-	 public function setUser($user){
+	public function setUser($user){
 		$this->user=$user;
 	}
 

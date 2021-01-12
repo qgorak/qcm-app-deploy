@@ -1,77 +1,77 @@
 <?php
 namespace models;
 /**
- * @table('tag')
-*/
+ * @table("name"=>"tag")
+ */
 class Tag{
 	/**
-	 * @id
-	 * @column("name"=>"id","nullable"=>false,"dbType"=>"int(11)")
-	 * @validator("id","constraints"=>array("autoinc"=>true))
-	*/
+	 * @id()
+	 * @column("name"=>"id","dbType"=>"int(11)")
+	 * @validator("type"=>"id","constraints"=>["autoinc"=>true])
+	 */
 	private $id;
 
 	/**
 	 * @column("name"=>"name","nullable"=>true,"dbType"=>"varchar(42)")
-	 * @validator("length","constraints"=>array("max"=>42))
-	*/
+	 * @validator("type"=>"length","constraints"=>["max"=>42])
+	 */
 	private $name;
 
 	/**
 	 * @column("name"=>"color","nullable"=>true,"dbType"=>"varchar(42)")
-	 * @validator("length","constraints"=>array("max"=>42))
-	*/
+	 * @validator("type"=>"length","constraints"=>["max"=>42])
+	 */
 	private $color;
 
 	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\\User","name"=>"idUser","nullable"=>false)
-	*/
+	 * @manyToOne()
+	 * @joinColumn("className"=>"models\\User","name"=>"idUser")
+	 */
 	private $user;
 
 	/**
 	 * @manyToMany("targetEntity"=>"models\\Question","inversedBy"=>"tags")
 	 * @joinTable("name"=>"questiontag")
-	*/
+	 */
 	private $questions;
 
-	 public function getId(){
+	public function getId(){
 		return $this->id;
 	}
 
-	 public function setId($id){
+	public function setId($id){
 		$this->id=$id;
 	}
 
-	 public function getName(){
+	public function getName(){
 		return $this->name;
 	}
 
-	 public function setName($name){
+	public function setName($name){
 		$this->name=$name;
 	}
 
-	 public function getColor(){
+	public function getColor(){
 		return $this->color;
 	}
 
-	 public function setColor($color){
+	public function setColor($color){
 		$this->color=$color;
 	}
 
-	 public function getUser(){
+	public function getUser(){
 		return $this->user;
 	}
 
-	 public function setUser($user){
+	public function setUser($user){
 		$this->user=$user;
 	}
 
-	 public function getQuestions(){
+	public function getQuestions(){
 		return $this->questions;
 	}
 
-	 public function setQuestions($questions){
+	public function setQuestions($questions){
 		$this->questions=$questions;
 	}
 

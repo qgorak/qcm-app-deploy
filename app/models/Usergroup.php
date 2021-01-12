@@ -1,78 +1,78 @@
 <?php
 namespace models;
 /**
- * @table('usergroup')
-*/
+ * @table("name"=>"usergroup")
+ */
 class Usergroup{
 	/**
-	 * @id
-	 * @column("name"=>"idGroup","nullable"=>false,"dbType"=>"int(11)")
-	 * @validator("id","constraints"=>array("autoinc"=>true))
-	*/
+	 * @id()
+	 * @column("name"=>"idGroup","dbType"=>"int(11)")
+	 * @validator("type"=>"id","constraints"=>["autoinc"=>true])
+	 */
 	private $idGroup;
 
 	/**
-	 * @id
-	 * @column("name"=>"idUser","nullable"=>false,"dbType"=>"int(11)")
-	 * @validator("id","constraints"=>array("autoinc"=>true))
-	*/
+	 * @id()
+	 * @column("name"=>"idUser","dbType"=>"int(11)")
+	 * @validator("type"=>"id","constraints"=>["autoinc"=>true])
+	 */
 	private $idUser;
 
 	/**
-	 * @column("name"=>"status","nullable"=>false,"dbType"=>"varchar(255)")
-	 * @validator("length","constraints"=>array("max"=>255,"notNull"=>true))
-	*/
+	 * @column("name"=>"status","dbType"=>"varchar(255)")
+	 * @validator("type"=>"length","constraints"=>["max"=>255,"notNull"=>true])
+	 */
 	private $status;
 
 	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\\Group","name"=>"idGroup","nullable"=>false)
-	*/
+	 * @manyToOne()
+	 * @joinColumn("className"=>"models\\Group","name"=>"idGroup")
+	 */
 	private $group;
 
 	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\\User","name"=>"idUser","nullable"=>false)
-	*/
+	 * @manyToOne()
+	 * @joinColumn("className"=>"models\\User","name"=>"idUser")
+	 */
 	private $user;
 
-	 public function getIdGroup(){
+	public function getIdGroup(){
 		return $this->idGroup;
 	}
 
-	 public function setIdGroup($idGroup){
+	public function setIdGroup($idGroup){
 		$this->idGroup=$idGroup;
 	}
 
-	 public function getIdUser(){
+	public function getIdUser(){
 		return $this->idUser;
 	}
 
-	 public function setIdUser($idUser){
+	public function setIdUser($idUser){
 		$this->idUser=$idUser;
 	}
 
-	 public function getStatus(){
+	public function getStatus(){
 		return $this->status;
 	}
 
-	 public function setStatus($status){
+	public function setStatus($status){
 		$this->status=$status;
 	}
 
-	 public function getGroup(){
+	public function getGroup(){
 		return $this->group;
 	}
 
-	 public function setGroup($group){
+	public function setGroup($group){
 		$this->group=$group;
 	}
 
-	 public function getUser(){
+	public function getUser(){
 		return $this->user;
 	}
 
-	 public function setUser($user){
+	public function setUser($user){
 		$this->user=$user;
 	}
 

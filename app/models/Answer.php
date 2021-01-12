@@ -1,62 +1,62 @@
 <?php
 namespace models;
 /**
- * @table('answer')
-*/
+ * @table("name"=>"answer")
+ */
 class Answer{
 	/**
-	 * @id
-	 * @column("name"=>"id","nullable"=>false,"dbType"=>"int(11)")
-	 * @validator("id","constraints"=>array("autoinc"=>true))
-	*/
+	 * @id()
+	 * @column("name"=>"id","dbType"=>"int(11)")
+	 * @validator("type"=>"id","constraints"=>["autoinc"=>true])
+	 */
 	private $id;
 
 	/**
 	 * @column("name"=>"caption","nullable"=>true,"dbType"=>"varchar(42)")
-	 * @validator("length","constraints"=>array("max"=>42))
-	*/
+	 * @validator("type"=>"length","constraints"=>["max"=>42])
+	 */
 	private $caption;
 
 	/**
 	 * @column("name"=>"score","nullable"=>true,"dbType"=>"float")
-	*/
+	 */
 	private $score;
 
 	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\\Question","name"=>"idQuestion","nullable"=>false)
-	*/
+	 * @manyToOne()
+	 * @joinColumn("className"=>"models\\Question","name"=>"idQuestion")
+	 */
 	private $question;
 
-	 public function getId(){
+	public function getId(){
 		return $this->id;
 	}
 
-	 public function setId($id){
+	public function setId($id){
 		$this->id=$id;
 	}
 
-	 public function getCaption(){
+	public function getCaption(){
 		return $this->caption;
 	}
 
-	 public function setCaption($caption){
+	public function setCaption($caption){
 		$this->caption=$caption;
 	}
 
-	 public function getScore(){
+	public function getScore(){
 		return $this->score;
 	}
 
-	 public function setScore($score){
+	public function setScore($score){
 		$this->score=$score;
 	}
 
-	 public function getQuestion(){
+	public function getQuestion(){
 		return $this->question;
 	}
 
-	 public function setQuestion($question){
+	public function setQuestion($question){
 		$this->question=$question;
 	}
 

@@ -9,13 +9,14 @@ use Ubiquity\mailer\MailerManager;
 class MailManager extends \Ubiquity\mailer\AbstractMail {
 
     private $newPassword;
+    private $bodyContent;
     
-    public function getNewPassword(){
-        return $this->newPassword;
+    public function getBody(){
+        return $this->bodyContent;
     }
 
-    public function setNewPassword($newPassword){
-        $this->newPassword = $newPassword;
+    public function setBody($body){
+        $this->bodyContent = $body;
     }
 
     /**
@@ -24,16 +25,15 @@ class MailManager extends \Ubiquity\mailer\AbstractMail {
 	 * @see \Ubiquity\mailer\AbstractMail::initialize()
 	 */
 	protected function initialize(){
-		$this->subject = 'Reset password';
+		
 		$this->from(MailerManager::loadConfig()['user']??'from@organization');
 	}
-
 	/**
 	 *
 	 * {@inheritdoc}
 	 * @see \Ubiquity\mailer\AbstractMail::body()
 	 */
 	public function body() {
-		return "Your new password is ".$this->getNewPassword();
+	    return $this->bodyContent;
 	}
 }

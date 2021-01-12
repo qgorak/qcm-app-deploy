@@ -114,14 +114,14 @@ class GroupUIService {
 	        TranslatorManager::trans('lastname',[],'main'),
 	        TranslatorManager::trans('email',[],'main')
 	    ]);
-	    $msg = $this->jquery->semantic()->htmlMessage('emptyUsersDtMsg','share this link:<button id="invitationLink" class="ui button">Copier le lien d\'invitation</button>');
+	    $msg = $this->jquery->semantic()->htmlMessage('emptyUsersDtMsg','<button id="invitationLink" class="ui button">Copier le lien d\'invitation</button>');
         $msg->setHeader('Empty group');
 	    $usersDt->setEmptyMessage($msg);
 	    $usersDt->setClass(['ui single line very basic table']);
 	    $usersDt->setIdentifierFunction ( 'getId' );
 	    $usersDt->setProperty('group', $id);
 	    $usersDt->insertDefaultButtonIn('delete','ban','delete')->setVisibleHover(true);
-	    $this->jquery->_add_event('#invitationLink','navigator.clipboard.writeText("'.$_SERVER[SERVER_NAME].':'.$_SERVER['SERVER_PORT'].'/'.Router::path('joinLink',[$key]).'");
+	    $this->jquery->_add_event('#invitationLink','navigator.clipboard.writeText("'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/'.Router::path('joinLink',[$key]).'");
         $("body").toast({
             class:"success",
             message: "'.TranslatorManager::trans('copyLink',[],'main').'"
