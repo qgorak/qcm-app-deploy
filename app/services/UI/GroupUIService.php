@@ -62,6 +62,11 @@ class GroupUIService {
             'hasLoader' => 'internal',
             'attr' => 'data-ajax'
         ]);
+        $this->jquery->getOnClick('._showexams',Router::path ('exam.group',[""]),'#response',[
+            'historize'=>false,
+            'hasLoader' => 'internal',
+            'attr' => 'data-ajax'
+        ]);
         $this->jquery->ajaxOnClick('._demand',Router::path ('groupDemand',[""]),'#response-demand',[
             'attr'=>'data-ajax',
             'jsCallback'=>'$("#demandModal").modal("show");'
@@ -168,6 +173,7 @@ class GroupUIService {
     private function groupOptionButton($group){
         $dd=$this->jquery->semantic()->htmlDropdown('dd-'.$group->getId())->addIcon('ellipsis vertical');
         $dd->addItems(['<i class="pencil alternate icon"></i>See exams','<i class="key icon"></i>Copy link','<i class="delete icon"></i>Delete']);
+        $dd->getItem(0)->setProperty('data-ajax',$group->getId())->addClass('_showexams');
         $dd->getItem(2)->setProperty('data-ajax',$group->getId())->addClass('_delete');
         $dd->setClass('dropdown ui button');
         $dd->setStyle("background:none;padding-top:20px");

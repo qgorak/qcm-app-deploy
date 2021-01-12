@@ -44,7 +44,9 @@ class ExamDAOLoader {
 	public function allMyQCM(){
 	    return DAO::getAll(Qcm::class,'idUser=?',false,[USession::get('activeUser')['id']]);
 	}
-	
+    public function examGroup($idGroup){
+        return DAO::getAll(Exam::class,'idGroup=?',['group','qcm'],[$idGroup]);
+    }
 	public function allMyGroup(){
 	    return DAO::getAll(Group::class,"idUser=?",false,[USession::get('activeUser')['id']]);
 	}

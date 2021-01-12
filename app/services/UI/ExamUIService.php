@@ -22,8 +22,8 @@ class ExamUIService {
 		$this->semantic = $jq->semantic ();
 	}
 	
-	public function displayMyExams($exam){
-	    $exams=$this->jquery->semantic()->dataTable('myExam',Exam::class,$exam);
+	public function displayMyExams($exams){
+	    $exams=$this->jquery->semantic()->dataTable('myExam',Exam::class,$exams);
 	    $exams->setFields([
 	        'dated',
 	        'datef',

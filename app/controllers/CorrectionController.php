@@ -67,7 +67,13 @@ class CorrectionController extends ControllerBase{
         $counUA = count($userAnswers);
         $res = $counUA/$countQ*100;
         $result = $this->correctExam($userAnswers);
-        $this->jquery->semantic()->htmlProgress('Progression',$res);
+        $exam = $this->loader->get($idExam);
+        $user = DAO::getById(User::class,$idUser);
+        $msg = $this->jquery->semantic()->htmlMessage('msgcompleted',$user->getFirstname().' '.$user->getLastname().' has done the exam.','info')->setIcon('check circle');
+        if($counUA!=$countQ){
+            $msg->addClass('hidden');
+        }
+        $this->jquery->semantic()->htmlProgress('Progression',$res,$res.'% of Completion');
         $this->jquery->renderView('CorrectionController/liveresult.html',['totalScore'=>$result[1],'userScore'=>$result[2],'countUA'=>$counUA]);
     }
 

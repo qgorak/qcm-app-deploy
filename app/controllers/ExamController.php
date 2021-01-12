@@ -2,6 +2,7 @@
 namespace controllers;
 
 use models\Question;
+use models\User;
 use Ubiquity\controllers\Router;
 use Ubiquity\controllers\Startup;
 use Ubiquity\orm\DAO;
@@ -178,10 +179,25 @@ class ExamController extends ControllerBase{
         $this->jquery->ajaxOn('change','#idNewQ',Router::path('liveresult.correctq',[$idExam,$idUser]),'',[
             'jsCallback'=>'$("#accordion3").append(data);$("#countUA").val(parseInt($("#countUA").val())+1);
                            per =parseFloat(parseInt($("#countUA").val(), 10) * 100)/ parseInt($("#countQ").val(), 10);
-                           $("#Progression").progress({percent: per});',
+                           $("#Progression").progress({percent: per});
+                           if(per == 100){
+                                $("#lbl-Progression").html(" ");
+                               $("#msgcompleted").removeClass("hidden");
+                            }else{
+                                $("#lbl-Progression").html(per+"% of Completion");
+                             };',
             'attr'=>'value'
         ]);
         $this->jquery->renderView('ExamController/overseeuser.html',['idUser'=>$idUser,'countUA'=>$countAnswer]);
+    }
+
+    /**
+     * @get('group/{idGroup}','name'=>'exam.group')
+     */
+    public function ExamGroup($idGroup){
+        $exams = $this->loader->examGroup($idGroup);
+        $dt = $this->uiService->displayMyExams($exams);
+        $this->jquery->renderView('ExamController/examgroup.html',[]);
     }
 
 }
