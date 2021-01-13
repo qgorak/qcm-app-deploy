@@ -1,6 +1,7 @@
 <?php
 namespace controllers;
 
+use models\Answer;
 use Ubiquity\controllers\Router;
 use Ubiquity\controllers\Startup;
 use Ubiquity\orm\DAO;
@@ -125,11 +126,14 @@ class inExamController extends ControllerBase{
         } else {
             switch ($question->getIdTypeq()){
                 case 1:
-                    $userAnswer=$this->postMultipleAnswerData();
+                    $userAnswer=$this->postMultipleAnswerData(0,$question);
+                    break;
                 case 2:
-                    $userAnswer=$this->postMultipleAnswerData();
+                    $userAnswer=$this->postMultipleAnswerData(1,$question);
+                    break;
                 case 3:
                     $userAnswer=$this->postSingleAnswerData();
+                    break;
             }
             $userAnswer->setQuestion($question);
             DAO::insert($userAnswer);
@@ -158,11 +162,29 @@ class inExamController extends ControllerBase{
         $this->jquery->renderView('ExamController/end.html',);
     }
 
-    private function postMultipleAnswerData(){
+    private function postMultipleAnswerData($type,$question){
         $userAnswer = new Useranswer();
-        $userAnswer->setValue(\json_encode(URequest::getDatas()));
+        $val =\json_encode(URequest::getDatas());
+        $val =\json_decode($val);
+        $val->points=0;
         $userAnswer->setIdUser(USession::get('activeUser')['id']);
         $userAnswer->setIdExam(USession::get('exam_id'));
+        if($type == 0){
+            print_r($val);
+            $answers = DAO::getAll(Answer::class,'idQuestion=?',false,[$question->getId()]);
+            foreach($answers as $answer){
+                foreach($val->userAnswer as $uAnswer){
+                    if($uAnswer==$answer->getId()){
+                        $val->points=$answer->getScore();
+                        $val->corrected=true;
+                    }
+                }
+            }
+        }else{
+            $val->corrected=false;
+        }
+
+        $userAnswer->setValue(\json_encode($val));
         return $userAnswer;
     }
 

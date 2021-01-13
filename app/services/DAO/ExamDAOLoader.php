@@ -2,6 +2,10 @@
 
 namespace services\DAO;
 
+use models\Answer;
+use models\User;
+use models\Useranswer;
+use models\Usergroup;
 use Ubiquity\orm\DAO;
 use models\Exam;
 use models\Group;
@@ -56,5 +60,42 @@ class ExamDAOLoader {
     public function allMyComingExam(){
         return DAO::uGetAll(Exam::class,"qcm.idUser=? AND datef>now() AND dated>now()",true,[USession::get('activeUser')['id']]);
     }
+    public function getExamTotalScore($id){
+        $exam=DAO::uGetOne(Exam::class,'id= ?',['qcm.questions'],[$id]);
+        $questions = $exam->getQcm()->getQuestions();
+        $totalScoreExam = 0;
+        foreach ($questions as $question){
+            $answers = DAO::getAll(Answer::class, 'idQuestion=?',false,[$question->getId()]);
+            foreach ($answers as $answer){
+                $totalScoreExam+=$answer->getScore();
+            }
+        }
+        return $totalScoreExam;
+    }
+    public function getExamUsersScores($id){
+        $exam=DAO::uGetOne(Exam::class,'id= ?',['qcm.questions','group'],[$id]);
+        $users = [];
+        $usersResults['users'] = [];
+        $usersResults['mark'] = [];
+        $userGroup=DAO::getAll(Usergroup::class,"idGroup=? AND status='1'",false,[$exam->getGroup()->getId()]);
+        foreach($userGroup as $value){
+            \array_push($users,DAO::getById(User::class,$value->getIdUser(),false));
+        }
+        $questions = $exam->getQcm()->getQuestions();
+        foreach ($users as $user){
+            $mark=0;
+            foreach ($questions as $question){
+                $uas = DAO::getAll(Useranswer::class,'idExam=? AND idQuestion=? AND idUser=?',false,[$exam->getId(),$question->getId(),$user->getId()]);
+                foreach ($uas as $ua){
+                    $val=json_decode($ua->getValue());
+                    $mark+=$val->points;
+                }
+            }
+            \array_push($usersResults['mark'],  $mark);
+            \array_push($usersResults['users'],  $user->getId());
+        }
+        return $usersResults;
+    }
+
 }
 

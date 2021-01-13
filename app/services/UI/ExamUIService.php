@@ -36,11 +36,13 @@ class ExamUIService {
 	        TranslatorManager::trans('qcm',[],'main'),
 	        TranslatorManager::trans('group',[],'main')
 	    ]);
+	    $exams->setIdentifierFunction('getId');
 	    $exams->setValueFunction('qcm',function($v){return $v->getName();});
 	    $exams->setValueFunction('group',function($v){return $v->getName();});
+	    return $exams;
 	}
 
-    public function OverseeUsersDataTable($exam){
+    public function usersDataTable($exam){
         $usersg=DAO::getOneToMany($exam->getGroup(),'usergroups');
         $users=[];
         foreach($usersg as $userg){
@@ -74,7 +76,6 @@ class ExamUIService {
         );
         $dt->setIdentifierFunction( 'getId' );
         $dt->setActiveRowSelector("active");
-        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'attr'=>'data-ajax']);
         return $dt;
     }
 

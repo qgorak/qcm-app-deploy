@@ -76,6 +76,20 @@ class ExamController extends ControllerBase{
             'response' => $response
         ] );
     }
+
+    /**
+     * @get('get/{id}','name'=>'exam.report')
+     */
+    public function get($id){
+        $exam=$this->loader->get($id);
+        $totalScore = $this->loader->getExamTotalScore($id);
+        $userScores = $this->loader->getExamUsersScores($id);
+        $avg=array_sum($userScores['mark'])/count($userScores['mark']);
+        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-getexam',['hasLoader'=>false,'attr'=>'data-ajax']);
+        $this->uiService->usersDataTable($exam);
+        $this->jquery->renderView('ExamController/get.html',['totalScoreExam'=>$totalScore,'usersAvg '=>$avg]);
+    }
+
     
     /**
      * @get('add','name'=>'examAdd')
@@ -164,8 +178,9 @@ class ExamController extends ControllerBase{
 
         $qcm = DAO::getById(Qcm::class,$qcm->getId(),true);
         $countq=count($qcm->getQuestions());
-        $this->uiService->OverseeUsersDataTable($exam);
+        $this->uiService->usersDataTable($exam);
         $group=DAO::getOne(Group::class,'keyCode=?',false,[$exam->getGroup()]);
+        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'attr'=>'data-ajax']);
         $this->jquery->renderView('ExamController/oversee.html',['group'=>$group->getName(),'countQ'=>$countq]);
     }
 
@@ -197,6 +212,10 @@ class ExamController extends ControllerBase{
     public function ExamGroup($idGroup){
         $exams = $this->loader->examGroup($idGroup);
         $dt = $this->uiService->displayMyExams($exams);
+        $dt->insertDefaultButtonIn(4,'eye','_report',false);
+        $this->jquery->getOnClick('._report',Router::path('exam.report'),'#response',[
+            'attr'=>'data-ajax'
+        ]);
         $this->jquery->renderView('ExamController/examgroup.html',[]);
     }
 

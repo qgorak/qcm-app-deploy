@@ -1,0 +1,216 @@
+{{ js('js/highcharts.js') }}
+{{ js('js/highcharts_modules/variable-pie.js') }}
+<div class="fourteen wide column" style="padding-left: 0;">
+<div id="response">
+    <div class="ui menu">
+        <div id="cancelitem" class="item">
+            <div id="cancel" href="{{path('question')}}" data-target="#response" class="circular ui icon button"> <i class="arrow left icon"></i></div>
+        </div>
+        <div class="flex-container">
+            <div id="headercquestion" class="header item">
+                Examen du JJ MM AA
+            </div>
+        </div>
+        <div class="right menu">
+                <div  data-target="#response"  class="hidden"></div>
+
+        </div>
+    </div>
+    <div style="display: flex">
+        <div id="response-getexam" style="width: calc( 100% - 235px )!important;">
+
+            <div style="flex-wrap: wrap;display:flex;">
+                <div style="flex-grow: 1;width: 33%;">
+                    <div class="graph" id="graph1"></div></div>
+                <div style="flex-grow: 1;width: 33%;">
+            <div class="graph" id="graph2"></div>
+                </div>
+                <div style="flex-grow: 1;width: 33%;">
+                    <div class="graph" id="graph3"></div>
+                </div>
+            </div>
+            {{ totalScore | raw }}
+            {{ userScores | raw }}
+        </div>
+
+        <div style="display: flex;width: 235px">
+            <div class="deck" style="margin: 0;width: 235px;border: 1px solid #dededf">
+                <div class="ui label " style="display:flex;border-radius:0;padding-left: 1em;"><i class="ui users icon"></i> <div style="padding-left: 1em;">{{ group | raw }}</div></div>
+                {{q['OverseeUserDt'] | raw }}
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        body{
+            overflow: hidden;
+        }
+        .highcharts-credits {
+            display: none;
+        }
+        .graph{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #container .highcharts-tooltip{
+            visibility:hidden;
+        }
+        #response-overseeuser .ui.main.container.segment{
+            width: 100%;
+        }
+        #OverseeUserDt tbody {
+            display: block;
+        }
+        #OverseeUserDt thead {
+            display: flex;
+        }
+        #OverseeUserDt tr {
+            display: flex;
+            cursor: pointer;
+
+        }
+        #OverseeUserDt tr:hover {
+            background: #f8f8f8;
+        }
+
+        #OverseeUserDt tr.active:hover {
+            background: #e0e0e0;
+        }
+
+        #OverseeUserDt td {
+            display: block;
+            border-top: none;
+        }
+        #OverseeUserDt thead{
+            display: none!important;
+        }
+        .status{
+            display: none!important;
+        }
+
+    </style>
+    <script>
+
+        Highcharts.chart('graph1', {
+            chart: {
+                type: 'variablepie',
+                height: 150,
+                width: 150
+            },
+            plotOptions: {
+                variablepie: {
+                    dataLabels: {
+                        enabled: false,
+                    }
+                },
+                series: {
+                    enableMouseTracking: false
+                }
+            },
+            title: {
+                text: ''
+            },
+            tooltip: {
+                enabled:false
+            },
+            series: [{
+                minPointSize: 10,
+                innerSize: '80%',
+                zMin: 0,
+                name: 'countries',
+                data: [{
+                    name: 'Total',
+                    y: 505370,
+                    z: 100
+                }, {
+                    name: 'France',
+                    y: 551500,
+                    z: 100
+                }]
+            }]
+        });
+        Highcharts.chart('graph2', {
+            chart: {
+                type: 'variablepie',
+                height: 150,
+                width: 150
+            },
+            plotOptions: {
+                variablepie: {
+                    dataLabels: {
+                        enabled: false,
+                    }
+                },
+                series: {
+                    enableMouseTracking: false
+                }
+            },
+            title: {
+                text: ''
+            },
+            tooltip: {
+                enabled:false
+            },
+            series: [{
+                minPointSize: 10,
+                innerSize: '80%',
+                zMin: 0,
+                name: 'countries',
+                data: [{
+                    name: 'Spain',
+                    y: 505370,
+                    z: 100
+                }, {
+                    name: 'France',
+                    y: 551500,
+                    z: 100
+                }]
+            }]
+        });
+        Highcharts.chart('graph3', {
+            chart: {
+                type: 'variablepie',
+                height: 150,
+                width: 150
+            },
+            plotOptions: {
+                variablepie: {
+                    dataLabels: {
+                        enabled: false,
+                    }
+                },
+                series: {
+                    enableMouseTracking: false
+                }
+            },
+            title: {
+                text: ''
+            },
+            tooltip: {
+                enabled:false
+            },
+            series: [{
+                minPointSize: 10,
+                innerSize: '80%',
+                zMin: 0,
+                name: 'countries',
+                data: [{
+                    name: 'Spain',
+                    y: 505370,
+                    z: 100
+                }, {
+                    name: 'France',
+                    y: 551500,
+                    z: 100
+                }]
+            }]
+        });
+    </script>
+    {{script_foot | raw }}
+</div>
+</div>
+
+<!---close menu div --->
+</div>
