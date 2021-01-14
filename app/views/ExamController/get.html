@@ -20,12 +20,13 @@
         <div id="response-getexam" style="width: calc( 100% - 235px )!important;">
 
             <div style="flex-wrap: wrap;display:flex;">
-                <div style="flex-grow: 1;width: 33%;">
+                <div style="flex-grow: 1;width: 33%;text-align: center">
                     <div class="graph" id="graph1"></div></div>
-                <div style="flex-grow: 1;width: 33%;">
+                <div style="flex-grow: 1;width: 33%;text-align: center">
             <div class="graph" id="graph2"></div>
+                    {{ successRate | raw }}% de taux de Réussite
                 </div>
-                <div style="flex-grow: 1;width: 33%;">
+                <div style="flex-grow: 1;width: 33%;text-align: center">
                     <div class="graph" id="graph3"></div>
                 </div>
             </div>
@@ -160,11 +161,11 @@
                 name: 'countries',
                 data: [{
                     name: 'Spain',
-                    y: 505370,
+                    y: {{ success | raw }},
                     z: 100
                 }, {
                     name: 'France',
-                    y: 551500,
+                    y: {{ failed | raw }},
                     z: 100
                 }]
             }]

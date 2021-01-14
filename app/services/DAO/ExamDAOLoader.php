@@ -86,15 +86,39 @@ class ExamDAOLoader {
             $mark=0;
             foreach ($questions as $question){
                 $uas = DAO::getAll(Useranswer::class,'idExam=? AND idQuestion=? AND idUser=?',false,[$exam->getId(),$question->getId(),$user->getId()]);
-                foreach ($uas as $ua){
-                    $val=json_decode($ua->getValue());
-                    $mark+=$val->points;
+                if(count($uas)==0){
+                    $mark=-1;
+                }else {
+                    foreach ($uas as $ua) {
+                        $val = json_decode($ua->getValue());
+                        $mark += $val->points;
+                    }
                 }
             }
             \array_push($usersResults['mark'],  $mark);
             \array_push($usersResults['users'],  $user->getId());
         }
         return $usersResults;
+    }
+
+    public function getExamSuccessRate($id){
+        $usersResults = $this->getExamUsersScores($id);
+        $examTotalScore = $this->getExamTotalScore($id);
+        $countUsers = count($usersResults['users']);
+        $graduatingUsers = 0;
+        $notGraduatingUsers = 0;
+        for($i = 0; $i < $countUsers; ++$i) {
+            if($usersResults['mark'][$i]>=intval($examTotalScore/2)){
+                $graduatingUsers++;
+            }else{
+
+            }
+            if($usersResults['mark'][$i]==-1){
+                $notGraduatingUsers++;
+            }
+        }
+         $notGraduatingUsers =$countUsers-$graduatingUsers;
+        return [$notGraduatingUsers,$graduatingUsers,$countUsers];
     }
 
 }
