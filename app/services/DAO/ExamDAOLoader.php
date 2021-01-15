@@ -92,6 +92,10 @@ class ExamDAOLoader {
                     foreach ($uas as $ua) {
                         $val = json_decode($ua->getValue());
                         $mark += $val->points;
+                        if($val->corrected==false){
+                            $mark==-2;
+                            break;
+                        }
                     }
                 }
             }
@@ -107,18 +111,20 @@ class ExamDAOLoader {
         $countUsers = count($usersResults['users']);
         $graduatingUsers = 0;
         $notGraduatingUsers = 0;
+        $missingUsers = 0;
         for($i = 0; $i < $countUsers; ++$i) {
             if($usersResults['mark'][$i]>=intval($examTotalScore/2)){
                 $graduatingUsers++;
             }else{
-
-            }
-            if($usersResults['mark'][$i]==-1){
                 $notGraduatingUsers++;
             }
+            if($usersResults['mark'][$i]==-1){
+                $missingUsers++;
+            }
         }
-         $notGraduatingUsers =$countUsers-$graduatingUsers;
-        return [$notGraduatingUsers,$graduatingUsers,$countUsers];
+        $participants = $countUsers-$missingUsers;
+         $notGraduatingUsers = $participants-$graduatingUsers;
+        return [$notGraduatingUsers,$graduatingUsers,$countUsers,$missingUsers,$participants];
     }
 
 }

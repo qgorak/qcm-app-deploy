@@ -67,7 +67,6 @@ class CorrectionController extends ControllerBase{
         $counUA = count($userAnswers);
         $res = $counUA/$countQ*100;
         $result = $this->correctExam($userAnswers);
-        $exam = $this->loader->get($idExam);
         $user = DAO::getById(User::class,$idUser);
         $msg = $this->jquery->semantic()->htmlMessage('msgcompleted',$user->getFirstname().' '.$user->getLastname().' has done the exam.','info')->setIcon('check circle');
         if($counUA!=$countQ){

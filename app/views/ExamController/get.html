@@ -21,7 +21,9 @@
 
             <div style="flex-wrap: wrap;display:flex;">
                 <div style="flex-grow: 1;width: 33%;text-align: center">
-                    <div class="graph" id="graph1"></div></div>
+                    <div class="graph" id="graph1"></div>
+                    {{ presentRate | raw }}% ont participé
+                </div>
                 <div style="flex-grow: 1;width: 33%;text-align: center">
             <div class="graph" id="graph2"></div>
                     {{ successRate | raw }}% de taux de Réussite
@@ -123,11 +125,11 @@
                 name: 'countries',
                 data: [{
                     name: 'Total',
-                    y: 505370,
+                    y: {{ count | raw }},
                     z: 100
                 }, {
-                    name: 'France',
-                    y: 551500,
+                    name: 'te',
+                    y: {{ missing | raw }},
                     z: 100
                 }]
             }]

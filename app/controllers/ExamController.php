@@ -86,7 +86,8 @@ class ExamController extends ControllerBase{
         $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-getexam',['hasLoader'=>false,'attr'=>'data-ajax']);
         $this->uiService->usersDataTable($exam);
         $succesRate = ($userScores[1] / $userScores[2]) * 100;
-        $this->jquery->renderView('ExamController/get.html',['success'=>$userScores[1],'successRate'=>$succesRate.' ','failed'=>$userScores[0]]);
+        $presentRate = ($userScores[4] / $userScores[2]) * 100;
+        $this->jquery->renderView('ExamController/get.html',['success'=>$userScores[1],'successRate'=>$succesRate.' ','failed'=>$userScores[0],'presentRate'=>$presentRate,'count'=>$userScores[4],'missing'=>$userScores[3]]);
     }
 
     
