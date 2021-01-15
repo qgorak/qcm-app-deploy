@@ -1,4 +1,4 @@
-﻿CREATE TABLE `answer` (
+CREATE TABLE `answer` (
   `id` int(11) NOT NULL,
   `caption` varchar(42) DEFAULT NULL,
   `score` float DEFAULT 0,
@@ -68,7 +68,7 @@ CREATE TABLE `qcmquestion` (
 
 CREATE TABLE `question` (
   `id` int(11) NOT NULL,
-  `caption` varchar(42) DEFAULT NULL,
+  `caption` varchar(255) DEFAULT NULL,
   `ckcontent` text DEFAULT NULL,
   `points` int(11) DEFAULT 0,
   `idTypeq` int(11) DEFAULT 0,
@@ -112,7 +112,8 @@ CREATE TABLE `user` (
   `lastname` varchar(42) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `avatar` varchar(255) DEFAULT NULL,
-  `language` varchar(32) NOT NULL
+  `language` varchar(32) NOT NULL,
+  `confirmed` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
