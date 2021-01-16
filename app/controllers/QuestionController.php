@@ -301,7 +301,7 @@ class QuestionController extends ControllerBase {
             $answerObjects = array();
             for ($i = 0; $i < \count($postAnswers); $i += 2) {
                 $answerToInsert = new Answer();
-                $answerToInsert->setCaption($postAnswers[$i][1]);
+                $answerToInsert->setCaption(urldecode( $postAnswers[$i][1]));
                 $answerToInsert->setScore($postAnswers[$i+1][1]);
                 \array_push($answerObjects,$answerToInsert);
             }
