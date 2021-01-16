@@ -30,6 +30,7 @@
                 </div>
                 <div style="flex-grow: 1;width: 33%;text-align: center">
                     <div class="graph" id="graph3"></div>
+                    {{ correctionRate | raw }}% des copies sont corrigées
                 </div>
             </div>
             {{ totalScore | raw }}
@@ -201,11 +202,11 @@
                 name: 'countries',
                 data: [{
                     name: 'Spain',
-                    y: 505370,
+                    y: {{ paperdone | raw }},
                     z: 100
                 }, {
-                    name: 'France',
-                    y: 551500,
+                    name: 'qsd',
+                    y: {{ paperleft | raw }},
                     z: 100
                 }]
             }]

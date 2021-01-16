@@ -77,6 +77,8 @@ class ExamDAOLoader {
         $users = [];
         $usersResults['users'] = [];
         $usersResults['mark'] = [];
+        $usersResults['notcorrected'] = [];
+        $usersResults['missing'] = [];
         $userGroup=DAO::getAll(Usergroup::class,"idGroup=? AND status='1'",false,[$exam->getGroup()->getId()]);
         foreach($userGroup as $value){
             \array_push($users,DAO::getById(User::class,$value->getIdUser(),false));
@@ -84,20 +86,32 @@ class ExamDAOLoader {
         $questions = $exam->getQcm()->getQuestions();
         foreach ($users as $user){
             $mark=0;
+            $notAnswerd = 0;
+            $notCorrected = 0;
             foreach ($questions as $question){
                 $uas = DAO::getAll(Useranswer::class,'idExam=? AND idQuestion=? AND idUser=?',false,[$exam->getId(),$question->getId(),$user->getId()]);
                 if(count($uas)==0){
-                    $mark=-1;
+                    $notAnswerd++;
                 }else {
                     foreach ($uas as $ua) {
                         $val = json_decode($ua->getValue());
-                        $mark += $val->points;
-                        if($val->corrected==false){
-                            $mark==-2;
-                            break;
+                        $mark += $val->points;;
+                        if ($val->corrected == false) {
+                            $notCorrected++;
                         }
                     }
                 }
+            }
+            if(count($questions)==$notAnswerd){
+                \array_push($usersResults['missing'],1);
+                \array_push($usersResults['notcorrected'],0);
+            }else{
+                \array_push($usersResults['missing'],0);
+            }
+            if($notCorrected > 0){
+                \array_push($usersResults['notcorrected'],1);
+            }else{
+                \array_push($usersResults['notcorrected'],0);
             }
             \array_push($usersResults['mark'],  $mark);
             \array_push($usersResults['users'],  $user->getId());
@@ -112,19 +126,24 @@ class ExamDAOLoader {
         $graduatingUsers = 0;
         $notGraduatingUsers = 0;
         $missingUsers = 0;
+        $paperleft = 0;
         for($i = 0; $i < $countUsers; ++$i) {
-            if($usersResults['mark'][$i]>=intval($examTotalScore/2)){
+            if($usersResults['mark'][$i]>=intval($examTotalScore/2) and $usersResults['notcorrected'][$i]==0){
                 $graduatingUsers++;
-            }else{
+            }
+            if($usersResults['mark'][$i]<intval($examTotalScore/2) and $usersResults['missing'][$i]==0 and $usersResults['notcorrected'][$i]==0){
                 $notGraduatingUsers++;
             }
-            if($usersResults['mark'][$i]==-1){
+            if($usersResults['missing'][$i]==1){
                 $missingUsers++;
+            }
+            if($usersResults['notcorrected'][$i]==1){
+                $paperleft++;
             }
         }
         $participants = $countUsers-$missingUsers;
-         $notGraduatingUsers = $participants-$graduatingUsers;
-        return [$notGraduatingUsers,$graduatingUsers,$countUsers,$missingUsers,$participants];
+         $notGraduatingUsers = $participants-$graduatingUsers-$paperleft;
+        return [$notGraduatingUsers,$graduatingUsers,$countUsers,$missingUsers,$participants,$paperleft];
     }
 
 }

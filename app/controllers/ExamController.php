@@ -87,7 +87,21 @@ class ExamController extends ControllerBase{
         $this->uiService->usersDataTable($exam);
         $succesRate = ($userScores[1] / $userScores[2]) * 100;
         $presentRate = ($userScores[4] / $userScores[2]) * 100;
-        $this->jquery->renderView('ExamController/get.html',['success'=>$userScores[1],'successRate'=>$succesRate.' ','failed'=>$userScores[0],'presentRate'=>$presentRate,'count'=>$userScores[4],'missing'=>$userScores[3]]);
+        $paperdone=$userScores[4]-$userScores[5];
+        if($paperdone!= 0){
+            $correctionRate = ($userScores[4] / $paperdone) * 100;
+        }else{
+            $correctionRate=0;
+        }
+        $this->jquery->renderView('ExamController/get.html',['success'=>$userScores[1],
+            'successRate'=>$succesRate.' ',
+            'failed'=>$userScores[0],
+            'presentRate'=>$presentRate,
+            'count'=>$userScores[4],
+            'missing'=>$userScores[3],
+            'paperleft'=>$userScores[5],
+            'paperdone'=>$paperdone,
+            'correctionRate'=>$correctionRate]);
     }
 
     
