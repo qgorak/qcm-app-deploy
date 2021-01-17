@@ -92,6 +92,9 @@ class ExamController extends ControllerBase{
         }else{
             $correctionRate=0;
         }
+        $this->jquery->ajaxOnClick('#cancelitem',Router::path('dashboard'),'#response',[
+            'hasLoader'=>false
+        ]);
         $this->jquery->renderView('ExamController/get.html',['success'=>$userScores[1],
             'successRate'=>$succesRate.' ',
             'failed'=>$userScores[0],
@@ -229,6 +232,9 @@ class ExamController extends ControllerBase{
         $dt = $this->uiService->displayMyExamsInProgress($examsinp);
         $dt2 = $this->uiService->displayMyComingExams($examscom);
         $dt3 = $this->uiService->displayMyPastExams($examspast);
+        $this->jquery->ajaxOnClick('#cancelitem',Router::path('group'),'#response',[
+            'hasLoader'=>false
+        ]);
         $this->jquery->renderView('ExamController/examgroup.html',[]);
     }
 
