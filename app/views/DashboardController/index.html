@@ -1,14 +1,31 @@
-<div class="fourteen wide column" style="padding-left: 0;">
-<div id="response">
-    <div class="main ui container">
-    <h2 class="ui header" style="margin-top:15px">
-        <div class="content">
-            Trainer Dashboard
-        </div>
-        <div class="sub header">See your infos</div>
-    </h2>
-    <div >
+<div class="top_trainer_right ui menu">
+    <div class="header item" style="border-bottom: 3px solid #2185d0;margin-bottom: -1px;padding-bottom: calc( 0.928571em - 4px )">
+        Trainer Dashboard
+    </div>
+</div>
+<div id="scroll"  style="overflow-y: auto;overflow-x: hidden;height: calc( 100vh - 95px );background: #fafbfc;">
+<div class="main ui container">
+     <div >
         <div class="ui stackable two column grid">
+
+            <div class="column">
+                {{q['headerExamInProgress'] | raw }}
+                {{q['myExam'] | raw }}
+                <h2 class="ui header">
+                    <i class="chart bar icon"></i>
+                    <div class="content">
+                        Upcoming Exam
+                    </div>
+                </h2>
+                {{q['myComingExams'] | raw }}
+                <h2 class="ui header">
+                    <i class="chart bar icon"></i>
+                    <div class="content">
+                        History
+                    </div>
+                </h2>
+                {{ q['myPastExams'] | raw }}
+            </div>
             <div class="column">
                 <div class="ui equal width center aligned padded grid">
                     <div class="row">
@@ -56,37 +73,25 @@
                         </div>
                     </div>
                     <div class="row">
-                    <div class="column">
-                        <div class="ui segment statistic">
-                            <div class="value">
-                                {{ nbUsers | raw }}<i class="users icon"></i>
-                            </div>
-                            <div class="label">
-                                Users in your Groups
-                            </div>
+                        <div class="column">
+                            <div class="ui segment statistic">
+                                <div class="value">
+                                    {{ nbUsers | raw }}<i class="users icon"></i>
+                                </div>
+                                <div class="label">
+                                    Users in your Groups
+                                </div>
 
+                            </div>
                         </div>
                     </div>
-                    </div>
                 </div>
-       </div>
-            <div class="column">
-                {{q['headerExamInProgress'] | raw }}
-                {{q['myExam'] | raw }}
-                <h2 class="ui header">
-                    <i class="chart bar icon"></i>
-                    <div class="content">
-                        Upcoming Exam
-                    </div>
-                </h2>
-                {{q['myComingExams'] | raw }}
             </div>
         </div>
     </div>
     </div>
+</div>
+<style>
+    body{overflow: hidden}
+</style>
 {{ script_foot | raw }}
-</div>
-</div>
-
-<!---close menu div --->
-</div>

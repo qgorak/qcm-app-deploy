@@ -51,6 +51,13 @@ class QuestionController extends ControllerBase {
         $this->jquery->attr('#trainermode','class','item active',true);
     }
 
+    public function finalize() {
+        if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/closeColumnCloseMenu.html');
+        }
+        parent::finalize();
+    }
+
     /**
      * @route('/','name'=>'question')
      */
@@ -242,6 +249,7 @@ class QuestionController extends ControllerBase {
     public function submit() {
         $question= new Question ();
         URequest::setValuesToObject($question);
+        $question->setCaption(htmlentities($question->getCaption()));
         $question->setIdTypeq(URequest::post('type'));
         $tagsObjects = $this->getTagPostData();
         $answerObjects = $this->getAnswersPostData();

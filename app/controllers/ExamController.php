@@ -45,6 +45,12 @@ class ExamController extends ControllerBase{
             ] );
         }
     }
+    public function finalize() {
+        if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/closeColumnCloseMenu.html');
+        }
+        parent::finalize();
+    }
     
     /**
      *
@@ -62,14 +68,7 @@ class ExamController extends ControllerBase{
     /**
      * @route('/','name'=>'exam')
      */
-    public function index(){
-        $this->jquery->ajaxOnClick('#addExam',Router::path ('examAdd'),'#response',[
-            'hasloader'=>'internal'
-        ]);
-        $this->displayMyExam();
-        $this->jquery->execOn('ready','document','$("pre code").each(function(i, e) {hljs.highlightBlock(e)});');
-        $this->_index($this->jquery->renderView('ExamController/display.html',[],true));
-    }
+    public function index(){}
     
     private function _index($response = '') {
         $this->jquery->renderView ( 'ExamController/index.html', [
@@ -88,8 +87,8 @@ class ExamController extends ControllerBase{
         $succesRate = ($userScores[1] / $userScores[2]) * 100;
         $presentRate = ($userScores[4] / $userScores[2]) * 100;
         $paperdone=$userScores[4]-$userScores[5];
-        if($paperdone!= 0){
-            $correctionRate = ($userScores[4] / $paperdone) * 100;
+        if($userScores[4]!= 0){
+            $correctionRate = ($paperdone /$userScores[4]) * 100;
         }else{
             $correctionRate=0;
         }
@@ -224,12 +223,12 @@ class ExamController extends ControllerBase{
      * @get('group/{idGroup}','name'=>'exam.group')
      */
     public function ExamGroup($idGroup){
-        $exams = $this->loader->examGroup($idGroup);
-        $dt = $this->uiService->displayMyExams($exams);
-        $dt->insertDefaultButtonIn(4,'eye','_report',false);
-        $this->jquery->getOnClick('._report',Router::path('exam.report'),'#response',[
-            'attr'=>'data-ajax'
-        ]);
+        $examsinp = $this->loader->allMyExamGroupInProgress($idGroup);
+        $examscom = $this->loader->allMyGroupComingExam($idGroup);
+        $examspast = $this->loader->allMyGroupPastExam($idGroup);
+        $dt = $this->uiService->displayMyExamsInProgress($examsinp);
+        $dt2 = $this->uiService->displayMyComingExams($examscom);
+        $dt3 = $this->uiService->displayMyPastExams($examspast);
         $this->jquery->renderView('ExamController/examgroup.html',[]);
     }
 

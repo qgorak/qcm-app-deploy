@@ -1,7 +1,9 @@
-<h2 class="ui header" style="margin-top:15px;">
-	<i class="pencil alternate icon"></i>
-	<div class="content">Exam</div>
-</h2>
+<div class="top_trainer_right ui menu">
+	<div class="header item" style="border-bottom: 3px solid #2185d0;margin-bottom: -1px;padding-bottom: calc( 0.928571em - 4px )">
+		Programmer un examen
+	</div>
+</div>
+<div class="main ui container">
 <form method="post" id="examAdd" name="examAdd" action="{{path('examAddSubmit')}}">
 <div class="ui form">
   <div class="two fields">
@@ -39,3 +41,7 @@
 {{js('/js/datepicker.js')}}
 <script>datePicker('{{lang}}')</script>
 {{script_foot | raw}}
+</div>
+<style>
+	body{overflow: hidden}
+</style>

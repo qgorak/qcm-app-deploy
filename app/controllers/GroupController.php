@@ -41,6 +41,13 @@ class GroupController extends ControllerBase{
             $this->jquery->attr('#trainermode','class','item active',true);
         }
     }
+
+    public function finalize() {
+        if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/closeColumnCloseMenu.html');
+        }
+        parent::finalize();
+    }
     
     /**
      *
@@ -66,19 +73,12 @@ class GroupController extends ControllerBase{
      * @route('/','name'=>'group')
      */
     public function index(){
-        $this->_index();
+        $this->displayMyGroups();
+        $this->jquery->execOn('click','#addGroup','$("#addModal").modal("show");');
         $this->jquery->renderView('GroupController/index.html');
     }
-    
-    private function _index(){
-        $this->displayMyGroups();
-        $this->jquery->_add_event('#addGroup','$("#addModal").modal("show");','click');
-    }
 
-    private function _viewGroup($id){
-        $users=$this->loader->getUsers($id);
-        $this->uiService->viewGroup($users, $id);
-    }
+
     
     /**
      * @post("add","name"=>"GroupAddSubmit")
@@ -91,8 +91,7 @@ class GroupController extends ControllerBase{
         $group->setUser($user);
         $this->loader->add($group);
         $this->jquery->semantic()->toast('body',['message'=>'Group created','class'=> 'success','position'=>'center top']);
-        $this->_index();
-        $this->jquery->renderView('GroupController/display.html');
+        $this->index();
     }
     
     /**
@@ -149,9 +148,8 @@ class GroupController extends ControllerBase{
      */
     public function groupDelete(string $id){
         $this->loader->remove ( $id );
-        $this->_index();
         $this->jquery->semantic()->toast('body',['message'=>'group deleted','class'=> 'success','position'=>'center top']);
-        $this->jquery->renderView('GroupController/display.html');
+        $this->index();
     }
     
     private function demand($groupId){

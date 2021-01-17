@@ -282,6 +282,64 @@ canvas{
 	margin-top: 0;
 	border-top-left-radius: 0;
 }
+.top_trainer_right{
+	min-height: 49px!important;
+}
+.top_trainer_middle{
+	min-height: 49px!important;
+}
+.top_trainer_middle header:before {
+	background: none;
+}
+
+.top_trainer_middle.ui.menu .item:before {
+	background: none!important;
+}
+.top_trainer_middle.ui.menu > .item{
+	position: absolute;
+}
+.top_trainer_middle.ui.menu .header.item:before {
+	background: none!important;
+}
+.top_trainer_middle.ui.menu .right_button .item:before {
+	background: none!important;
+}
+
+#submitQ:before {
+	background: none!important;
+}
+.right_button {
+	position: absolute;
+	right: 0px;
+	margin-right: 1em;
+}
+
+
+
+.top_trainer_middle.ui.menu .header.item {
+	border-bottom: 3px solid #2185d0;
+	border-radius: 0;
+	padding-bottom: 0;
+	font-size: 15px;
+	width: auto;
+	height: 50px;
+	margin: auto;
+
+}
+.flex-container {
+	width: 100%;
+	display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+	display: -ms-flexbox;  /* TWEENER - IE 10 */
+	display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+	display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+	justify-content: center;
+	align-items: center;
+}
+
+
+.top_trainer_right.ui.menu .item:before {
+	background: none;
+}
 @media only screen and (max-width: 1200px) {
 	#avatar{
 		display: none;

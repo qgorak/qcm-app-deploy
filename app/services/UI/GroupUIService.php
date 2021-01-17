@@ -40,7 +40,7 @@ class GroupUIService {
 	    $groupForm->fieldAsSubmit('submit','green',Router::path('GroupAddSubmit'),"#response",[
 	        'class'=>'fluid ui green button',
 	        'value'=>TranslatorManager::trans('addSubmit',[],'main'),
-	        'ajax'=>['hasLoader'=>false,'historize'=>false,'before'=>'$("#addModal").modal("hide");$("#addForm")[0].reset();']
+	        'ajax'=>['hasLoader'=>'internal','historize'=>false,'before'=>'$("#addModal").modal("hide");','jsCallback'=>'$(".modals").remove()']
 	    ]);
 		$dtMyGroups = $this->jquery->semantic ()->dataTable ( 'myGroups', Group::class, $myGroups );
 		$dtMyGroups->setFields ( [
@@ -114,18 +114,20 @@ class GroupUIService {
 	        TranslatorManager::trans('lastname',[],'main'),
 	        TranslatorManager::trans('email',[],'main')
 	    ]);
-	    $msg = $this->jquery->semantic()->htmlMessage('emptyUsersDtMsg','<button id="invitationLink" class="ui button">Copier le lien d\'invitation</button>');
+	    $msg = $this->jquery->semantic()->htmlMessage('emptyUsersDtMsg','<button class="ui button _invitationLink-'.$id.'">Copier le lien d\'invitation</button>');
         $msg->setHeader('Empty group');
 	    $usersDt->setEmptyMessage($msg);
 	    $usersDt->setClass(['ui single line very basic table']);
 	    $usersDt->setIdentifierFunction ( 'getId' );
 	    $usersDt->setProperty('group', $id);
 	    $usersDt->insertDefaultButtonIn('delete','ban','delete')->setVisibleHover(true);
-	    $this->jquery->_add_event('#invitationLink','navigator.clipboard.writeText("'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/'.Router::path('joinLink',[$key]).'");
+	    $this->jquery->execOn('click','._invitationLink-'.$id,'navigator.clipboard.writeText("'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/'.Router::path('joinLink',[$key]).'");
         $("body").toast({
             class:"success",
             message: "'.TranslatorManager::trans('copyLink',[],'main').'"
-        });','click',false,false,true,true);	    
+        });',[
+            'stopPropagation'=>true,
+        ]);
 	    return $usersDt;
     }
 	
@@ -174,6 +176,7 @@ class GroupUIService {
         $dd=$this->jquery->semantic()->htmlDropdown('dd-'.$group->getId())->addIcon('ellipsis vertical');
         $dd->addItems(['<i class="pencil alternate icon"></i>See exams','<i class="key icon"></i>Copy link','<i class="delete icon"></i>Delete']);
         $dd->getItem(0)->setProperty('data-ajax',$group->getId())->addClass('_showexams');
+        $dd->getItem(1)->addClass('_invitationLink-'.$group->getId());
         $dd->getItem(2)->setProperty('data-ajax',$group->getId())->addClass('_delete');
         $dd->setClass('dropdown ui button');
         $dd->setStyle("background:none;padding-top:20px");

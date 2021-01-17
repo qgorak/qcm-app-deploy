@@ -51,6 +51,15 @@ class ExamDAOLoader {
     public function examGroup($idGroup){
         return DAO::getAll(Exam::class,'idGroup=?',['group','qcm'],[$idGroup]);
     }
+    public function allMyExamGroupInProgress($idGroup){
+        return DAO::uGetAll(Exam::class,"qcm.idUser=? AND datef>now() AND dated<now() AND idGroup=?",true,[USession::get('activeUser')['id'],$idGroup]);
+    }
+    public function allMyGroupComingExam($idGroup){
+        return DAO::uGetAll(Exam::class,"qcm.idUser=? AND datef>now() AND dated>now() AND idGroup=?",true,[USession::get('activeUser')['id'],$idGroup]);
+    }
+    public function allMyGroupPastExam($idGroup){
+        return DAO::uGetAll(Exam::class,"qcm.idUser=? AND datef<now() AND idGroup=?",true,[USession::get('activeUser')['id'],$idGroup]);
+    }
 	public function allMyGroup(){
 	    return DAO::getAll(Group::class,"idUser=?",false,[USession::get('activeUser')['id']]);
 	}
@@ -60,6 +69,9 @@ class ExamDAOLoader {
     public function allMyComingExam(){
         return DAO::uGetAll(Exam::class,"qcm.idUser=? AND datef>now() AND dated>now()",true,[USession::get('activeUser')['id']]);
     }
+    public function allMyPastExam(){
+        return DAO::uGetAll(Exam::class,"qcm.idUser=? AND datef<now()",true,[USession::get('activeUser')['id']]);
+    }
     public function getExamTotalScore($id){
         $exam=DAO::uGetOne(Exam::class,'id= ?',['qcm.questions'],[$id]);
         $questions = $exam->getQcm()->getQuestions();
@@ -67,7 +79,9 @@ class ExamDAOLoader {
         foreach ($questions as $question){
             $answers = DAO::getAll(Answer::class, 'idQuestion=?',false,[$question->getId()]);
             foreach ($answers as $answer){
-                $totalScoreExam+=$answer->getScore();
+                if($answer->getScore()>0){
+                    $totalScoreExam+=$answer->getScore();
+                }
             }
         }
         return $totalScoreExam;

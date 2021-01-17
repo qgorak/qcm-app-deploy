@@ -48,6 +48,12 @@ class DashboardController extends ControllerBase{
             ] );
         }
     }
+    public function finalize() {
+        if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/closeColumnCloseMenu.html');
+        }
+        parent::finalize();
+    }
 
     /**
      * @route('/','name'=>'dashboard')
@@ -60,10 +66,12 @@ class DashboardController extends ControllerBase{
         $countUserInMyGroups=DAO::uCount(Usergroup::class,'group.idUser = ? and status=1',[USession::get('activeUser')['id']]);
         $examInProgress =$this->loader->allMyExamInProgress();
         $examComing =$this->loader->allMyComingExam();
+        $examPast =$this->loader->allMyPastExam();
         if($examInProgress!=array()) {
             $this->jquery->semantic()->htmlHeader('headerExamInProgress', 2, '<div class="content">Exam in progress</div>')->addIcon('circle small red');;
             $this->uiService->displayMyExamsInProgress($examInProgress);
         }
+        $this->uiService->displayMyPastExams($examPast);
         $this->uiService->displayMyComingExams($examComing);
         $this->jquery->renderView("DashboardController/index.html",[
             'nbQuestion'=>$countQuestion,

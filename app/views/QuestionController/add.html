@@ -1,18 +1,19 @@
-<div id="response">
-	<div class="ui menu">
+	<div class="top_trainer_middle ui menu">
 		<div id="cancelitem" class="item">
 			<div id="cancel" href="{{path('question')}}" data-target="#response" class="circular ui icon button"> <i class="arrow left icon"></i></div>
 		</div>
 		<div class="flex-container">
-		<div id="headercquestion" class="header item">
+		<div class="header item">
 			Question
 		</div>
-		</div>
-		<div class="right menu">
+
+		<div class="right_button">
 			<div class="item" id="submitQ">
 				<div id="add" href="{{path('question.add')}}" data-target="#response"  class="ui primary button">Submit</div>
 			</div>
 		</div>
+		</div>
+
 	</div>
 	<div id="scroll"  style="overflow-y: scroll;height: calc( 100vh - 95px );background: #fafbfc;">
 	<div class="main ui container" id="mainsegment" style="display: none;margin-bottom: 2em;">
@@ -52,40 +53,8 @@
 			#text-dropdown-questionForm-mytags-0{
 				margin-top: 0!important;
 			}
-			#headercquestion:before {
-				background: none;
-			}
-
-			#cancelitem:before {
-				background: none!important;
-			}
-
-			#submitQ:before {
-				background: none!important;
-			}
-
-			#headercquestion {
-				border-bottom: 3px solid #2185d0;
-				border-radius: 0;
-				padding-bottom: 0;
-				font-size: 15px;
-				width: 100px;
-				height: 50px;
-				margin-bottom: -1px;
-
-			}
-			.flex-container {
-				width: 100%;
-				display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
-				display: -ms-flexbox;  /* TWEENER - IE 10 */
-				display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
-				display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
-				justify-content: center;
-				align-items: center;
-			}
 
 		</style>
 </div>
 	</div>
 	</div>
-</div>

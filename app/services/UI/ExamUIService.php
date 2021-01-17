@@ -140,6 +140,29 @@ class ExamUIService {
         $dt->setValueFunction('group',function($v){return $v->getName();});
         $dt->setValueFunction('timer',function($v){ return '<div id="timer-'.$v['id'].'"></div><script>createTimer('.$v['time'].',"#timer-'.$v['id'].'","'.Router::path('exam.get',[$v['id']]).'")</script>';});
     }
+
+    public function displayMyPastExams($exams){
+        $dt=$this->jquery->semantic()->dataTable('myPastExams',Exam::class,$exams);
+        $dt->setFields([
+            'qcm',
+            'group',
+            'dated',
+            'datef'
+        ]);
+        $dt->setCaptions([
+            TranslatorManager::trans('qcm',[],'main'),
+            TranslatorManager::trans('group',[],'main'),
+            TranslatorManager::trans('startDate',[],'main'),
+            TranslatorManager::trans('endDate',[],'main'),
+        ]);
+        $dt->setIdentifierFunction('getId');
+        $dt->setValueFunction('qcm',function($v){return $v->getName();});
+        $dt->setValueFunction('group',function($v){return $v->getName();});
+        $dt->insertDefaultButtonIn(4,'eye','_report',false);
+        $this->jquery->getOnClick('._report',Router::path('exam.report'),'#response',[
+            'attr'=>'data-ajax'
+        ]);
+    }
 	
 	public function examForm($qcm,$groups){
 	    $exam=$this->jquery->semantic()->dataForm('exam',new Exam());

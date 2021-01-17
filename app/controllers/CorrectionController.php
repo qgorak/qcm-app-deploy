@@ -164,7 +164,9 @@ class CorrectionController extends ControllerBase{
                     $answer->checked = false;
                 }
             }
-            $totalScore += $answer->getScore();
+            if ($answer->getScore()>0) {
+                $totalScore += $answer->getScore();
+            }
             \array_push($answersToDisplay,$answer); 
         }
         $dt = $this->uiService->correctionAnswersDataTable($answersToDisplay);
@@ -184,7 +186,9 @@ class CorrectionController extends ControllerBase{
         $answer->comment = $userAnswerValue->comment;
         $answer->identifiers = $userAnswer->getidUser().','.$userAnswer->getidExam().','.$userAnswer->getidQuestion();
         $frm = $this->uiService->shortAnswerForm($answer,$questionCreator->getId(),$totalScore);
-        $totalScore+=$answer->getScore();
+        if ($answer->getScore()>0) {
+            $totalScore += $answer->getScore();
+        }
         $score+=$userAnswerValue->points;
         $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);
         $item = array($question->getCaption().$label,$frm);
@@ -201,7 +205,9 @@ class CorrectionController extends ControllerBase{
         $answer->scoreUser = $userAnswerValue->points;
         $answer->comment = $userAnswerValue->comment;
         $answer->identifiers = $userAnswer->getidUser().','.$userAnswer->getidExam().','.$userAnswer->getidQuestion();
-        $totalScore += $answer->getScore();
+        if ($answer->getScore()>0) {
+            $totalScore += $answer->getScore();
+        }
         $score += $userAnswerValue->points;
         $frm = $this->uiService->longAnswerForm($answer,$questionCreator->getId(),$totalScore);
         $label = $this->jquery->semantic()->htmlLabel('mark',$score.'/'.$totalScore);

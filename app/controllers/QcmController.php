@@ -39,6 +39,13 @@ class QcmController extends ControllerBase{
         }
         $this->jquery->attr('#trainermode','class','item active',true);
     }
+
+    public function finalize() {
+        if (! URequest::isAjax ()) {
+            $this->loadView('/main/UI/closeColumnCloseMenu.html');
+        }
+        parent::finalize();
+    }
     
     /**
      *
@@ -63,16 +70,12 @@ class QcmController extends ControllerBase{
 	        'historize'=>false
 	    ]);
 	    $this->uiService->getQcmDataTable($this->loader->my());
-	    $this->_index($this->jquery->renderView ( 'QcmController/templates/myQcm.html',[
+	    $this->jquery->renderView ( 'QcmController/index.html',[
 	        'msg' => $msg
-	    ],true));
+	    ]);
 	}
-	
-	private function _index($response = '') {
-	    $this->jquery->renderView ( 'QcmController/index.html', [
-	        'response' => $response
-	    ] );
-	}
+
+
 	
 	/**
 	 * @get("add","name"=>'qcm.add')
@@ -184,6 +187,6 @@ class QcmController extends ControllerBase{
 	    $qcm->setDescription(URequest::post ( 'description', '' ) );
 	    $this->loader->add ($qcm);
 	    USession::delete('questions');
-	    $this->_index($this->index(new HtmlMessage ( '', "Success !" )));
+	    $this->index();
 	}
 }

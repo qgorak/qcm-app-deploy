@@ -1,7 +1,21 @@
-<div class="fourteen wide column" style="padding-left: 0;padding-right: 0">
-    <div id="response">
-{{ q['myExam'] | raw }}
-{{script_foot | raw}}
-    </div>
+<div class="top_trainer_middle ui menu">
+        <div id="cancelitem" class="item">
+                <div id="cancel" href="{{path('question')}}" data-target="#response" class="circular ui icon button"> <i class="arrow left icon"></i></div>
+        </div>
+        <div class="flex-container">
+                <div class="header item">
+                        Exams du groupe :
+                </div>
+        </div>
+        <div id="cancelitem" class="item" style="visibility: hidden">
+        </div>
 </div>
+<div id="scroll"  style="overflow-y: auto;overflow-x: hidden;height: calc( 100vh - 95px );background: #fafbfc;">
+        {{ q['myExam'] | raw }}
+        {{ q['myComingExams'] | raw }}
+        {{ q['myPastExams'] | raw }}
+        {{script_foot | raw}}
 </div>
+<style>
+        body{overflow: hidden}
+</style>
