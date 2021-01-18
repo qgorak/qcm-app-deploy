@@ -24,7 +24,8 @@ class QuestionDAOLoader {
                     foreach ($temp as $question){
                         if (isset($res[$question->getId()])) {
                             array_push($newRes,$question);
-                        }
+                        } 
+                    }
                     $res=$newRes;
                 }else{
                     $res=$temp;
