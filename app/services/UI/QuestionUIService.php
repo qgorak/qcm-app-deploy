@@ -37,7 +37,11 @@ class QuestionUIService {
 	    $dd->setStyle('min-width:180px;padding-right:0');
 	    $dd->setDefaultText('<div style="margin-top:-3px;"class="ui basic button"><i class="tag icon"></i>Filter by tags</div>');
 	    $this->jquery->jsonArrayOn('change','#filterTags','#dtItems-tr-__id__','question/getByTags/','post',[
-	        'params'=>'{tags:$("#input-filterTags").val()}',
+	        'params'=>'{tags:$("#input-filterTags").val(),types:$("#input-filterType").val()}',
+            'jsCallback'=>'onLoad();$(".ui.dropdown.selection").dropdown({"action": "activate","on": "hover","showOnFocus": true});'
+        ]);
+        $this->jquery->jsonArrayOn('change','#filterType','#dtItems-tr-__id__','question/getByTags/','post',[
+            'params'=>'{tags:$("#input-filterTags").val(),types:$("#input-filterType").val()}',
             'jsCallback'=>'onLoad();$(".ui.dropdown.selection").dropdown({"action": "activate","on": "hover","showOnFocus": true});'
         ]);
 	    return $dd;
@@ -46,8 +50,8 @@ class QuestionUIService {
     public function questionTypeFilterDd(){
         $types = ['1'=>'<i class="check square icon"></i>QCM','2'=>'<i class="bars icon"></i>courte','3'=>'<i class="align left icon"></i>longue','4'=>'<i class="code icon"></i>Code'];
         $dd = $this->jquery->semantic()->htmlDropdown('filterType','',$types);
-        $dd->asSelect('type',0);
-        $dd->setClass('ui multiple search dropdown item');
+        $dd->asSelect('type',true);
+        $dd->setClass('ui multiple dropdown item');
         $dd->setStyle('min-width:180px;padding-right:0');
         $dd->setDefaultText('<div style="margin-top:-3px;"class="ui basic button"><i class="filter icon"></i>Filter by type</div>');
         return $dd;

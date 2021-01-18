@@ -218,8 +218,8 @@ class QuestionController extends ControllerBase {
      * @post("getByTags","name"=>"question.getBy.tags")
      */
     public function getByTags() {
-        $postTags = URequest::getInput('tags');
-        if(\strlen($postTags['tags'])>0){
+        $post = URequest::getInput();
+        if(\strlen($post['tags'])>0){
            $tagIdArray = \explode(',',URequest::getPost()['tags']);
     	   $tagObjects = array();
     	   $tag = new Tag();
@@ -227,10 +227,21 @@ class QuestionController extends ControllerBase {
     	       $tag->setId($tagId);
     	       \array_push($tagObjects,$tag);
     	   }
-
     	   $questions = $this->loader->getByTags($tagObjects);
         }else{
             $questions = $this->loader->my();
+        }
+        if(\strlen($post['types'])>0){
+            $tempquestions=$questions;
+            $questions=[];
+            $typeIdArray = \explode(',',URequest::getPost()['types']);
+            foreach ($tempquestions as $question){
+                for($i=0;$i<count($typeIdArray);$i++){
+                    if($question->getIdTypeQ()==$typeIdArray[$i]){
+                        \array_push($questions,$question);
+                    }
+                }
+            }
         }
         echo $this->getQuestionJsonArray($questions);
     }
