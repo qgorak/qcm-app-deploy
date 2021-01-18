@@ -20,16 +20,22 @@ class QuestionDAOLoader {
 	    foreach($tags as $tag) {
             $temp = DAO::getManyToMany($tag, 'questions',['tags']);
                 if($i>0){
-                    $oldres = $res;
-                    $res = [];
+                    $newRes = [];
+                    foreach ($temp as $question){
+                        if (isset($res[$question->getId()])) {
+                            array_push($newRes,$question);
+                        }
+                    $res=$newRes;
                 }else{
-
                     $res=$temp;
                 }
             $i++;
 	    }
         return $res;
          }
+
+
+
 	public function add(Question $item,array $tags): void {
 	    $creator = new User();
 	    $creator->setId(USession::get('activeUser')['id']);
