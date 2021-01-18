@@ -1,13 +1,24 @@
-<h2 class="ui header" style="margin-top:15px;">
-	<i class="question icon"></i>
-	<div class="content">QCM</div>
-</h2>
-<button id="cancel" href="{{path('qcm')}}" data-target="#response" class="ui red button">{{t('cancel',[],'main')}}</button>
-<button id="create" class="ui green button">{{t('create',[],'main')}}</button>
-<div class="ui container text segment">
+<div class="top_trainer_middle ui menu">
+	<div id="cancelitem" class="item">
+		<div id="cancel" href="{{path('qcm')}}" data-target="#response" class="circular ui icon button"> <i class="arrow left icon"></i></div>
+	</div>
+	<div class="flex-container">
+		<div class="header item">
+			Qcm
+		</div>
+		<div class="right_button">
+			<div class="item" id="submitQ">
+				<div id="create"  class="ui primary button">Submit</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="main ui container segment">
+<div style="max-width: 450px">
 {{ q['qcmForm'] | raw }}
 </div>
 <div id="responseBank">
 
+</div>
 </div>
 {{ script_foot | raw }}
