@@ -2,7 +2,9 @@
 namespace controllers;
 
 use Ajax\semantic\html\collections\HtmlMessage;
+use models\Question;
 use Ubiquity\controllers\Router;
+use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
 use Ubiquity\utils\http\USession;
 use models\Qcm;
@@ -81,11 +83,14 @@ class QcmController extends ControllerBase{
 	 * @get("add","name"=>'qcm.add')
 	 */
 	public function add() {
+        $questionLoader = new QuestionDAOLoader();
+        USession::set('questions',array());
 	    $this->uiService->qcmForm();
 	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
 	        'hasLoader'=>'internal'
 	    ]);
-	    $this->jquery->ajax('get', Router::path('qcm.display.bank'),'#responseBank' );
+	 //   $this->jquery->ajax('get', Router::path('qcm.display.bank'),'#responseBank' );
+        $this->uiService->questionBankImportDataTable($questionLoader->my());
 	    $this->jquery->renderView ( 'QcmController/add.html', []);
 	}
 	
@@ -94,16 +99,10 @@ class QcmController extends ControllerBase{
 	 */
 	public function addQuestionToQcm($id) {
 	    $myQuestions = USession::get('questions');
-	    foreach ($myQuestions['notchecked'] as $key => $value) {
-	        if($value->getId()==$id){
-	            $question = $value;
-	            \array_push($myQuestions['checked'],$question);
-	            unset($myQuestions['notchecked'][$key]);
-	            break;
-	        }    
-	    }
+	    $question = DAO::getById(Question::class,$id,false);
+	    $myQuestions[$question->getId()]=$question;
 	    USession::set('questions', $myQuestions);
-	    $this->displayQuestionBankImport();
+	    echo $this-> getQuestionJsonArray($this->loader->getquestions());
 	}
 	
 	/**
@@ -139,17 +138,12 @@ class QcmController extends ControllerBase{
 	 * @delete("deleteQuestion/{id}","name"=>"qcm.delete.question")
 	 */
 	public function removeQuestionToQcm($id) {
-	    $myQuestions = USession::get('questions');
-	    foreach ($myQuestions['checked'] as $key => $value) {
-	        if($value->getId()==$id){
-	            $question = $value;
-	            \array_push($myQuestions['notchecked'],$question);
-	            unset($myQuestions['checked'][$key]);
-	            break;
-	        }
-	    }
+        $myQuestions = USession::get('questions');
+        $question = DAO::getById(Question::class,$id,false);
+        unset($myQuestions[$question->getId()]);
 	    USession::set('questions', $myQuestions);
 	    $this->displayQuestionBankImport();
+        echo $this-> getQuestionJsonArray($this->loader->getquestions());
 	}
 	
 	/**
@@ -189,4 +183,22 @@ class QcmController extends ControllerBase{
 	    USession::delete('questions');
 	    $this->index();
 	}
+
+    private function getQuestionJsonArray($questions){
+        $json= [];
+        foreach ($questions as $question){
+            $res = '';
+            $checkTags=array_key_exists('tags',$question->_rest);
+            if($checkTags!==false){
+                foreach ($question->_rest['tags'] as $tag){
+                    $res = $res.'<div class="ui '.$tag->_rest['color'].' label">'.$tag->_rest['name'].'</div>';
+                }
+            }
+            $question->_rest['tags']=$res;
+            $typeq = [1=>['name'=>'QCM','icon'=>'check square'],2=>['name'=>'courte','icon'=>'bars'],3=>['name'=>'longue','icon'=>'align left'],4=>['name'=>'code','icon'=>'code']];
+            $question->_rest['idTypeq']='<div class="ui label" style="display:inline-flex;"><i id="icon-" class="icon '.$typeq[$question->_rest['idTypeq']]['icon'].'"></i>'.$typeq[$question->_rest['idTypeq']]['name'].'</div>';
+            array_push($json,$question->_rest);
+        }
+        return json_encode($json);
+    }
 }

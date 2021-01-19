@@ -2,6 +2,7 @@
 
 namespace services\DAO;
 
+use models\Question;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\USession;
 use models\Qcm;
@@ -43,4 +44,16 @@ class QcmDAOLoader {
 	public function update($item): bool {
 		return DAO::update ( $item );
 	}
+
+    public function getquestions(): array {
+        $userid = USession::get('activeUser')['id'];
+        $checkedquestion = USession::get('questions');
+        $res = DAO::getAll(Question::class, 'idUser=?',['tags'],[$userid]);
+        foreach ($checkedquestion as $question){
+            if (isset($checkedquestion[$question->getId()])) {
+                unset($res[$question->getId()]);
+            }
+        }
+        return $res;
+    }
 }

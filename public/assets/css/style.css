@@ -313,7 +313,12 @@ canvas{
 	right: 0px;
 	margin-right: 1em;
 }
-
+.hiddenbutton{
+	display: none!important;
+}
+#dtBankImport .hide{
+	display: none!important;
+}
 
 
 .top_trainer_middle.ui.menu .header.item {
