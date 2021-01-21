@@ -19,7 +19,7 @@ class QcmDAOLoader {
         $creator->setId(USession::get('activeUser')['id']);
         $qcm->setUser($creator);
         $questions = USession::get('questions');
-        $qcm->setQuestions($questions['checked']);
+        $qcm->setQuestions($questions);
         $qcm->setCdate(\date_create()->format('Y-m-d H:i:s'));
 		DAO::insert($qcm,true);
 	}
@@ -51,6 +51,32 @@ class QcmDAOLoader {
         $res = DAO::getAll(Question::class, 'idUser=?',['tags'],[$userid]);
         foreach ($checkedquestion as $question){
             if (isset($checkedquestion[$question->getId()])) {
+                unset($res[$question->getId()]);
+            }
+        }
+        return $res;
+    }
+    public function getByTags($tags): ?array {
+        $res=array();
+        $i=0;
+        foreach($tags as $tag) {
+            $temp = DAO::getManyToMany($tag, 'questions',['tags']);
+            if($i>0){
+                $newRes = [];
+                foreach ($temp as $question){
+                    if (isset($res[$question->getId()])) {
+                        array_push($newRes,$question);
+                    }
+                }
+                $res=$newRes;
+            }else{
+                $res=$temp;
+            }
+            $i++;
+        }
+        $myQuestions = USession::get('questions');
+        foreach ($myQuestions  as $question){
+            if (isset($myQuestions[$question->getId()])) {
                 unset($res[$question->getId()]);
             }
         }

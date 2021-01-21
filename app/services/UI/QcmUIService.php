@@ -89,6 +89,40 @@ class QcmUIService {
             'attr' => 'data-ajax'
         ] );
     }
+
+    public function questionTagsFilterDd(){
+        $mytags = DAO::getAll( Tag::class, 'idUser='.USession::get('activeUser')['id'],false);
+        $res = [];
+        foreach ($mytags as $tag) {
+            $label = $this->jquery->semantic()->htmlLabel('', $tag->getName());
+            $label->setClass('ui '.$tag->getColor().' label');
+            $res[$tag->getId()]=$label;
+        }
+        $dd = $this->jquery->semantic()->htmlDropdown('filterTags','',$res);
+        $dd->asSelect('tags',true);
+        $dd->setClass('ui multiple search dropdown item');
+        $dd->setStyle('min-width:180px;padding-right:0');
+        $dd->setDefaultText('<div style="margin-top:-3px;"class="ui basic button"><i class="tag icon"></i>Filter by tags</div>');
+        $this->jquery->jsonArrayOn('change','#filterTags','#dtBankImport-tr-__id__',Router::path('qcm.filter.bank'),'post',[
+            'params'=>'{tags:$("#input-filterTags").val(),types:$("#input-filterType").val()}',
+            'jsCallback'=>'$(".ui.dropdown.selection").dropdown({"action": "activate","on": "hover","showOnFocus": true});'
+        ]);
+        $this->jquery->jsonArrayOn('change','#filterType','#dtBankImport-tr-__id__',Router::path('qcm.filter.bank'),'post',[
+            'params'=>'{tags:$("#input-filterTags").val(),types:$("#input-filterType").val()}',
+            'jsCallback'=>'$(".ui.dropdown.selection").dropdown({"action": "activate","on": "hover","showOnFocus": true});'
+        ]);
+        return $dd;
+    }
+
+    public function questionTypeFilterDd(){
+        $types = ['1'=>'<i class="check square icon"></i>QCM','2'=>'<i class="bars icon"></i>courte','3'=>'<i class="align left icon"></i>longue','4'=>'<i class="code icon"></i>Code'];
+        $dd = $this->jquery->semantic()->htmlDropdown('filterType','',$types);
+        $dd->asSelect('type',true);
+        $dd->setClass('ui multiple dropdown item');
+        $dd->setStyle('min-width:180px;padding-right:0');
+        $dd->setDefaultText('<div style="margin-top:-3px;"class="ui basic button"><i class="filter icon"></i>Filter by type</div>');
+        return $dd;
+    }
     
     public function questionDataTable($name,$questions,$checked) {
         $q = new Question ();
@@ -199,19 +233,19 @@ class QcmUIService {
         $this->jquery->attr('.field .dropdown.icon','class','ellipsis vertical icon',true);
         $dt->setUrls(["question/jsonPagination"]);
         $this->jquery->html('#htmltr-dtBankImport-tr-__id__-1','__tags__',true);
-        $this->jquery->exec('function onLoad(){',true);
-        $this->jquery->jsonArrayOn('click','._add','#dtBankImport-tr-__id__',Router::path('qcm.add.question'),'get',[
+        $this->jquery->jsonArrayOn('click','._add','#dtBankImport-tr-__id__',Router::path('qcm.add.question'),'post',[
             'attr'=>'data-ajax',
+            'params'=>'{tags:$("#input-filterTags").val(),types:$("#input-filterType").val()}',
             'listenerOn'=>'body',
             'before'=>'$(self).attr("class","hiddenbutton");$(self).closest("._element").prependTo("#dtBankChecked");',
-            'jsCallback'=>'onLoad();$(self).closest("tr").next().find("._remove").removeClass("hide");'
+            'jsCallback'=>'$(self).closest("tr").next().find("._remove").removeClass("hide");'
         ]);
-        $this->jquery->jsonArrayOn('click','._remove','#dtBankImport-tr-__id__',Router::path('qcm.delete.question'),'get',[
+        $this->jquery->jsonArrayOn('click','._remove','#dtBankImport-tr-__id__',Router::path('qcm.delete.question'),'post',[
             'attr'=>'data-ajax',
+            'params'=>'{tags:$("#input-filterTags").val(),types:$("#input-filterType").val()}',
             'listenerOn'=>'body',
-            'jsCallback'=>'onLoad();$(self).closest("._element").remove();'
+            'jsCallback'=>'$(self).closest("._element").remove();'
         ]);
-        $this->jquery->exec('}onLoad();',true);
     }
 
 

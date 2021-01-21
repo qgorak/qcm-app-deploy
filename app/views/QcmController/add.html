@@ -13,15 +13,27 @@
 		</div>
 	</div>
 </div>
+<div id="scroll"  style="overflow-y: scroll;overflow-x: hidden;height: calc( 100vh - 95px );background: #fafbfc;">
 <div class="main ui container segment">
 <div style="max-width: 450px">
 {{ q['qcmForm'] | raw }}
 </div>
-<div id="responseBank">
 	<table id="dtBankChecked" class="ui table" style="border-radius: .5em;margin-top:1em">
 
 	</table>
+	<div class="ui menu" id="qbankbar">
+		<div class="header item" style="border-bottom: 3px solid #2185d0;margin-bottom: -1px;padding-bottom: calc( 0.928571em - 4px )">
+			Question bank
+		</div>
+		{{q['filterType'] | raw }}
+		{{q['filterTags'] | raw }}
+	</div>
 	{{ q['dtBankImport'] | raw }}
 </div>
 </div>
+<style>
+	body{
+		overflow: hidden;
+	}
+</style>
 {{ script_foot | raw }}

@@ -3,6 +3,7 @@ namespace controllers;
 
 use Ajax\semantic\html\collections\HtmlMessage;
 use models\Question;
+use models\Tag;
 use Ubiquity\controllers\Router;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\URequest;
@@ -69,7 +70,7 @@ class QcmController extends ControllerBase{
 	    USession::set('questions', $myQuestions);
 	    $this->jquery->getHref('#addQcm', '',[
 	        'hasLoader'=>'internal',
-	        'historize'=>false
+	        'historize'=>true
 	    ]);
 	    $this->uiService->getQcmDataTable($this->loader->my());
 	    $this->jquery->renderView ( 'QcmController/index.html',[
@@ -89,72 +90,41 @@ class QcmController extends ControllerBase{
 	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
 	        'hasLoader'=>'internal'
 	    ]);
-	 //   $this->jquery->ajax('get', Router::path('qcm.display.bank'),'#responseBank' );
+        $this->jquery->getHref ( '#cancel', '#response', [
+            'hasLoader' => 'internal'
+        ] );
+        $this->uiService->questionTagsFilterDd();
+        $this->uiService->questionTypeFilterDd();
         $this->uiService->questionBankImportDataTable($questionLoader->my());
 	    $this->jquery->renderView ( 'QcmController/add.html', []);
 	}
 	
 	/**
-	 * @get("addQuestion/{id}","name"=>"qcm.add.question")
+	 * @post("addQuestion/{id}","name"=>"qcm.add.question")
 	 */
 	public function addQuestionToQcm($id) {
 	    $myQuestions = USession::get('questions');
 	    $question = DAO::getById(Question::class,$id,false);
 	    $myQuestions[$question->getId()]=$question;
 	    USession::set('questions', $myQuestions);
-	    echo $this-> getQuestionJsonArray($this->loader->getquestions());
+	    $this->filter();
 	}
+
 	
 	/**
-	 * @get("questionBankImport","name"=>'qcm.display.bank')
-	 */
-	public function displayQuestionBankImport(){
-	    $this->uiService->questionDataTable('dtQuestionNotChecked',USession::get('questions')['notchecked'],false);
-	    $this->uiService->questionDataTable('dtQuestionChecked',USession::get('questions')['checked'],true);
-	    $this->jquery->getHref('#cancel', '',[
-	        'hasLoader'=>'internal',
-	        'historize'=>false
-	    ]);
-	    $this->jquery->ajaxOnClick ( '._add', Router::path('qcm.add.question',['']) , '#responseBank', [
-	        'hasLoader' => 'internal',
-	        'method' => 'get',
-	        'attr' => 'data-ajax',
-	    ] );
-	    $this->jquery->ajaxOnClick ( '._remove', Router::path('qcm.delete.question',['']) , '#responseBank', [
-	        'hasLoader' => 'internal',
-	        'method' => 'delete',
-	        'attr' => 'data-ajax',
-	    ] );
-	    $this->jquery->ajaxOn('change','#input-Filter', Router::path('qcm.filter'),"#responseBank",[
-	        'preventDefault'=>false,
-	        'method' => 'post',
-	        'params' =>'{"tags":$("#input-Filter").val()}',
-	        'hasLoader'=>'internal'
-	    ]);
-	    $this->jquery->renderView ( 'QcmController/templates/questionBankImport.html', [] );    
-	}
-	
-	/**
-	 * @delete("deleteQuestion/{id}","name"=>"qcm.delete.question")
+	 * @post("deleteQuestion/{id}","name"=>"qcm.delete.question")
 	 */
 	public function removeQuestionToQcm($id) {
         $myQuestions = USession::get('questions');
         $question = DAO::getById(Question::class,$id,false);
         unset($myQuestions[$question->getId()]);
 	    USession::set('questions', $myQuestions);
-	    $this->displayQuestionBankImport();
-        echo $this-> getQuestionJsonArray($this->loader->getquestions());
+        $this->filter();
 	}
+
 	
 	/**
-	 * @post("filterQuestionBank","name"=>"qcm.filter")
-	 */
-	public function filterQuestionBank() {
-	    $this->displayQuestionBankImport();
-	}
-	
-	/**
-	 * @get("delete/{id}",'name'=>'qcm.delete')
+	 * @post("delete/{id}",'name'=>'qcm.delete')
 	 */
 	public function delete($id) {
 		$this->loader->remove($id);
@@ -200,5 +170,37 @@ class QcmController extends ControllerBase{
             array_push($json,$question->_rest);
         }
         return json_encode($json);
+    }
+
+    /**
+     * @post("filter","name"=>"qcm.filter.bank")
+     */
+    public function filter() {
+        $post = URequest::getInput();
+        if(\strlen($post['tags'])>0){
+            $tagIdArray = \explode(',',URequest::getPost()['tags']);
+            $tagObjects = array();
+            $tag = new Tag();
+            foreach($tagIdArray as $tagId) {
+                $tag->setId($tagId);
+                \array_push($tagObjects,$tag);
+            }
+            $questions = $this->loader->getByTags($tagObjects);
+        }else{
+            $questions = $this->loader->getquestions();
+        }
+        if(\strlen($post['types'])>0){
+            $tempquestions=$questions;
+            $questions=[];
+            $typeIdArray = \explode(',',URequest::getPost()['types']);
+            foreach ($tempquestions as $question){
+                for($i=0;$i<count($typeIdArray);$i++){
+                    if($question->getIdTypeQ()==$typeIdArray[$i]){
+                        \array_push($questions,$question);
+                    }
+                }
+            }
+        }
+        echo $this->getQuestionJsonArray($questions);
     }
 }

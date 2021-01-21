@@ -319,7 +319,35 @@ canvas{
 #dtBankImport .hide{
 	display: none!important;
 }
+#qbankbar .item:before {
+	background: none;
+}
 
+#filterTags-icon{
+	display: none;
+}
+
+#dtBankImport{
+	margin-top: 0!important;
+}
+
+#filterTags .ui.label.transition{
+	padding: 0 13px 0 0;
+	margin-top: 5px;
+	background: transparent;
+}
+#filterTags .ui.label.transition i{
+	color:black;
+}
+#filterType{
+	min-height: 53px;
+}
+#filterType-icon{
+	display: none;
+}
+#filterTags .search{
+	width: 0!important;
+}
 
 .top_trainer_middle.ui.menu .header.item {
 	border-bottom: 3px solid #2185d0;
