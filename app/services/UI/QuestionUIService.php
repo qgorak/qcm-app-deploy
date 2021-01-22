@@ -147,6 +147,7 @@ else
 	        'caption',
 	        'tags',
 	        'idTypeq',
+            'answers',
             'action2'
 	    ] );
 	    $dt->setStyle('margin-top:2em;');
@@ -156,10 +157,19 @@ else
             'Tags',
             'Type'
 	    ]);
+	    $dt->setValueFunction('answers', function ($answers) {
+            if ($answers != null and $answers != '__answers__') {
+                $score = 0;
+                foreach ($answers as $answer) {
+                    $score+=$answer->getScore();
+                }
+                return $score.'pts';
+            }
+        });
         $dt->fieldAsDropDown('action2',[1=>'<i class="eye icon"></i>Preview',2=>'<i class="edit icon"></i>Edit',3=>'<i class="delete icon"></i>Delete']);
 	    $dt->setStyle('border-radius: .5em;margin-top:1em');
 	    $dt->setIdentifierFunction ( 'getId' );
-	    $dt->setColWidths([0=>8,1=>5,2=>2,3=>1]);
+	    $dt->setColWidths([0=>8,1=>4,2=>2,3=>1,4=>1]);
 	    $dt->setEdition ();
         $dt->setValueFunction('tags', function ($tags) {
             if ($tags != null and $tags != '__tags__') {

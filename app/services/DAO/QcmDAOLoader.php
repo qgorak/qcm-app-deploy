@@ -48,7 +48,7 @@ class QcmDAOLoader {
     public function getquestions(): array {
         $userid = USession::get('activeUser')['id'];
         $checkedquestion = USession::get('questions');
-        $res = DAO::getAll(Question::class, 'idUser=?',['tags'],[$userid]);
+        $res = DAO::getAll(Question::class, 'idUser=?',['tags','answers'],[$userid]);
         foreach ($checkedquestion as $question){
             if (isset($checkedquestion[$question->getId()])) {
                 unset($res[$question->getId()]);
@@ -60,12 +60,12 @@ class QcmDAOLoader {
         $res=array();
         $i=0;
         foreach($tags as $tag) {
-            $temp = DAO::getManyToMany($tag, 'questions',['tags']);
+            $temp = DAO::getManyToMany($tag, 'questions',['tags','answers']);
             if($i>0){
                 $newRes = [];
                 foreach ($temp as $question){
                     if (isset($res[$question->getId()])) {
-                        array_push($newRes,$question);
+                        $newRes[$question->getId()]=$question;
                     }
                 }
                 $res=$newRes;

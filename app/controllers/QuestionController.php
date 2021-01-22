@@ -387,7 +387,15 @@ class QuestionController extends ControllerBase {
                 $res = $res.'<div class="ui '.$tag->_rest['color'].' label">'.$tag->_rest['name'].'</div>';
             }
             }
+            $score=0;
+            $answers=array_key_exists('answers',$question->_rest);
+            if($answers!==false){
+                foreach ($question->_rest['answers'] as $answer){
+                    $score+=$answer->getScore();
+                }
+            }
             $question->_rest['tags']=$res;
+            $question->_rest['answers']=$score;
             $typeq = [1=>['name'=>'QCM','icon'=>'check square'],2=>['name'=>'courte','icon'=>'bars'],3=>['name'=>'longue','icon'=>'align left'],4=>['name'=>'code','icon'=>'code']];
             $question->_rest['idTypeq']='<div class="ui label" style="display:inline-flex;"><i id="icon-" class="icon '.$typeq[$question->_rest['idTypeq']]['icon'].'"></i>'.$typeq[$question->_rest['idTypeq']]['name'].'</div>';
             array_push($json,$question->_rest);

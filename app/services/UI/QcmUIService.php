@@ -195,6 +195,7 @@ class QcmUIService {
             'caption',
             'tags',
             'idTypeq',
+            'answers',
             'action'
         ] );
         $dt->setStyle('margin-top:2em;');
@@ -205,7 +206,7 @@ class QcmUIService {
         ]);
         $dt->setStyle('border-radius: .5em;margin-top:1em');
         $dt->setIdentifierFunction ( 'getId' );
-        $dt->setColWidths([0=>8,1=>5,2=>2,3=>1]);
+        $dt->setColWidths([0=>8,1=>3,2=>2,3=>1,4=>1]);
         $dt->setValueFunction('tags', function ($tags) {
             if ($tags != null and $tags != '__tags__') {
                 $res = [];
@@ -216,6 +217,7 @@ class QcmUIService {
                 return $res;
             }
         });
+
         $dt->setValueFunction('idTypeq', function ($type) {
             if($type!='__idTypeq__'){
                 $typeq = [1=>['name'=>'QCM','icon'=>'check square'],2=>['name'=>'courte','icon'=>'bars'],3=>['name'=>'longue','icon'=>'align left'],4=>['name'=>'code','icon'=>'code']];
@@ -226,25 +228,46 @@ class QcmUIService {
             return $type;
         });
 
-        $dt->insertDefaultButtonIn(3, 'plus','_add circular green ',false,null);
-        $dt->insertDefaultButtonIn(3, 'x','_remove hide circular red ',false,null);
-        $this->jquery->html('#htmltr-dtItems-tr-__id__-1','__tags__',true);
+        $dt->setValueFunction('answers', function ($answers) {
+            if ($answers != null and $answers != '__answers__') {
+                $score = 0;
+                foreach ($answers as $answer) {
+                    $score+=$answer->getScore();
+                }
+                return $score.'pts';
+            }
+        });
+
+
+        $dt->insertDefaultButtonIn(4, 'plus','_add circular green ',false,null);
+        $dt->insertDefaultButtonIn(4, 'x','_remove hide circular red ',false,null);
+
         $dt->paginate(1,DAO::count(Question::class,'idUser=?',[USession::get('activeUser')['id']]),30);
         $this->jquery->attr('.field .dropdown.icon','class','ellipsis vertical icon',true);
         $dt->setUrls(["question/jsonPagination"]);
         $this->jquery->html('#htmltr-dtBankImport-tr-__id__-1','__tags__',true);
+        $this->jquery->html('#htmltr-dtBankImport-tr-__id__-3','__answers__',true);
+        $this->jquery->exec('function updateCounter(){
+                                var sum = 0;
+                                $("#dtBankChecked tr td:nth-child(4)").each(function(){
+                                sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
+                            });
+                            var countq = $("#dtBankChecked tr").length;
+                            $("#counter").html(sum+"pts");
+                            $("#counter2").html(countq);
+                            }',true);
         $this->jquery->jsonArrayOn('click','._add','#dtBankImport-tr-__id__',Router::path('qcm.add.question'),'post',[
             'attr'=>'data-ajax',
             'params'=>'{tags:$("#input-filterTags").val(),types:$("#input-filterType").val()}',
             'listenerOn'=>'body',
             'before'=>'$(self).attr("class","hiddenbutton");$(self).closest("._element").prependTo("#dtBankChecked");',
-            'jsCallback'=>'$(self).closest("tr").next().find("._remove").removeClass("hide");'
+            'jsCallback'=>'$(self).closest("tr").next().find("._remove").removeClass("hide");updateCounter();'
         ]);
         $this->jquery->jsonArrayOn('click','._remove','#dtBankImport-tr-__id__',Router::path('qcm.delete.question'),'post',[
             'attr'=>'data-ajax',
             'params'=>'{tags:$("#input-filterTags").val(),types:$("#input-filterType").val()}',
             'listenerOn'=>'body',
-            'jsCallback'=>'$(self).closest("._element").remove();'
+            'jsCallback'=>'$(self).closest("._element").remove();updateCounter();'
         ]);
     }
 
