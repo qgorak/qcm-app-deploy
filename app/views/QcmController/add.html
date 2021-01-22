@@ -15,10 +15,31 @@
 </div>
 <div id="scroll"  style="overflow-y: scroll;overflow-x: hidden;height: calc( 100vh - 95px );background: #fafbfc;">
 <div class="main ui container segment">
-<div style="max-width: 450px">
+<div style="display: flex;justify-content: space-between;">
 {{ q['qcmForm'] | raw }}
+	<div class="ui info message" style="width: 200px"; height:150px;margin-right: 1rem;">
+		<div class="header">
+			Need help ?
+		</div>
+		<ul class="list">
+			<li></li>
+			<li>FAQ</li>
+		</ul>
+	</div>
 </div>
-	<table id="dtBankChecked" class="ui table" style="border-radius: .5em;margin-top:1em">
+	<div class="ui menu" style="margin-top: 1em;">
+		<div class="header item" style="border-bottom: 3px solid #2185d0;margin-bottom: -1px;padding-bottom: calc( 0.928571em - 4px )">
+			My qcm
+		</div>
+		<div class="header item" style="margin-bottom: -1px;padding-bottom: calc( 0.928571em - 4px )">
+			Total points:
+			<div>
+				0
+			</div>
+		</div>
+
+	</div>
+	<table id="dtBankChecked" class="ui table" style="margin:0;">
 
 	</table>
 	<div class="ui menu" id="qbankbar">

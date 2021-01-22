@@ -88,7 +88,8 @@ class QcmController extends ControllerBase{
         USession::set('questions',array());
 	    $this->uiService->qcmForm();
 	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[
-	        'hasLoader'=>'internal'
+	        'hasLoader'=>'internal',
+            'jsCallback'=>'$("body").toast({position: "center top", message: "Qcm created",class: "success", });'
 	    ]);
         $this->jquery->getHref ( '#cancel', '#response', [
             'hasLoader' => 'internal'
@@ -124,12 +125,12 @@ class QcmController extends ControllerBase{
 
 	
 	/**
-	 * @post("delete/{id}",'name'=>'qcm.delete')
+	 * @get("delete/{id}",'name'=>'qcm.delete')
 	 */
 	public function delete($id) {
 		$this->loader->remove($id);
-		$msg = $this->jquery->semantic()->htmlMessage('','success !');
-		$this->index($msg);
+		$this->jquery->semantic()->toast('body',['message'=>'Qcm deleted','class'=> 'success','position'=>'center top']);
+		$this->index();
 	}
 	
 	/**

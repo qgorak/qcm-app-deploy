@@ -345,6 +345,27 @@ canvas{
 #filterType-icon{
 	display: none;
 }
+#qcmForm{
+	width: 300px;
+}
+#dtBankChecked{
+	border:none;
+	margin: 0;
+}
+#dtBankChecked tr:first-of-type td{
+	border-top: 1px solid rgba(34,36,38,.1);
+
+}
+#dtBankChecked tr td{
+	border-bottom: 1px solid rgba(34,36,38,.1);
+
+}
+#dtBankChecked tr td:first-of-type{
+	border-left: 1px solid rgba(34,36,38,.1);
+}
+#dtBankChecked tr td:last-of-type{
+	border-right: 1px solid rgba(34,36,38,.1);
+}
 #filterTags .search{
 	width: 0!important;
 }
