@@ -61,21 +61,14 @@ class QcmController extends ControllerBase{
     /**
      * @route('/','name'=>'qcm')
      */
-	public function index($msg=''){
-	    $questionLoader = new QuestionDAOLoader();
-	    $myQuestions = array();
-	    $myQuestions['notchecked'] = $questionLoader->my();
-	    $myQuestions['checked'] = array();
+	public function index(){
 	    $this->uiService->modal();
-	    USession::set('questions', $myQuestions);
 	    $this->jquery->getHref('#addQcm', '',[
 	        'hasLoader'=>'internal',
 	        'historize'=>true
 	    ]);
-	    $this->uiService->getQcmDataTable($this->loader->my());
-	    $this->jquery->renderView ( 'QcmController/index.html',[
-	        'msg' => $msg
-	    ]);
+	    $this->uiService->getQcmCards($this->loader->my());
+	    $this->jquery->renderView ( 'QcmController/index.html',[]);
 	}
 
 
@@ -84,7 +77,6 @@ class QcmController extends ControllerBase{
 	 * @get("add","name"=>'qcm.add')
 	 */
 	public function add() {
-        $questionLoader = new QuestionDAOLoader();
         USession::set('questions',array());
 	    $this->uiService->qcmForm();
 	    $this->jquery->postFormOnClick('#create', Router::path('qcm.submit'), 'qcmForm','#response',[

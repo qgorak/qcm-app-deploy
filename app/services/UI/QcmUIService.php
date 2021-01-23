@@ -53,42 +53,44 @@ class QcmUIService {
         ]);
         return $frm;
     }
-    
-    public function getQcmDataTable($qcms){
-        $dt = $this->jquery->semantic ()->dataTable ( 'dtQcms', Question::class, $qcms );
-        $msg = new HtmlMessage ( '', TranslatorManager::trans('noDisplay',[],'main') );
-        $msg->addIcon ( "x" );
-        $dt->setEmptyMessage ( $msg );
-        $dt->setFields ( [
-            'name',
-            'description',
-            'cdate',
-        ] );
-        $dt->insertDeleteButtonIn(3,true);
-        $dt->insertEditButtonIn(3,true);
-        $dt->insertDisplayButtonIn(3,true);
-        $dt->setClass(['ui very basic table']);
-        $dt->setCaptions([
-            TranslatorManager::trans('name',[],'main')
-        ]);
-        $dt->setIdentifierFunction ( 'getId' );
-        $dt->setColWidths([0=>2,1=>8,2=>3,2=>3]);
-        $dt->setEdition ();
+    public function getQcmCards($qcms){
+        $cards=$this->jquery->semantic()->htmlCardGroups("cardsqcm");
+        $cards->setWide(3);
+        $cards->fromDatabaseObjects($qcms,function($qcm) use ($cards){
+            $card=$cards->newItem("card-".$qcm->getId());
+            $card->setProperty('data-ajax',$qcm->getId());
+            $card->addItemHeaderContent($qcm->getName(),'',$qcm->getDescription());
+            $extra=$card->addExtraContent();
+            $totalscore=0;
+            foreach ($qcm->getQuestions() as $question){
+                foreach ($question->getAnswers() as $answer){
+                    if($answer->getScore()>0){
+                        $totalscore+=$answer->getScore();
+                    }
+                }
+            }
+            $bts=$this->jquery->semantic()->htmlButtonGroups("bts1",["Edit","Delete"]);
+            $bts->addClasses(["basic _edit","basic red _delete"]);
+            $bts->getItem(0)->setProperty('data-ajax',$qcm->getId());
+            $bts->getItem(1)->setProperty('data-ajax',$qcm->getId());
+            $extra->addContent('Grading scale: '.$totalscore.'pts');
+            $extra->addMeta('<i class="icon question"></i>'.count($qcm->getQuestions()).' Questions');
+            $extra->addContentText($qcm->getCdate(),"right");
+            $extra->addContentText($bts);
+
+            return $card;
+        });
         $this->jquery->getOnClick ( '._delete', Router::path ('qcm.delete',[""]), '#response', [
             'hasLoader' => 'internal',
             'attr' => 'data-ajax'
-        ] );
-        $this->jquery->ajaxOnClick ( '._display', Router::path('qcm.preview',['']) , '#response-modal', [
-            'hasLoader' => 'internal',
-            'method' => 'get',
-            'attr' => 'data-ajax',
-            'jsCallback'=>'$("#modal").modal("show");'
         ] );
         $this->jquery->getOnClick ( '._edit', Router::path ('qcm.patch',[""]), '#response', [
             'hasLoader' => 'internal',
             'attr' => 'data-ajax'
         ] );
+        return $cards;
     }
+
 
     public function questionTagsFilterDd(){
         $mytags = DAO::getAll( Tag::class, 'idUser='.USession::get('activeUser')['id'],false);

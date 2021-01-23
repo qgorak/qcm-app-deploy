@@ -394,6 +394,11 @@ canvas{
 .top_trainer_right.ui.menu .item:before {
 	background: none;
 }
+
+#bts1{
+	width: 100%;
+	margin-top: 1em;
+}
 @media only screen and (max-width: 1200px) {
 	#avatar{
 		display: none;
