@@ -1,0 +1,15 @@
+<div style="display: flex;align-items:center;flex-direction:column; flex:1;height: calc( 100vh - 44px );">
+    <div class="ui menu" style="border: 1px solid #e8e8e8;margin-top: auto;margin-bottom: 0;width: 80%;height: 40px">
+        <div class="item" >
+            <i class="ui icon terminal"></i>Live Console
+        </div>
+
+    </div>
+    <div id="logs_console" style="background:#282b2e;width: 80%;height:60vh;overflow-y: scroll;margin-bottom: 2em">
+        <div style="width: 100%;" class="logs_text">
+						<pre  style="width: 100%;line-height: 0.9em;white-space: pre-wrap;color: white;margin: 0"><code id="logs" ></br>{{ logs | raw }}</code>
+							</pre>
+        </div>
+    </div>
+</div>
+{{script_foot | raw }}

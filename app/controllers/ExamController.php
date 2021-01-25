@@ -161,8 +161,17 @@ class ExamController extends ControllerBase{
             console.log(e.data);
             obj=JSON.parse(e.data);
             if("cheat" in obj){
-            var index="#OverseeUserDt-icon-"+obj.user.id;
-            $(index).addClass("exclamation triangle");
+                var index="#OverseeUserDt-icon-"+obj.user.id;
+                $(index).addClass("exclamation triangle");
+                var index2="#OverseeUserDt-tr-"+obj.user.id;
+                $(index2).addClass("red");
+                console.log(obj);
+                if($("#console").val()==1){
+                
+                    $("#logs").append(obj.date+" "+obj.user.firstname+" "+obj.user.lastname+" cheated "+obj.cheat+" time <br>");
+                    hljs.initHighlighting.called = false;
+	                hljs.initHighlighting();
+                }
             }
             if(("idPQ" in obj) && ($("#idUser").val() == obj.user.id)){
              var index="#OverseeUserDt-icon-"+obj.user.id;
@@ -190,9 +199,18 @@ class ExamController extends ControllerBase{
         $("#submitMessage").click(function(event){ws.send(\'{"exam":'.$id.',"id":'.USession::get('activeUser')['id'].',"target":"\'+target+\'","message":"\'+$("textarea[name=message]").val()+\'"}\');$(".cheat").modal("hide");$("textarea[name=message]").val("");event.stopPropagation();});
         
         }
+		$("#logs_console").scrollTop($("#logs_console")[0].scrollHeight);
+		hljs.initHighlighting.called = false;
+	    hljs.initHighlighting();
+
+		
+					
+		
+
+        
         ',true);
         $upTwo = dirname(__DIR__, 2);
-        $logs = fopen($upTwo.'\exam_logs\exam_'.$id.'.log', "r");
+        $logs = fopen($upTwo.'/exam_logs/exam_'.$id.'.log', "r");
         $txtlogs='';
         if ($logs) {
             while (($line = fgets($logs)) !== false) {
@@ -208,7 +226,7 @@ class ExamController extends ControllerBase{
         $countq=count($qcm->getQuestions());
         $this->uiService->usersDataTable($exam);
         $group=DAO::getOne(Group::class,'keyCode=?',false,[$exam->getGroup()]);
-        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'attr'=>'data-ajax']);
+        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'attr'=>'data-ajax','jsCallback'=>'$("#buttonconsole").addClass("active")']);
         $this->jquery->renderView('ExamController/oversee.html',['group'=>$group->getName(),'logs'=>$txtlogs,'countQ'=>$countq]);
     }
 
@@ -217,6 +235,8 @@ class ExamController extends ControllerBase{
      */
     public function ExamOverseeUser($idExam,$idUser){
         $exam = $this->loader->get($idExam);
+        $this->jquery->ajaxOn('click','#buttonconsole',Router::path('exam.console',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'jsCallback'=>'$("#buttonconsole").removeClass("active");hljs.initHighlighting.called = false;
+	                hljs.initHighlighting();$("#logs_console").scrollTop($("#logs_console")[0].scrollHeight);']);
         $countAnswer = DAO::count(Useranswer::class,'idExam = ? AND idUser = ?',[$exam->getId(),$idUser]);
         $this->jquery->ajax('get',Router::path('liveresult.exam',[$idExam,$idUser]),'#answers_accordion');
         $this->jquery->ajaxOn('change','#idNewQ',Router::path('liveresult.correctq',[$idExam,$idUser]),'',[
@@ -241,7 +261,7 @@ class ExamController extends ControllerBase{
     public function ExamOverseeCheatUser($idExam,$idUser){
         $exam = $this->loader->get($idExam);
         $upTwo = dirname(__DIR__, 2);
-        $logs = fopen($upTwo.'\exam_logs\exam_'.$idExam.'.log', "r");
+        $logs = fopen($upTwo.'/exam_logs/exam_'.$idExam.'.log', "r");
         $txtlogs='';
         if ($logs) {
             while (($line = fgets($logs)) !== false) {
@@ -255,6 +275,26 @@ class ExamController extends ControllerBase{
             // error opening the file.
         }
         $this->jquery->renderView('ExamController/cheatuser.html',['idUser'=>$idUser,'logs'=>$txtlogs]);
+    }
+
+    /**
+     * @get('console/{idExam}','name'=>'exam.console')
+     */
+    public function ExamConsole($idExam){
+        $upTwo = dirname(__DIR__, 2);
+        $logs = fopen($upTwo.'/exam_logs/exam_'.$idExam.'.log', "r");
+        $txtlogs='';
+        if ($logs) {
+            while (($line = fgets($logs)) !== false) {
+                $line = explode('`',$line);
+                $txtlogs = $txtlogs.$line[1].'<br>';
+            }
+
+            fclose($logs);
+        } else {
+            // error opening the file.
+        }
+        $this->jquery->renderView('ExamController/console.html',['logs'=>$txtlogs]);
     }
 
     /**

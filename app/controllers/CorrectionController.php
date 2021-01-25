@@ -63,7 +63,7 @@ class CorrectionController extends ControllerBase{
         $qcm = $exam->getQcm();
         $questions = DAO::getManyToMany($qcm,'questions');
         $countQ = count($questions);
-        $userAnswers = DAO::uGetAll(Useranswer::class,'idUser=? and exam.idQcm=?',['question'],[$idUser,$qcm->getId()]);
+        $userAnswers = DAO::uGetAll(Useranswer::class,'idUser=? and exam.idQcm=? and idExam=?',['question'],[$idUser,$qcm->getId(),$idExam]);
         $counUA = count($userAnswers);
         $res = $counUA/$countQ*100;
         $result = $this->correctExam($userAnswers);

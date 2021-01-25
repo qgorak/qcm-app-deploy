@@ -389,7 +389,12 @@ canvas{
 	justify-content: center;
 	align-items: center;
 }
-
+#buttonconsole{
+	display: none;
+}
+#buttonconsole.active {
+	display: block;
+}
 
 .top_trainer_right.ui.menu .item:before {
 	background: none;

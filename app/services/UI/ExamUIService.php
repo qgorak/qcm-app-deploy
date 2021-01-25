@@ -57,10 +57,11 @@ class ExamUIService {
             'avatar',
             'firstname',
             'lastname',
+            'info',
         ]);
     //    $dt->fieldAsLabel('status',null,['class'=>'ui grey empty circular label']);
         $dt->fieldAsAvatar('avatar');
-        $dt->fieldAsIcon('warning');
+        $dt->fieldAsIcon('info');
         $dt->setValueFunction('msg',function($v,$e){return new HtmlButton('msg-'.$e->getId(),'send',null,'
         sendMessage('.$e->getId().');
         $(".user").html("'.$e->getFirstname().' '.$e->getLastname().'");
