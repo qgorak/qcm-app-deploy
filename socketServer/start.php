@@ -45,6 +45,7 @@ $ws_worker->onMessage = function($connection, $data) use ($ws_worker){
         }
     }
     if(isset($dataArray->target,$dataArray->cheat)){
+        file_put_contents('../exam_logs/exam_'.$dataArray->exam.'.log', $dataArray->user->id.'`'.date('Y-m-d H:i:s').' '.$dataArray->user->firstname.' '.$dataArray->user->lastname.' cheated '.$dataArray->cheat.'time'.PHP_EOL, FILE_APPEND);
         if(isset($ws_worker->exams[$dataArray->exam]['users'][$dataArray->target])){
             $id=$ws_worker->exams[$dataArray->exam]['users'][$dataArray->target];
             $connection=$ws_worker->connections[$id];

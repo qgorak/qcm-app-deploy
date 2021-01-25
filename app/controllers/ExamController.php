@@ -191,13 +191,25 @@ class ExamController extends ControllerBase{
         
         }
         ',true);
+        $upTwo = dirname(__DIR__, 2);
+        $logs = fopen($upTwo.'\exam_logs\exam_'.$id.'.log', "r");
+        $txtlogs='';
+        if ($logs) {
+            while (($line = fgets($logs)) !== false) {
+                $line = explode('`',$line);
+                $txtlogs = $txtlogs.$line[1].'<br>';
+            }
 
+            fclose($logs);
+        } else {
+            // error opening the file.
+        }
         $qcm = DAO::getById(Qcm::class,$qcm->getId(),true);
         $countq=count($qcm->getQuestions());
         $this->uiService->usersDataTable($exam);
         $group=DAO::getOne(Group::class,'keyCode=?',false,[$exam->getGroup()]);
         $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'attr'=>'data-ajax']);
-        $this->jquery->renderView('ExamController/oversee.html',['group'=>$group->getName(),'countQ'=>$countq]);
+        $this->jquery->renderView('ExamController/oversee.html',['group'=>$group->getName(),'logs'=>$txtlogs,'countQ'=>$countq]);
     }
 
     /**
@@ -219,7 +231,30 @@ class ExamController extends ControllerBase{
                              };',
             'attr'=>'value'
         ]);
+        $this->jquery->ajaxOnClick('#cheat_tab',Router::path('exam.overseecheatuser',[$idExam,$idUser]),'#response-cheat');
         $this->jquery->renderView('ExamController/overseeuser.html',['idUser'=>$idUser,'countUA'=>$countAnswer]);
+    }
+
+    /**
+     * @get('overseecheatuser/{idExam}/{idUser}','name'=>'exam.overseecheatuser')
+     */
+    public function ExamOverseeCheatUser($idExam,$idUser){
+        $exam = $this->loader->get($idExam);
+        $upTwo = dirname(__DIR__, 2);
+        $logs = fopen($upTwo.'\exam_logs\exam_'.$idExam.'.log', "r");
+        $txtlogs='';
+        if ($logs) {
+            while (($line = fgets($logs)) !== false) {
+                $line = explode('`',$line);
+                if($line[0]==$idUser){
+                    $txtlogs = $txtlogs.$line[1].'<br>';
+                }
+            }
+            fclose($logs);
+        } else {
+            // error opening the file.
+        }
+        $this->jquery->renderView('ExamController/cheatuser.html',['idUser'=>$idUser,'logs'=>$txtlogs]);
     }
 
     /**

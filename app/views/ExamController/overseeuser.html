@@ -2,7 +2,7 @@
     <div class="ui top attached tabular menu">
         <a class="item active" data-tab="first"><i class="ui eye outline icon"></i>Real-time Answers</a>
         <a class="item" data-tab="second"><i class="ui comments outline icon"></i> Messages </a>
-        <a class="item" data-tab="third"><i class="ui shield alternate icon"></i>Anti-cheat</a>
+        <a class="item"  id="cheat_tab" data-tab="third"><i class="ui shield alternate icon"></i>Anti-cheat</a>
     </div>
     <div class="ui bottom attached tab segment" data-tab="first">
         <div id="answers_accordion">
@@ -10,11 +10,13 @@
             dffsdf
         </div>
     </div>
-    <div class="ui bottom attached tab segment" data-tab="second">
+    <div class="ui bottom attached tab segment" id="messages_tab" data-tab="second">
         Second
     </div>
-    <div class="ui bottom attached tab segment active" data-tab="third">
-        Third
+    <div class="ui bottom attached tab segment active"data-tab="third">
+        <div id="response-cheat">
+
+        </div>
     </div>
 </div>
 <input id="idNewQ" type="hidden" value=0>
