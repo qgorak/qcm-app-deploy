@@ -11,7 +11,15 @@
         </div>
     </div>
     <div class="ui bottom attached tab segment" id="messages_tab" data-tab="second">
-        Second
+        <div id="messages_box">
+        {% for message in messages %}
+
+                <div class="ui segment">{{ message.content }}</div>
+
+        {% endfor %}
+        </div>
+        <input id="message" type="text">
+        <div id="post_message" class="ui button">Post</div>
     </div>
     <div class="ui bottom attached tab segment active"data-tab="third">
         <div id="response-cheat">

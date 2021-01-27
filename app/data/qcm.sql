@@ -119,6 +119,25 @@ CREATE TABLE `user` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `message`
+--
+
+CREATE TABLE `message` (
+  `id` int(11) NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `idTarget` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `idExam` int(11) DEFAULT NULL,
+  `seen` int(1) DEFAULT 0,
+  `cdate` datetime DEFAULT current_timestamp(),
+    CONSTRAINT `fk_message_user` FOREIGN KEY (`idUser`) REFERENCES `user`(`id`),
+    CONSTRAINT `fk_message_target` FOREIGN KEY (`idTarget`) REFERENCES `user`(`id`),
+    CONSTRAINT `fk_message_exam` FOREIGN KEY (`idExam`) REFERENCES `exam`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `useranswer`
 --
 
@@ -151,6 +170,15 @@ CREATE TABLE `usergroup` (
 ALTER TABLE `answer`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idQuestion` (`idQuestion`);
+
+--
+-- Index pour la table `message`
+--
+ALTER TABLE `message`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idUser` (`idUser`),
+  ADD KEY `idTarget` (`idTarget`),
+  ADD KEY `idUser` (`idExam`);
 
 --
 -- Index pour la table `exam`
@@ -235,6 +263,12 @@ ALTER TABLE `usergroup`
 -- AUTO_INCREMENT pour la table `answer`
 --
 ALTER TABLE `answer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `message`
+--
+ALTER TABLE `message`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -343,3 +377,5 @@ ALTER TABLE `usergroup`
   ADD CONSTRAINT `fk_usergroup_group` FOREIGN KEY (`idGroup`) REFERENCES `group` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_usergroup_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 COMMIT;
+
+

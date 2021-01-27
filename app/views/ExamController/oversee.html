@@ -8,16 +8,19 @@
 						<div class='resizer bottom-left'></div>
 						<div class='resizer bottom-right'></div>
 
-						<div id="console_bar" class="ui menu" style=" cursor: move;width:650px;border: 1px solid #e8e8e8;margin-top: auto;margin-bottom: 0;height: 40px">
-							<div class="item">
-								<div id="btn_reduce" style="position: relative" class="ui icon circular orange button"> <i style="position: absolute;top: 5px;width: .5em;left: 5px;" class="minus icon"></i></div>
-							</div>
-							<div class="item" >
-								<i class="ui icon terminal"></i>Live Console
+						<div id="console_bar" class="ui menu">
+							<div style="display: flex;justify-content: space-between;width: 100%;align-items: center;padding-right: 1em;" >
+								<div id="btn_reduce"  > <i class="minus icon"></i></div>
+								<div style="">
+								Live Console
+								</div>
+								<div>
+
+								</div>
 							</div>
 
 						</div>
-						<div id="logs_console" style="background:#282b2e;width:650px;height:410px;overflow-y: scroll;margin-bottom: 2em">
+						<div id="logs_console" >
 							<div style="width: 100%;" class="logs_text">
 						<pre  style="width: 100%;line-height: 0.9em;white-space: pre-wrap;color: white;margin: 0"><code id="logs" ></br>{{ logs | raw }}</code>
 							</pre>

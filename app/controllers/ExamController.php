@@ -1,6 +1,7 @@
 <?php
 namespace controllers;
 
+use models\Message;
 use models\Question;
 use models\User;
 use Ubiquity\controllers\Router;
@@ -197,13 +198,14 @@ class ExamController extends ControllerBase{
         };
         $("#cancelMessage").click(function(){$(".cheat").modal("hide");});
         function sendMessage(target){
-        $( "#submitMessage" ).unbind( "click" );
+
         $("#submitMessage").click(function(event){ws.send(\'{"exam":'.$id.',"id":'.USession::get('activeUser')['id'].',"target":"\'+target+\'","message":"\'+$("textarea[name=message]").val()+\'"}\');$(".cheat").modal("hide");$("textarea[name=message]").val("");event.stopPropagation();});
         
         }
 		$("#logs_console").scrollTop($("#logs_console")[0].scrollHeight);
 		hljs.initHighlighting.called = false;
 	    hljs.initHighlighting();
+	     $("#submitMessage").click(function(event){ws.send(\'{"id":'.USession::get('activeUser')['id'].',"exam":'.$id.',"target":"\'+$("#idUser").val()+\'","message":"\'+$("#message").val()+\'"}\');});
 
 		
 					
@@ -254,8 +256,13 @@ class ExamController extends ControllerBase{
                              };',
             'attr'=>'value'
         ]);
+        $messages = DAO::getAll(Message::class,'(idUser=? and idTarget=?) or (idUser=? and idTarget=?) and idExam=?',false,[USession::get('activeUser')['id'],$idUser,$idUser,USession::get('activeUser')['id'],$idExam]);
+        $this->jquery->postOnClick('#post_message',Router::path('message.exam.post'),'{ message: $("#message").val(), target:'.$idUser.',exam:'.$idExam.' }','',[
+            'jsCallback'=>'$( "#submitMessage" ).trigger( "click" );$(\'#messages_box\').append(\'<div class="ui segment">\'+$("#message").val()+\'</div>\');
+                            $("#message").val("");'
+        ]);
         $this->jquery->ajaxOnClick('#cheat_tab',Router::path('exam.overseecheatuser',[$idExam,$idUser]),'#response-cheat');
-        $this->jquery->renderView('ExamController/overseeuser.html',['idUser'=>$idUser,'countUA'=>$countAnswer]);
+        $this->jquery->renderView('ExamController/overseeuser.html',['idUser'=>$idUser,'countUA'=>$countAnswer,'messages'=>$messages]);
     }
 
     /**

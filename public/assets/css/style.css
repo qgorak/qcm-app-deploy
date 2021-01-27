@@ -392,10 +392,55 @@ canvas{
 #buttonconsole{
 	display: none;
 }
+#console_window{
+
+}
+#btn_reduce{
+	height: 14px;
+	width: 14px;
+	margin-left: 14px;
+	background-color: #fccc08;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+#btn_reduce i{
+	margin-left: 4px;
+	margin-top: 1px;
+	font-size: 0.7em;
+	display: none;
+	color:#9e5d03;
+
+}
+#btn_reduce:hover i{
+
+	display: block;
+
+
+}
+#console_bar{
+	border-radius: 10px 10px 0 0;
+	cursor: move;
+	width:650px;
+	border: 1px solid #e8e8e8;
+	margin-top: auto;
+	margin-bottom: 0;
+	min-height: 26px;
+	height: 26px;
+}
 #buttonconsole.active {
 	display: block;
 }
-
+#logs_console{
+	border-radius: 0 0 10px 10px;
+	background:#282b2e;
+	width:650px;
+	height:410px;
+	overflow-y: scroll;
+	margin-bottom: 2em;
+}
 .top_trainer_right.ui.menu .item:before {
 	background: none;
 }
@@ -406,7 +451,6 @@ canvas{
 }
 
 .resizable {
-	background: white;
 	width: 100px;
 	height: 100px;
 	position: absolute;
@@ -441,12 +485,12 @@ canvas{
 }
 .resizable .resizers .resizer.bottom-left {
 	left: -5px;
-	bottom: -5px;
+	bottom: 10px;
 	cursor: nesw-resize;
 }
 .resizable .resizers .resizer.bottom-right {
 	right: -5px;
-	bottom: -5px;
+	bottom: 10px;
 	cursor: nwse-resize;
 }
 @media only screen and (max-width: 1200px) {
