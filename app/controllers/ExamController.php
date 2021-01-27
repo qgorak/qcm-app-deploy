@@ -149,7 +149,9 @@ class ExamController extends ControllerBase{
     public function ExamOverseePage($id){
         $exam = $this->loader->get($id);
         $qcm = $exam->getQcm();
+
         $idOwner = $qcm->getUser();
+        $this->jquery->exec('createTimer('.\intval(\strtotime($exam->getDatef())-\strtotime(\date("Y-m-d H:i:s"))).',"#timer-exam","'.Router::path('exam.get',[$id]).'")',true);
         $this->jquery->exec('
         var obj;var count=0;
         var ws = new WebSocket("ws:/127.0.0.1:2346");
@@ -209,6 +211,7 @@ class ExamController extends ControllerBase{
 
         
         ',true);
+        $this->jquery->execOn('click','#btn_reduce','console.log($("#deck").position());$("#console_window").addClass("reduced");$("#console_window").animate({ left:$("#deck").position().left+220 ,top:$("#deck").position().top});setTimeout(function() {$("#buttonconsole").addClass("active");}, 450);');
         $upTwo = dirname(__DIR__, 2);
         $logs = fopen($upTwo.'/exam_logs/exam_'.$id.'.log', "r");
         $txtlogs='';
@@ -226,8 +229,10 @@ class ExamController extends ControllerBase{
         $countq=count($qcm->getQuestions());
         $this->uiService->usersDataTable($exam);
         $group=DAO::getOne(Group::class,'keyCode=?',false,[$exam->getGroup()]);
-        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'attr'=>'data-ajax','jsCallback'=>'$("#buttonconsole").addClass("active")']);
+        $this->jquery->execOn('click','#buttonconsole','rightmenu = document.getElementById("right_menu");$("#console_window").removeClass("reduced");$("#console_window").animate({ left: (window.innerWidth / 2)-($("#console_window").width()/2)-rightmenu.offsetWidth ,top:(window.innerHeight / 2)-$("#console_window").height()/2});$("#buttonconsole").removeClass("active");');
+        $this->jquery->ajaxOn('click','._element',Router::path('exam.overseeuser',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'attr'=>'data-ajax']);
         $this->jquery->renderView('ExamController/oversee.html',['group'=>$group->getName(),'logs'=>$txtlogs,'countQ'=>$countq]);
+
     }
 
     /**
@@ -235,8 +240,6 @@ class ExamController extends ControllerBase{
      */
     public function ExamOverseeUser($idExam,$idUser){
         $exam = $this->loader->get($idExam);
-        $this->jquery->ajaxOn('click','#buttonconsole',Router::path('exam.console',[$exam->getId()]),'#response-overseeuser',['hasLoader'=>false,'jsCallback'=>'$("#buttonconsole").removeClass("active");hljs.initHighlighting.called = false;
-	                hljs.initHighlighting();$("#logs_console").scrollTop($("#logs_console")[0].scrollHeight);']);
         $countAnswer = DAO::count(Useranswer::class,'idExam = ? AND idUser = ?',[$exam->getId(),$idUser]);
         $this->jquery->ajax('get',Router::path('liveresult.exam',[$idExam,$idUser]),'#answers_accordion');
         $this->jquery->ajaxOn('change','#idNewQ',Router::path('liveresult.correctq',[$idExam,$idUser]),'',[

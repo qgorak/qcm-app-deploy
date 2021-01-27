@@ -1,24 +1,36 @@
 
 		    <div style="display: flex">
-				<div id="response-overseeuser" style="width: calc( 100% - 235px )!important;">
-					<div style="display: flex;align-items:center;flex-direction:column; flex:1;height: calc( 100vh - 44px );">
-						<div class="ui menu" style="border: 1px solid #e8e8e8;margin-top: auto;margin-bottom: 0;width: 80%;height: 40px">
+				<div id="timer-exam" class="ui big circle label" style="position:absolute;z-index: 3"></div>
+				<div id="console_window" class="resizable" style="transition: transform 0.5s;transform-origin: left top;z-index:3;position: absolute;display: flex;align-items:center;flex-direction:column; flex:1;width:650px;height: 450px;">
+					<div class='resizers'>
+						<div class='resizer top-left'></div>
+						<div class='resizer top-right'></div>
+						<div class='resizer bottom-left'></div>
+						<div class='resizer bottom-right'></div>
+
+						<div id="console_bar" class="ui menu" style=" cursor: move;width:650px;border: 1px solid #e8e8e8;margin-top: auto;margin-bottom: 0;height: 40px">
+							<div class="item">
+								<div id="btn_reduce" style="position: relative" class="ui icon circular orange button"> <i style="position: absolute;top: 5px;width: .5em;left: 5px;" class="minus icon"></i></div>
+							</div>
 							<div class="item" >
 								<i class="ui icon terminal"></i>Live Console
 							</div>
 
-							</div>
-						<div id="logs_console" style="background:#282b2e;width: 80%;height:60vh;overflow-y: scroll;margin-bottom: 2em">
-						<div style="width: 100%;" class="logs_text">
+						</div>
+						<div id="logs_console" style="background:#282b2e;width:650px;height:410px;overflow-y: scroll;margin-bottom: 2em">
+							<div style="width: 100%;" class="logs_text">
 						<pre  style="width: 100%;line-height: 0.9em;white-space: pre-wrap;color: white;margin: 0"><code id="logs" ></br>{{ logs | raw }}</code>
 							</pre>
+							</div>
 						</div>
 					</div>
-					</div>
+				</div>
+				<div id="response-overseeuser" style="margin-top:2em;width: calc( 100% - 235px )!important;">
+
 				</div>
 
 		    	<div style="display: flex;width: 235px">
-					<div class="deck" style="margin: 0;width: 235px;border: 1px solid #dededf">
+					<div id="deck" class="deck" style="margin: 0;width: 235px;border: 1px solid #dededf">
 						<div id="buttonconsole" class="ui inverted segment" style="margin: 0;">
 							<button class="ui inverted black button"><i class="terminal icon"></i>Global console</button>
 						</div>
@@ -78,5 +90,150 @@
 	}
 
 </style>
+<script>
+	dragElement(document.getElementById("console_bar"));
 
+	function dragElement(elmnt) {
+		var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+		if (document.getElementById(elmnt.id + "header")) {
+			// if present, the header is where you move the DIV from:
+			document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+		} else {
+			// otherwise, move the DIV from anywhere inside the DIV:
+			elmnt.onmousedown = dragMouseDown;
+		}
+
+		function dragMouseDown(e) {
+			e = e || window.event;
+			e.preventDefault();
+			// get the mouse cursor position at startup:
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			console.log(e);
+			document.onmouseup = closeDragElement;
+			// call a function whenever the cursor moves:
+			document.onmousemove = elementDrag;
+		}
+
+		function elementDrag(e) {
+			e = e || window.event;
+			e.preventDefault();
+			// calculate the new cursor position:
+			pos1 = pos3 - e.clientX;
+			pos2 = pos4 - e.clientY;
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			test = document.getElementById("console_window")
+			// set the element's new position:
+			console.log(elmnt)
+		//	if(elmnt.offsetTop - pos2 > -300 && elmnt.offsetTop - pos2 < 50){
+			test.style.top = (test.offsetTop - pos2) + "px";
+		//	}
+			test.style.left = (test.offsetLeft - pos1) + "px";
+
+		}
+
+		function closeDragElement() {
+			// stop moving when mouse button is released:
+			document.onmouseup = null;
+			document.onmousemove = null;
+		}
+	}
+	/*Make resizable div by Hung Nguyen*/
+	function makeResizableDiv(div) {
+		const element = document.querySelector(div);
+		const resizers = document.querySelectorAll(div + ' .resizer')
+		const minimum_size = 20;
+		let original_width = 0;
+		let original_height = 0;
+		let original_x = 0;
+		let original_y = 0;
+		let original_mouse_x = 0;
+		let original_mouse_y = 0;
+		for (let i = 0;i < resizers.length; i++) {
+			const currentResizer = resizers[i];
+			currentResizer.addEventListener('mousedown', function(e) {
+				e.preventDefault()
+				original_width = parseFloat(getComputedStyle(element, null).getPropertyValue('width').replace('px', ''));
+				original_height = parseFloat(getComputedStyle(element, null).getPropertyValue('height').replace('px', ''));
+				original_x = element.getBoundingClientRect().left;
+				original_y = element.getBoundingClientRect().top;
+				original_mouse_x = e.pageX;
+				original_mouse_y = e.pageY;
+				window.addEventListener('mousemove', resize)
+				window.addEventListener('mouseup', stopResize)
+			})
+
+			function resize(e) {
+				logs = document.getElementById("logs_console")
+				menu = document.getElementById("console_bar")
+				rightmenu = document.getElementById("right_menu")
+				if (currentResizer.classList.contains('bottom-right')) {
+					const width = original_width + (e.pageX - original_mouse_x);
+					const height = original_height + (e.pageY - original_mouse_y)
+					if (width > minimum_size) {
+						logs.style.width = width + 'px';
+						menu.style.width = width + 'px';
+						element.style.width = width + 'px';
+					}
+					if (height > minimum_size) {
+						element.style.height = height+4 + 'px';
+						logs.style.height = height-40 + 'px';
+					}
+				}
+				else if (currentResizer.classList.contains('bottom-left')) {
+					const height = original_height + (e.pageY - original_mouse_y)
+
+					const width = original_width - (e.pageX - original_mouse_x)
+					console.log(rightmenu.offsetWidth);
+					if (height > minimum_size) {
+						element.style.height = height + 'px';
+						logs.style.height = height-40 + 'px';
+					}
+					if (width > minimum_size) {
+						logs.style.width = width + 'px';
+						menu.style.width = width + 'px';
+						element.style.width = width + 'px';
+						element.style.left = original_x + (e.pageX - original_mouse_x) - rightmenu.offsetWidth + 'px'
+					}
+				}
+				else if (currentResizer.classList.contains('top-right')) {
+					const width = original_width + (e.pageX - original_mouse_x)
+					const height = original_height - (e.pageY - original_mouse_y)
+					if (width > minimum_size) {
+						logs.style.width = width + 'px';
+						menu.style.width = width + 'px';
+						element.style.width = width + 'px';
+					}
+					if (height > minimum_size) {
+						logs.style.height = height-40 + 'px';
+						element.style.height = height + 'px';
+						element.style.top = e.pageY-20 + 'px';
+					}
+				}
+				else {
+					const width = original_width - (e.pageX - original_mouse_x)
+					const height = original_height - (e.pageY - original_mouse_y)
+					if (width > minimum_size) {
+						element.style.width = width + 'px';
+						menu.style.width = width + 'px';
+						logs.style.width = width + 'px';
+						element.style.left = original_x + (e.pageX - original_mouse_x)-rightmenu.offsetWidth + 'px'
+					}
+					if (height > minimum_size) {
+						logs.style.height = height-40 + 'px'
+						element.style.height = height + 'px'
+						element.style.top = original_y + (e.pageY - original_mouse_y)-20 + 'px'
+					}
+				}
+			}
+
+			function stopResize() {
+				window.removeEventListener('mousemove', resize)
+			}
+		}
+	}
+
+	makeResizableDiv('.resizable')
+</script>
 {{script_foot | raw }}
