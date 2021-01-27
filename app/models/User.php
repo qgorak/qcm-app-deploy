@@ -50,7 +50,7 @@ class User{
 	private $language;
 
 	/**
-	 * @column("name"=>"confirmed","dbType"=>"text")
+	 * @column("name"=>"confirmed","dbType"=>"int(11)")
 	 * @validator("type"=>"notNull")
 	 */
 	private $confirmed;
@@ -59,6 +59,16 @@ class User{
 	 * @oneToMany("mappedBy"=>"user","className"=>"models\\Group")
 	 */
 	private $groups;
+
+	/**
+	 * @oneToMany("mappedBy"=>"user","className"=>"models\\Message")
+	 */
+	private $messages;
+
+	/**
+	 * @oneToMany("mappedBy"=>"user","className"=>"models\\Message")
+	 */
+	private $idUsers;
 
 	/**
 	 * @oneToMany("mappedBy"=>"user","className"=>"models\\Qcm")
@@ -159,6 +169,30 @@ class User{
 
 	 public function addGroup($group){
 		$this->groups[]=$group;
+	}
+
+	public function getMessages(){
+		return $this->messages;
+	}
+
+	public function setMessages($messages){
+		$this->messages=$messages;
+	}
+
+	 public function addMessage($message){
+		$this->messages[]=$message;
+	}
+
+	public function getIdUsers(){
+		return $this->idUsers;
+	}
+
+	public function setIdUsers($idUsers){
+		$this->idUsers=$idUsers;
+	}
+
+	 public function addIdUser($idUser){
+		$this->idUsers[]=$idUser;
 	}
 
 	public function getQcms(){
