@@ -12,9 +12,31 @@
     </div>
     <div class="ui bottom attached tab segment" id="messages_tab" data-tab="second">
         <div id="messages_box">
+            <div class="yours message">
+                <div class="ui segment messagecontent ">
+                    reçu
+                </div>
+                <div class="messagecdate">
+                    2021-01-27 22:30:22
+                </div>
+
+            </div>
         {% for message in messages %}
 
-                <div class="ui segment">{{ message.content }}</div>
+            {% if message.idUser == user.id %}
+            <div class="mine message">
+            <div class="ui segment messagecontent ">
+                {{ message.content }}
+            </div>
+                <div class="messagecdate">
+                    {{ message.cdate }}
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
 
         {% endfor %}
         </div>

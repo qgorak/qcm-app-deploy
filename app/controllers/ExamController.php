@@ -258,7 +258,7 @@ class ExamController extends ControllerBase{
         ]);
         $messages = DAO::getAll(Message::class,'(idUser=? and idTarget=?) or (idUser=? and idTarget=?) and idExam=?',false,[USession::get('activeUser')['id'],$idUser,$idUser,USession::get('activeUser')['id'],$idExam]);
         $this->jquery->postOnClick('#post_message',Router::path('message.exam.post'),'{ message: $("#message").val(), target:'.$idUser.',exam:'.$idExam.' }','',[
-            'jsCallback'=>'$( "#submitMessage" ).trigger( "click" );$(\'#messages_box\').append(\'<div class="ui segment">\'+$("#message").val()+\'</div>\');
+            'jsCallback'=>'$( "#submitMessage" ).trigger( "click" );$(\'#messages_box\').append(\'<div class="mine message"><div class="mine message"><div class="ui segment messagecontent ">\'+$("#message").val()+\'</div><div class="messagecdate">0000-00-00</div></div>\');
                             $("#message").val("");'
         ]);
         $this->jquery->ajaxOnClick('#cheat_tab',Router::path('exam.overseecheatuser',[$idExam,$idUser]),'#response-cheat');

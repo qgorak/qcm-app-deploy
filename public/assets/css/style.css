@@ -493,6 +493,31 @@ canvas{
 	bottom: 10px;
 	cursor: nwse-resize;
 }
+
+#messages_box{
+	display: flex;
+	flex-direction: column;
+}
+.message{
+	display: flex;
+	flex-direction: column;
+	max-width: 65%;
+	min-width: 100px;
+}
+.messagecontent{
+	margin:0!important;
+}
+.messagecdate{
+	color:grey;
+	margin-bottom: 1em;
+}
+.mine.message{
+	margin-left: auto;
+}
+.yours.message{
+	margin-right: auto;
+}
+
 @media only screen and (max-width: 1200px) {
 	#avatar{
 		display: none;
