@@ -157,7 +157,7 @@ class ExamController extends ControllerBase{
         var obj;var count=0;
         var ws = new WebSocket("ws:/127.0.0.1:2346");
         ws.onopen=function(){
-            ws.send(\'{"exam":'.$id.',"idOwner":'.$idOwner.',"id":'.USession::get('activeUser')['id'].'}\');
+            ws.send(\'{"exam":'.$id.',"idOwner":'.$idOwner.',"user":'.\json_encode(USession::get('activeUser')).'}\');
             ws.send(\'{"exam":'.$id.',"id":'.USession::get('activeUser')['id'].',"action":"getuser"}\');
         };
         ws.onmessage = function(e) {
@@ -194,6 +194,16 @@ class ExamController extends ControllerBase{
                         $("#"+y+" .status").attr("class","status ui grey empty circular label");
                     }
                 })
+            }
+            if("logged" in obj){
+                    $("#logs").append(obj.date+" "+obj.logged.firstname+" "+obj.logged.lastname+" joined the exam <br>");
+                    hljs.initHighlighting.called = false;
+	                hljs.initHighlighting();
+            }
+             if("left" in obj){
+                    $("#logs").append(obj.date+" "+obj.left.firstname+" "+obj.left.lastname+" left the exam <br>");
+                    hljs.initHighlighting.called = false;
+	                hljs.initHighlighting();
             }
         };
         $("#cancelMessage").click(function(){$(".cheat").modal("hide");});

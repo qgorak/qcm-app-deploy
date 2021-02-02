@@ -63,10 +63,12 @@ class inExamController extends ControllerBase{
         ]);
         $bt=$this->jquery->semantic()->htmlButton('btNext','next');
         $bt->addToProperty('style', 'display:none;');
-        $this->jquery->exec('var count=0;
+        $this->jquery->exec('
+        $(".ui.sidebar").sidebar("setting", "transition", "overlay");
+        var count=0;
         var ws = new WebSocket("ws:/127.0.0.1:2346");
         ws.onopen=function(){
-            ws.send(\'{"exam":'.$id.',"idOwner":'.$qcm->getUser().',"id":'.USession::get('activeUser')['id'].'}\');
+            ws.send(\'{"exam":'.$id.',"idOwner":'.$qcm->getUser().',"user":'.\json_encode(USession::get('activeUser')).'}\');
         };
         $(window).on("blur focus", function (e) {
         var prevType = $(this).data("prevType");
@@ -96,6 +98,7 @@ class inExamController extends ControllerBase{
             'before'=>'idPQ = $( "#IdQ" ).val();',
             'jsCallback'=>'$( "#IdPQ" ).val(idPQ);$("#IdPQ").trigger("change");'
         ]);
+        $this->jquery->execOn('click','#test','$(".ui.sidebar").sidebar("toggle");');
         $this->jquery->renderView('ExamController/exam.html',['name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
     }
 
