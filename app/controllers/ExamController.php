@@ -207,15 +207,11 @@ class ExamController extends ControllerBase{
             }
         };
         $("#cancelMessage").click(function(){$(".cheat").modal("hide");});
-        function sendMessage(target){
-
-        $("#submitMessage").click(function(event){ws.send(\'{"exam":'.$id.',"id":'.USession::get('activeUser')['id'].',"target":"\'+target+\'","message":"\'+$("textarea[name=message]").val()+\'"}\');$(".cheat").modal("hide");$("textarea[name=message]").val("");event.stopPropagation();});
-        
-        }
+   
 		$("#logs_console").scrollTop($("#logs_console")[0].scrollHeight);
 		hljs.initHighlighting.called = false;
 	    hljs.initHighlighting();
-	     $("#submitMessage").click(function(event){ws.send(\'{"id":'.USession::get('activeUser')['id'].',"exam":'.$id.',"target":"\'+$("#idUser").val()+\'","message":"\'+$("#message").val()+\'"}\');});
+	     $("#submitMessage").click(function(event){ws.send(\'{"id":'.USession::get('activeUser')['id'].',"exam":'.$id.',"target":"\'+$("#idUser").val()+\'","message":"\'+$("#message_pr").val()+\'"}\');});
 
 		
 					
@@ -266,11 +262,11 @@ class ExamController extends ControllerBase{
                              };',
             'attr'=>'value'
         ]);
-        $messages = DAO::getAll(Message::class,'(idUser=? and idTarget=?) or (idUser=? and idTarget=?) and idExam=?',false,[USession::get('activeUser')['id'],$idUser,$idUser,USession::get('activeUser')['id'],$idExam]);
-        $this->jquery->postOnClick('#post_message',Router::path('message.exam.post'),'{ message: $("#message").val(), target:'.$idUser.',exam:'.$idExam.' }','',[
-            'jsCallback'=>'$( "#submitMessage" ).trigger( "click" );$(\'#messages_box\').append(\'<div class="mine message"><div class="mine message"><div class="ui segment messagecontent ">\'+$("#message").val()+\'</div><div class="messagecdate">0000-00-00</div></div>\');
-                            $("#message").val("");'
+        $this->jquery->postOnClick('#post_message_2',Router::path('message.exam.post'),'{ message: $("#message_pr").val(), target:'.$idUser.',exam:'.USession::get('activeUser')['id'].' }','',[
+            'jsCallback'=>'$( "#submitMessage" ).trigger( "click" );$(\'#messages_box_pr\').append(\'<div class="mine message"><div class="mine message"><div class="ui segment messagecontent ">\'+$("#message_pr").val()+\'</div><div class="messagecdate">0000-00-00</div></div>\');
+                            $("#message_pr").val("");'
         ]);
+        $messages = DAO::getAll(Message::class,'(idUser=? and idTarget=?) or (idUser=? and idTarget=?) and idExam=?',true,[USession::get('activeUser')['id'],$idUser,$idUser,USession::get('activeUser')['id'],$idExam]);
         $this->jquery->ajaxOnClick('#cheat_tab',Router::path('exam.overseecheatuser',[$idExam,$idUser]),'#response-cheat');
         $this->jquery->renderView('ExamController/overseeuser.html',['idUser'=>$idUser,'countUA'=>$countAnswer,'messages'=>$messages]);
     }

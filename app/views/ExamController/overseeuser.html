@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="ui bottom attached tab segment" id="messages_tab" data-tab="second">
-        <div id="messages_box">
+        <div id="messages_box_pr">
             <div class="yours message">
                 <div class="ui segment messagecontent ">
                     reçu
@@ -22,8 +22,7 @@
 
             </div>
         {% for message in messages %}
-
-            {% if message.idUser == user.id %}
+            {% if message.user.id == idUser %}
             <div class="mine message">
             <div class="ui segment messagecontent ">
                 {{ message.content }}
@@ -33,15 +32,22 @@
                 </div>
 
             </div>
+            {% else %}
+            <div class="yours message">
+                <div class="ui segment messagecontent ">
+                    {{ message.content }}
+                </div>
+                <div class="messagecdate">
+                    {{ message.cdate }}
+                </div>
+            </div>
 
             {% endif %}
 
-
-
         {% endfor %}
         </div>
-        <input id="message" type="text">
-        <div id="post_message" class="ui button">Post</div>
+        <input id="message_pr" type="text">
+        <div id="post_message_2" class="ui button">Post</div>
     </div>
     <div class="ui bottom attached tab segment active"data-tab="third">
         <div id="response-cheat">
