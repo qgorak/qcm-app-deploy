@@ -84,13 +84,13 @@ class inExamController extends ControllerBase{
             idPQ = $( "#IdPQ" ).val();
             ws.send(\'{"exam":'.$id.',"user":'.\json_encode(USession::get('activeUser')).',"target":'.$target.',"idPQ": \'+idPQ+\'}\');
         });
-        $("#submitMessage").click(function(event){ws.send(\'{"id":'.USession::get('activeUser')['id'].',"exam":'.$id.',"target":'.$target.',"message":"\'+$("#message").val()+\'"}\');});
+        $("#submitMessage2").click(function(event){ws.send(\'{"id":'.USession::get('activeUser')['id'].',"exam":'.$id.',"target":'.$target.',"message":"\'+$("#message").val()+\'"}\');});
         $("#next").click(function(event){ws.send(\'{"exam":'.$id.',"id":'.USession::get('activeUser')['id'].',"target":"\'+target+\'","message":"\'+$("textarea[name=message]").val()+\'"}\');$(".cheat").modal("hide");$("textarea[name=message]").val("");event.stopPropagation();});
         ws.onmessage = function(e) {
             console.log(e.data);
            var obj=JSON.parse(e.data);
            if("message" in obj){
-            alert(obj.message);
+           $(\'#messages_box\').append(\'<div class="yours message"><div class="ui segment messagecontent ">\'+obj.message+\'</div><div class="messagecdate">\'+obj.cdate+\'</div>\');
            }
         };',true);
         $this->jquery->postFormOnClick("#btNext", Router::path('exam.next'), 'frmUserAnswer','#response',[
@@ -100,8 +100,9 @@ class inExamController extends ControllerBase{
             'jsCallback'=>'$( "#IdPQ" ).val(idPQ);$("#IdPQ").trigger("change");'
         ]);
         $this->jquery->postOnClick('#post_message',Router::path('message.exam.post'),'{ message: $("#message").val(), target:'.$target.',exam:'.$id.' }','',[
-            'jsCallback'=>'$( "#submitMessage" ).trigger( "click" );$(\'#messages_box\').append(\'<div class="mine message"><div class="mine message"><div class="ui segment messagecontent ">\'+$("#message").val()+\'</div><div class="messagecdate">0000-00-00</div></div>\');
-                            $("#message").val("");'
+            'jsCallback'=>'$( "#submitMessage2" ).trigger( "click" );$(\'#messages_box\').append(\'<div class="mine message"><div class="mine message"><div class="ui segment messagecontent ">\'+$("#message").val()+\'</div><div class="messagecdate">0000-00-00</div></div>\');
+                            $("#message").val("");',
+
         ]);
         $this->jquery->execOn('click','#test','$(".ui.sidebar").sidebar("toggle");');
         $this->jquery->renderView('ExamController/exam.html',['idUser'=>USession::get('activeUser')['id'],'name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);

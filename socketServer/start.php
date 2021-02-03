@@ -77,7 +77,8 @@ $ws_worker->onMessage = function($connection, $data) use ($ws_worker){
         if(isset($ws_worker->exams[$dataArray->exam]['users'][$dataArray->target]['connection'])){
             $id=$ws_worker->exams[$dataArray->exam]['users'][$dataArray->target]['connection'];
             $connection=$ws_worker->connections[$id];
-            $connection->send($data);
+            $dataArray->cdate=date('Y-m-d H:i:s');
+            $connection->send(json_encode($dataArray));
         }
     }
     if(isset($dataArray->action,$dataArray->id)){

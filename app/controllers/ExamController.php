@@ -205,6 +205,9 @@ class ExamController extends ControllerBase{
                     hljs.initHighlighting.called = false;
 	                hljs.initHighlighting();
             }
+             if("message" in obj){
+           $(\'#messages_box_pr\').append(\'<div class="yours message"><div class="ui segment messagecontent ">\'+obj.message+\'</div><div class="messagecdate">\'+obj.cdate+\'</div>\');
+           }
         };
         $("#cancelMessage").click(function(){$(".cheat").modal("hide");});
    
