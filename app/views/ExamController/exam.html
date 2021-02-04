@@ -1,4 +1,47 @@
+<div class="ui sidebar" style="background: white;width:40%;padding: 1em;">
+	<div class="ui horizontal list">
+		<div class="item" style="display: flex">
+			{% if creator.avatar|first|lower != "#" %}
+			<img class="ui mini circular image" src=" {{ creator.avatar }} ">
+			{% else %}
+			<div class="baseAvatar" style="display:inline-block;position:relative;"></div>
+			{% endif %}
+			<div class="content">
+				<div class="ui sub header">{{ creator.firstname }} {{ creator.lastname }}</div>
+				Coordinator
+			</div>
+		</div>
+	</div>
+	<div id="messages_box">
+		{% for message in messages %}
+		{{ message.user.id }}
+		{% if message.user.id == idUser %}
+		<div class="mine message">
+			<div class="ui segment messagecontent ">
+				{{ message.content }}
+			</div>
+			<div class="messagecdate">
+				{{ message.cdate }}
+			</div>
 
+		</div>
+		{% else %}
+		<div class="yours message">
+			<div class="ui segment messagecontent ">
+				{{ message.content }}
+			</div>
+			<div class="messagecdate">
+				{{ message.cdate }}
+			</div>
+		</div>
+
+		{% endif %}
+
+		{% endfor %}
+	</div>
+	<input id="message" type="text">
+	<div id="post_message" class="ui button">Post</div>
+</div>
 
 
 <div class="ui container" style="margin-top: 200px">

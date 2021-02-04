@@ -104,12 +104,14 @@ class GroupUIService {
 	public function viewGroup($users,$id,$key){
 	    $usersDt=$this->jquery->semantic()->dataTable('dtUsers',User::class,$users);
 	    $usersDt->setFields([
+	        'avatar',
 	        'firstname',
 	        'lastname',
 	        'email',
 	        'delete'
 	    ]);
 	    $usersDt->setCaptions([
+	        '',
 	        TranslatorManager::trans('firstname',[],'main'),
 	        TranslatorManager::trans('lastname',[],'main'),
 	        TranslatorManager::trans('email',[],'main')
@@ -117,10 +119,20 @@ class GroupUIService {
 	    $msg = $this->jquery->semantic()->htmlMessage('emptyUsersDtMsg','<button class="ui button _invitationLink-'.$id.'">Copier le lien d\'invitation</button>');
         $msg->setHeader('Empty group');
 	    $usersDt->setEmptyMessage($msg);
+        $usersDt->fieldAsAvatar('avatar');
+        $usersDt->setValueFunction('avatar',function($a) {
+            if ($a[0] == '#') {
+                return '<div class="avatarDt"><div style="background:'.$a.'" class="baseAvatarDt"></div><i style="position: absolute;top: 5px;left: 4px;font-size:1.2em;color: white;" class="graduation cap icon"></i></div>';
+            } else {
+                return '<div class="avatarDt"><img style="margin-right: auto" class="ui avatar image" src="'.$a.'"></div>';
+            }
+        }
+        );
 	    $usersDt->setClass(['ui single line very basic table']);
 	    $usersDt->setIdentifierFunction ( 'getId' );
 	    $usersDt->setProperty('group', $id);
 	    $usersDt->insertDefaultButtonIn('delete','ban','delete')->setVisibleHover(true);
+        $usersDt->setColWidths([0=>1,1=>5,2=>5,3=>6,4=>1]);
 	    $this->jquery->execOn('click','._invitationLink-'.$id,'navigator.clipboard.writeText("'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/'.Router::path('joinLink',[$key]).'");
         $("body").toast({
             class:"success",

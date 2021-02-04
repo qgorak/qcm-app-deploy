@@ -46,11 +46,7 @@ class ExamUIService {
         $usersg=DAO::getOneToMany($exam->getGroup(),'usergroups');
         $users=[];
         foreach($usersg as $userg){
-            $user = $userg->getUser();
-            if($user->getAvatar()==NULL){
-                $user->setAvatar('#'.$user->getFirstname()[0].$user->getlastname()[0]);
-            }
-            \array_push($users,$user);
+            \array_push($users,$userg->getUser());
         }
         $dt=$this->jquery->semantic()->dataTable('OverseeUserDt',User::class,$users);
         $dt->setFields([
@@ -69,7 +65,7 @@ class ExamUIService {
         ');});
         $dt->setValueFunction('avatar',function($a) {
             if ($a[0] == '#') {
-                return '<div class="avatarDt"><div class="baseAvatarDt">'.$a[1].$a[2].'</div><div class="status ui grey empty circular label"></div></div>';
+                return '<div class="avatarDt"><div style="background:'.$a.'" class="baseAvatarDt"></div><div class="status ui grey empty circular label"></div><i style="position: absolute;top: 5px;left: 4px;font-size:1.2em;color: white;" class="graduation cap icon"></i></div>';
             } else {
                 return '<div class="avatarDt"><img style="margin-right: auto" class="ui avatar image" src="'.$a.'"><div class="status ui grey empty circular label"></div></div>';
             }

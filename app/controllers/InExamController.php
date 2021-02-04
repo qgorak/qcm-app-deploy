@@ -2,6 +2,8 @@
 namespace controllers;
 
 use models\Answer;
+use models\Message;
+use models\User;
 use Ubiquity\controllers\Router;
 use Ubiquity\controllers\Startup;
 use Ubiquity\orm\DAO;
@@ -99,13 +101,16 @@ class inExamController extends ControllerBase{
             'before'=>'idPQ = $( "#IdQ" ).val();',
             'jsCallback'=>'$( "#IdPQ" ).val(idPQ);$("#IdPQ").trigger("change");'
         ]);
+        $creator=DAO::getById(User::class,$target);
         $this->jquery->postOnClick('#post_message',Router::path('message.exam.post'),'{ message: $("#message").val(), target:'.$target.',exam:'.$id.' }','',[
             'jsCallback'=>'$( "#submitMessage2" ).trigger( "click" );$(\'#messages_box\').append(\'<div class="mine message"><div class="mine message"><div class="ui segment messagecontent ">\'+$("#message").val()+\'</div><div class="messagecdate">0000-00-00</div></div>\');
                             $("#message").val("");',
 
         ]);
+        $creator->getAvatar();
+        $messages = DAO::getAll(Message::class,'(idUser=? and idTarget=?) or (idUser=? and idTarget=?) and idExam=?',true,[USession::get('activeUser')['id'],$target,$target,USession::get('activeUser')['id'],$id]);
         $this->jquery->execOn('click','#test','$(".ui.sidebar").sidebar("toggle");');
-        $this->jquery->renderView('ExamController/exam.html',['idUser'=>USession::get('activeUser')['id'],'name'=>$qcm->getName(),'date'=>$date,'id'=>$id]);
+        $this->jquery->renderView('ExamController/exam.html',['idUser'=>USession::get('activeUser')['id'],'name'=>$qcm->getName(),'date'=>$date,'id'=>$id,'creator'=>$creator,'messages'=>$messages]);
     }
 
     /**
