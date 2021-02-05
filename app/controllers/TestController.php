@@ -20,12 +20,12 @@ use services\datePickerTranslator;
 use services\UI\ExamUIService;
 
 /**
- * Controller InController
+ * Controller TestController
  * @allow('role'=>'@USER')
  * @route('inexam','inherited'=>true,'automated'=>true)
  * @property \Ajax\php\ubiquity\JsUtils $jquery
  */
-class inController extends ControllerBase{
+class TestController extends ControllerBase{
     use AclControllerTrait;
 
     /**
