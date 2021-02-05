@@ -3,11 +3,11 @@ return array(
 	"siteUrl"=>"https://lesbleus.sts-sio-caen.info/",
 	"database"=>[
 			"type"=>"mysql",
-			"dbName"=>"qcm-app",
-			"serverName"=>"163.172.212.32",
+			"dbName"=>"qcm",
+			"serverName"=>"127.0.0.1",
 			"port"=>3306,
-			"user"=>"qcm-app",
-			"password"=>"lIwM8pFuUd7mA6Rv",
+			"user"=>"root",
+			"password"=>"root",
 			"options"=>[
 					true,
 					2
