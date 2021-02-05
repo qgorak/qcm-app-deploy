@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2243bbe42435c47dad82df011bf79b92",
+    "content-hash": "3cecffbf76173e684bef0e50182b6b16",
     "packages": [
         {
             "name": "frameworks/jquery",
@@ -35,6 +35,68 @@
                 "wiki": "http://docs.jquery.com/"
             },
             "time": "2015-10-09T00:55:51+00:00"
+        },
+        {
+            "name": "hybridauth/hybridauth",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hybridauth/hybridauth.git",
+                "reference": "040dae5d9f8938c8bbdf72a84840b7df3d676515"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/040dae5d9f8938c8bbdf72a84840b7df3d676515",
+                "reference": "040dae5d9f8938c8bbdf72a84840b7df3d676515",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "phpunit/phpunit": "~4.8.35"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hybridauth\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Miled",
+                    "email": "hybridauth@gmail.com"
+                }
+            ],
+            "description": "PHP Social Authentication Library",
+            "homepage": "https://hybridauth.github.io",
+            "keywords": [
+                "Authentication",
+                "OpenId",
+                "api",
+                "authorization",
+                "facebook",
+                "google",
+                "oauth",
+                "social",
+                "twitter"
+            ],
+            "support": {
+                "gitter": "https://gitter.im/hybridauth/hybridauth",
+                "issues": "https://github.com/hybridauth/hybridauth/issues",
+                "source": "https://github.com/hybridauth/hybridauth/tree/v3.1.0"
+            },
+            "time": "2019-12-13T11:30:17+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -114,16 +176,16 @@
         },
         {
             "name": "phpmv/php-mv-ui",
-            "version": "2.3.13",
+            "version": "2.3.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/phpMv-UI.git",
-                "reference": "6f80f95a9e0ff06607a35beabef881b0d5f4c776"
+                "reference": "e38ed86d7a756be41658229e35a2931710cdf3f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/6f80f95a9e0ff06607a35beabef881b0d5f4c776",
-                "reference": "6f80f95a9e0ff06607a35beabef881b0d5f4c776",
+                "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/e38ed86d7a756be41658229e35a2931710cdf3f2",
+                "reference": "e38ed86d7a756be41658229e35a2931710cdf3f2",
                 "shasum": ""
             },
             "require": {
@@ -174,9 +236,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpMv/phpMv-UI/issues",
-                "source": "https://github.com/phpMv/phpMv-UI/tree/2.3.13"
+                "source": "https://github.com/phpMv/phpMv-UI/tree/2.3.17"
             },
-            "time": "2020-12-10T09:21:54+00:00"
+            "time": "2021-01-31T17:32:18+00:00"
         },
         {
             "name": "phpmv/ubiquity",
@@ -184,12 +246,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/ubiquity.git",
-                "reference": "0431fd1b88d8363356bfdd4737787d6dcb57c4f5"
+                "reference": "828f268a5543197f31713e332326fa33cf37062d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/ubiquity/zipball/0431fd1b88d8363356bfdd4737787d6dcb57c4f5",
-                "reference": "0431fd1b88d8363356bfdd4737787d6dcb57c4f5",
+                "url": "https://api.github.com/repos/phpMv/ubiquity/zipball/828f268a5543197f31713e332326fa33cf37062d",
+                "reference": "828f268a5543197f31713e332326fa33cf37062d",
                 "shasum": ""
             },
             "require": {
@@ -198,7 +260,7 @@
             "require-dev": {
                 "phpmv/php-mv-ui": "^2.2",
                 "phpmv/ubiquity-codeception": "dev-master",
-                "phpmv/ubiquity-dev": "^0.0",
+                "phpmv/ubiquity-dev": "^0.1",
                 "phpmv/ubiquity-devtools": "dev-master"
             },
             "default-branch": true,
@@ -235,20 +297,20 @@
                 "issues": "https://github.com/phpMv/ubiquity/issues",
                 "source": "https://github.com/phpMv/ubiquity/tree/master"
             },
-            "time": "2020-12-12T16:45:20+00:00"
+            "time": "2021-02-05T03:12:28+00:00"
         },
         {
             "name": "phpmv/ubiquity-acl",
-            "version": "dev-main",
+            "version": "0.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/ubiquity-acl.git",
-                "reference": "ff76692e28378bf376ab822264483e751591f3e0"
+                "reference": "1480987354840d964899c5f733252046e5fa024b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/ubiquity-acl/zipball/ff76692e28378bf376ab822264483e751591f3e0",
-                "reference": "ff76692e28378bf376ab822264483e751591f3e0",
+                "url": "https://api.github.com/repos/phpMv/ubiquity-acl/zipball/1480987354840d964899c5f733252046e5fa024b",
+                "reference": "1480987354840d964899c5f733252046e5fa024b",
                 "shasum": ""
             },
             "require": {
@@ -257,11 +319,8 @@
             "require-dev": {
                 "codeception/codeception": "^4.1",
                 "codeception/module-asserts": "^1.0.0",
-                "mindplay/annotations": "^1.3",
-                "phpmv/ubiquity": "^2.3",
-                "phpmv/ubiquity-dev": "^0.0.19"
+                "phpmv/ubiquity-dev": "^0.1"
             },
-            "default-branch": true,
             "type": "extension",
             "extra": {
                 "branch-alias": {
@@ -297,9 +356,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpMv/ubiquity-acl/issues",
-                "source": "https://github.com/phpMv/ubiquity-acl/tree/0.0.2"
+                "source": "https://github.com/phpMv/ubiquity-acl/tree/0.0.4"
             },
-            "time": "2020-12-11T18:08:13+00:00"
+            "time": "2021-01-01T19:08:56+00:00"
         },
         {
             "name": "phpmv/ubiquity-mailer",
@@ -357,6 +416,61 @@
             "time": "2020-12-15T16:57:00+00:00"
         },
         {
+            "name": "phpmv/ubiquity-oauth",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpMv/ubiquity-oauth.git",
+                "reference": "779cda7dae62492d7578b8d0c548b47f528014d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpMv/ubiquity-oauth/zipball/779cda7dae62492d7578b8d0c548b47f528014d5",
+                "reference": "779cda7dae62492d7578b8d0c548b47f528014d5",
+                "shasum": ""
+            },
+            "require": {
+                "hybridauth/hybridauth": "3.1",
+                "phpmv/ubiquity": "^2.3"
+            },
+            "type": "extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ubiquity\\": "src/Ubiquity/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Jean-Christophe HERON",
+                    "email": "myaddressmail@gmail.com",
+                    "role": "Lead developer"
+                }
+            ],
+            "description": "Oauth 2 client for Ubiquity framework",
+            "keywords": [
+                "framework",
+                "mvc",
+                "oauth2",
+                "php",
+                "php-framework",
+                "tools"
+            ],
+            "support": {
+                "issues": "https://github.com/phpMv/ubiquity-oauth/issues",
+                "source": "https://github.com/phpMv/ubiquity-oauth/tree/0.0.2"
+            },
+            "time": "2020-04-22T01:29:03+00:00"
+        },
+        {
             "name": "phpmv/ubiquity-security",
             "version": "0.0.1",
             "source": {
@@ -412,16 +526,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.20.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "f4ba089a5b6366e453971d3aad5fe8e897b37f41"
+                "reference": "c6c942b1ac76c82448322025e084cadc56048b4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/f4ba089a5b6366e453971d3aad5fe8e897b37f41",
-                "reference": "f4ba089a5b6366e453971d3aad5fe8e897b37f41",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/c6c942b1ac76c82448322025e084cadc56048b4e",
+                "reference": "c6c942b1ac76c82448322025e084cadc56048b4e",
                 "shasum": ""
             },
             "require": {
@@ -433,7 +547,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.22-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -471,7 +585,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.20.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.22.0"
             },
             "funding": [
                 {
@@ -487,20 +601,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2021-01-07T16:49:33+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.20.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "39d483bdf39be819deabf04ec872eb0b2410b531"
+                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/39d483bdf39be819deabf04ec872eb0b2410b531",
-                "reference": "39d483bdf39be819deabf04ec872eb0b2410b531",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
+                "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
                 "shasum": ""
             },
             "require": {
@@ -512,7 +626,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.20-dev"
+                    "dev-main": "1.22-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -551,7 +665,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.20.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.22.0"
             },
             "funding": [
                 {
@@ -567,20 +681,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-23T14:02:19+00:00"
+            "time": "2021-01-07T16:49:33+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v3.1.1",
+            "version": "v3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "b02fa41f3783a2616eccef7b92fbc2343ffed737"
+                "reference": "f795ca686d38530045859b0350b5352f7d63447d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b02fa41f3783a2616eccef7b92fbc2343ffed737",
-                "reference": "b02fa41f3783a2616eccef7b92fbc2343ffed737",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/f795ca686d38530045859b0350b5352f7d63447d",
+                "reference": "f795ca686d38530045859b0350b5352f7d63447d",
                 "shasum": ""
             },
             "require": {
@@ -595,7 +709,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -631,7 +745,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.1.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.2.1"
             },
             "funding": [
                 {
@@ -643,22 +757,22 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-27T19:28:23+00:00"
+            "time": "2021-01-05T15:40:36+00:00"
         }
     ],
     "packages-dev": [
         {
             "name": "mindplay/annotations",
-            "version": "1.3.1",
+            "version": "dev-php8-fix",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-annotations/php-annotations.git",
-                "reference": "77ef66f79fb65a7b7e7e005be0bd6b643de43867"
+                "url": "https://github.com/phpMv/php-annotations.git",
+                "reference": "fdee2479bcf515ebc02aed0768e6c1ee27da813d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-annotations/php-annotations/zipball/77ef66f79fb65a7b7e7e005be0bd6b643de43867",
-                "reference": "77ef66f79fb65a7b7e7e005be0bd6b643de43867",
+                "url": "https://api.github.com/repos/phpMv/php-annotations/zipball/fdee2479bcf515ebc02aed0768e6c1ee27da813d",
+                "reference": "fdee2479bcf515ebc02aed0768e6c1ee27da813d",
                 "shasum": ""
             },
             "require": {
@@ -679,7 +793,6 @@
                     "mindplay\\annotations\\": "src\\annotations"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL-3.0+"
             ],
@@ -696,10 +809,63 @@
                 "framework"
             ],
             "support": {
-                "issues": "https://github.com/php-annotations/php-annotations/issues",
-                "source": "https://github.com/php-annotations/php-annotations/tree/master"
+                "source": "https://github.com/phpMv/php-annotations/tree/php8-fix"
             },
-            "time": "2019-01-15T17:03:08+00:00"
+            "time": "2020-12-23T13:15:15+00:00"
+        },
+        {
+            "name": "phpmv/ubiquity-annotations",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpMv/ubiquity-annotations.git",
+                "reference": "fe2405a248317b6e7c1d51c45c3b5f6743a01582"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpMv/ubiquity-annotations/zipball/fe2405a248317b6e7c1d51c45c3b5f6743a01582",
+                "reference": "fe2405a248317b6e7c1d51c45c3b5f6743a01582",
+                "shasum": ""
+            },
+            "require": {
+                "mindplay/annotations": "^1.3.1",
+                "php": ">=7.4"
+            },
+            "type": "extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ubiquity\\": "src/Ubiquity/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Jean-Christophe HERON",
+                    "email": "myaddressmail@gmail.com",
+                    "role": "Lead developer"
+                }
+            ],
+            "description": "php annotations for Ubiquity framework with mindplay/php-annotations",
+            "keywords": [
+                "annotations",
+                "framework",
+                "mvc",
+                "php",
+                "php-framework"
+            ],
+            "support": {
+                "issues": "https://github.com/phpMv/ubiquity-annotations/issues",
+                "source": "https://github.com/phpMv/ubiquity-annotations/tree/0.0.1"
+            },
+            "time": "2021-01-01T16:57:09+00:00"
         },
         {
             "name": "phpmv/ubiquity-codeception",
@@ -759,16 +925,16 @@
         },
         {
             "name": "phpmv/ubiquity-commands",
-            "version": "0.0.17",
+            "version": "0.0.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/ubiquity-commands.git",
-                "reference": "f3568bd10ff4d87d7965a4a3361157071e05e65a"
+                "reference": "1d73cd3922dca7b417cbedcf4a86c10afa13693c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/ubiquity-commands/zipball/f3568bd10ff4d87d7965a4a3361157071e05e65a",
-                "reference": "f3568bd10ff4d87d7965a4a3361157071e05e65a",
+                "url": "https://api.github.com/repos/phpMv/ubiquity-commands/zipball/1d73cd3922dca7b417cbedcf4a86c10afa13693c",
+                "reference": "1d73cd3922dca7b417cbedcf4a86c10afa13693c",
                 "shasum": ""
             },
             "require": {
@@ -808,22 +974,22 @@
             ],
             "support": {
                 "issues": "https://github.com/phpMv/ubiquity-commands/issues",
-                "source": "https://github.com/phpMv/ubiquity-commands/tree/0.0.17"
+                "source": "https://github.com/phpMv/ubiquity-commands/tree/0.0.19"
             },
-            "time": "2020-12-10T11:52:57+00:00"
+            "time": "2021-02-05T03:32:02+00:00"
         },
         {
             "name": "phpmv/ubiquity-dev",
-            "version": "0.0.23",
+            "version": "0.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/ubiquity-dev.git",
-                "reference": "ae91b1bc330e87365ab0d98e8e64341d87189a95"
+                "reference": "2266f6a47c3d33a29bdaffcd247bd3a5bfee911b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/ubiquity-dev/zipball/ae91b1bc330e87365ab0d98e8e64341d87189a95",
-                "reference": "ae91b1bc330e87365ab0d98e8e64341d87189a95",
+                "url": "https://api.github.com/repos/phpMv/ubiquity-dev/zipball/2266f6a47c3d33a29bdaffcd247bd3a5bfee911b",
+                "reference": "2266f6a47c3d33a29bdaffcd247bd3a5bfee911b",
                 "shasum": ""
             },
             "require": {
@@ -862,22 +1028,22 @@
             ],
             "support": {
                 "issues": "https://github.com/phpMv/ubiquity-dev/issues",
-                "source": "https://github.com/phpMv/ubiquity-dev/tree/0.0.23"
+                "source": "https://github.com/phpMv/ubiquity-dev/tree/0.1.9"
             },
-            "time": "2020-12-03T02:08:32+00:00"
+            "time": "2021-01-30T01:35:33+00:00"
         },
         {
             "name": "phpmv/ubiquity-devtools",
-            "version": "1.2.18",
+            "version": "1.2.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/ubiquity-devtools.git",
-                "reference": "4d7fefa7d549f65db8cd2e6a21040761c2fbbaac"
+                "reference": "e7f8d9514f61a26f659f8c32207cf2ce4a67985b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/ubiquity-devtools/zipball/4d7fefa7d549f65db8cd2e6a21040761c2fbbaac",
-                "reference": "4d7fefa7d549f65db8cd2e6a21040761c2fbbaac",
+                "url": "https://api.github.com/repos/phpMv/ubiquity-devtools/zipball/e7f8d9514f61a26f659f8c32207cf2ce4a67985b",
+                "reference": "e7f8d9514f61a26f659f8c32207cf2ce4a67985b",
                 "shasum": ""
             },
             "require": {
@@ -916,9 +1082,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpMv/ubiquity-devtools/issues",
-                "source": "https://github.com/phpMv/ubiquity-devtools/tree/1.2.18"
+                "source": "https://github.com/phpMv/ubiquity-devtools/tree/1.2.22"
             },
-            "time": "2020-12-11T15:20:31+00:00"
+            "time": "2021-02-05T03:25:46+00:00"
         },
         {
             "name": "phpmv/ubiquity-webtools",
@@ -926,18 +1092,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/ubiquity-webtools.git",
-                "reference": "4a0f9e901873481afd26804917e1a9fb0349bfab"
+                "reference": "da6b517f3e0564964c4c5b5a2b2fd29572b2d62a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/ubiquity-webtools/zipball/4a0f9e901873481afd26804917e1a9fb0349bfab",
-                "reference": "4a0f9e901873481afd26804917e1a9fb0349bfab",
+                "url": "https://api.github.com/repos/phpMv/ubiquity-webtools/zipball/da6b517f3e0564964c4c5b5a2b2fd29572b2d62a",
+                "reference": "da6b517f3e0564964c4c5b5a2b2fd29572b2d62a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4",
-                "phpmv/php-mv-ui": "^2.2.19",
-                "phpmv/ubiquity-dev": "^0.0"
+                "phpmv/php-mv-ui": ">2.2.19",
+                "phpmv/ubiquity-dev": "^0.1"
             },
             "default-branch": true,
             "type": "extension",
@@ -973,16 +1139,23 @@
             ],
             "support": {
                 "issues": "https://github.com/phpMv/ubiquity-webtools/issues",
-                "source": "https://github.com/phpMv/ubiquity-webtools/tree/2.3.13"
+                "source": "https://github.com/phpMv/ubiquity-webtools/tree/master"
             },
-            "time": "2020-12-11T14:48:47+00:00"
+            "time": "2021-02-03T10:46:59+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "mindplay/annotations",
+            "version": "dev-php8-fix",
+            "alias": "1.3.2",
+            "alias_normalized": "1.3.2.0"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
         "phpmv/ubiquity": 20,
-        "phpmv/ubiquity-acl": 20,
+        "mindplay/annotations": 20,
         "phpmv/ubiquity-webtools": 20
     },
     "prefer-stable": true,

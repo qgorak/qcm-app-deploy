@@ -1,38 +1,44 @@
 <?php
 return array(
-	"siteUrl"=>"https://qcm-app-ubiquity.herokuapp.com/",
-	"database"=>array(
+	"siteUrl"=>"https://lesbleus.sts-sio-caen.info/",
+	"database"=>[
 			"type"=>"mysql",
 			"dbName"=>"qcm-app",
 			"serverName"=>"163.172.212.32",
 			"port"=>3306,
 			"user"=>"qcm-app",
 			"password"=>"lIwM8pFuUd7mA6Rv",
-			"options"=>array(PDO::ATTR_PERSISTENT=>true,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC),
+			"options"=>[
+					true,
+					2
+					],
 			"cache"=>false,
 			"wrapper"=>"Ubiquity\\db\\providers\\pdo\\PDOWrapper"
-			),
+			],
 	"sessionName"=>"s5fc15c2d88353",
-	"namespaces"=>array(),
+	"namespaces"=>[],
 	"templateEngine"=>"Ubiquity\\views\\engine\\Twig",
-	"templateEngineOptions"=>array(
-			"cache"=>true
-			),
+	"templateEngineOptions"=>[
+			"cache"=>false
+			],
 	"test"=>false,
-	"debug"=>false,
-	"di"=>array(
-			"@exec"=>array("jquery"=>function ($controller){
+	"debug"=>true,
+	"di"=>[
+			"@exec"=>[
+					"jquery"=>function ($controller){
 						return \Ubiquity\core\Framework::diSemantic($controller);
-					})
-			),
-	"cache"=>array(
+					}
+					]
+			],
+	"cache"=>[
 			"directory"=>"cache/",
 			"system"=>"Ubiquity\\cache\\system\\ArrayCache",
-			"params"=>array()
-			),
-	"mvcNS"=>array(
+			"params"=>[]
+			],
+	"mvcNS"=>[
 			"models"=>"models",
 			"controllers"=>"controllers",
 			"rest"=>""
-			)
+			],
+	"encryption-key"=>"78d9337edb02184dd4e0361fd517e32a"
 	);
