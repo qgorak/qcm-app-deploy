@@ -4,8 +4,8 @@ require_once './vendor/autoload.php';
 
 $context = array(
     'ssl' => array(
-        'local_cert'  => '/etc/ssl/websocketssl.pem',
-        'local_pk'    => '/etc/ssl/websocketss.key',
+        'local_cert'  => './key/websocketssl.pem',
+        'local_pk'    => './key/websocketssl.key',
         'verify_peer' => false,
     )
 );
