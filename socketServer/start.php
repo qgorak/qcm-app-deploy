@@ -2,9 +2,17 @@
 use Workerman\Worker;
 require_once './vendor/autoload.php';
 
+$context = array(
+    'ssl' => array(
+        'local_cert'  => '/etc/ssl/websocketssl.pem',
+        'local_pk'    => '/etc/ssl/websocketss.key',
+        'verify_peer' => false,
+    )
+);
 // Create A Worker and Listens 2346 port, use Websocket protocol
-$ws_worker = new Worker("websocket://0.0.0.0:2346");
+$ws_worker = new Worker("websocket://0.0.0.0:2346",$context);
 
+$ws_worker->transport = 'ssl';
 // 4 processes
 $ws_worker->count = 1;
 
