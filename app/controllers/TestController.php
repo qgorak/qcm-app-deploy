@@ -68,7 +68,9 @@ class TestController extends ControllerBase{
         $this->jquery->exec('
         $(".ui.sidebar").sidebar("setting", "transition", "overlay");
         var count=0;
-        var ws = new WebSocket("ws:/127.0.0.1:2346");
+        var ws = new WebSocket("ws:/127.0.0.1:2346", {
+  rejectUnauthorized: false
+});
         ws.onopen=function(){
             ws.send(\'{"exam":'.$id.',"idOwner":'.$qcm->getUser().',"user":'.\json_encode(USession::get('activeUser')).'}\');
         };
